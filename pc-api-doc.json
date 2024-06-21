@@ -1,0 +1,2861 @@
+{
+	"info": {
+		"_postman_id": "df7a341a-8655-4221-ae1b-229982435fe1",
+		"name": "Premier Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "57417adb-6190-4b3e-a91b-5684e405f755",
+						"exec": [
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"token\", jsonData.data.token);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "demo1@domain.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456789",
+							"type": "text"
+						}
+					],
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "demo1@domain.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Wed, 27 May 2020 12:43:13 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1047"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTEzOWI3MTRjMmZmYjNjNmU5NGJiMjZmMmJiMGUyMTIzNjU2MDllNmY4N2FlNWUwOTAzYTIwNTZhZTI0MDg5M2I0NjViMWVhYzZiMmFjZjMiLCJpYXQiOjE1OTA1ODMzOTYsIm5iZiI6MTU5MDU4MzM5NiwiZXhwIjoxNjIyMTE5Mzk2LCJzdWIiOiIyMiIsInNjb3BlcyI6W119.WnH1Rcy46S-JPHEHbO9pwy90gPDuIFIEqhf_7BvsqIhDor6fbjMTAvV-oap1NPD5px-K58wyOFwQNoHQD3_7msHbw_hM1241JIP5v1vzbF3tQxGCISTd0zO-YI3Sjf2iwm0LaLTTXdv_s6fTdHdbPm7vPgqokOkz1buqJ6-q3juvADOtaxpJWwHpOtURIROzrlpRBcUrAXU7-MjvBNVTt5bNIomgsIswq38I3EEeY5xHMBzaamn6HOO3TpA1yYtm6KoY-ONHhkN9aUOv87xJSyLd7Q8ZjlArvWi8AWfGgtQ3dF1go2I_Wd7Lhsq6B2LFBUBElIUVU5uk0ZG1mr8NVaHsXtODoz_bf6pYbB3vGiDj8ZSqRwVSySHhU6oNzWWTHPoZa3lOtaZp0JMI80wGYqWGUVi5763VVjnZ7CrQ8gujsIqXG9n0B3z1vQvpCGxZTIBQbgCnOX0Uh67ogHYFfnXDeilujDzvBzVdnF1RqkLDaFB2LFii_9BELYQsSppCn_41s-c7DzOsKub8ur7xr_KVW2S_tEqLntxoDIDUew5MBYPZzI9Qanj1LtmUHpvuzybAVEutQVAZYiTMqxdQupV3jcWuLr2QWxtzbW9T5tVe42vtMpa5b-3bLhEszgMxKMCQ1Rx5yll1HoMW2iTKidE5K4iLS8NFb-QWfnOFpx0\",\n        \"name\": \"Demo 1 user\"\n    },\n    \"message\": \"User login successfully.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Forgot Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c0e56a54-9948-4c68-a1a2-a1618f7382ec",
+						"exec": [
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"token\", jsonData.data.token);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "1demo1@domain.com",
+							"type": "text"
+						}
+					],
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/forgot",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"forgot"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "demo1@domain.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Wed, 27 May 2020 12:43:13 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1047"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTEzOWI3MTRjMmZmYjNjNmU5NGJiMjZmMmJiMGUyMTIzNjU2MDllNmY4N2FlNWUwOTAzYTIwNTZhZTI0MDg5M2I0NjViMWVhYzZiMmFjZjMiLCJpYXQiOjE1OTA1ODMzOTYsIm5iZiI6MTU5MDU4MzM5NiwiZXhwIjoxNjIyMTE5Mzk2LCJzdWIiOiIyMiIsInNjb3BlcyI6W119.WnH1Rcy46S-JPHEHbO9pwy90gPDuIFIEqhf_7BvsqIhDor6fbjMTAvV-oap1NPD5px-K58wyOFwQNoHQD3_7msHbw_hM1241JIP5v1vzbF3tQxGCISTd0zO-YI3Sjf2iwm0LaLTTXdv_s6fTdHdbPm7vPgqokOkz1buqJ6-q3juvADOtaxpJWwHpOtURIROzrlpRBcUrAXU7-MjvBNVTt5bNIomgsIswq38I3EEeY5xHMBzaamn6HOO3TpA1yYtm6KoY-ONHhkN9aUOv87xJSyLd7Q8ZjlArvWi8AWfGgtQ3dF1go2I_Wd7Lhsq6B2LFBUBElIUVU5uk0ZG1mr8NVaHsXtODoz_bf6pYbB3vGiDj8ZSqRwVSySHhU6oNzWWTHPoZa3lOtaZp0JMI80wGYqWGUVi5763VVjnZ7CrQ8gujsIqXG9n0B3z1vQvpCGxZTIBQbgCnOX0Uh67ogHYFfnXDeilujDzvBzVdnF1RqkLDaFB2LFii_9BELYQsSppCn_41s-c7DzOsKub8ur7xr_KVW2S_tEqLntxoDIDUew5MBYPZzI9Qanj1LtmUHpvuzybAVEutQVAZYiTMqxdQupV3jcWuLr2QWxtzbW9T5tVe42vtMpa5b-3bLhEszgMxKMCQ1Rx5yll1HoMW2iTKidE5K4iLS8NFb-QWfnOFpx0\",\n        \"name\": \"Demo 1 user\"\n    },\n    \"message\": \"User login successfully.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "51e008f1-0457-41aa-85f1-c956b8dbe344",
+						"exec": [
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"token\", jsonData.data.token);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "firstname",
+							"value": "Amit",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "Client",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "amit1@domain.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456789",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "1234567890",
+							"type": "text"
+						},
+						{
+							"key": "phone2",
+							"value": "1234567890",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "address",
+							"type": "text"
+						},
+						{
+							"key": "city",
+							"value": "ct",
+							"type": "text"
+						},
+						{
+							"key": "state",
+							"value": "st",
+							"type": "text"
+						},
+						{
+							"key": "country",
+							"value": "Country name",
+							"type": "text"
+						},
+						{
+							"key": "zip",
+							"value": "123456",
+							"type": "text"
+						},
+						{
+							"key": "company_name",
+							"value": "aaa",
+							"type": "text"
+						},
+						{
+							"key": "business_nature",
+							"value": "other",
+							"description": " 'business_nature' => [        \n        'tailor_store'=>'Tailor Store', \n        'online_tailor'=>'Online Tailor', \n        'wholesaler_exporter'=>'Wholesaler/Exporter', \n        'reseller'=>'Reseller', \n        'salesman'=>'Salesman', \n        'garment_manufacturer'=>'Garment Manufacturer',             \n        'other'=>'Other',\n    ]",
+							"type": "text"
+						},
+						{
+							"key": "business_nature_other",
+							"value": "my business",
+							"type": "text"
+						},
+						{
+							"key": "newsletter",
+							"value": "1",
+							"description": "Bool",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Register",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstname",
+									"value": "Demo",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "User",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "demo23@domain.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 18 Jun 2020 09:47:54 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1066"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMzJjM2JmZjRkZDlhMmEzOGQxYWMwNDk0ZmMwZGY0MWJhMzM0ZDZhMjE2MjI0NjViZmVmMzE2OGVmYzM5M2EzZTExY2RiNDEyOTUzZjE1ZTUiLCJpYXQiOjE1OTI0NzM2NzQsIm5iZiI6MTU5MjQ3MzY3NCwiZXhwIjoxNjI0MDA5Njc0LCJzdWIiOiIyNSIsInNjb3BlcyI6W119.JhdMwzamvJJnaRgfFePxnbLc77LlBK4ai1OT5-mSc6Y70WBhA3Yspvsdq6Y_S3u6sxkU-gvo0XgsrJHSCwLys5SpdWg3McVQcXdlTgX9teDjdnSFDvIoky22O-1mNyXOj5EUDw35ON_pn6i5S00FcIxsjn7MXWuNvORzyHiE3A31X9ywAdJZ2EYCmSIu1298NBfEYIEt452W1w-DYsFC0cPkIhAbYPoYqNKomEcZvKw0G8VVcZ44ph8C3yQRFm7HxraQoD4wgBplG-UzMcqVKKaK8LztoTziZx7DHAyt8i-Wo2NBnb8m7nFSbUK_4ZxfBUwNTQJ8PIRIUqQh2CKxbr-AShc9ns7KX2RYwuCAP6ftYBEwYQCrWvBJlDA8qad5HwDlM_2TV8UK9mVJNGN-6r969eim3AUHoF-h4bQ0CN05ngQM_wEWanQJA5zsnEg_5fujZFwfHsg2tZlx_zMaoTWFh5JrmzNNqZspSmLyIuG5ffu82VxbbaA8lhZecUqUfGmeV776LNPXvNTXgkcRO6JSCiinVC4zpp45o_ElZr7Vu94cJOjAw9RzxtwtDUw4TC1p7mZ_K03oE_Hehvz_fvhQbt4qZkXcuz13-qMawWo9Cw6g1Ht8-1ebFSzwvU9aOMC3846AznKSKoMcQqtMzTaImVxZmKW3dncd7F6lPXs\",\n        \"firstname\": \"Demo\",\n        \"lastname\": \"User\"\n    },\n    \"message\": \"User register successfully.\"\n}"
+				},
+				{
+					"name": "Register Error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstname",
+									"value": "Demo1",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "User",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "demo1@domain.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "phone2",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "address",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "ct",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "st",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Country name",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "company_name",
+									"value": "aaa",
+									"type": "text"
+								},
+								{
+									"key": "business_nature",
+									"value": "other",
+									"description": " 'business_nature' => [        \n        'tailor_store'=>'Tailor Store', \n        'online_tailor'=>'Online Tailor', \n        'wholesaler_exporter'=>'Wholesaler/Exporter', \n        'reseller'=>'Reseller', \n        'salesman'=>'Salesman', \n        'garment_manufacturer'=>'Garment Manufacturer',             \n        'other'=>'Other',\n    ]",
+									"type": "text"
+								},
+								{
+									"key": "business_nature_other",
+									"value": "my business",
+									"type": "text"
+								},
+								{
+									"key": "newsletter",
+									"value": "1",
+									"description": "Bool",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Wed, 14 Oct 2020 11:31:38 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Upgrade",
+							"value": "h2,h2c"
+						},
+						{
+							"key": "Connection",
+							"value": "Upgrade, Keep-Alive"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "host-header",
+							"value": "c2hhcmVkLmJsdWVob3N0LmNvbQ=="
+						},
+						{
+							"key": "Content-Length",
+							"value": "104"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=75"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"data\": {\n        \"error\": {\n            \"email\": [\n                \"The email has already been taken.\"\n            ]\n        }\n    },\n    \"message\": \"The email has already been taken.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Update Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9e078962-1058-454d-9b93-4b77e948227f",
+						"exec": [
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"token\", jsonData.data.token);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "firstname",
+							"value": "Amit",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "Sales",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "amit1@domain.com",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "123456789",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "phone",
+							"value": "1234567890",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "phone2",
+							"value": "1234567890",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "address",
+							"value": "address",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "city",
+							"value": "ct",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "state",
+							"value": "st",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "country",
+							"value": "Country name",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "zip",
+							"value": "123456",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "company_name",
+							"value": "aaa",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "business_nature",
+							"value": "other",
+							"description": " 'business_nature' => [        \n        'tailor_store'=>'Tailor Store', \n        'online_tailor'=>'Online Tailor', \n        'wholesaler_exporter'=>'Wholesaler/Exporter', \n        'reseller'=>'Reseller', \n        'salesman'=>'Salesman', \n        'garment_manufacturer'=>'Garment Manufacturer',             \n        'other'=>'Other',\n    ]",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "business_nature_other",
+							"value": "my business",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "newsletter",
+							"value": "1",
+							"description": "Bool",
+							"type": "text",
+							"disabled": true
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/user/update",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"update"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Register",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstname",
+									"value": "Demo",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "User",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "demo23@domain.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 18 Jun 2020 09:47:54 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1066"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMzJjM2JmZjRkZDlhMmEzOGQxYWMwNDk0ZmMwZGY0MWJhMzM0ZDZhMjE2MjI0NjViZmVmMzE2OGVmYzM5M2EzZTExY2RiNDEyOTUzZjE1ZTUiLCJpYXQiOjE1OTI0NzM2NzQsIm5iZiI6MTU5MjQ3MzY3NCwiZXhwIjoxNjI0MDA5Njc0LCJzdWIiOiIyNSIsInNjb3BlcyI6W119.JhdMwzamvJJnaRgfFePxnbLc77LlBK4ai1OT5-mSc6Y70WBhA3Yspvsdq6Y_S3u6sxkU-gvo0XgsrJHSCwLys5SpdWg3McVQcXdlTgX9teDjdnSFDvIoky22O-1mNyXOj5EUDw35ON_pn6i5S00FcIxsjn7MXWuNvORzyHiE3A31X9ywAdJZ2EYCmSIu1298NBfEYIEt452W1w-DYsFC0cPkIhAbYPoYqNKomEcZvKw0G8VVcZ44ph8C3yQRFm7HxraQoD4wgBplG-UzMcqVKKaK8LztoTziZx7DHAyt8i-Wo2NBnb8m7nFSbUK_4ZxfBUwNTQJ8PIRIUqQh2CKxbr-AShc9ns7KX2RYwuCAP6ftYBEwYQCrWvBJlDA8qad5HwDlM_2TV8UK9mVJNGN-6r969eim3AUHoF-h4bQ0CN05ngQM_wEWanQJA5zsnEg_5fujZFwfHsg2tZlx_zMaoTWFh5JrmzNNqZspSmLyIuG5ffu82VxbbaA8lhZecUqUfGmeV776LNPXvNTXgkcRO6JSCiinVC4zpp45o_ElZr7Vu94cJOjAw9RzxtwtDUw4TC1p7mZ_K03oE_Hehvz_fvhQbt4qZkXcuz13-qMawWo9Cw6g1Ht8-1ebFSzwvU9aOMC3846AznKSKoMcQqtMzTaImVxZmKW3dncd7F6lPXs\",\n        \"firstname\": \"Demo\",\n        \"lastname\": \"User\"\n    },\n    \"message\": \"User register successfully.\"\n}"
+				},
+				{
+					"name": "Register Error",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstname",
+									"value": "Demo1",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "User",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "demo1@domain.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "phone2",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "address",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "ct",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "st",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "Country name",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "company_name",
+									"value": "aaa",
+									"type": "text"
+								},
+								{
+									"key": "business_nature",
+									"value": "other",
+									"description": " 'business_nature' => [        \n        'tailor_store'=>'Tailor Store', \n        'online_tailor'=>'Online Tailor', \n        'wholesaler_exporter'=>'Wholesaler/Exporter', \n        'reseller'=>'Reseller', \n        'salesman'=>'Salesman', \n        'garment_manufacturer'=>'Garment Manufacturer',             \n        'other'=>'Other',\n    ]",
+									"type": "text"
+								},
+								{
+									"key": "business_nature_other",
+									"value": "my business",
+									"type": "text"
+								},
+								{
+									"key": "newsletter",
+									"value": "1",
+									"description": "Bool",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Wed, 14 Oct 2020 11:31:38 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Upgrade",
+							"value": "h2,h2c"
+						},
+						{
+							"key": "Connection",
+							"value": "Upgrade, Keep-Alive"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "host-header",
+							"value": "c2hhcmVkLmJsdWVob3N0LmNvbQ=="
+						},
+						{
+							"key": "Content-Length",
+							"value": "104"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=75"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": false,\n    \"data\": {\n        \"error\": {\n            \"email\": [\n                \"The email has already been taken.\"\n            ]\n        }\n    },\n    \"message\": \"The email has already been taken.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Create Order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "889bd8cc-e539-4254-ade9-c72eb1739c35",
+						"exec": [
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"token\", jsonData.data.token);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_id\": 23,\r\n    \"seller_id\": 27,\r\n    \"note\": \"THis is test booking\",\r\n    \"name\": \"Customer Delevery Name\",\r\n    \"mobile\" : \"Delevery Contact\",\r\n    \"address\" :\"Delevery Address\",\r\n    \"booking_days\" :10,\r\n    \"booking\" :1,\r\n    \"items\" : [\r\n        {\r\n            \"item_id\" : 47,\r\n            \"meter\": 5,\r\n            \"price\": 0\r\n        },\r\n        {\r\n            \"item_id\" : 44,\r\n            \"meter\": 5,\r\n            \"price\": 0\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/order/create",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"order",
+						"create"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Register",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstname",
+									"value": "Demo",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "User",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "demo23@domain.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 18 Jun 2020 09:47:54 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1066"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMzJjM2JmZjRkZDlhMmEzOGQxYWMwNDk0ZmMwZGY0MWJhMzM0ZDZhMjE2MjI0NjViZmVmMzE2OGVmYzM5M2EzZTExY2RiNDEyOTUzZjE1ZTUiLCJpYXQiOjE1OTI0NzM2NzQsIm5iZiI6MTU5MjQ3MzY3NCwiZXhwIjoxNjI0MDA5Njc0LCJzdWIiOiIyNSIsInNjb3BlcyI6W119.JhdMwzamvJJnaRgfFePxnbLc77LlBK4ai1OT5-mSc6Y70WBhA3Yspvsdq6Y_S3u6sxkU-gvo0XgsrJHSCwLys5SpdWg3McVQcXdlTgX9teDjdnSFDvIoky22O-1mNyXOj5EUDw35ON_pn6i5S00FcIxsjn7MXWuNvORzyHiE3A31X9ywAdJZ2EYCmSIu1298NBfEYIEt452W1w-DYsFC0cPkIhAbYPoYqNKomEcZvKw0G8VVcZ44ph8C3yQRFm7HxraQoD4wgBplG-UzMcqVKKaK8LztoTziZx7DHAyt8i-Wo2NBnb8m7nFSbUK_4ZxfBUwNTQJ8PIRIUqQh2CKxbr-AShc9ns7KX2RYwuCAP6ftYBEwYQCrWvBJlDA8qad5HwDlM_2TV8UK9mVJNGN-6r969eim3AUHoF-h4bQ0CN05ngQM_wEWanQJA5zsnEg_5fujZFwfHsg2tZlx_zMaoTWFh5JrmzNNqZspSmLyIuG5ffu82VxbbaA8lhZecUqUfGmeV776LNPXvNTXgkcRO6JSCiinVC4zpp45o_ElZr7Vu94cJOjAw9RzxtwtDUw4TC1p7mZ_K03oE_Hehvz_fvhQbt4qZkXcuz13-qMawWo9Cw6g1Ht8-1ebFSzwvU9aOMC3846AznKSKoMcQqtMzTaImVxZmKW3dncd7F6lPXs\",\n        \"firstname\": \"Demo\",\n        \"lastname\": \"User\"\n    },\n    \"message\": \"User register successfully.\"\n}"
+				},
+				{
+					"name": "Create Order",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"customer_id\": 1,\r\n    \"seller_id\": \"\",\r\n    \"note\": \"\",\r\n    \"items\" : [\r\n        {\r\n            \"item_id\" : 47,\r\n            \"meter\": 10\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/order/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"order",
+								"create"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 20 Oct 2020 06:01:39 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1112"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Order Successfully Created\",\n    \"data\": {\n        \"id\": 25,\n        \"customer_id\": 1,\n        \"seller_id\": 0,\n        \"order_date\": \"20/10/2020\",\n        \"note\": null,\n        \"status\": 1,\n        \"deleted_at\": null,\n        \"created_at\": \"2020-10-20T06:01:39.000000Z\",\n        \"updated_at\": \"2020-10-20T06:01:39.000000Z\",\n        \"customer\": {\n            \"id\": 1,\n            \"firstname\": \"Super Admin\",\n            \"lastname\": \"\",\n            \"email\": \"super@admin.com\",\n            \"email_verified_at\": null,\n            \"phone\": \"1234567890\",\n            \"phone2\": null,\n            \"company_name\": null,\n            \"business_nature\": null,\n            \"business_nature_other\": null,\n            \"address\": \"Address\",\n            \"city\": \"city\",\n            \"state\": \"State\",\n            \"country\": null,\n            \"zip\": \"123456\",\n            \"dob\": \"31/03/2020\",\n            \"avatar\": \"users/0aba8aa282611a9b38e4.png\",\n            \"joining_date\": \"20/10/2020\",\n            \"last_invoice\": 6,\n            \"salesman_commission\": null,\n            \"skype\": null,\n            \"facebook\": null,\n            \"pinterest\": null,\n            \"wechat\": null,\n            \"whatsapp\": null,\n            \"line\": null,\n            \"newsletter\": 0,\n            \"api_user\": 0,\n            \"created_at\": \"2020-03-28T11:36:28.000000Z\",\n            \"updated_at\": \"2020-08-30T21:39:42.000000Z\"\n        },\n        \"seller\": null,\n        \"invoice\": null,\n        \"order_items\": [\n            {\n                \"id\": 46,\n                \"order_id\": 25,\n                \"item_id\": 47,\n                \"type_of_sale\": \"R\",\n                \"meter\": \"10.00\",\n                \"price\": \"0.00\",\n                \"created_at\": \"2020-10-20T06:01:39.000000Z\",\n                \"updated_at\": \"2020-10-20T06:01:39.000000Z\"\n            }\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Send Contact mail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0536c483-7e9f-4111-a315-87468000018b",
+						"exec": [
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.environment.set(\"token\", jsonData.data.token);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Contact Person",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "customer@domain.com",
+							"type": "text"
+						},
+						{
+							"key": "message",
+							"value": "Inquiry message",
+							"type": "text"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/send_contact_mail",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"send_contact_mail"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Register",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "firstname",
+									"value": "Demo",
+									"type": "text"
+								},
+								{
+									"key": "lastname",
+									"value": "User",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "demo23@domain.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456789",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 18 Jun 2020 09:47:54 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1066"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMzJjM2JmZjRkZDlhMmEzOGQxYWMwNDk0ZmMwZGY0MWJhMzM0ZDZhMjE2MjI0NjViZmVmMzE2OGVmYzM5M2EzZTExY2RiNDEyOTUzZjE1ZTUiLCJpYXQiOjE1OTI0NzM2NzQsIm5iZiI6MTU5MjQ3MzY3NCwiZXhwIjoxNjI0MDA5Njc0LCJzdWIiOiIyNSIsInNjb3BlcyI6W119.JhdMwzamvJJnaRgfFePxnbLc77LlBK4ai1OT5-mSc6Y70WBhA3Yspvsdq6Y_S3u6sxkU-gvo0XgsrJHSCwLys5SpdWg3McVQcXdlTgX9teDjdnSFDvIoky22O-1mNyXOj5EUDw35ON_pn6i5S00FcIxsjn7MXWuNvORzyHiE3A31X9ywAdJZ2EYCmSIu1298NBfEYIEt452W1w-DYsFC0cPkIhAbYPoYqNKomEcZvKw0G8VVcZ44ph8C3yQRFm7HxraQoD4wgBplG-UzMcqVKKaK8LztoTziZx7DHAyt8i-Wo2NBnb8m7nFSbUK_4ZxfBUwNTQJ8PIRIUqQh2CKxbr-AShc9ns7KX2RYwuCAP6ftYBEwYQCrWvBJlDA8qad5HwDlM_2TV8UK9mVJNGN-6r969eim3AUHoF-h4bQ0CN05ngQM_wEWanQJA5zsnEg_5fujZFwfHsg2tZlx_zMaoTWFh5JrmzNNqZspSmLyIuG5ffu82VxbbaA8lhZecUqUfGmeV776LNPXvNTXgkcRO6JSCiinVC4zpp45o_ElZr7Vu94cJOjAw9RzxtwtDUw4TC1p7mZ_K03oE_Hehvz_fvhQbt4qZkXcuz13-qMawWo9Cw6g1Ht8-1ebFSzwvU9aOMC3846AznKSKoMcQqtMzTaImVxZmKW3dncd7F6lPXs\",\n        \"firstname\": \"Demo\",\n        \"lastname\": \"User\"\n    },\n    \"message\": \"User register successfully.\"\n}"
+				},
+				{
+					"name": "Create Order",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"customer_id\": 1,\r\n    \"seller_id\": \"\",\r\n    \"note\": \"\",\r\n    \"items\" : [\r\n        {\r\n            \"item_id\" : 47,\r\n            \"meter\": 10\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/order/create",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"order",
+								"create"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 20 Oct 2020 06:01:39 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1112"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Order Successfully Created\",\n    \"data\": {\n        \"id\": 25,\n        \"customer_id\": 1,\n        \"seller_id\": 0,\n        \"order_date\": \"20/10/2020\",\n        \"note\": null,\n        \"status\": 1,\n        \"deleted_at\": null,\n        \"created_at\": \"2020-10-20T06:01:39.000000Z\",\n        \"updated_at\": \"2020-10-20T06:01:39.000000Z\",\n        \"customer\": {\n            \"id\": 1,\n            \"firstname\": \"Super Admin\",\n            \"lastname\": \"\",\n            \"email\": \"super@admin.com\",\n            \"email_verified_at\": null,\n            \"phone\": \"1234567890\",\n            \"phone2\": null,\n            \"company_name\": null,\n            \"business_nature\": null,\n            \"business_nature_other\": null,\n            \"address\": \"Address\",\n            \"city\": \"city\",\n            \"state\": \"State\",\n            \"country\": null,\n            \"zip\": \"123456\",\n            \"dob\": \"31/03/2020\",\n            \"avatar\": \"users/0aba8aa282611a9b38e4.png\",\n            \"joining_date\": \"20/10/2020\",\n            \"last_invoice\": 6,\n            \"salesman_commission\": null,\n            \"skype\": null,\n            \"facebook\": null,\n            \"pinterest\": null,\n            \"wechat\": null,\n            \"whatsapp\": null,\n            \"line\": null,\n            \"newsletter\": 0,\n            \"api_user\": 0,\n            \"created_at\": \"2020-03-28T11:36:28.000000Z\",\n            \"updated_at\": \"2020-08-30T21:39:42.000000Z\"\n        },\n        \"seller\": null,\n        \"invoice\": null,\n        \"order_items\": [\n            {\n                \"id\": 46,\n                \"order_id\": 25,\n                \"item_id\": 47,\n                \"type_of_sale\": \"R\",\n                \"meter\": \"10.00\",\n                \"price\": \"0.00\",\n                \"created_at\": \"2020-10-20T06:01:39.000000Z\",\n                \"updated_at\": \"2020-10-20T06:01:39.000000Z\"\n            }\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Logged in user info",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/user/me",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"me"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Logged in user info",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user/me",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user",
+								"me"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 18 Jun 2020 09:49:29 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "353"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": 25,\n        \"firstname\": \"Demo\",\n        \"lastname\": \"User\",\n        \"email\": \"demo23@domain.com\",\n        \"email_verified_at\": null,\n        \"phone\": null,\n        \"address\": null,\n        \"city\": null,\n        \"state\": null,\n        \"zip\": null,\n        \"dob\": \"18/06/2020\",\n        \"avatar\": null,\n        \"joining_date\": \"18/06/2020\",\n        \"created_at\": \"2020-06-18T09:47:54.000000Z\",\n        \"updated_at\": \"2020-06-18T09:47:54.000000Z\"\n    },\n    \"message\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/categories?q=&perPage=2",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"categories"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": ""
+						},
+						{
+							"key": "perPage",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Categories",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories?q=&perPage=2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": ""
+								},
+								{
+									"key": "perPage",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Thu, 18 Jun 2020 09:53:45 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "871"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Success\",\n    \"data\": {\n        \"current_page\": 1,\n        \"data\": [\n            {\n                \"id\": 1,\n                \"name\": \"Category 1\",\n                \"slug\": \"category-1\",\n                \"parent_id\": 0,\n                \"status\": 1,\n                \"deleted_at\": null,\n                \"created_at\": \"2020-03-28T11:36:31.000000Z\",\n                \"updated_at\": \"2020-03-28T11:36:31.000000Z\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Category 2\",\n                \"slug\": \"category-2\",\n                \"parent_id\": 0,\n                \"status\": 1,\n                \"deleted_at\": null,\n                \"created_at\": \"2020-03-28T11:36:31.000000Z\",\n                \"updated_at\": \"2020-03-28T11:36:31.000000Z\"\n            }\n        ],\n        \"first_page_url\": \"http://localhost/laravel/premiercollection/api/categories?perPage=2&page=1\",\n        \"from\": 1,\n        \"last_page\": 2,\n        \"last_page_url\": \"http://localhost/laravel/premiercollection/api/categories?perPage=2&page=2\",\n        \"next_page_url\": \"http://localhost/laravel/premiercollection/api/categories?perPage=2&page=2\",\n        \"path\": \"http://localhost/laravel/premiercollection/api/categories\",\n        \"per_page\": 2,\n        \"prev_page_url\": null,\n        \"to\": 2,\n        \"total\": 3\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Materials",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/materials/?perPage=&q=890401155606127",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"materials",
+						""
+					],
+					"query": [
+						{
+							"key": "cat",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "article_no",
+							"value": "DeMa1",
+							"disabled": true
+						},
+						{
+							"key": "color",
+							"value": "Black",
+							"disabled": true
+						},
+						{
+							"key": "perPage",
+							"value": ""
+						},
+						{
+							"key": "paeg",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "q",
+							"value": "890401155606127"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Materials",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/materials/?article_no=DeMa1&color=&perPage=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materials",
+								""
+							],
+							"query": [
+								{
+									"key": "cat",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "article_no",
+									"value": "DeMa1"
+								},
+								{
+									"key": "color",
+									"value": ""
+								},
+								{
+									"key": "perPage",
+									"value": ""
+								},
+								{
+									"key": "paeg",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 16 Oct 2020 11:40:53 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1310"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=99"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Success\",\n    \"data\": [\n        {\n            \"id\": 47,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Black\",\n            \"color_no\": \"01\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/63a0f0aac0d50d502378.jpg\",\n            \"barcode\": \"765263904812037\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 48,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Red\",\n            \"color_no\": \"02\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/ac5841678616f7b17aa8.jpg\",\n            \"barcode\": \"359261393801204\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 49,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Yellow\",\n            \"color_no\": \"03\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/1f45143426a0233b4744.jpg\",\n            \"barcode\": \"121833909680051\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        }\n    ],\n    \"colors\": [\n        \"Black\",\n        \"Red\",\n        \"Yellow\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/orders/my",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"orders",
+						"my"
+					],
+					"query": [
+						{
+							"key": "cat",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "paeg",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Materials",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/materials/?article_no=DeMa1&color=&perPage=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materials",
+								""
+							],
+							"query": [
+								{
+									"key": "cat",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "article_no",
+									"value": "DeMa1"
+								},
+								{
+									"key": "color",
+									"value": ""
+								},
+								{
+									"key": "perPage",
+									"value": ""
+								},
+								{
+									"key": "paeg",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 16 Oct 2020 11:40:53 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1310"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=99"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Success\",\n    \"data\": [\n        {\n            \"id\": 47,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Black\",\n            \"color_no\": \"01\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/63a0f0aac0d50d502378.jpg\",\n            \"barcode\": \"765263904812037\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 48,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Red\",\n            \"color_no\": \"02\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/ac5841678616f7b17aa8.jpg\",\n            \"barcode\": \"359261393801204\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 49,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Yellow\",\n            \"color_no\": \"03\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/1f45143426a0233b4744.jpg\",\n            \"barcode\": \"121833909680051\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        }\n    ],\n    \"colors\": [\n        \"Black\",\n        \"Red\",\n        \"Yellow\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Bookings",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/bookings/my",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"bookings",
+						"my"
+					],
+					"query": [
+						{
+							"key": "cat",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "paeg",
+							"value": "1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Materials",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/materials/?article_no=DeMa1&color=&perPage=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materials",
+								""
+							],
+							"query": [
+								{
+									"key": "cat",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "article_no",
+									"value": "DeMa1"
+								},
+								{
+									"key": "color",
+									"value": ""
+								},
+								{
+									"key": "perPage",
+									"value": ""
+								},
+								{
+									"key": "paeg",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 16 Oct 2020 11:40:53 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1310"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=99"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Success\",\n    \"data\": [\n        {\n            \"id\": 47,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Black\",\n            \"color_no\": \"01\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/63a0f0aac0d50d502378.jpg\",\n            \"barcode\": \"765263904812037\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 48,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Red\",\n            \"color_no\": \"02\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/ac5841678616f7b17aa8.jpg\",\n            \"barcode\": \"359261393801204\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 49,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Yellow\",\n            \"color_no\": \"03\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/1f45143426a0233b4744.jpg\",\n            \"barcode\": \"121833909680051\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        }\n    ],\n    \"colors\": [\n        \"Black\",\n        \"Red\",\n        \"Yellow\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Orders By Customer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/orders/by_customer?id=23",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"orders",
+						"by_customer"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "23"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Materials",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/materials/?article_no=DeMa1&color=&perPage=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materials",
+								""
+							],
+							"query": [
+								{
+									"key": "cat",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "article_no",
+									"value": "DeMa1"
+								},
+								{
+									"key": "color",
+									"value": ""
+								},
+								{
+									"key": "perPage",
+									"value": ""
+								},
+								{
+									"key": "paeg",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 16 Oct 2020 11:40:53 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1310"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=99"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Success\",\n    \"data\": [\n        {\n            \"id\": 47,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Black\",\n            \"color_no\": \"01\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/63a0f0aac0d50d502378.jpg\",\n            \"barcode\": \"765263904812037\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 48,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Red\",\n            \"color_no\": \"02\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/ac5841678616f7b17aa8.jpg\",\n            \"barcode\": \"359261393801204\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 49,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Yellow\",\n            \"color_no\": \"03\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/1f45143426a0233b4744.jpg\",\n            \"barcode\": \"121833909680051\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        }\n    ],\n    \"colors\": [\n        \"Black\",\n        \"Red\",\n        \"Yellow\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Bookings By Customer Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/bookings/by_customer?id=23",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"bookings",
+						"by_customer"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "23"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Materials",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/materials/?article_no=DeMa1&color=&perPage=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materials",
+								""
+							],
+							"query": [
+								{
+									"key": "cat",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "article_no",
+									"value": "DeMa1"
+								},
+								{
+									"key": "color",
+									"value": ""
+								},
+								{
+									"key": "perPage",
+									"value": ""
+								},
+								{
+									"key": "paeg",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 16 Oct 2020 11:40:53 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1310"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=99"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Success\",\n    \"data\": [\n        {\n            \"id\": 47,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Black\",\n            \"color_no\": \"01\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/63a0f0aac0d50d502378.jpg\",\n            \"barcode\": \"765263904812037\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 48,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Red\",\n            \"color_no\": \"02\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/ac5841678616f7b17aa8.jpg\",\n            \"barcode\": \"359261393801204\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 49,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Yellow\",\n            \"color_no\": \"03\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/1f45143426a0233b4744.jpg\",\n            \"barcode\": \"121833909680051\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        }\n    ],\n    \"colors\": [\n        \"Black\",\n        \"Red\",\n        \"Yellow\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Orders By ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/order/info?id=31",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"order",
+						"info"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "31"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Materials",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/materials/?article_no=DeMa1&color=&perPage=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materials",
+								""
+							],
+							"query": [
+								{
+									"key": "cat",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "article_no",
+									"value": "DeMa1"
+								},
+								{
+									"key": "color",
+									"value": ""
+								},
+								{
+									"key": "perPage",
+									"value": ""
+								},
+								{
+									"key": "paeg",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 16 Oct 2020 11:40:53 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1310"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=99"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Success\",\n    \"data\": [\n        {\n            \"id\": 47,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Black\",\n            \"color_no\": \"01\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/63a0f0aac0d50d502378.jpg\",\n            \"barcode\": \"765263904812037\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 48,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Red\",\n            \"color_no\": \"02\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/ac5841678616f7b17aa8.jpg\",\n            \"barcode\": \"359261393801204\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 49,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Yellow\",\n            \"color_no\": \"03\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/1f45143426a0233b4744.jpg\",\n            \"barcode\": \"121833909680051\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        }\n    ],\n    \"colors\": [\n        \"Black\",\n        \"Red\",\n        \"Yellow\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "My Clients",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/my_clients",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"my_clients"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Materials",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/materials/?article_no=DeMa1&color=&perPage=",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"materials",
+								""
+							],
+							"query": [
+								{
+									"key": "cat",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "article_no",
+									"value": "DeMa1"
+								},
+								{
+									"key": "color",
+									"value": ""
+								},
+								{
+									"key": "perPage",
+									"value": ""
+								},
+								{
+									"key": "paeg",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 16 Oct 2020 11:40:53 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache/2.4.39 (Win64) OpenSSL/1.1.1b PHP/7.3.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/7.3.5"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1310"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=99"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Success\",\n    \"data\": [\n        {\n            \"id\": 47,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Black\",\n            \"color_no\": \"01\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/63a0f0aac0d50d502378.jpg\",\n            \"barcode\": \"765263904812037\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 48,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Red\",\n            \"color_no\": \"02\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/ac5841678616f7b17aa8.jpg\",\n            \"barcode\": \"359261393801204\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        },\n        {\n            \"id\": 49,\n            \"name\": \"Demo Material 1\",\n            \"category_id\": 8,\n            \"selvage\": \"Demo Selvage\",\n            \"construction\": \"Demo Contrustion\",\n            \"color\": \"Yellow\",\n            \"color_no\": \"03\",\n            \"width\": \"50\",\n            \"article_no\": \"DeMa1\",\n            \"batch_no\": null,\n            \"image\": \"materials/1f45143426a0233b4744.jpg\",\n            \"barcode\": \"121833909680051\",\n            \"description\": \"Demo Material\",\n            \"status\": 1,\n            \"deleted_at\": null,\n            \"created_at\": \"2020-08-25T21:38:30.000000Z\",\n            \"updated_at\": \"2020-08-25T21:38:30.000000Z\"\n        }\n    ],\n    \"colors\": [\n        \"Black\",\n        \"Red\",\n        \"Yellow\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Single Material by Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/material?id=47",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"material"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "47",
+							"description": "Required"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Single Material by Id",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/material/47",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"material",
+								"47"
+							],
+							"query": [
+								{
+									"key": "cat",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "paeg",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sat, 17 Oct 2020 09:28:29 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization,Accept-Encoding"
+						},
+						{
+							"key": "Upgrade",
+							"value": "h2,h2c"
+						},
+						{
+							"key": "Connection",
+							"value": "Upgrade, Keep-Alive"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "host-header",
+							"value": "c2hhcmVkLmJsdWVob3N0LmNvbQ=="
+						},
+						{
+							"key": "Content-Length",
+							"value": "348"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=75"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Success\",\n    \"data\": {\n        \"id\": 47,\n        \"name\": \"Demo Material 1\",\n        \"category_id\": 8,\n        \"selvage\": \"Demo Selvage\",\n        \"construction\": \"Demo Contrustion\",\n        \"color\": \"Black\",\n        \"color_no\": \"01\",\n        \"width\": \"50\",\n        \"article_no\": \"DeMa1\",\n        \"batch_no\": null,\n        \"image\": \"materials/63a0f0aac0d50d502378.jpg\",\n        \"barcode\": \"765263904812037\",\n        \"description\": \"Demo Material\",\n        \"status\": 1,\n        \"deleted_at\": null,\n        \"created_at\": \"2020-08-25T10:08:30.000000Z\",\n        \"updated_at\": \"2020-08-25T10:08:30.000000Z\",\n        \"image_url\": \"http://clothing.shinetechnolab.com/public/uploads/materials/63a0f0aac0d50d502378.jpg\"\n    },\n    \"colors\": [\n        \"Black\",\n        \"Red\",\n        \"Yellow\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Single User Info (Customer or Seler)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/user/info?id=24",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"info"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "24",
+							"description": "Required"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Single Material by Id",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/material/47",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"material",
+								"47"
+							],
+							"query": [
+								{
+									"key": "cat",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "paeg",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Sat, 17 Oct 2020 09:28:29 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "60"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "59"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization,Accept-Encoding"
+						},
+						{
+							"key": "Upgrade",
+							"value": "h2,h2c"
+						},
+						{
+							"key": "Connection",
+							"value": "Upgrade, Keep-Alive"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "host-header",
+							"value": "c2hhcmVkLmJsdWVob3N0LmNvbQ=="
+						},
+						{
+							"key": "Content-Length",
+							"value": "348"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=75"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"Success\",\n    \"data\": {\n        \"id\": 47,\n        \"name\": \"Demo Material 1\",\n        \"category_id\": 8,\n        \"selvage\": \"Demo Selvage\",\n        \"construction\": \"Demo Contrustion\",\n        \"color\": \"Black\",\n        \"color_no\": \"01\",\n        \"width\": \"50\",\n        \"article_no\": \"DeMa1\",\n        \"batch_no\": null,\n        \"image\": \"materials/63a0f0aac0d50d502378.jpg\",\n        \"barcode\": \"765263904812037\",\n        \"description\": \"Demo Material\",\n        \"status\": 1,\n        \"deleted_at\": null,\n        \"created_at\": \"2020-08-25T10:08:30.000000Z\",\n        \"updated_at\": \"2020-08-25T10:08:30.000000Z\",\n        \"image_url\": \"http://clothing.shinetechnolab.com/public/uploads/materials/63a0f0aac0d50d502378.jpg\"\n    },\n    \"colors\": [\n        \"Black\",\n        \"Red\",\n        \"Yellow\"\n    ]\n}"
+				}
+			]
+		}
+	],
+	"protocolProfileBehavior": {}
+}

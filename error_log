@@ -1,0 +1,950 @@
+[18-Jun-2020 10:05:41 UTC] PHP Fatal error:  Trait 'Laravel\Passport\HasApiTokens' not found in /home1/shinete4/public_html/premiercollection/app/User.php on line 16
+[23-Jul-2022 12:52:28 UTC] PHP Fatal error:  Cannot redeclare App\Utils\Util::get_purchase_data() in /home1/shinetec/public_html/clothing/app/Utils/Util.php on line 210
+[29-Jul-2022 22:35:45 America/Boise] PHP Warning:  file_get_contents(/tmp/adminer.version): failed to open stream: Permission denied in /home1/shinetec/public_html/clothing/adminer.php on line 1425
+[01-Aug-2022 12:25:29 UTC] PHP Fatal error:  Trait 'App\HasFactory' not found in /home1/shinetec/public_html/clothing/app/Settings.php on line 7
+[12-Sep-2022 06:21:03 UTC] PHP Fatal error:  Trait 'Illuminate\Database\Eloquent\Factories\HasFactory' not found in /home1/shinetec/public_html/clothing/app/Audit.php on line 9
+[06-Jun-2023 12:48:56 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(310): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(127): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 12:50:04 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(310): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(127): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 06:58:50 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothing/vendor/composer/../lcobucci/jwt/compat/class-aliases.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothing/vendor/composer/autoload_real.php on line 78
+[06-Jun-2023 12:58:55 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(310): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(127): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 06:59:12 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 06:59:22 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 06:59:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 13:00:17 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(310): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(127): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 07:00:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:01:11 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:01:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:02:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:03:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:04:40 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:04:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:05:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:06:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 13:07:36 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(310): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(127): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 07:07:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:08:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:09:50 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothing/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothing/public/index.php on line 24
+[06-Jun-2023 13:10:26 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(310): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(127): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 07:10:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:11:29 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:11:32 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:11:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:12:50 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothing/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothing/public/index.php on line 24
+[06-Jun-2023 13:13:34 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(310): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(127): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:13:40 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home1/shinetec/public_html/clothing/vendor/psr/log/src/LoggerInterface.php on line 30
+[06-Jun-2023 13:13:40 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[06-Jun-2023 13:13:43 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home1/shinetec/public_html/clothing/vendor/psr/log/src/LoggerInterface.php on line 30
+[06-Jun-2023 13:13:43 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[06-Jun-2023 13:13:50 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home1/shinetec/public_html/clothing/vendor/psr/log/src/LoggerInterface.php on line 30
+[06-Jun-2023 13:13:50 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[06-Jun-2023 13:13:51 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home1/shinetec/public_html/clothing/vendor/psr/log/src/LoggerInterface.php on line 30
+[06-Jun-2023 13:13:51 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[06-Jun-2023 13:14:15 UTC] PHP Parse error:  syntax error, unexpected '|', expecting variable (T_VARIABLE) in /home1/shinetec/public_html/clothing/vendor/psr/log/src/LoggerInterface.php on line 30
+[06-Jun-2023 13:14:15 UTC] PHP Fatal error:  Exception thrown without a stack frame in Unknown on line 0
+[06-Jun-2023 07:14:32 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:14:35 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:14:46 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:14:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:15:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:16:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:17:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:18:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:18:54 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:19:33 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:19:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:20:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:21:41 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:21:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 07:22:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 13:23:20 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#11 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#12 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:23:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#11 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#12 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:24:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#11 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#12 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:25:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#11 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#12 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:26:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#11 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#12 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:27:18 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(310): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(127): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:27:33 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:27:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 07:28:50 America/Boise] PHP Fatal error:  Uncaught Error: Failed opening required '/home1/shinetec/public_html/clothing/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php82/root/usr/share/pear') in /home1/shinetec/public_html/clothing/public/index.php:24
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/index.php(21): require_once()
+#1 {main}
+  thrown in /home1/shinetec/public_html/clothing/public/index.php on line 24
+[06-Jun-2023 13:29:04 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(310): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(127): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:29:18 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:29:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:30:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:31:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:32:41 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(310): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(127): Illuminate\Foundation\Console\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/artisan(35): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:32:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:33:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 07:34:50 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.3.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 13:35:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:36:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:37:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:38:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:39:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:40:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:41:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:42:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:43:50 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:44:22 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 13:44:23 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 21:11:29 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 00:23:04 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 04:29:58 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 04:40:39 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothing/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothing/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothing/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothing/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[06-Jun-2023 22:50:35 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.3.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[06-Jun-2023 22:51:01 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home1/shinetec/public_html/clothing/vendor/composer/platform_check.php on line 24
+[07-Jun-2023 05:34:07 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothings/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothings/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 05:34:57 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothings/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothings/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 05:36:15 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothings/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothings/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 05:41:16 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothings/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothings/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 05:48:53 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothings/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothings/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 05:49:01 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothings/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothings/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 05:49:01 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothings/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothings/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 05:49:02 UTC] PHP Fatal error:  During inheritance of ArrayAccess: Uncaught ErrorException: Return type of Illuminate\Support\Collection::offsetExists($key) should either be compatible with ArrayAccess::offsetExists(mixed $offset): bool, or the #[\ReturnTypeWillChange] attribute should be used to temporarily suppress the notice in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php:1349
+Stack trace:
+#0 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8192, 'Return type of ...', '/home1/shinetec...', 1349)
+#1 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(571): include('/home1/shinetec...')
+#2 /home1/shinetec/public_html/clothings/vendor/composer/ClassLoader.php(428): Composer\Autoload\includeFile('/home1/shinetec...')
+#3 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/helpers.php(110): Composer\Autoload\ClassLoader->loadClass('Illuminate\\Supp...')
+#4 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(130): collect(Array)
+#5 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(106): Illuminate\Foundation\PackageManifest->build()
+#6 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(89): Illuminate\Foundation\PackageManifest->getManifest()
+#7 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/PackageManifest.php(78): Illuminate\Foundation\PackageManifest->config('aliases')
+#8 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/RegisterFacades.php(26): Illuminate\Foundation\PackageManifest->aliases()
+#9 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(230): Illuminate\Foundation\Bootstrap\RegisterFacades->bootstrap(Object(Illuminate\Foundation\Application))
+#10 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\Foundation\Application->bootstrapWith(Array)
+#11 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(135): Illuminate\Foundation\Http\Kernel->bootstrap()
+#12 /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(109): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#13 /home1/shinetec/public_html/clothings/public/index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#14 /home1/shinetec/public_html/clothings/index.php(21): require_once('/home1/shinetec...')
+#15 {main} in /home1/shinetec/public_html/clothings/vendor/laravel/framework/src/Illuminate/Support/Collection.php on line 11
+[07-Jun-2023 00:31:44 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:31:44 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:25 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:26 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:26 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:26 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:26 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:27 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:27 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:27 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:27 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:31 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:31 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:40 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:40 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:40 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:40 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:41 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:41 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:41 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:41 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:54 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:33:54 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 00:37:13 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/artisan on line 18
+[07-Jun-2023 00:37:13 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/artisan on line 18
+[07-Jun-2023 00:37:13 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/artisan on line 18
+[07-Jun-2023 00:37:35 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/artisan on line 18
+[07-Jun-2023 00:37:35 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/artisan on line 18
+[07-Jun-2023 00:37:35 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/artisan on line 18
+[07-Jun-2023 01:01:07 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:07 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:07 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:07 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:07 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:07 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:28 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:28 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:28 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:28 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:28 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:01:28 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:10:02 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:10:02 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:10:02 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:10:05 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:10:05 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:10:05 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:10:24 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:10:24 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:10:24 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:17:53 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:17:53 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:17:53 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:17:58 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:17:58 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:17:58 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:18:04 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:18:04 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:18:04 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:18:10 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:18:10 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:18:10 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:48:50 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:48:50 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 01:48:50 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 02:10:27 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 02:10:27 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 02:10:27 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 02:10:56 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 02:10:56 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 02:10:56 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 03:41:48 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 03:41:48 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 03:41:48 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 03:51:27 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 03:51:27 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 03:51:27 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 04:05:02 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 04:05:02 America/Boise] PHP Warning:  require(/home1/shinetec/public_html/clothings/public/../vendor/autoload.php): failed to open stream: No such file or directory in /home1/shinetec/public_html/clothings/public/index.php on line 24
+[07-Jun-2023 04:05:02 America/Boise] PHP Fatal error:  require(): Failed opening required '/home1/shinetec/public_html/clothings/public/../vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/shinetec/public_html/clothings/public/index.php on line 24
