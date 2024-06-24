@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Category;
 use App\Color;
 use App\Settings;
+use App\Supplier;
 use App\Utils\Util;
 use Illuminate\Support\Str;
 use Validator;
@@ -109,9 +110,11 @@ class MaterialController extends Controller
         $categories = [''=>"Select Category"];
         $categories += Category::active()->pluck('name', 'id')->all();
         $colors = Color::active()->pluck('name', 'id')->all();
+        $suppliers = [''=>"Select Supplier"];
+        $suppliers += Supplier::pluck('name', 'id')->all();
         $settings = Settings::where('id',1)->first();
 
-        return view('materials.create', compact('categories', 'colors','settings'));
+        return view('materials.create', compact('categories', 'colors','settings','suppliers'));
     }
 
     /**
@@ -122,12 +125,13 @@ class MaterialController extends Controller
      */
     public function store(Request $request)
     {
+        // dd(request()->all());
         $item=count($request->input('color_no'));
         $this->validate($request, [
             'name'        => 'required',
             'category_id' => 'required',
-            'width'       => 'required',
-            'weight'      => 'required',
+            'width_cm'       => 'required',
+            'width_inch'      => 'required',
             // 'selvage'  => 'required',
             // 'construction' => 'required',
             'article_no'  => 'required|unique:materials',
@@ -157,21 +161,33 @@ class MaterialController extends Controller
 
             $data = [
                         'name'          => $request->name,
-                        'barcode'       => $this->generateCode($request->article_no),
                         'category_id'   => $request->category_id,
-                        'color'         => Str::ucfirst($request->color[$i]),
-                        'color_no'      => $request->color_no[$i],
+                        'supplier_id'   => $request->supplier_id,
+                        'made_in'       => $request->made_in,
+                        'currency'      => $request->currency,
+                        'price'         => $request->price,
+                        'article_no'    => $request->article_no,
+                        'barcode'       => $this->generateCode($request->article_no),
+                        'roll'          => $request->roll,
+                        'cut_wholesale' => $request->cut_wholesale,
+                        'retail'        => $request->retail,
+                        'width_inch'    => $request->width_inch,
+                        'width_cm'      => $request->width_cm,
+                        'weight_gsm'    => $request->weight_gsm,
+                        'weight_per_mtr'=> $request->weight_per_mtr,
+                        'weight_per_yard'=> $request->weight_per_yard,
                         'selvage'       => $request->selvage,
                         'construction'  => $request->construction,
-                        'article_no'    => $request->article_no,
+                        'description'   => $request->description,
+                        'color_no'      => $request->color_no[$i],
+                        'color'         => Str::ucfirst($request->color[$i]),
                         'width'         => $request->width,
                         'weight'        => $request->weight,
-                        'description'   => $request->description,
                         'min_alert_qty' => $request->min_alert_qty[$i],
                         'image'         => isset($img[$i]) ? $img[$i] : null,
-                        'wholesale_price' => $request->wholesale_price,
-                        'retail_price'    => $request->retail_price,
-                        'sample_price'    => $request->sample_price,
+                        // 'wholesale_price' => $request->wholesale_price,
+                        // 'retail_price'    => $request->retail_price,
+                        // 'sample_price'    => $request->sample_price,
                     ];
                     // dd($data);
             Material::create($data);
@@ -203,7 +219,9 @@ class MaterialController extends Controller
         $categories = [''=>"Select Category"];
         $categories += Category::active()->pluck('name', 'id')->all();
         $colors = Color::active()->pluck('name', 'id')->all();
-        return view('materials.edit', compact('material', 'categories', 'colors'));
+        $suppliers = [''=>"Select Supplier"];
+        $suppliers += Supplier::pluck('name', 'id')->all();
+        return view('materials.edit', compact('material', 'categories', 'colors','suppliers'));
     }
 
     /**
@@ -221,27 +239,41 @@ class MaterialController extends Controller
             'barcode'      => 'required',
             'category_id'  => 'required',
             'color'        => 'required',
-            'selvage'      => 'required',
-            'construction' => 'required',
-            'weight'       =>'required',
             'article_no'   => 'required',
-            'image'        => 'image|mimes:png,jpg,jpeg|max:' . config('constants.image_size_limit'),
+            'width_cm'       => 'required',
+            'width_inch'      => 'required',
+            // 'selvage'  => 'required',
+            // 'construction' => 'required',
+            // 'image'    => 'required|image|mimes:png,jpg,jpeg|max:' . config('constants.image_size_limit'),
         ]);
 
         $data = [
                     'name'         => $request->name,
+                    'category_id'   => $request->category_id,
+                    'supplier_id'   => $request->supplier_id,
+                    'made_in'       => $request->made_in,
+                    'currency'      => $request->currency,
+                    'price'         => $request->price,
+                    'article_no'    => $request->article_no,
                     'barcode'      => $request->barcode,
-                    'category_id'  => $request->category_id,
-                    'color'        => $request->color,
+                    'roll'          => $request->roll,
+                    'cut_wholesale' => $request->cut_wholesale,
+                    'retail'        => $request->retail,
+                    'width_inch'    => $request->width_inch,
+                    'width_cm'      => $request->width_cm,
+                    'weight_gsm'    => $request->weight_gsm,
+                    'weight_per_mtr'=> $request->weight_per_mtr,
+                    'weight_per_yard'=> $request->weight_per_yard,
                     'selvage'      => $request->selvage,
                     'construction' => $request->construction,
-                    'weight'       => $request->weight,
-                    'article_no'   => $request->article_no,
                     'description'  => $request->description,
+                    'color'        => $request->color,
+                    // 'weight'       => $request->weight,
                     'status'       => ($request->status) ? true : false,
-                    'wholesale_price' => $request->wholesale_price,
-                    'retail_price'    => $request->retail_price,
-                    'sample_price'    => $request->sample_price,
+                    'min_alert_qty' => $request->min_alert_qty,
+                    // 'wholesale_price' => $request->wholesale_price,
+                    // 'retail_price'    => $request->retail_price,
+                    // 'sample_price'    => $request->sample_price,
                 ];
 
         if ($request->image) {

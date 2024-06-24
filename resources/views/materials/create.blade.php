@@ -30,22 +30,54 @@
 
 
                 {!! Form::open(array('route' => 'materials.store','method'=>'POST','id'=>'from_add_material', 'class'=>"form-horizontal form-validate", 'novalidate', 'files' => true)) !!}
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Name</label>
-                    <div class="col-lg-5">
+                <div class="row">
+                    <div class="form-group row d-flex col-lg-2">
+                        <label class="form-control-label d-flex">Brand<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('name', null, array('placeholder' => 'New Item','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Category</label>
-                    <div class="col-lg-5">
+                    <div class="form-group row d-flex col-lg-2 ml-2">
+                        <label class="form-control-label d-flex">Category<span class="text-danger ml-2">*</span></label>
                         {!! Form::select('category_id', $categories,null, array('class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
                     </div>
+                    <div class="form-group row d-flex col-lg-2 ml-2">
+                        <label class="form-control-label d-flex">Vendor<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('supplier_id', $suppliers,null, array('class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                    </div>
+                    <div class="form-group row d-flex col-lg-2 ml-2">
+                        <label class="form-control-label d-flex">Made In<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('made_in',[''=>'Select Country','india'=>'India','china'=>'China','thailand'=>'Thailand'],null, array('class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                    </div>
+                    <div class="form-group row d-flex col-lg-2 ml-2">
+                        <label class="form-control-label d-flex">Price Currency<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('currency', [''=>'Select Currency','USD'=>'USD','EUR'=>'EUR','CNY'=>'CNY','THB'=>'THB','INR'=>'INR'],null, array('id'=>'currency_of_purchase','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                    </div>
+                    <div class="form-group row d-flex col-lg-2 ml-2">
+                        <label class="form-control-label d-flex">Price<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text('price', null, array('placeholder' => 'Amount','class' => 'form-control', 'data-validation'=>"required")) !!}
+                    </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Article No.</label>
-                    <div class="col-lg-5">
-                        {!! Form::text('article_no', null, array('id'=>'article_no','placeholder' => 'Give Article No.','class' => 'form-control', 'data-validation'=>"required")) !!}
+                <div class="row">
+                    <div class="form-group row d-flex col-lg-2">
+                        <label class="form-control-label d-flex">Article<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text('article_no', null, array('id'=>'article_no','placeholder' => 'Give Article Name','class' => 'form-control', 'data-validation'=>"required")) !!}
+                    </div>
+                    <div class="form-group row d-flex col-lg-1 ml-2 justify-content-center align-items-center">
+                        <label class="form-control-label">Selling Price:</label>
+                    </div>
+                    <div class="form-group row d-flex col-lg-2 ml-2">
+                        <!-- <label class="form-control-label">Sample Price</label> -->
+                        <label class="form-control-label">ROLL</label>
+                        {!! Form::text('roll',0, array('class' => 'form-control col-lg-12','id'=>"sample",'data-validation' => "number",'data-validation-allowing'=>"float",'placeholder' => 'Sample Price')) !!}
+                    </div>
+                    <div class="form-group row d-flex col-lg-2 ml-2">
+                        <!-- <label class="form-control-label">Wholesale Price</label> -->
+                        <label class="form-control-label">CUT WHOLESALE</label>
+                        {!! Form::text('cut_wholesale',0, array('class' => 'form-control col-lg-12','id'=>"wholesale",'data-validation' => "number",'data-validation-allowing'=>"float",'placeholder' => 'WholeSale Price')) !!}
+                    </div>
+                    <div class="form-group row d-flex col-lg-2 ml-2">
+                        <!-- <label class="form-control-label">Retail Price</label> -->
+                        <label class="form-control-label">RETAIL</label>
+                        {!! Form::text('retail',0, array('class' => 'form-control col-lg-12','id'=>"retail",'data-validation' => "number",'data-validation-allowing'=>"float",'placeholder' => 'Retail Price')) !!}
                     </div>
                 </div>
                 {{-- <div class="form-group row d-flex align-items-center mb-5">
@@ -62,63 +94,64 @@
                         </div>
                     </div>
                 </div> --}}
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Price</label>
-                    <div class="col-lg-2">
-                        <label for="col-lg-2 form-control-label d-flex justify-content-lg-end">Wholesale Price</label>
-                        {!! Form::text('wholesale_price',0, array('class' => 'form-control col-lg-12','id'=>"wholesale",'data-validation' => "number",'data-validation-allowing'=>"float",'placeholder' => 'WholeSale Price')) !!}
+                <div class="row">
+                    <div class="form-group row col-lg-2">
+                        <label class="form-control-label">Width (inch)<span class="text-danger ml-2">*</span></label>
+                        <div class="input-group-append">
+                            <input type="text" name="width_inch" class="form-control width-inch" id="widthInch" placeholder="Width in inches" data-validation="required">
+                            <span class="input-group-text">INCH</span>
+                        </div>
                     </div>
-                    <div class="col-lg-2">
-                        <label for="col-lg-2 form-control-label d-flex justify-content-lg-end">Retail Price</label>
-                        {!! Form::text('retail_price',0, array('class' => 'form-control col-lg-12','id'=>"retail",'data-validation' => "number",'data-validation-allowing'=>"float",'placeholder' => 'Retail Price')) !!}
+                    <div class="form-group row col-lg-2 ml-2">
+                        <label class="form-control-label">Width(cm) = inch*2.54</label>
+                        <div class="input-group-append">
+                            <input type="text" name="width_cm" class="form-control width-cm" id="widthCm" placeholder="Width in centimeters" readonly>
+                            <span class="input-group-text">CM</span>
+                        </div>
                     </div>
-                    <div class="col-lg-2">
-                        <label for="col-lg-2 form-control-label d-flex justify-content-lg-end">Sample Price</label>
-                        {!! Form::text('sample_price',0, array('class' => 'form-control col-lg-12','id'=>"sample",'data-validation' => "number",'data-validation-allowing'=>"float",'placeholder' => 'Sample Price')) !!}
+                    <div class="form-group row col-lg-2 ml-2">
+                        <label class="form-control-label">Weight(gsm)<span class="text-danger ml-2">*</span></label>
+                        <div class="input-group-append">
+                            {!! Form::text('weight_gsm',null, array('class' => 'form-control width','id'=>"width",'placeholder' => 'Width', 'data-validation'=>"required")) !!}
+                            <span class="input-group-text">GSM</span>
+                        </div>
+                    </div>
+                    <div class="form-group row col-lg-2 ml-2">
+                        <label class="form-control-label">Weight(per mtr)<span class="text-danger ml-2">*</span></label>
+                        <div class="input-group-append">
+                            {!! Form::text('weight_per_mtr',null, array('class' => 'form-control weight','id'=>"weight",'placeholder' => 'Weight', 'data-validation'=>"required")) !!}
+                            <span class="input-group-text">PER MTR</span>
+                        </div>
+                    </div>
+                    <div class="form-group row col-lg-2 ml-2">
+                        <label class="form-control-label">Weight(per yard)<span class="text-danger ml-2">*</span></label>
+                        <div class="input-group-append">
+                            {!! Form::text('weight_per_yard',null, array('class' => 'form-control weight','id'=>"weight",'placeholder' => 'Weight', 'data-validation'=>"required")) !!}
+                            <span class="input-group-text">PER YARD</span>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Width</label>
-                    <div class="col-lg-5">
-                        {!! Form::text('width',null, array('class' => 'form-control width','id'=>"width",'placeholder' => 'Width', 'data-validation'=>"required")) !!}
-                    </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Weight</label>
-                    <div class="col-lg-5">
-                        {!! Form::text('weight',null, array('class' => 'form-control weight','id'=>"weight",'placeholder' => 'Weight', 'data-validation'=>"required")) !!}
-                    </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Selvage</label>
-                    <div class="col-lg-5">
+                <div class="row">
+                    <div class="form-group row col-lg-3">
+                        <label class="form-control-label d-flex">Selvage</label>
                         {!! Form::text('selvage',null, array('class' => 'form-control selvage','id'=>"selvage",'placeholder' => 'Selvage')) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Construction</label>
-                    <div class="col-lg-5">
+                    <div class="form-group row col-lg-3 ml-2">
+                        <label class="form-control-label d-flex">Construction</label>
                         {!! Form::text('construction', null, array('placeholder' => 'Construction','class' => 'form-control','id'=>"construction")) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Description</label>
-                    <div class="col-lg-5">
+                    <div class="form-group row col-lg-3 ml-2">
+                        <label class="col-lg-2 form-control-label d-flex">Description</label>
                         {!! Form::textarea('description', null, ['class' => 'form-control','rows' => 3]); !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">No of colors</label>
-                    <div class="col-lg-5">
-
+                    <div class="form-group row col-lg-3 ml-2">
+                        <label class="form-control-label d-flex">No of colors<span class="text-danger ml-2">*</span></label>
                         <div class="input-group mb-3">
                             {!! Form::number('no_of_color', 1, ["class"=>" form-control no_of_color",'id'=>"no_of_color"]) !!}
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-primary p-2 rounded-right btn-md px-3" id="add_color_item">Add Color Item</button>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 {{-- <div class="form-group row d-flex align-items-center mb-5">
@@ -255,18 +288,21 @@
     <td>{!! Form::text('color_no[]', null, ['class'=>'form-control color_no','id'=>"color_no"]) !!}</td>
     <td>{!! Form::text('color[]', null, ['class'=>'form-control color','id'=>'color']) !!}</td>
     <td>{!! Form::text('min_alert_qty[]',null, ['class'=>'form-control min_alert_qty','id'=>'min_alert_qty']) !!}</td>
-    <td>{!! Form::file('image[]', ['id' => 'upload_image', 'accept' => 'image/*',
-        'data-validation'=>"mime",
-        'data-validation-allowing'=>"jpeg, jpg, png, gif",
-        'data-validation-error-msg-mime'=>"You can only upload images",
-        "capture"=>"camera"]); !!}
+    <td>
+        <div style="display: flex; align-items: center;">
+            {!! Form::file('image[]', ['id' => 'upload_image', 'accept' => 'image/*',
+            'data-validation'=>"mime",
+            'data-validation-allowing'=>"jpeg, jpg, png, gif",
+            'data-validation-error-msg-mime'=>"You can only upload images",
+            "capture"=>"camera"]); !!}
+            <button type="button" class="btn btn-info btn-sl" data-toggle="modal" onclick="showComara(this)" data-target="#myModal">Capture</button>
+        </div>
         <small>
             <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
         </small>
-        <button type=button class="btn btn-info btn-lg"  data-toggle="modal" onclick="showComara(this)"  data-target="#myModal" >Capture</button>
         <input type="hidden" name="image_binary[]" class="image_binary"/>    
     </td>
-    <td><a class="btn btn-danger btn-square btn-sm text-dark item-delete" >Delete</a></td>
+    <td><a class="btn btn-danger btn-square btn-sm item-delete" >Delete</a></td>
     {!! Form::hidden('barcode[]', null, array('id'=>'input_barcode','placeholder' => 'Barcode Number','class' => 'form-control input_barcode')) !!}
 </script>
 
@@ -392,5 +428,30 @@
     function closeWebcame(){
         Webcam.reset();
     }
+
+    // Function to convert inches to centimeters
+    function inchesToCm(inches) {
+        return inches * 2.54; // 1 inch = 2.54 cm
+    }
+
+    // Add event listener to detect input changes in width-inch field
+    document.getElementById('widthInch').addEventListener('input', function() {
+        // Get value of width in inches
+        let inches = parseFloat(this.value);
+
+        // Check if the input is a valid number
+        if (!isNaN(inches)) {
+            // Convert inches to centimeters
+            let cm = inchesToCm(inches);
+
+            // Update the value in width-cm field (rounded to 2 decimal places)
+            document.getElementById('widthCm').value = cm.toFixed(2);
+        } else {
+            // If input is not a valid number, clear the width-cm field
+            document.getElementById('widthCm').value = '';
+        }
+    });
 </script>
 @endpush
+
+
