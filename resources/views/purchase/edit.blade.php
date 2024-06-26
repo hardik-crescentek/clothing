@@ -30,46 +30,115 @@
 
 
                 {!! Form::model($purchase, ['route' => ['purchase.update', $purchase->id],'method'=>'PATCH','id'=>'from_edit_purchase', 'class'=>"form-horizontal form-validate", 'novalidate','files' => true]) !!}
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6">
-                        <div class="row">
-                            <div class="col mb-3">
+                <div class="row">
+                    <div class="col-lg-6 row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
                                 <label class="form-control-label">Date of purchase<span class="text-danger ml-2">*</span></label>
                                 {!! Form::text('purchase_date', null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required")) !!}
                             </div>
-                            <div class="col mb-3">
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
                                 <label class="form-control-label">Invoice No.<span class="text-danger ml-2">*</span></label>
                                 {!! Form::text('invoice_no', null, array('id' => 'invoice_no','class' => 'form-control', 'data-validation'=>"required")) !!}
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Supplier<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-8">
-                                {!! Form::select('supplier_id', $suppliers,null, array('id'=>'supplier_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label">Supplier<span class="text-danger ml-2">*</span></label>
+                                <div class="input-group form-group">
+                                    {!! Form::select('supplier_id', $suppliers,null, array('id'=>'supplier_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                                    <a href="{{ route('supplier.create', ['redirect' =>  base64_encode(route('purchase.create'))]) }}" class="btn btn-primary btn-square">Add Supplier</a>
+                                </div>
                             </div>
-                            <div class="col-4">
-                                <a href="{{ route('supplier.create', ['redirect' =>  base64_encode(route('purchase.create'))]) }}" class="btn btn-primary btn-square">Add Supplier</a>
-
+                        </div>
+                    </div>
+                    <div class="col-lg-6 row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label">Purchase Type<span class="text-danger ml-2">*</span></label>
+                                {!! Form::select('purchase_type', ['domestic'=>'Domestic', 'international'=>'International'],null, array('id'=>'purchase_type','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label">Currency Of Purchase<span class="text-danger ml-2">*</span></label>
+                                {!! Form::select('currency_of_purchase', [''=>'Select Currency','USD'=>'USD','EUR'=>'EUR','CNY'=>'CNY','THB'=>'THB','INR'=>'INR'],null, array('id'=>'currency_of_purchase','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label">EX RATE<span class="text-danger ml-2">*</span></label>
+                                {!! Form::text('ex_rate', null, array('id' => 'ex_rate','class' => 'form-control')) !!}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group row mb-3">
+                <div class="row">
+                    <div class="row col-lg-6">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-control-label">Total Meter<span class="text-danger ml-2">*</span></label>
+                                {!! Form::text('total_meter', null, array('placeholder' => 'Meters','id'=>'total_meter','class' => 'form-control')) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-control-label">Total Yards<span class="text-danger ml-2">*</span></label>
+                                {!! Form::text('total_yard', null, array('placeholder' => 'Yards','id'=>'total_yard','class' => 'form-control','readonly'=>'true')) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label">Import Tax<span class="text-danger ml-2">*</span></label>
+                                {!! Form::text('import_tax', null, array('placeholder' => 'THB','id'=>'import_tax','class' => 'form-control')) !!}
+                            </div>
+                        </div>
+                    </div>
+                        
+                    <div class="row col-lg-6">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label">Transport & Shipping Paid<span class="text-danger ml-2">*</span></label>
+                                {!! Form::text('transport_shipping_paid', null, array('placeholder' => 'THB','id'=>'transport_shipping_paid','class' => 'form-control')) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label">Discount</label>
+                                {!! Form::text('discount', null, array('placeholder' => 'discount','class' => 'form-control','id'=>'discount')) !!}
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="form-control-label">Attach Document</label>
+                                {!! Form::file('attach_documents[]', [
+                                        'class' => 'custom-file-input_0',
+                                        'id' => 'attach_documents',
+                                        'multiple' => true, // Enable multiple file selection
+                                        'data-validation' => 'mime',
+                                        'data-validation-allowing' => 'jpeg, jpg, png, pdf, doc, docx',
+                                        'data-validation-error-msg-mime' => 'You can only upload image or document files'
+                                    ]) !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Transportation & Shipping Cost Per Meter<span class="text-danger ml-2">*</span></label>
+                            {!! Form::text('transport_shippment_cost_per_meter', null, array('class' => 'form-control','id'=>'transport_shippment_cost_per_meter','readonly'=>'readonly')) !!}
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="form-group row mb-3">
                     <div class="col-xl-6">
                         <div class="row">
                             <div class="col mb-3">
-                                <label class="form-control-label">Purchase Type<span class="text-danger ml-2">*</span></label>
-                                {!! Form::select('purchase_type', ['domestic'=>'Domestic', 'international'=>'International'],null, array('id'=>'purchase_type','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col mb-3">
                                 <label class="form-control-label">Payment Terms<span class="text-danger ml-2">*</span></label>
                                 {!! Form::text('payment_terms', null, array('id' => 'payment_terms','class' => 'form-control')) !!}
-                            </div>
-                            <div class="col">
-                                <label class="form-control-label">Currency Of Purchase<span class="text-danger ml-2">*</span></label>
-                                {!! Form::select('currency_of_purchase', [''=>'Select Currency','USD'=>'USD','EUR'=>'EUR','CNY'=>'CNY','THB'=>'THB','INR'=>'INR'],null, array('id'=>'currency_of_purchase','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
                             </div>
                         </div>
                     </div>
@@ -91,10 +160,6 @@
                 <div class="form-group row mb-3">
                     <div class="col-xl-7">
                         <div class="row">
-                            <div class="col">
-                                <label class="form-control-label">Total Meter In This Invoice</label>
-                                {!! Form::text('total_meter', null, array('placeholder' => 'Meters','id'=>'total_meter','class' => 'form-control','readonly' )) !!}
-                            </div>
                             <div class="col">
                                 <label class="form-control-label">Shipping Paid</label>
                                 {!! Form::text('shipping_paid', null, array('placeholder' => 'Shipping THB','id'=>'shipping_paid','class' => 'form-control')) !!}
@@ -160,11 +225,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group row mb-5">
-                    <div class="col">
-                        <label class="form-control-label">Note</label>
-                        {!! Form::textarea('note', null, ['class' => 'form-control','rows' => 3]); !!}
+                </div> -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="form-control-label">Note</label>
+                            {!! Form::textarea('note', null, ['class' => 'form-control','rows' => 3]); !!}
+                        </div>
                     </div>
                 </div>
 
@@ -533,6 +600,85 @@
         return confirm("Are you sure want to delete?");
     }
     (function($) {
+        $(document).ready(function() {
+
+            $('#supplier_id').change(function() {
+                var supplierId = $(this).val();
+                if (supplierId) {
+                    $.ajax({
+                        url: '{{ route('get.suppliers') }}',
+                        type: 'GET',
+                        data: {
+                            supplier_id: supplierId
+                        },
+                        success: function(data) {
+                            console.log('AJAX Response:', data); // Debugging: Log the response to console
+
+                            // Set purchase type dropdown value
+                            $('#purchase_type').val(data.purchase_type);
+                            $('#purchase_type').trigger('change');
+
+                            // Set currency type dropdown value
+                            $('#currency_of_purchase').val(data.currency_type).change();
+                            $('#currency_of_purchase').trigger('change');
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('AJAX Error:', error); // Log any AJAX errors for debugging
+                        }
+                    });
+                } else {
+                    // If no supplier selected, clear purchase type and currency type fields
+                    $('#purchase_type').val('').change();
+                    $('#currency_of_purchase').val('').change();
+                }
+            });
+
+            // Assuming you have a change event listener on #purchase_type dropdown
+            $('#purchase_type').change(function() {
+                var selectedPurchaseType = $(this).val();
+                var exRateInput = $('#ex_rate');
+                console.log('test'+selectedPurchaseType);
+
+                if (selectedPurchaseType === 'domestic') {
+                    // Set ex_rate value to 1 and disable the input
+                    exRateInput.val('1');
+                    // exRateInput.prop('disabled', true); // Optionally disable the input
+                } else {
+                    // Allow the user to manually input ex_rate
+                    exRateInput.val(''); // Clear previous value if any
+                    // exRateInput.prop('disabled', false); // Enable the input
+                }
+            });
+
+            $('#total_meter').on('input', function() {
+                var meters = $(this).val();
+                if (meters) {
+                    // Perform conversion assuming 1 meter = 1.09361 yards
+                    var yards = meters * 1.09361;
+                    // Update the Total Yards field
+                    $('#total_yard').val(yards.toFixed(2)); // Adjust to display 2 decimal places
+                } else {
+                    $('#total_yard').val(''); // If no input, clear the Total Yards field
+                }
+            });
+
+            function calculateTransportationShippingCostPerMeter() {
+                var totalMeter = parseFloat($('#total_meter').val()) || 0;
+                var importTax = parseFloat($('#import_tax').val()) || 0;
+                var transportationPaid = parseFloat($('#transport_shipping_paid').val()) || 0;
+
+                // Calculate the transportation & shipping cost per meter
+                var transportationShippingCostPerMeter = (importTax + transportationPaid) / totalMeter;
+
+                // Update the displayed value
+                $('#transport_shippment_cost_per_meter').val(transportationShippingCostPerMeter.toFixed(2));
+            }
+
+            // Trigger calculation when any relevant input field changes
+            $('#total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
+
+        });
+
         $('#thb_ex_rate, #price_usd').keyup(function() {
             var price_thb = 0;
             var thb_ex_rate = parseFloat($('#thb_ex_rate').val());

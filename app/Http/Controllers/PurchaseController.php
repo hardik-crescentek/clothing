@@ -68,9 +68,15 @@ class PurchaseController extends Controller
             'invoice_no'           => 'required',
             'supplier_id'          => 'required',
             'purchase_type'        => 'required',
-            'payment_terms'        => 'required',
             'currency_of_purchase' => 'required',
-            'price'                => 'required',
+            'ex_rate'              => 'required',
+            'total_meter'          => 'required',
+            'total_yard'           => 'required',
+            'import_tax'           => 'required',
+            'transport_shipping_paid' => 'required',
+            'transport_shippment_cost_per_meter' => 'required',
+            // 'currency_type' => 'required',
+            // 'price'                => 'required',
         ]);
        
         $total_qty = 0;
@@ -104,7 +110,16 @@ class PurchaseController extends Controller
         $usd_price_per_meter = $request->input("price");
         $thb_price_per_meter = $request->input("price_thb");
         $thb_ex_rate = $request->input("thb_ex_rate");
-        $attachment = Util::uploadFile($request, 'attach_document', config('constants.purchase_attachment'));
+        // $attachment = Util::uploadFile($request, 'attach_document', config('constants.purchase_attachment'));
+
+        // Handle multiple file uploads
+        $attachments = [];
+        if ($request->hasFile('attach_documents')) {
+            foreach ($request->file('attach_documents') as $file) {
+                $filename = $file->store('purchase_attachments', 'public'); // Store file in public storage
+                $attachments[] = $filename; // Collect the file paths
+            }
+        }
 
 
         $data = [
@@ -112,24 +127,31 @@ class PurchaseController extends Controller
             "purchase_date"           => $request->input("purchase_date"),
             "user_id"                 => $user->id,
             "supplier_id"             => $request->input("supplier_id"),
-            "total_qty"               => $total_qty,
-            "total_tax"               => $request->input("total_tax"),
-            "shipping_cost_per_meter" => $request->input("shipping_cost"),
-            "discount"                => $request->input("discount"),
-            "price"                   => $usd_price_per_meter,
-            "thb_ex_rate"             => $thb_ex_rate,
-            "price_thb"               => $thb_price_per_meter,
-            "payment_terms"           => $request->input("payment_terms"),
             "purchase_type"           => $request->input("purchase_type"),
             "currency_of_purchase"    => $request->input("currency_of_purchase"),
+            "ex_rate"                 => $request->input("ex_rate"),
             "total_meter"             => $request->input("total_meter"),
-            "shipping_paid"           => $request->input("shipping_paid"),
-            "transportation"          => $request->input("transportation"),
-            "gross_tax"               => $request->input("gross_tax"),
-            "shippment_cost_shipper"  => $request->input("shippment_cost_shipper"),
-            "shippment_cost_destination" => $request->input("shippment_cost_destination"),
-            "attachment"                 => $attachment,
-            "note"                       => $request->input("note"),
+            "total_yard"              => $request->input("total_yard"),
+            "import_tax"              => $request->input("import_tax"),
+            "transport_shipping_paid"  => $request->input("transport_shipping_paid"),
+            "discount"                => $request->input("discount"),
+            "transport_shippment_cost_per_meter"  => $request->input("transport_shippment_cost_per_meter"),
+            "note"                    => $request->input("note"),
+            // "attachment"                 => $attachment,
+            "attachment"                 => json_encode($attachments),
+
+            // "total_qty"               => $total_qty,
+            // "total_tax"               => $request->input("total_tax"),
+            // "shipping_cost_per_meter" => $request->input("shipping_cost"),
+            // "price"                   => $usd_price_per_meter,
+            // "thb_ex_rate"             => $thb_ex_rate,
+            // "price_thb"               => $thb_price_per_meter,
+            // "payment_terms"           => $request->input("payment_terms"),
+            // "shipping_paid"           => $request->input("shipping_paid"),
+            // "transportation"          => $request->input("transportation"),
+            // "gross_tax"               => $request->input("gross_tax"),
+            // "shippment_cost_shipper"  => $request->input("shippment_cost_shipper"),
+            // "shippment_cost_destination" => $request->input("shippment_cost_destination"),
         ];
 
         $purchase = Purchase::create($data);
@@ -164,6 +186,7 @@ class PurchaseController extends Controller
                     // "total_tax" => $tax_per_meter * $qty,
                     // "shipping_cost" => $shipping_cost_per_meter * $qty,
                     // "discount" => $request->input("discount"),
+                    'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx' // Validate each file
                 ];
                 PurchaseItem::create($item_data);
                 $sort_order++;
@@ -306,9 +329,13 @@ class PurchaseController extends Controller
             'invoice_no'           => 'required',
             'supplier_id'          => 'required',
             'purchase_type'        => 'required',
-            'payment_terms'        => 'required',
             'currency_of_purchase' => 'required',
-            'price'                => 'required',
+            'ex_rate'              => 'required',
+            'total_meter'          => 'required',
+            'total_yard'           => 'required',
+            'import_tax'           => 'required',
+            'transport_shipping_paid' => 'required',
+            'transport_shippment_cost_per_meter' => 'required',
         ]);
        
         $total_qty = $purchase->total_qty;
@@ -332,33 +359,54 @@ class PurchaseController extends Controller
             }
         }
 
-        $attachment = Util::uploadFile($request, 'attach_document', config('constants.purchase_attachment'));
+        // $attachment = Util::uploadFile($request, 'attach_document', config('constants.purchase_attachment'));
         $usd_price_per_meter = $request->input("price");
         $thb_price_per_meter = $request->input("price_thb");
         $thb_ex_rate = $request->input("thb_ex_rate");
 
+         // Handle multiple file uploads
+        if ($request->hasFile('attach_documents')) {
+            $attachments = [];
+            foreach ($request->file('attach_documents') as $file) {
+                $filename = $file->store('purchase_attachments', 'public'); // Store file in public storage
+                $attachments[] = $filename; // Collect the file paths
+            }
+        } else {
+                $attachments = $purchase->attachment;
+        }
+ 
+        $user = Auth::user();
+
         $data = [
                     "invoice_no"                 => $request->input("invoice_no"),
                     "purchase_date"              => $request->input("purchase_date"),
+                    "user_id"                    => $user->id,
                     "supplier_id"                => $request->input("supplier_id"),
-                    "total_qty"                  => $total_qty,
-                    "total_tax"                  => $request->input("total_tax"),
-                    "shipping_cost_per_meter"    => $request->input("shipping_cost_per_meter"),
-                    "discount"                   => $request->input("discount"),
-                    "price"                      => $usd_price_per_meter,
-                    "thb_ex_rate"                => $thb_ex_rate,
-                    "price_thb"                  => $thb_price_per_meter,
-                    "payment_terms"              => $request->input("payment_terms"),
                     "purchase_type"              => $request->input("purchase_type"),
                     "currency_of_purchase"       => $request->input("currency_of_purchase"),
+                    "ex_rate"                    => $request->input("ex_rate"),
                     "total_meter"                => $request->input("total_meter"),
-                    "shipping_paid"              => $request->input("shipping_paid"),
-                    "transportation"             => $request->input("transportation"),
-                    "gross_tax"                  => $request->input("gross_tax"),
-                    "shippment_cost_shipper"     => $request->input("shippment_cost_shipper"),
-                    "shippment_cost_destination" => $request->input("shippment_cost_destination"),
-                    "attachment"                 => $attachment,
+                    "total_yard"                 => $request->input("total_yard"),
+                    "import_tax"                 => $request->input("import_tax"),
+                    "transport_shipping_paid"    => $request->input("transport_shipping_paid"),
+                    "discount"                   => $request->input("discount"),
+                    "transport_shippment_cost_per_meter"  => $request->input("transport_shippment_cost_per_meter"),
                     "note"                       => $request->input("note"),
+                    "attachment"                 => $attachments,
+
+
+                    // "total_qty"                  => $total_qty,
+                    // "total_tax"                  => $request->input("total_tax"),
+                    // "shipping_cost_per_meter"    => $request->input("shipping_cost_per_meter"),
+                    // "price"                      => $usd_price_per_meter,
+                    // "thb_ex_rate"                => $thb_ex_rate,
+                    // "price_thb"                  => $thb_price_per_meter,
+                    // "payment_terms"              => $request->input("payment_terms"),
+                    // "shipping_paid"              => $request->input("shipping_paid"),
+                    // "transportation"             => $request->input("transportation"),
+                    // "gross_tax"                  => $request->input("gross_tax"),
+                    // "shippment_cost_shipper"     => $request->input("shippment_cost_shipper"),
+                    // "shippment_cost_destination" => $request->input("shippment_cost_destination"),
                 ];
 
         $purchase->fill($data);
@@ -466,5 +514,27 @@ class PurchaseController extends Controller
         } else {
             return response()->json(['error' => true, 'message' => 'Something went wrong.'], 201);
         }
+    }
+
+    
+    public function getSuppliers(Request $request)
+    {
+        // Implement logic to fetch purchase type and currency type based on $supplierId
+        $supplierId = $request->input('supplier_id');
+        $supplier = Supplier::find($supplierId);
+
+        // Initialize variables for purchase_type and currency_type
+        $purchaseType = null;
+        $currencyType = null;
+
+        if ($supplier) {
+            $purchaseType = $supplier->supplier_type; // Adjust according to your database structure
+            $currencyType = $supplier->currency_type; // Adjust according to your database structure
+        }
+
+        return response()->json([
+            'purchase_type' => $purchaseType,
+            'currency_type' => $currencyType
+        ]);
     }
 }

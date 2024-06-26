@@ -58,6 +58,8 @@ Route::group(['middleware' => ['auth']], function() {
     # For Supplier #
     Route::resource('supplier', SupplierController::class);
 
+    Route::get('get-suppliers',  [App\Http\Controllers\PurchaseController::class, 'getSuppliers'])->name('get.suppliers');
+
     # For Order #
     Route::resource('order', OrderController::class,['only' => ['index', 'create', 'store','edit','update','destroy']]);
     Route::get('pos', [App\Http\Controllers\OrderController::class, 'posCreate'])->name('pos');

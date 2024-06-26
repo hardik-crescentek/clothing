@@ -59,6 +59,8 @@
                                 <th>Office No.</th>
                                 <th data-sorter="false">Address</th>
                                 <th>City</th>
+                                <th>Supplier Type</th>
+                                <th>Currency</th>
                                 <th data-sorter="false" width="130px">Action</th>
                             </tr>
                         </thead>
@@ -73,6 +75,8 @@
                                 <td>{{ $supplier->office_no }}</td>
                                 <td>{{ $supplier->address }}</td>
                                 <td>{{ $supplier->city }}</td>
+                                <td>{{ $supplier->supplier_type }}</td>
+                                <td>{{ $supplier->currency_type }}</td>
                                 <td class="td-actions">
                                     <a class="btn btn-primary btn-sm btn-square col-sm-7" href="{{ route('supplier.edit',$supplier->id) }}">Edit</a>
                                     {!! Form::open(['method' => 'DELETE','route' => ['supplier.destroy', $supplier->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}

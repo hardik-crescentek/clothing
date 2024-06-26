@@ -56,7 +56,7 @@
                                     <br>
                                     THB: {{ total_per_meter($purchase->price_thb, $purchase->shipping_cost_per_meter)}}
                                 </td>
-                                <td><a href="{{ route('purchase.supplier-details',$purchase->supplier_id) }}" style="color:blue;">{{ $purchase->supplier->name }}</a></td>
+                                <td><a href="{{ route('purchase.supplier-details',$purchase->supplier_id) }}" style="color:blue;">{{ $purchase->supplier->name ?? '' }}</a></td>
                                 <td>{{ $purchase->payment_terms }}</td>
                                 <td>{{ $purchase->purchase_type }}</td>
                                 <td class="td-actions">

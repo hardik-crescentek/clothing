@@ -108,6 +108,18 @@
                     </div>
                 </div>
                 <div class="form-group row d-flex align-items-center mb-5">
+                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Supplier Type</label>
+                    <div class="col-lg-5">
+                        {!! Form::select('supplier_type', ['domestic'=>'Domestic', 'international'=>'International'],null, array('id'=>'currency_type','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                    </div>
+                </div>
+                <div class="form-group row d-flex align-items-center mb-5">
+                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Currency Type</label>
+                    <div class="col-lg-5">
+                        {!! Form::select('currency_type',[''=>'Select Currency','USD'=>'USD','EUR'=>'EUR','CNY'=>'CNY','THB'=>'THB','INR'=>'INR'],null, array('id'=>'currency_type','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                    </div>
+                </div>
+                <div class="form-group row d-flex align-items-center mb-5">
                     <div class="col-lg-5 offset-lg-3">
                         <button type="submit" class="btn btn-primary btn-lg">Save</button>
                     </div>
