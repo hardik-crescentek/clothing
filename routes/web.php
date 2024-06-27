@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -137,4 +138,14 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('notifaction', [App\Http\Controllers\HomeController::class, 'headerNotifaction'])->name('header.notifaction');
 
     Route::post('notifaction', [App\Http\Controllers\SettingsController::class, 'update'])->name('setting.update');
+
+    Route::get('storageLink', function () {
+        try {
+            // Execute the storage:link Artisan command
+            Artisan::call('storage:link');
+            return 'Storage link created successfully.';
+        } catch (\Exception $e) {
+            return 'Error creating storage link: ' . $e->getMessage();
+        }
+    });
 });

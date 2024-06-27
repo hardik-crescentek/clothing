@@ -318,6 +318,43 @@
         // Trigger calculation when any relevant input field changes
         $('#total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
 
+        $(document).on('input','.meter_val',function(){
+            getTotalMeters();
+        });
+
+        $(document).on('click','#delete_row',function(){
+            var row_id=$(this).data('row_id');
+            $('#' + row_id).remove();
+            getTotalMeters();
+        });
+        function convertMetersToYards() {
+            var meters = $('#total_meter').val();
+            if (meters) {
+                // Perform conversion assuming 1 meter = 1.09361 yards
+                var yards = meters * 1.09361;
+                // Update the Total Yards field
+                $('#total_yard').val(yards.toFixed(2)); // Adjust to display 2 decimal places
+            } else {
+                $('#total_yard').val(''); // If no input, clear the Total Yards field
+            }
+        }
+
+        function getTotalMeters() {
+            var totalMeter = 0;
+            $("input[name='meter[]']").each(function(){
+                totalMeter += $(this).val() ? parseFloat($(this).val()) : 0;
+            });
+
+            $('#total_meter').val(totalMeter);
+            $('#total_meter').trigger('change');
+
+            var yards = totalMeter * 1.09361;
+            $('#total_yard').val(yards.toFixed(2));
+            $('#total_yard').trigger('change');
+
+            calculateTransportationShippingCostPerMeter();
+        }
+
         $(document).ready(function() {
 
             $('#supplier_id').change(function() {
@@ -379,7 +416,6 @@
                     $('#total_yard').val(''); // If no input, clear the Total Yards field
                 }
             });
-
         });
         $('#thb_ex_rate, #price').keyup(function() {
             var price_thb = 0;
@@ -502,6 +538,42 @@
         $(document).on('click','#save_continue',function(){
             save_continue = true;
         });
+
+        function resetLastRowData(){
+            last_row_data = {
+                meter: [],
+                color_no: [],
+                width: [],
+                article_no: [],
+                batch_no: [],
+                roll_no: []
+            };
+
+            $('.meter_val').each(function(){
+                last_row_data.meter.push($(this).val());
+            });
+
+            $('.color_no').each(function(){
+                last_row_data.color_no.push($(this).val());
+            });
+
+            $('.width').each(function(){
+                last_row_data.width.push($(this).val());
+            });
+
+            $('.article_no').each(function(){
+                last_row_data.article_no.push($(this).val());
+            });
+
+            $('.batch_no').each(function(){
+                last_row_data.batch_no.push($(this).val());
+            });
+
+            $('.roll_no').each(function(){
+                last_row_data.roll_no.push($(this).val());
+            });
+        }
+
         $(document).on('click','#save_close',function(){
             save_continue = false;
         });
@@ -733,38 +805,6 @@
         if(($('.purchaseItem').length)!=0){
             $('#add_single_row').css('display','block');
         }
-    }
-    $(document).on('input','.meter_val',function(){
-        getTotalMeters();
-        calculateTransportationShippingCostPerMeter();
-    });
-
-    $(document).on('click','#delete_row',function(){
-        var row_id=$(this).data('row_id');
-        $('#' + row_id).remove();
-        getTotalMeters();
-
-    });
-
-
-    function getTotalMeters() {
-        var text= new Array();
-        var totalMeter = 0;
-        $("input[name='meter[]").each(function(){
-            text.push($(this).val());
-        });
-
-        text.forEach(t => {
-            totalMeter += t ? parseInt(t) : 0;
-        })
-        $('#total_meter').val(totalMeter);
-        $('#total_meter').trigger('change');
-
-        var yards = totalMeter * 1.09361;
-        $('#total_yard').val(yards.toFixed(2)); 
-        $('#total_yard').trigger('change');
-
-        calculateTransportationShippingCostPerMeter();
     }
 </script>
 @endpush

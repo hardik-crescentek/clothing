@@ -600,7 +600,66 @@
         return confirm("Are you sure want to delete?");
     }
     (function($) {
+
+        function calculateTransportationShippingCostPerMeter() {
+            var totalMeter = parseFloat($('#total_meter').val()) || 0;
+            var importTax = parseFloat($('#import_tax').val()) || 0;
+            var transportationPaid = parseFloat($('#transport_shipping_paid').val()) || 0;
+
+            // Calculate the transportation & shipping cost per meter
+            var transportationShippingCostPerMeter = (importTax + transportationPaid) / totalMeter;
+
+            // Update the displayed value
+            $('#transport_shippment_cost_per_meter').val(transportationShippingCostPerMeter.toFixed(2));
+        }
+
+        
+        function convertMetersToYards() {
+            var meters = $('#total_meter').val();
+            if (meters) {
+                // Perform conversion assuming 1 meter = 1.09361 yards
+                var yards = meters * 1.09361;
+                // Update the Total Yards field
+                $('#total_yard').val(yards.toFixed(2)); // Adjust to display 2 decimal places
+            } else {
+                $('#total_yard').val(''); // If no input, clear the Total Yards field
+            }
+        }
+        
+        // Trigger calculation when any relevant input field changes
+        $('#total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
+      
+        $(document).on('input', '.meter_val', function(){
+            getTotalMeters();
+        });
+
+        $(document).on('click', '#delete_row', function(){
+            var row_id = $(this).data('row_id');
+            $('#' + row_id).remove();
+            getTotalMeters();
+        });
+
+        function getTotalMeters() {
+            var totalMeter = 0;
+            $("input[name='meter[]']").each(function(){
+                totalMeter += $(this).val() ? parseFloat($(this).val()) : 0;
+            });
+
+            $('#total_meter').val(totalMeter);
+            $('#total_meter').trigger('change');
+
+            var yards = totalMeter * 1.09361;
+            $('#total_yard').val(yards.toFixed(2));
+            $('#total_yard').trigger('change');
+
+            calculateTransportationShippingCostPerMeter();
+        }
+
         $(document).ready(function() {
+
+            // Trigger the conversion and calculation when the form is opened or the page is loaded
+            convertMetersToYards();
+            calculateTransportationShippingCostPerMeter();
 
             $('#supplier_id').change(function() {
                 var supplierId = $(this).val();
@@ -661,22 +720,6 @@
                     $('#total_yard').val(''); // If no input, clear the Total Yards field
                 }
             });
-
-            function calculateTransportationShippingCostPerMeter() {
-                var totalMeter = parseFloat($('#total_meter').val()) || 0;
-                var importTax = parseFloat($('#import_tax').val()) || 0;
-                var transportationPaid = parseFloat($('#transport_shipping_paid').val()) || 0;
-
-                // Calculate the transportation & shipping cost per meter
-                var transportationShippingCostPerMeter = (importTax + transportationPaid) / totalMeter;
-
-                // Update the displayed value
-                $('#transport_shippment_cost_per_meter').val(transportationShippingCostPerMeter.toFixed(2));
-            }
-
-            // Trigger calculation when any relevant input field changes
-            $('#total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
-
         });
 
         $('#thb_ex_rate, #price_usd').keyup(function() {

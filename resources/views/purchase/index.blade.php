@@ -1,15 +1,19 @@
 @extends('layouts.master')
 @section('title', 'Purchase')
+@section('style')
+<style>
+    /* Custom CSS for modal adjustments */
+    .modal-lg {
+        max-width: 90%; /* Adjust modal maximum width */
+    }
+
+    .modal-body {
+        max-height: calc(100vh - 200px); /* Adjust modal body maximum height */
+        overflow-y: auto; /* Enable vertical scrolling if content exceeds modal height */
+    }
+</style>
+@endsection
 @section('content')
-<!-- Begin Page Header-->
-<!-- <div class="row">
-    <div class="page-header">
-        <div class="d-flex align-items-center">
-            <h2 class="page-header-title">Users</h2>
-        </div>
-    </div>
-</div> -->
-<!-- End Page Header -->
 
 @if ($message = Session::get('success'))
 <div class="alert alert-success">
@@ -39,35 +43,82 @@
                         </thead>
                         <tbody>
                             @isset($purchases)
-                            @foreach ($purchases as $key => $purchase)
-                            <tr class="purchase-link" data-id="{{$purchase->id}}">
-                                <td>{{ $purchase->invoice_no }} <br> 
-                                    <span>{{ $purchase->purchase_date }}</span>
-                                </td>
-                                <td>{{ $purchase->pcs_no }}</td>
-                                <td>{{ $purchase->available_qty }}/{{ $purchase->total_qty }}</td>
-                                <td>
-                                    {{$purchase->currency_of_purchase}}: {{ total_cost($purchase->price, $purchase->total_qty, $purchase->shipping_cost_per_meter) }}
-                                    <br>
-                                    THB: {{ total_cost($purchase->price_thb, $purchase->total_qty, $purchase->shipping_cost_per_meter) }}
-                                </td>
-                                <td>
-                                    {{$purchase->currency_of_purchase}}: {{ total_per_meter($purchase->price, $purchase->shipping_cost_per_meter) }}
-                                    <br>
-                                    THB: {{ total_per_meter($purchase->price_thb, $purchase->shipping_cost_per_meter)}}
-                                </td>
-                                <td><a href="{{ route('purchase.supplier-details',$purchase->supplier_id) }}" style="color:blue;">{{ $purchase->supplier->name ?? '' }}</a></td>
-                                <td>{{ $purchase->payment_terms }}</td>
-                                <td>{{ $purchase->purchase_type }}</td>
-                                <td class="td-actions">
-                                    <a class="btn btn-secondary btn-sm btn-square col-sm-6 mt-1" href="{{ route('printbarcode',['id' => $purchase->id,'invoice_no' => $purchase->invoice_no, 'printBarcode'=>1,'printQRCode'=>1,'printWithBatchNo'=>1,'printWithArticleNo'=>1,'printWithRollNo'=>1,'printInvoice'=>1,'printColor'=>1,'printWidth'=>1]) }}">Print</a>
-                                    <a class="btn btn-primary btn-sm btn-square col-sm-6 mt-1" href="{{ route('purchase.edit',$purchase->id) }}">Edit</a>
-                                    {!! Form::open(['method' => 'DELETE','route' => ['purchase.destroy', $purchase->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
-                                    {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square col-sm-6 mt-1']) !!}
-                                    {!! Form::close() !!}
-                                </td>
-                            </tr>
-                            @endforeach
+                                @foreach ($purchases as $key => $purchase)
+                                    <tr class="purchase-link" data-id="{{$purchase->id}}">
+                                        <td>{{ $purchase->invoice_no }} <br> 
+                                            <span>{{ $purchase->purchase_date }}</span>
+                                        </td>
+                                        <td>{{ $purchase->pcs_no }}</td>
+                                        <td>{{ $purchase->available_qty }}/{{ $purchase->total_qty }}</td>
+                                        <td>
+                                            {{$purchase->currency_of_purchase}}: {{ total_cost($purchase->price, $purchase->total_qty, $purchase->shipping_cost_per_meter) }}
+                                            <br>
+                                            THB: {{ total_cost($purchase->price_thb, $purchase->total_qty, $purchase->shipping_cost_per_meter) }}
+                                        </td>
+                                        <td>
+                                            {{$purchase->currency_of_purchase}}: {{ total_per_meter($purchase->price, $purchase->shipping_cost_per_meter) }}
+                                            <br>
+                                            THB: {{ total_per_meter($purchase->price_thb, $purchase->shipping_cost_per_meter)}}
+                                        </td>
+                                        <td><a href="{{ route('purchase.supplier-details',$purchase->supplier_id) }}" style="color:blue;">{{ $purchase->supplier->name ?? '' }}</a></td>
+                                        <td>{{ $purchase->payment_terms }}</td>
+                                        <td>{{ $purchase->purchase_type }}</td>
+                                        <td class="td-actions">                                    
+                                            <div class="row">
+                                                <a class="btn fa fa-print btn-sm btn-info" data-toggle="tooltip" data-placement="top" title="Print" href="{{ route('printbarcode',['id' => $purchase->id,'invoice_no' => $purchase->invoice_no, 'printBarcode'=>1,'printQRCode'=>1,'printWithBatchNo'=>1,'printWithArticleNo'=>1,'printWithRollNo'=>1,'printInvoice'=>1,'printColor'=>1,'printWidth'=>1]) }}"></a>
+                                                <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('purchase.edit',$purchase->id) }}" data-toggle="tooltip" data-placement="top" title="Edit"></a>
+                                                {!! Form::open(['method' => 'DELETE','route' => ['purchase.destroy', $purchase->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
+                                                <button type="submit" class="btn-action btn fa fa-trash  btn-sm btn-danger ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                </button>
+                                                {!! Form::close() !!}
+
+                                                @php
+                                                    $attachments = json_decode($purchase->attachment, true);
+                                                @endphp
+                                                @if(is_array($attachments) && !empty($attachments))
+                                                    <button type="button" class="btn-action btn fa fa-eye btn-sm btn-warning ml-1" data-toggle="modal" data-target="#imageModal-{{ $purchase->id }}" data-placement="top" title="View Attachments"></button>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Modal Structure -->
+                                    <div class="modal fade" id="imageModal-{{ $purchase->id }}" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel-{{ $purchase->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="imageModalLabel-{{ $purchase->id }}">Attachments for Invoice No: {{ $purchase->invoice_no }}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body" style="height: auto; overflow-y: visible;">
+                                                    <div class="row">
+                                                        @php
+                                                            $attachments = json_decode($purchase->attachment, true);
+                                                        @endphp
+                                                        @if(is_array($attachments) && !empty($attachments))
+                                                            @foreach($attachments as $attachment)
+                                                                @php
+                                                                    $attachmentName = basename($attachment);
+                                                                    $downloadName = $purchase->invoice_no . '_' . $attachmentName;
+                                                                @endphp
+                                                                <div class="col-lg-4" style="display: flex; align-items: center;">
+                                                                    <a data-fancybox="gallery" href="{{ url('public/storage/' . $attachment) }}">
+                                                                        <img src="{{ url('public/storage/' . $attachment) }}" class="img-fluid img-thumbnail" alt="Attachment">
+                                                                    </a>
+                                                                    <a href="{{ url('public/storage/' . $attachment) }}" class="btn ml-1 fa fa-download" download="{{ $downloadName }}"></a>
+                                                                </div>
+
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                @endforeach
                             @endisset
                         </tbody>
                     </table>
@@ -85,23 +136,25 @@
 </script>
 @endsection
 @push('scripts')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous"></script>
-    <script>
-        // $(document).ready(function(){
-        //     $('#purchase_tbl').tablesorter({
-        //         cssAsc: 'up',
-		      //   cssDesc: 'down',
-        //         cssNone: 'both'
-        //     });
-        // })
-        $(document).ready(function () {
-            $('#purchase_tbl').DataTable({
-                lengthMenu: [
-                    [10, 25, 50,100,500,1000,'All'],
-                    [10, 25, 50,100,500,1000,'All'],
-                ],
-                "aaSorting": []
-            });
+<!-- CSS for FancyBox -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+<!-- JavaScript for FancyBox -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#purchase_tbl').DataTable({
+            lengthMenu: [
+                [10, 25, 50,100,500,1000,'All'],
+                [10, 25, 50,100,500,1000,'All'],
+            ],
+            "aaSorting": []
         });
-    </script>
+
+       
+    });
+</script>
 @endpush

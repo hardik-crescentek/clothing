@@ -75,6 +75,8 @@ class PurchaseController extends Controller
             'import_tax'           => 'required',
             'transport_shipping_paid' => 'required',
             'transport_shippment_cost_per_meter' => 'required',
+            // Add validation for file attachments
+            'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx|max:2048'
             // 'currency_type' => 'required',
             // 'price'                => 'required',
         ]);
@@ -336,6 +338,7 @@ class PurchaseController extends Controller
             'import_tax'           => 'required',
             'transport_shipping_paid' => 'required',
             'transport_shippment_cost_per_meter' => 'required',
+            'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx|max:2048'
         ]);
        
         $total_qty = $purchase->total_qty;
@@ -372,7 +375,7 @@ class PurchaseController extends Controller
                 $attachments[] = $filename; // Collect the file paths
             }
         } else {
-                $attachments = $purchase->attachment;
+                $attachments = json_decode($purchase->attachment, true);
         }
  
         $user = Auth::user();
@@ -392,7 +395,7 @@ class PurchaseController extends Controller
                     "discount"                   => $request->input("discount"),
                     "transport_shippment_cost_per_meter"  => $request->input("transport_shippment_cost_per_meter"),
                     "note"                       => $request->input("note"),
-                    "attachment"                 => $attachments,
+                    "attachment"                 => json_encode($attachments),
 
 
                     // "total_qty"                  => $total_qty,
