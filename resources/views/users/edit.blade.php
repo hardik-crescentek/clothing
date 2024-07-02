@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-lg-3 row_business_nature_other" style="display: {{ $user->business_nature == 'other' ? 'flex' : 'none' }};">
+                    <div class="form-group col-lg-3 row_business_nature_other" style="display: {{ $user->business_nature == 'other' ? '' : 'none' }};">
                         <label class="form-control-label d-flex">Other Nature Of Business</label>
                         {!! Form::text('business_nature_other', null, array('id'=>'business_nature_other','placeholder' => 'Other Nature Of Business','class' => 'form-control')) !!}
                     </div>
@@ -134,10 +134,10 @@
                     </div>
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Line</label>
-                        <div class="input-group">
+                        <!-- <div class="input-group"> -->
                             {!! Form::text('line', null, array('placeholder' => 'Line','class' => 'form-control')) !!}
-                            <span class="input-group-addon addon-secondary"> <img src="{{ asset('assets/img/icons8-line-50.png') }}" height="20px" width="20px"></span>
-                        </div>
+                            <!-- <span class="input-group-addon addon-secondary"> <img src="{{ asset('assets/img/icons8-line-50.png') }}" height="20px" width="20px"></span>
+                        </div> -->
                     </div>
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Password<span class="text-danger ml-2">*</span></label>
@@ -165,10 +165,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <div class="col-lg-5 offset-lg-3">
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                        <a class="btn btn-secondary btn-lg" href="{{ route('users.index') }}"> Cancel</a>
+                        <a class="btn btn-secondary btn-lg ml-1" href="{{ route('users.index') }}"> Cancel</a>
                     </div>
                 </div>
                 {!! Form::close() !!}

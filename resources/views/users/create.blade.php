@@ -135,10 +135,10 @@
                     </div>
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Line</label>
-                        <div class="input-group">
+                        <!-- <div class="input-group"> -->
                             {!! Form::text('line', null, array('placeholder' => 'Line','class' => 'form-control')) !!}
-                            <span class="input-group-addon addon-secondary"> <img src="{{ asset('assets/img/icons8-line-50.png') }}" height="20px" width="20px"></span>
-                        </div>
+                            <!-- <span class="input-group-addon addon-secondary"> <img src="{{ asset('assets/img/icons8-line-50.png') }}" height="20px" width="20px"></span> -->
+                        <!-- </div> -->
                     </div>
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Password<span class="text-danger ml-2">*</span></label>
