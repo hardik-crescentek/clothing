@@ -212,7 +212,7 @@
     <!-- End Side Navbar -->
 </div>
 <style>
-.custome-li-third{
+.custome-li-third {
     font-size: 0.85rem !important;
     padding: 10px 10px 10px 40px !important;
     text-decoration: none !important;
@@ -221,7 +221,8 @@
     position: relative;
     cursor: pointer;
 }
-.custome-li-third::before{
+
+.custome-li-third::before {
     color: #fff8eb;
     font-size: 0.85rem;
     content: '\f124';
@@ -233,7 +234,18 @@
     right: 20px;
     opacity: 0.5;
 }
+
 .custome-li-third[aria-expanded="true"]::before {
     content: '\f123';
 }
+
+.side-navbar.box-scroll.sidebar-scroll img {
+    width: 7%; /* Reduce size by 20% */
+    transition: width 0.3s ease; /* Optional: add a transition effect */
+}
+
+.side-navbar.box-scroll.sidebar-scroll.shrinked img {
+    width: 30%; /* Reset size to original */
+}
+
 </style>
