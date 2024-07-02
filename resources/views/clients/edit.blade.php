@@ -42,8 +42,8 @@
                 {!! Form::model($user, ['method' => 'POST','route' => ['client.update', $user->id], 'class'=>"form-validate", 'novalidate']) !!}
                 <div class="row">
                     <div class="form-group col-lg-3">
-                        <label class="form-control-label d-flex">Company Name / Shop Name<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('company_name', null, array('id'=>'company_name','class' => 'form-control' , 'data-validation'=>"required")) !!}
+                        <label class="form-control-label d-flex">Company Name / Shop Name</label>
+                        {!! Form::text('company_name', null, array('id'=>'company_name','class' => 'form-control')) !!}
                     </div>
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Owner FirstName<span class="text-danger ml-2">*</span></label>
