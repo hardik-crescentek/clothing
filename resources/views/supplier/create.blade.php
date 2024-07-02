@@ -41,86 +41,68 @@
 
                 {!! Form::open(array('route' => 'supplier.store','method'=>'POST', 'class'=>"form-validate", 'novalidate')) !!}
                 <input type="hidden" name="redirectTo" value="{{$redirect}}">
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Name</label>
-                    <div class="col-lg-5">
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Name<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Contact person</label>
-                    <div class="col-lg-5">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Contact person</label>
                         {!! Form::text('contact_person', null, array('placeholder' => 'Contact person','class' => 'form-control')) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Email</label>
-                    <div class="col-lg-5">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Email</label>
                         {!! Form::text('email', null, array('placeholder' => 'Email','class' => 'form-control')) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Mobile number</label>
-                    <div class="col-lg-5">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Mobile number</label>
                         {!! Form::text('mobile_no', null, array('placeholder' => 'Mobile number','class' => 'form-control')) !!}
                     </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Alternate number</label>
-                    <div class="col-lg-5">
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Alternate number</label>
                         {!! Form::text('alternate_no', null, array('placeholder' => 'Alternate number','class' => 'form-control')) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Office number</label>
-                    <div class="col-lg-5">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Office number</label>
                         {!! Form::text('office_no', null, array('placeholder' => 'Office number','class' => 'form-control')) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Address</label>
-                    <div class="col-lg-5">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Address</label>
                         {!! Form::text('address', null, array('placeholder' => 'Address','class' => 'form-control')) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">City</label>
-                    <div class="col-lg-5">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">City</label>
                         {!! Form::text('city', null, array('placeholder' => 'City','class' => 'form-control')) !!}
                     </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">GST Number</label>
-                    <div class="col-lg-5">
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">GST Number</label>
                         {!! Form::text('gst_no', null, array('placeholder' => 'GST Number','class' => 'form-control')) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Transport Name</label>
-                    <div class="col-lg-5">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Transport Name</label>
                         {!! Form::text('transport_name', null, array('placeholder' => 'Transport Name','class' => 'form-control')) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">More information</label>
-                    <div class="col-lg-5">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">More information</label>
                         {!! Form::textarea('info', null, array('placeholder' => 'More information','class' => 'form-control', 'rows' => 3)) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Supplier Type</label>
-                    <div class="col-lg-5">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Supplier Type<span class="text-danger ml-2">*</span></label>
                         {!! Form::select('supplier_type', ['domestic'=>'Domestic', 'international'=>'International'],null, array('id'=>'currency_type','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
                     </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Currency Type</label>
-                    <div class="col-lg-5">
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Currency Type<span class="text-danger ml-2">*</span></label>
                         {!! Form::select('currency_type',[''=>'Select Currency','USD'=>'USD','EUR'=>'EUR','CNY'=>'CNY','THB'=>'THB','INR'=>'INR'],null, array('id'=>'currency_type','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
                     </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <div class="col-lg-5 offset-lg-3">
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary btn-lg">Save</button>
                     </div>
                 </div>
