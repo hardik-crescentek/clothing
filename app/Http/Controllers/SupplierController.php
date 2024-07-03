@@ -48,10 +48,11 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->name = preg_replace('/\s+/', ' ', $request->name);
         $this->validate($request, [
             'name' => ['required'],
+            'supplier_type' => ['required'],
+            'currency_type' => ['required'],
             // 'contact_person' => ['required'],
             // 'email' => ['required', 'email'],
             // 'mobile_no' => ['required'],
@@ -87,6 +88,8 @@ class SupplierController extends Controller
                     'city'           => $request->city ?? '',
                     'gst_no'         => $request->gst_no ?? '',
                     'transport_name' => $request->transport_name ?? '',
+                    'supplier_type' => $request->supplier_type ?? '',
+                    'currency_type' => $request->currency_type ?? '',
                     'info'           => $request->info,
 
                 ];
@@ -139,6 +142,8 @@ class SupplierController extends Controller
             // 'city' => ['required'],
             // 'gst_no' => ['required'],
             // 'transport_name' => ['required'],
+            'supplier_type' => ['required'],
+            'currency_type' => ['required'],
         ]);
         if ($request->mobile_no) {
             $this->validate($request, [
@@ -167,6 +172,8 @@ class SupplierController extends Controller
                     'gst_no'         => $request->gst_no ?? '',
                     'transport_name' => $request->transport_name ?? '',
                     'info'           => $request->info,
+                    'supplier_type' => $request->supplier_type ?? '',
+                    'currency_type' => $request->currency_type ?? '',
                 ];
         $supplier->update($data);
         return redirect()->route('supplier.index')->with('success', 'Supplier updated successfully');

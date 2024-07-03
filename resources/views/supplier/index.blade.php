@@ -18,7 +18,7 @@
 @endif
 
 <!-- Begin Row -->
-<div class="row flex-row">
+<!-- <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
             <div class="widget-header bordered no-actions1 d-block align-items-center">
@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- Begin Row -->
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
@@ -59,6 +59,8 @@
                                 <th>Office No.</th>
                                 <th data-sorter="false">Address</th>
                                 <th>City</th>
+                                <th>Supplier Type</th>
+                                <th>Currency</th>
                                 <th data-sorter="false" width="130px">Action</th>
                             </tr>
                         </thead>
@@ -73,6 +75,8 @@
                                 <td>{{ $supplier->office_no }}</td>
                                 <td>{{ $supplier->address }}</td>
                                 <td>{{ $supplier->city }}</td>
+                                <td>{{ $supplier->supplier_type }}</td>
+                                <td>{{ $supplier->currency_type }}</td>
                                 <td class="td-actions">
                                     <a class="btn btn-primary btn-sm btn-square col-sm-7" href="{{ route('supplier.edit',$supplier->id) }}">Edit</a>
                                     {!! Form::open(['method' => 'DELETE','route' => ['supplier.destroy', $supplier->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
@@ -84,9 +88,9 @@
                             @endisset
                         </tbody>
                     </table>
-                    @isset($suppliers)
+                    <!-- @isset($suppliers)
                     {{ $suppliers->render() }}
-                    @endisset
+                    @endisset -->
 
                 </div>
             </div>
@@ -104,10 +108,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function(){
-            $('#supplier_tbl').tablesorter({
-                cssAsc: 'up',
-		        cssDesc: 'down',
-                cssNone: 'both'
+            // $('#supplier_tbl').tablesorter({
+            //     cssAsc: 'up',
+		    //     cssDesc: 'down',
+            //     cssNone: 'both'
+            // });
+            $('#supplier_tbl').DataTable({
+                lengthMenu: [
+                    [10, 25, 50,100,500,1000,'All'],
+                    [10, 25, 50,100,500,1000,'All'],
+                ],
+                "aaSorting": []
             });
         })
     </script>

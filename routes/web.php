@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,8 @@ Route::group(['middleware' => ['auth']], function() {
 
     # For Supplier #
     Route::resource('supplier', SupplierController::class);
+
+    Route::get('get-suppliers',  [App\Http\Controllers\PurchaseController::class, 'getSuppliers'])->name('get.suppliers');
 
     # For Order #
     Route::resource('order', OrderController::class,['only' => ['index', 'create', 'store','edit','update','destroy']]);
@@ -135,4 +138,14 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('notifaction', [App\Http\Controllers\HomeController::class, 'headerNotifaction'])->name('header.notifaction');
 
     Route::post('notifaction', [App\Http\Controllers\SettingsController::class, 'update'])->name('setting.update');
+
+    Route::get('storageLink', function () {
+        try {
+            // Execute the storage:link Artisan command
+            Artisan::call('storage:link');
+            return 'Storage link created successfully.';
+        } catch (\Exception $e) {
+            return 'Error creating storage link: ' . $e->getMessage();
+        }
+    });
 });
