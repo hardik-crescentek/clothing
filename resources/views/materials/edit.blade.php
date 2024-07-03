@@ -112,14 +112,14 @@
 
                 <div class="row">
                     <div class="col-lg-2">
-                        <label class="form-control-label">Width (inch)<span class="text-danger ml-2">*</span></label>
+                        <label class="form-control-label">Width(inch)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
                             {!! Form::text('width_inch',null, array('class' => 'form-control width-inch','id'=>"widthInch",'placeholder' => 'Width in inches', 'data-validation'=>"required")) !!}
                             <span class="input-group-text">INCH</span>
                         </div>
                     </div>
                     <div class="col-lg-2">
-                        <label class="form-control-label">Width(cm) = inch*2.54</label>
+                        <label class="form-control-label">Width(cm)</label>
                         <div class="input-group form-group">
                             {!! Form::text('width_cm',null, array('class' => 'form-control width-cm','id'=>"widthCm",'placeholder' => 'Width in centimeters', 'data-validation'=>"required",'readonly'=>"readonly")) !!}
                             <span class="input-group-text">CM</span>
@@ -128,21 +128,21 @@
                     <div class="col-lg-2">
                         <label class="form-control-label">Weight(gsm)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
-                            {!! Form::text('weight_gsm',null, array('class' => 'form-control width','id'=>"width",'placeholder' => 'Width', 'data-validation'=>"required")) !!}
+                            {!! Form::text('weight_gsm',null, array('class' => 'form-control width','id'=>"weightGsm",'placeholder' => 'Width', 'data-validation'=>"required")) !!}
                             <span class="input-group-text">GSM</span>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <label class="form-control-label">Weight(per mtr)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
-                            {!! Form::text('weight_per_mtr',null, array('class' => 'form-control weight','id'=>"weight",'placeholder' => 'Weight', 'data-validation'=>"required")) !!}
+                            {!! Form::text('weight_per_mtr',null, array('class' => 'form-control weight','id'=>"weightPerMtr",'placeholder' => 'Weight', 'data-validation'=>"required",'readonly' => 'readonly')) !!}
                             <span class="input-group-text">PER MTR</span>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <label class="form-control-label">Weight(per yard)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
-                            {!! Form::text('weight_per_yard',null, array('class' => 'form-control weight','id'=>"weight",'placeholder' => 'Weight', 'data-validation'=>"required")) !!}
+                            {!! Form::text('weight_per_yard',null, array('class' => 'form-control weight','id'=>"weightPerYard",'placeholder' => 'Weight', 'data-validation'=>"required",'readonly' => 'readonly')) !!}
                             <span class="input-group-text">PER YARD</span>
                         </div>
                     </div>
@@ -214,9 +214,9 @@
                     </div>
                 </div>
 
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <div class="col-lg-5 offset-lg-3">
-                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
                     </div>
                 </div>
                 {!! Form::close() !!}
@@ -325,6 +325,22 @@
     function closeWebcame(){
         Webcam.reset();
     }
+    function calculateWeights() {
+        let gsmWeight = parseFloat(document.getElementById('weightGsm').value);
+
+        if (!isNaN(gsmWeight)) {
+            let weightPerMtr = 1.5 * gsmWeight;
+            let weightPerYard = gsmWeight * 1.3716;
+
+            document.getElementById('weightPerMtr').value = weightPerMtr.toFixed(2);
+            document.getElementById('weightPerYard').value = weightPerYard.toFixed(2);
+        } else {
+            document.getElementById('weightPerMtr').value = '';
+            document.getElementById('weightPerYard').value = '';
+        }
+    }
+
+    document.getElementById('weightGsm').addEventListener('input', calculateWeights);
 </script>
 <style>
     .styled-radio {

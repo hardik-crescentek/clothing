@@ -40,38 +40,45 @@
                 @endif
 
                 {!! Form::model($category, ['method' => 'PATCH','route' => ['category.update', $category->id], 'class'=>"form-validate", 'novalidate']) !!}
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Name</label>
-                    <div class="col-lg-5">
-                        {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control', 'data-validation'=>"required")) !!}
-                    </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Parent Category</label>
-                    <div class="col-lg-5">
-                        {!! Form::select('parent_id', $parent_categories,null, array('class' => 'form-control custom-select')) !!}
-                    </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Active</label>
-                    <div class="col-lg-1">
-                        <div class="styled-radio">
-                            {!! Form::radio('status', 1, true, array('class' => 'custom-control-input', 'id'=>"status-active")) !!}
-                            <label for="status-active">Active</label>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Name<span class="text-danger ml-2">*</span></label>
+                            {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control', 'data-validation'=>"required")) !!}
                         </div>
                     </div>
-                    <div class="col-lg-1">
-                        <div class="styled-radio">
-                            {!! Form::radio('status', 0, false, array('class' => 'custom-control-input', 'id'=>"status-inactive")) !!}
-                            <label for="status-inactive">Inactive</label>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Parent Category</label>
+                            {!! Form::select('parent_id', $parent_categories,null, array('class' => 'form-control custom-select')) !!}
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Active</label>
+                            <div class="d-flex align-items-center">
+                                <div class="styled-radio mr-3">
+                                    {!! Form::radio('status', 1, true, ['class' => 'custom-control-input', 'id' => 'status-active']) !!}
+                                    <label for="status-active">Active</label>
+                                </div>
+                                <div class="styled-radio">
+                                    {!! Form::radio('status', 0, false, ['class' => 'custom-control-input', 'id' => 'status-inactive']) !!}
+                                    <label for="status-inactive">Inactive</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group row d-flex align-items-center mb-5">
+                <!-- <div class="form-group row d-flex align-items-center mb-5">
                     <div class="col-lg-5 offset-lg-3">
                         <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                        <a class="btn btn-secondary btn-lg" href="{{ route('category.index') }}"> Cancel</a>
+                    </div>
+                </div> -->
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                        <a class="btn btn-secondary btn-lg ml-1" href="{{ route('category.index') }}"> Cancel</a>
                     </div>
                 </div>
                 {!! Form::close() !!}

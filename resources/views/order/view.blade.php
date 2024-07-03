@@ -23,86 +23,82 @@
                 @endif
                 {{-- {!! Form::open(array('route' => ['order.update', $order->id],'method'=>'PATCH','id'=>'from_edit_order', 'class'=>"form-horizontal form-validate", 'novalidate')) !!} --}}
                 {!! Form::model($order, ['route' => ['order.updatenew'],'method'=>'POST','id'=>'from_edit_order', 'class'=>"form-horizontal form-validate", 'novalidate']) !!}
-                <div class="form-group row">
-                    <div class="col-xl-4 mb-3">
-                        <label class="form-control-label">Date of purchase<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('purchase_date', null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required","readonly")) !!}
-                    </div>
-                    <div class="col-xl-4 mb-3">
-                        <label class="form-control-label">Status<span class="text-danger ml-2">*</span></label>
-                        {!! Form::select('status', $order_status,$order->status, array('id'=>'order_status','class' => 'form-control custom-select', 'data-validation'=>"required","readonly")) !!}
-                    </div>
-                    <div class="col-xl-4 mb-3">
-                        <label class="form-control-label">Role Cutter Person Name </label>
-                        <input type="text" class="form-control" name="role_cutter_name" value="{{ $order->role_cutter_name }}" readonly>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Customer<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-8">
-                                {!! Form::select('customer_id', $users,$order->customer_id, array('id'=>'customer_id','class' => 'form-control custom-select', 'data-validation'=>"required","readonly")) !!}
-                            </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Date of purchase<span class="text-danger ml-2">*</span></label>
+                            {!! Form::text('purchase_date', null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required","readonly")) !!}
                         </div>
                     </div>
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Sales Person<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-8">
-                                {!! Form::select('seller_id', $sales_person,$order->seller_id, array('id'=>'seller_id','class' => 'form-control custom-select', 'data-validation'=>"required","readonly")) !!}
-                            </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Status<span class="text-danger ml-2">*</span></label>
+                            {!! Form::select('status', $order_status,$order->status, array('id'=>'order_status','class' => 'form-control custom-select', 'data-validation'=>"required","readonly")) !!}
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Role Cutter Person Name</label>
+                            <input type="text" class="form-control" name="role_cutter_name" value="{{ $order->role_cutter_name }}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Customer<span class="text-danger ml-2">*</span></label>
+                            {!! Form::select('customer_id', $users,$order->customer_id, array('id'=>'customer_id','class' => 'form-control custom-select', 'data-validation'=>"required","readonly")) !!}
                         </div>
                     </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <div class="col-lg-6">
-                        <div class="row">
-                            <div class="col">
-                                <label class="form-control-label">Article No </label>
-                                {!! Form::text('search_article',null , array('class' => 'form-control','id'=>'search_article',"readonly")) !!}
-                            </div>
-                            <div class="col">
-                                <label class="form-control-label">Color </label>
-                                {!! Form::text('search_color',null , array('class' => 'form-control','id'=>'search_color',"readonly")) !!}
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Sales Person<span class="text-danger ml-2">*</span></label>
+                            {!! Form::select('seller_id', $sales_person,$order->seller_id, array('id'=>'seller_id','class' => 'form-control custom-select', 'data-validation'=>"required","readonly")) !!}
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Article No</label>
+                            {!! Form::text('search_article',null , array('class' => 'form-control','id'=>'search_article',"readonly")) !!}
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Color</label>
+                            {!! Form::text('search_color',null , array('class' => 'form-control','id'=>'search_color',"readonly")) !!}
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Scan Barcode Number</label>
+                            <div class="input-group">
+                                <span class="input-group-addon addon-secondary"><i class="la la-barcode"></i></span>
+                                {!! Form::text('input_search_barcode', null, array('id'=>'input_search_barcode','placeholder' => 'Barcode Number','class' => 'form-control',"readonly")) !!}
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <label class=" form-control-label ">Scan Barcode Number</label>
-                        <div class="input-group">
-                            <span class="input-group-addon addon-secondary"><i class="la la-barcode"></i></span>
-                            {!! Form::text('input_search_barcode', null, array('id'=>'input_search_barcode','placeholder' => 'Barcode Number','class' => 'form-control',"readonly")) !!}
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Note</label>
+                            {!! Form::textarea('note', $order->note, ['class' => 'form-control','rows' => 3]); !!}
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Remark</label>
+                            {!! Form::textarea('remark', $order->remark, ['class' => 'form-control','rows' => 3]); !!}
                         </div>
                     </div>
                 </div>
                 <div class="form-group row d-flex align-items-center">
                     <div id="search_error" class=" col-lg-12 alert alert-danger form-control" style="display: none;"></div>
                 </div>
-                <div class=" mt-5">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="form-group">
-                                <label class="form-control-label">Note</label>
-                                {!! Form::textarea('note', $order->note, ['class' => 'form-control','rows' => 3]); !!}
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="form-group">
-                                <label class="form-control-label">Remark</label>
-                                {!! Form::textarea('remark', $order->remark, ['class' => 'form-control','rows' => 3]); !!}
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <h4 class="mb-3">
-                            </h4>
-                            <h4 class="mb-3">
-                            </h4>
-                            <div class="float-right mt-3">
-                                <input type="hidden" name="id" value="{{$order->id}}">
-                                <button type="submit" class="btn btn-primary btn-lg btn-square">Update</button>
-                            </div>
-                        </div>
+                <input type="hidden" name="id" value="{{$order->id}}">
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
                     </div>
                 </div>
 

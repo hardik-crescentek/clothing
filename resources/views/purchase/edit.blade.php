@@ -47,9 +47,15 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label class="form-control-label">Supplier<span class="text-danger ml-2">*</span></label>
-                                <div class="input-group form-group">
-                                    {!! Form::select('supplier_id', $suppliers,null, array('id'=>'supplier_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                                    <a href="{{ route('supplier.create', ['redirect' =>  base64_encode(route('purchase.create'))]) }}" class="btn btn-primary btn-square">Add Supplier</a>
+                                <div class="input-group">
+                                    {!! Form::select('supplier_id', $suppliers, null, ['id' => 'supplier_id','class' => 'form-control custom-select','data-validation' => "required"]) !!}
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">
+                                            <a href="{{ route('supplier.create', ['redirect' =>  base64_encode(route('purchase.create'))]) }}" title="Add Supplier">
+                                                <span><i class="fa fa-plus"></i></span>
+                                            </a>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -269,8 +275,13 @@
                     </div>
                 </div>
 
-                <div class="form-group row mb-4 float-right">
+                <!-- <div class="form-group row mb-4 float-right">
                     <div class="col">
+                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                    </div>
+                </div> -->
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary btn-lg">Save</button>
                     </div>
                 </div>

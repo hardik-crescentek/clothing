@@ -19,10 +19,10 @@
             <div class="widget-body">
                 {!! Form::open(['method' => 'GET','route' => ['order.index']]) !!}
                 <div class="form-group row d-flex align-items-center mt-3">
-                    <div class="col-lg-3">
+                    <!-- <div class="col-lg-3">
                         <label class="form-control-label col-lg-12">Search <div class="d-inline text-muted" style="font-size: 10px;">[Customer Name/Sales Persion/Material]</div></label>
                         {!! Form::text('search', '', array('class' => 'form-control')) !!}
-                    </div>
+                    </div> -->
                     <div class="col-lg-2">
                         <label class="form-control-label col-lg-12">Start Date </label>
                         <input type="date" class="form-control" name="start_date">
@@ -139,20 +139,26 @@
                                             </td> -->
                                             @role('super-admin')
                                             <td class="td-actions">
-                                                <a data-toggle="modal" data-target="#order-status-model" data-id="{{ $order->id }}" class="btn btn-secondary btn-sm btn-square col-sm-6 mt-1" style="color: #366a2b !important;">Order <br> Status</a>
-                                                <a class="btn btn-primary btn-sm btn-square col-sm-6" href="{{ route('order.edit',$order->id) }}">Edit</a>
+                                                <!-- <a data-toggle="modal" data-target="#order-status-model" data-id="{{ $order->id }}" class="btn btn-secondary btn-sm btn-square col-sm-6 mt-1" style="color: #366a2b !important;">Order <br> Status</a> -->
+                                                <a class="btn fa fa-spinner btn-sm btn-primary ml-1"  data-toggle="modal" data-target="#order-status-model" data-id="{{ $order->id }}" data-placement="top" title="Order Status"></a>
+                                                <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('order.edit',$order->id) }}" data-toggle="tooltip" data-placement="top" title="Edit"></a>
                                                 {{-- {{print_r(sizeof($order->invoice))}} --}}
                                                 @role('super-admin')
                                                 @if (!$order->invoice)
-                                                    <a class="btn btn-secondary btn-sm btn-square col-sm-6 mt-1" href="{{ route('invoice.create',$order->id) }}">Generate <br> Invoice</a>
+                                                    <!-- <a class="btn btn-secondary btn-sm btn-square col-sm-6 mt-1" href="{{ route('invoice.create',$order->id) }}">Generate <br> Invoice</a> -->
+                                                    <a class="btn fa fa-file-invoice btn-sm btn-info ml-1" href="{{ route('invoice.create',$order->id) }}" data-toggle="tooltip" data-placement="top" title="Generate Invoice"></a>
                                                 @else
-                                                    <a class="btn btn-primary btn-sm btn-square col-sm-6 mt-1" href="{{ route('invoice.edit',$order->invoice->id) }}" >Edit <br> Invoice</a>
+                                                    <!-- <a class="btn btn-primary btn-sm btn-square col-sm-6 mt-1" href="{{ route('invoice.edit',$order->invoice->id) }}" >Edit <br> Invoice</a> -->
+                                                    <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('invoice.edit',$order->invoice->id) }}" data-toggle="tooltip" data-placement="top" title="Edit Invoice"></a>
                                                 @endif
                                                 @endrole
                                                 {!! Form::open(['method' => 'DELETE','route' => ['order.destroy', $order->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
-                                                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square delete col-sm-6 mt-1']) !!}
+                                                <!-- {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square delete col-sm-6 mt-1']) !!} -->
+                                                <button type="submit" class="btn-action btn fa fa-trash  btn-sm btn-danger ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                </button>
                                                 {!! Form::close() !!}
-                                                <a class="btn btn-primary btn-sm btn-square col-sm-6" href="{{ route('order.viewdetails',$order->id) }}">View Order <br> Details</a>
+                                                <!-- <a class="btn btn-primary btn-sm btn-square col-sm-6" href="{{ route('order.viewdetails',$order->id) }}">View Order <br> Details</a> -->
+                                                <a class="btn fa fa-eye btn-sm btn-warning ml-1" href="{{ route('order.viewdetails',$order->id) }}" data-toggle="tooltip" data-placement="top" title="View Order Details"></a>
                                             </td>
                                             @endrole
                                             @role('warehouse')
@@ -249,17 +255,19 @@
                                             @role('super-admin')
                                             <td class="td-actions">
                                                <!--  <a data-toggle="modal" data-target="#order-status-model" data-id="{{ $order->id }}" class="btn btn-secondary btn-sm btn-square col-sm-6 mt-1" style="color: #f0ad4e !important;">Order <br> Status</a> -->
-                                                <a class="btn btn-primary btn-sm btn-square col-sm-6" href="{{ route('order.edit',$order->id) }}">Edit</a>
+                                                <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('order.edit',$order->id) }}" data-toggle="tooltip" data-placement="top" title="Edit"></a>
                                                 {{-- {{print_r(sizeof($order->invoice))}} --}}
                                                 @role('super-admin')
                                                 @if (!$order->invoice)
-                                                    <a class="btn btn-secondary btn-sm btn-square col-sm-6 mt-1" href="{{ route('invoice.create',$order->id) }}">Generate <br> Invoice</a>
+                                                    <a class="btn fa fa-file-invoice btn-sm btn-info ml-1" href="{{ route('invoice.create',$order->id) }}" data-toggle="tooltip" data-placement="top" title="Generate Invoice"></a>
                                                 @else
-                                                    <a class="btn btn-primary btn-sm btn-square col-sm-6 mt-1" href="{{ route('invoice.edit',$order->invoice->id) }}" >Edit <br> Invoice</a>
+                                                    <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('invoice.edit',$order->invoice->id) }}" data-toggle="tooltip" data-placement="top" title="Edit Invoice"></a>
                                                 @endif
                                                 @endrole
                                                 {!! Form::open(['method' => 'DELETE','route' => ['order.destroy', $order->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
-                                                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square delete col-sm-6 mt-1']) !!}
+                                                <!-- {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square delete col-sm-6 mt-1']) !!} -->
+                                                <button type="submit" class="btn-action btn fa fa-trash  btn-sm btn-danger ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                </button>
                                                 {!! Form::close() !!}
                                             </td>
                                             @endrole

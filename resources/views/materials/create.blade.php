@@ -116,37 +116,37 @@
                 </div> --}}
                 <div class="row">
                     <div class="col-lg-2">
-                        <label class="form-control-label">Width (inch)<span class="text-danger ml-2">*</span></label>
+                        <label class="form-control-label">Width(inch)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
                             <input type="text" name="width_inch" class="form-control width-inch" id="widthInch" placeholder="Width in inches" data-validation="required">
                             <span class="input-group-text">INCH</span>
                         </div>
                     </div>
                     <div class="col-lg-2">
-                        <label class="form-control-label">Width(cm) = inch*2.54<span class="text-danger ml-2">*</span></label>
+                        <label class="form-control-label">Width(cm)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
                             <input type="text" name="width_cm" class="form-control width-cm" id="widthCm" placeholder="Width in centimeters" readonly>
                             <span class="input-group-text">CM</span>
                         </div>
                     </div>
                     <div class="col-lg-2">
-                        <label class="form-control-label">Weight (gsm)<span class="text-danger ml-2">*</span></label>
+                        <label class="form-control-label">Weight(gsm)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
                             {!! Form::text('weight_gsm', null, ['class' => 'form-control weight-gsm', 'id' => 'weightGsm', 'placeholder' => 'Weight', 'data-validation' => 'required']) !!}
                             <span class="input-group-text">GSM</span>
                         </div>
                     </div>
                     <div class="col-lg-2">
-                        <label class="form-control-label">Weight (per mtr)<span class="text-danger ml-2">*</span></label>
+                        <label class="form-control-label">Weight(per mtr)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
-                            {!! Form::text('weight_per_mtr', null, ['class' => 'form-control weight-per-mtr', 'id' => 'weightPerMtr', 'placeholder' => 'Weight', 'data-validation' => 'required']) !!}
+                            {!! Form::text('weight_per_mtr', null, ['class' => 'form-control weight-per-mtr', 'id' => 'weightPerMtr', 'placeholder' => 'Weight', 'data-validation' => 'required','readonly' => 'readonly']) !!}
                             <span class="input-group-text">PER MTR</span>
                         </div>
                     </div>
                     <div class="col-lg-2">
-                        <label class="form-control-label">Weight (per yard)<span class="text-danger ml-2">*</span></label>
+                        <label class="form-control-label">Weight(per yard)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
-                            {!! Form::text('weight_per_yard', null, ['class' => 'form-control weight-per-yard', 'id' => 'weightPerYard', 'placeholder' => 'Weight', 'data-validation' => 'required']) !!}
+                            {!! Form::text('weight_per_yard', null, ['class' => 'form-control weight-per-yard', 'id' => 'weightPerYard', 'placeholder' => 'Weight', 'data-validation' => 'required','readonly' => 'readonly']) !!}
                             <span class="input-group-text">PER YARD</span>
                         </div>
                     </div>
@@ -174,10 +174,14 @@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label class="form-control-label">No of colors</label>
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 {!! Form::number('no_of_color', 1, ["class"=>" form-control no_of_color",'id'=>"no_of_color"]) !!}
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary p-2 rounded-right btn-md px-3" id="add_color_item">Add Color Item</button>
+                                    <span class="input-group-text">
+                                        <a type="button" id="add_color_item" title="Add Color Item">
+                                            <span><i class="fa fa-plus"></i></span>
+                                        </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -247,8 +251,8 @@
                     </div>
                 </div>
 
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <div class="col-lg-5 offset-lg-3">
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary btn-lg">Save</button>
                     </div>
                 </div>
@@ -344,34 +348,9 @@
         $.validate({
             form: '#from_add_material',
             modules: 'file',
-            // rules:{
-            //     wholesale_price:{
-            //         required: true,
-            //         number : true
-            //     },
-            //     retail_price :{
-            //         required: true,
-            //         number : true
-            //     },
-            //     sample_price :{
-            //         required : true,
-            //         number : true
-            //     }
-            // }
         });
-        // $.validate({
-        //     form: '#add_color_form',
-        //     onSuccess: function($form) {
-        //         addItem($form);
-        //         $($form).trigger("reset");
-        //         $('#addColorModal').modal('hide');
-        //         return false; // Will stop the submission of the form
-        //     },
-        // });
+       
         $(document).on('click', '#add_color_item', function() {
-
-            // $("#article_no").validate(function(a){console.log(a)});
-            //  return ;
 
             if(!$('#from_add_material').isValid()){
                 return;
@@ -480,6 +459,23 @@
             document.getElementById('widthCm').value = '';
         }
     });
+
+    function calculateWeights() {
+        let gsmWeight = parseFloat(document.getElementById('weightGsm').value);
+
+        if (!isNaN(gsmWeight)) {
+            let weightPerMtr = 1.5 * gsmWeight;
+            let weightPerYard = gsmWeight * 1.3716;
+
+            document.getElementById('weightPerMtr').value = weightPerMtr.toFixed(2);
+            document.getElementById('weightPerYard').value = weightPerYard.toFixed(2);
+        } else {
+            document.getElementById('weightPerMtr').value = '';
+            document.getElementById('weightPerYard').value = '';
+        }
+    }
+
+    document.getElementById('weightGsm').addEventListener('input', calculateWeights);
 </script>
 @endpush
 

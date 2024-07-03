@@ -49,12 +49,16 @@
                             <div class="form-group">
                                 <label class="form-control-label">Supplier<span class="text-danger ml-2">*</span></label>
                                 <div class="input-group form-group">
-                                    {!! Form::select('supplier_id', $suppliers, null, [
-                                        'id' => 'supplier_id',
-                                        'class' => 'form-control custom-select',
-                                        'data-validation' => "required"
-                                    ]) !!}
-                                    <a href="{{ route('supplier.create', ['redirect' => base64_encode(route('purchase.create'))]) }}" class="col-6 btn btn-primary btn-square ml-2">Add Supplier</a>
+                                    <div class="input-group">
+                                        {!! Form::select('supplier_id', $suppliers, null, ['id' => 'supplier_id','class' => 'form-control custom-select','data-validation' => "required"]) !!}
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <a href="{{ route('supplier.create', ['redirect' =>  base64_encode(route('purchase.create'))]) }}" title="Add Supplier">
+                                                    <span><i class="fa fa-plus"></i></span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -208,8 +212,13 @@
 
                     </div>
                 </div>
-                <div class="form-group float-right">
+                <!-- <div class="form-group float-right">
                     <button type="submit" class="btn btn-primary btn-lg" id="from_add_purchase_btn">Save</button>
+                </div> -->
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg" id="from_add_purchase_btn">Save</button>
+                    </div>
                 </div>
                 {!! Form::close() !!}
             </div>

@@ -78,9 +78,9 @@
                                 <td>{{ $supplier->supplier_type }}</td>
                                 <td>{{ $supplier->currency_type }}</td>
                                 <td class="td-actions">
-                                    <a class="btn btn-primary btn-sm btn-square col-sm-7" href="{{ route('supplier.edit',$supplier->id) }}">Edit</a>
+                                    <a class="btn btn-primary btn-sm btn-square col-sm-5 mt-1" href="{{ route('supplier.edit',$supplier->id) }}">Edit</a>
                                     {!! Form::open(['method' => 'DELETE','route' => ['supplier.destroy', $supplier->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
-                                    {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square col-sm-7 mt-1']) !!}
+                                    {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square col-sm-5 mt-1']) !!}
                                     {!! Form::close() !!}
                                 </td>
                             </tr>
