@@ -23,60 +23,61 @@
                 @endif
                 {{-- {!! Form::open(array('route' => ['order.update', $order->id],'method'=>'PATCH','id'=>'from_edit_order', 'class'=>"form-horizontal form-validate", 'novalidate')) !!} --}}
                 {!! Form::model($order, ['route' => ['order.update', $order->id],'method'=>'PUT','id'=>'from_edit_order', 'class'=>"form-horizontal form-validate", 'novalidate']) !!}
-                <div class="form-group row">
-                    <div class="col-xl-4 mb-3">
-                        <label class="form-control-label">Date of purchase<span class="text-danger ml-2">*</span></label>
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Date of purchase<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('purchase_date', null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                    <div class="col-xl-4 mb-3">
-                        <label class="form-control-label">Status<span class="text-danger ml-2">*</span></label>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Status<span class="text-danger ml-2">*</span></label>
                         {!! Form::select('status', $order_status,$order->status, array('id'=>'order_status','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
                     </div>
-                    <div class="col-xl-4 mb-3">
-                        <label class="form-control-label">Role Cutter Person Name </label>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Role Cutter Person Name</label>
                         <input type="text" class="form-control" name="role_cutter_name" value="{{ $order->role_cutter_name }}">
                     </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Customer<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-8">
-                                {!! Form::select('customer_id', $users,$order->customer_id, array('id'=>'customer_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Customer</label>
+                        <div class="input-group">
+                            {!! Form::select('customer_id', $users,$order->customer_id, array('id'=>'customer_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                            <!-- <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.edit',$order->id))]) }}" title="Add Customer"><span><i class="fa fa-plus"></i></span></a> -->
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.create'))]) }}" title="Add Customer">
+                                        <span><i class="fa fa-plus"></i></span>
+                                    </a>
+                                </span>
                             </div>
-                            <div class="col-4">
-                                <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.edit',$order->id))]) }}" class="btn btn-primary btn-square">Add Customer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Sales Person<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-8">
-                                {!! Form::select('seller_id', $sales_person,$order->seller_id, array('id'=>'seller_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col-4">
-                                <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.edit',$order->id))]) }}" class="btn btn-primary btn-square">Add Sales Person</a>
-
-                            </div>
+                            <!-- <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.create'))]) }}" title="Add Customer"><span><i class="fa fa-plus"></i></span>
+                            </a> -->
                         </div>
                     </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <div class="col-lg-6">
-                        <div class="row">
-                            <div class="col">
-                                <label class="form-control-label">Article No </label>
-                                {!! Form::text('search_article',null , array('class' => 'form-control','id'=>'search_article')) !!}
-                            </div>
-                            <div class="col">
-                                <label class="form-control-label">Color </label>
-                                {!! Form::text('search_color',null , array('class' => 'form-control','id'=>'search_color')) !!}
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Sales Person<span class="text-danger ml-2">*</span></label>
+                        <div class="input-group">
+                            {!! Form::select('seller_id', $sales_person,$order->seller_id, array('id'=>'seller_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                            <!-- <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.edit',$order->id))]) }}" class="btn btn-primary btn-square">Add Sales Person</a> -->
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.create'))]) }}" title="Add Sales Person">
+                                        <span><i class="fa fa-plus"></i></span>
+                                    </a>
+                                </span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <label class=" form-control-label ">Scan Barcode Number</label>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Article No</label>
+                        {!! Form::text('search_article',null , array('class' => 'form-control','id'=>'search_article')) !!}
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Color</label>
+                        {!! Form::text('search_color',null , array('class' => 'form-control','id'=>'search_color')) !!}
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Scan Barcode Number</label>
                         <div class="input-group">
                             <span class="input-group-addon addon-secondary"><i class="la la-barcode"></i></span>
                             {!! Form::text('input_search_barcode', null, array('id'=>'input_search_barcode','placeholder' => 'Barcode Number','class' => 'form-control')) !!}

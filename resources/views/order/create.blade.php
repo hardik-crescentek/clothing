@@ -8,11 +8,31 @@
         height: 750px !important;
         overflow-y: auto !important ;
     }
+
+    .main-content {
+        padding: 20px; /* Add padding or other styling as needed */
+        transition: all 0.3s ease; /* Add transitions for smooth effect */
+    }
+
+    .sidebar-container {
+        overflow: hidden; /* Ensure sidebar doesn't affect layout when hidden */
+    }
+
+    .sidebar {
+        display: block; /* Default display state */
+        transform: translateX(0); /* Ensure sidebar starts in view */
+        transition: transform 0.3s ease; /* Add transitions for smooth sliding effect */
+    }
+
+    .sidebar-hidden {
+        transform: translateX(100%); /* Slide sidebar out of view */
+        transition: transform 0.3s ease; /* Add transitions for smooth sliding effect */
+    }
 </style>
 
 <!-- Begin Row -->
 <div class="row flex-row">
-    <div class="col-xl-8 col-12">
+    <div class="col-xl-8 col-12 main-content">
         <div class="widget has-shadow">
             <div class="widget-header bordered no-actions d-flex align-items-center">
                 <h4>Add Order</h4>
@@ -29,69 +49,77 @@
                 </div>
                 @endif
                 {!! Form::open(array('route' => 'order.store','method'=>'POST','id'=>'from_add_order', 'class'=>"form-horizontal form-validate", 'novalidate')) !!}
-                <div class="form-group row">
-                    <div class="col-xl-4 ">
-                       <label class="form-control-label">Date of purchase<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('purchase_date', null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required")) !!}
-                    </div>
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Customer<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-8">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Customer<span class="text-danger ml-2">*</span></label>
+                            <div class="input-group">
                                 {!! Form::select('user_id', $users,null, array('id'=>'user_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col-4">
-                                <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.create'))]) }}" class="btn btn-primary btn-square">Add Customer</a>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.create'))]) }}" title="Add Customer">
+                                            <span><i class="fa fa-plus"></i></span>
+                                        </a>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-4">
+                        <br>
+                        <button type="button" id="btn-show-orders" class="btn btn-primary btn-square mt-2">Show Past Orders</button>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Date of purchase<span class="text-danger ml-2">*</span></label>
+                            {!! Form::text('purchase_date', null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required")) !!}
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Sales Person<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-8">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Sales Person<span class="text-danger ml-2">*</span></label>
+                            <div class="input-group form-group">
                                 {!! Form::select('selse_person_id', $sales_person,null, array('id'=>'sales_person_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col-4">
-                                <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.create'))]) }}" class="btn btn-primary btn-square">Add Sales Person</a>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Role Cutter Person Name </label>
-                        <div class="row">
-                            <div class="col-12">
-                                <input type="text" class="form-control" name="role_cutter_name">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.create'))]) }}" title="Add Sales Person">
+                                            <span><i class="fa fa-plus"></i></span>
+                                        </a>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <div class="col-lg-6">
-                        <div class="row">
-                            <div class="col col-lg-6">
-                                <label class="form-control-label">Article No </label>
-                                <!-- {!! Form::text('search_article',null , array('class' => 'form-control','id'=>'search_article')) !!} -->
-                                {!! Form::select('search_article',$article_no, '' , array('class' => 'form-control','id'=>'search_article')) !!}
-                            </div>
-                            <div class="col col-lg-6">
-                                <label class="form-control-label">Color </label>
-                                <!-- {!! Form::text('search_color',null , array('class' => 'form-control','id'=>'search_color')) !!} -->
-                                {!! Form::select('search_color',$colors,'' , array('class' => 'form-control','id'=>'search_color')) !!}
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Scan Barcode Number</label>
+                            <div class="input-group form-group">
+                                <span class="input-group-addon addon-secondary"><i class="la la-barcode"></i></span>
+                                {!! Form::text('input_search_barcode', null, array('id'=>'input_search_barcode','placeholder' => 'Barcode Number','class' => 'form-control')) !!}
                             </div>
                         </div>
+                    </div>                    
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Article No</label>
+                            <br>
+                            {!! Form::select('search_article',$article_no, '' , array('class' => 'form-control','id'=>'search_article')) !!}
+                        </div>
                     </div>
-                    <div class="col-lg-6">
-                        <label class=" form-control-label ">Scan Barcode Number</label>
-                        <div class="input-group">
-                            <span class="input-group-addon addon-secondary"><i class="la la-barcode"></i></span>
-                            {!! Form::text('input_search_barcode', null, array('id'=>'input_search_barcode','placeholder' => 'Barcode Number','class' => 'form-control')) !!}
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Color</label>
+                            <br>
+                            {!! Form::select('search_color',$colors,'' , array('class' => 'form-control','id'=>'search_color')) !!}
                         </div>
                     </div>
                 </div>
+
                 <div class="form-group row d-flex align-items-center">
                     <div id="search_error" class=" col-lg-12 alert alert-danger form-control" style="display: none;"></div>
                 </div>
@@ -168,7 +196,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xl-4 col-12">
+    <div class="col-xl-4 col-12 sidebar-container sidebar">
         <div class="widget has-shadow">
             <div class="widget-header bordered no-actions d-flex align-items-center">
                 <h4>Customer past orders <span class=".custom-selected-name"></span></h4>
@@ -1140,7 +1168,103 @@
                 format: 'DD/MM/YYYY'
             }
         });
-    $(document).on('change','#user_id',function(){
+    // $(document).on('change','#user_id',function(){
+    //     var user_id = $(this).val();
+    //     $.ajax({
+    //         url: "{{ route('get_customer_orders') }}",
+    //         dataType: "json",
+    //         data: {
+    //             user_id: user_id
+    //         },
+    //         success: function(data) {
+
+    //             // console.log(data);
+    //             if (data.status === 200) 
+    //             {
+    //                 $(".custom-selected-orders").html('');
+    //                 var html = '';
+    //                 $.each(data.response,function(i,order_data){
+
+    //                     // console.log(order_data.order_date);
+    //                     html += '<div class="row col-md-12 mt-3">\
+    //                             <div class="form-group col-md-3">\
+    //                                 <h5>Order ID</h5>\
+    //                                 <span>'+order_data.id+'</span>\
+    //                             </div>\
+    //                              <div class="form-group col-md-4">\
+    //                                 <h5>Order Date</h5>\
+    //                                 <span>'+order_data.order_date+'</span>\
+    //                             </div>\
+    //                             <div class="form-group col-md-5">\
+    //                                 <h5>Order Note</h5>\
+    //                                 <span>'+order_data.note+'</span>\
+    //                             </div>\
+    //                         </div>';
+    //                         var html_item = '';
+    //                         var total_item_id = 0;
+    //                         var total_meater = 0;
+    //                         var grand_total = 0;
+    //                         if (order_data.order_item_data.length > 0) {
+    //                         html_item += '<table class="table mt-3 table-order-history">\
+    //                             <thead>\
+    //                                 <tr>\
+    //                                     <th scope="col">Order Type</th>\
+    //                                     <th scope="col">Meater</th>\
+    //                                     <th scope="col">Price</th>\
+    //                                 </tr>\
+    //                             </thead>\
+    //                             <tbody>';
+    //                             $.each(order_data.order_item_data,function(i,order_item_data){
+    //                                 html_item += '<tr>\
+    //                                     <td>'+order_item_data.type_of_sale+'</td>\
+    //                                     <td>'+order_item_data.meter+'</td>\
+    //                                     <td>'+order_item_data.price+'</td>\
+    //                                 </tr>';
+    //                                 total_item_id += 1;
+    //                                 total_meater += order_item_data.meter;
+    //                                 grand_total += parseInt(order_item_data.price);
+    //                                 })
+    //                             html_item += '</tbody>\
+    //                         </table>';
+    //                         }
+    //                         html += html_item;
+    //                         html += '<div class="">\
+    //                                 <div class="row">\
+    //                                     <div class="col-4">\
+    //                                         <h4 class="mb-2 ml-2">\
+    //                                             <div id="totalItem"> Total Items : '+total_item_id+'</div>\
+    //                                         </h4>\
+    //                                     </div>\
+    //                                     <div class="col-4">\
+    //                                         <h4 class="mb-2">\
+    //                                             <div id="totalMeter"> Total Meter : '+total_meater+'</div>\
+    //                                         </h4>\
+    //                                     </div>\
+    //                                     <div class="col-4">\
+    //                                         <h4 class="mb-2">\
+    //                                             <div id="grand_total"> Grand Total : '+grand_total+'</div>\
+    //                                         </h4>\
+    //                                     </div>\
+    //                                 </div>\
+    //                             </div>';
+    //                         html += '<hr>';
+
+    //                     $('.custom-selected-orders').html(html);
+    //                     // $("#search_color").append(`<option value="${i}">${data[i]}</option>`);
+    //                 })
+    //             }
+    //             else
+    //             {
+    //                 var html = '<div class="text-center mt-5" style="font-size: 20px;">\
+    //                       No data found..!\
+    //                     </div>';
+    //                 $('.custom-selected-orders').html(html);
+    //             }
+    //         }
+    //     });
+    // });
+
+    $(document).on('change', '#user_id', function() {
         var user_id = $(this).val();
         $.ajax({
             url: "{{ route('get_customer_orders') }}",
@@ -1149,90 +1273,118 @@
                 user_id: user_id
             },
             success: function(data) {
-
-                // console.log(data);
-                if (data.status === 200) 
-                {
+                if (data.status === 200) {
                     $(".custom-selected-orders").html('');
-                    var html = '';
-                    $.each(data.response,function(i,order_data){
+                    var html = '<table class="table mt-3 table-order-history">\
+                                    <thead>\
+                                        <tr>\
+                                            <th scope="col">INV#</th>\
+                                            <th scope="col">DATE</th>\
+                                            <th scope="col">Amount</th>\
+                                            <th scope="col">Payment Status</th>\
+                                            <th scope="col">Remark</th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>';
+                    var total_purchase = 0;
+                    var monthly_purchase = 0;
+                    var amount_to_receive = 0;
+                    var currentMonth = new Date().getMonth() + 1;
+                    var currentYear = new Date().getFullYear();
 
-                        // console.log(order_data.order_date);
-                        html += '<div class="row col-md-12 mt-3">\
-                                <div class="form-group col-md-3">\
-                                    <h5>Order ID</h5>\
-                                    <span>'+order_data.id+'</span>\
+                    $.each(data.response, function(i, order_data) {
+                        var order_total = 0;
+                        $.each(order_data.order_item_data, function(i, item) {
+                            order_total += parseFloat(item.price);
+                        });
+
+                        // Placeholder values for payment status and remark
+                        var payment_status = 'Paid'; // Replace with actual data if available
+                        var remark = order_data.note;
+
+                        var orderDate = new Date(order_data.order_date);
+                        var formattedDate = ("0" + orderDate.getDate()).slice(-2) + '/' +
+                                        ("0" + (orderDate.getMonth() + 1)).slice(-2) + '/' +
+                                        orderDate.getFullYear();
+                        if (orderDate.getMonth() + 1 === currentMonth && orderDate.getFullYear() === currentYear) {
+                            monthly_purchase += order_total;
+                        }
+
+                        total_purchase += order_total;
+                        amount_to_receive += order_total; // Placeholder for actual amount to receive logic
+
+                        html += '<tr>\
+                                    <td>' + order_data.id + '</td>\
+                                    <td>' + formattedDate + '</td>\
+                                    <td>' + order_total.toFixed(2) + '</td>\
+                                    <td>' + payment_status + '</td>\
+                                    <td>' + remark + '</td>\
+                                </tr>';
+                    });
+
+                    html += '</tbody>\
+                            </table>';
+                    
+                    html += '<hr>';
+                    
+                    html += '<div class="row m-1">\
+                                <div class="col-md-4">\
+                                    <h4>Total Purchase: ' + total_purchase.toFixed(2) + '</h4>\
                                 </div>\
-                                 <div class="form-group col-md-4">\
-                                    <h5>Order Date</h5>\
-                                    <span>'+order_data.order_date+'</span>\
+                                <div class="col-md-4">\
+                                    <h4>Monthly Purchase: ' + monthly_purchase.toFixed(2) + '</h4>\
                                 </div>\
-                                <div class="form-group col-md-5">\
-                                    <h5>Order Note</h5>\
-                                    <span>'+order_data.note+'</span>\
+                                <div class="col-md-4">\
+                                    <h4>Amount to Receive: ' + amount_to_receive.toFixed(2) + '</h4>\
                                 </div>\
                             </div>';
-                            var html_item = '';
-                            var total_item_id = 0;
-                            var total_meater = 0;
-                            var grand_total = 0;
-                            if (order_data.order_item_data.length > 0) {
-                            html_item += '<table class="table mt-3 table-order-history">\
-                                <thead>\
-                                    <tr>\
-                                        <th scope="col">Order Type</th>\
-                                        <th scope="col">Meater</th>\
-                                        <th scope="col">Price</th>\
-                                    </tr>\
-                                </thead>\
-                                <tbody>';
-                                $.each(order_data.order_item_data,function(i,order_item_data){
-                                    html_item += '<tr>\
-                                        <td>'+order_item_data.type_of_sale+'</td>\
-                                        <td>'+order_item_data.meter+'</td>\
-                                        <td>'+order_item_data.price+'</td>\
-                                    </tr>';
-                                    total_item_id += 1;
-                                    total_meater += order_item_data.meter;
-                                    grand_total += parseInt(order_item_data.price);
-                                    })
-                                html_item += '</tbody>\
-                            </table>';
-                            }
-                            html += html_item;
-                            html += '<div class="">\
-                                    <div class="row">\
-                                        <div class="col-4">\
-                                            <h4 class="mb-2 ml-2">\
-                                                <div id="totalItem"> Total Items : '+total_item_id+'</div>\
-                                            </h4>\
-                                        </div>\
-                                        <div class="col-4">\
-                                            <h4 class="mb-2">\
-                                                <div id="totalMeter"> Total Meter : '+total_meater+'</div>\
-                                            </h4>\
-                                        </div>\
-                                        <div class="col-4">\
-                                            <h4 class="mb-2">\
-                                                <div id="grand_total"> Grand Total : '+grand_total+'</div>\
-                                            </h4>\
-                                        </div>\
-                                    </div>\
-                                </div>';
-                            html += '<hr>';
 
-                        $('.custom-selected-orders').html(html);
-                        // $("#search_color").append(`<option value="${i}">${data[i]}</option>`);
-                    })
-                }
-                else
-                {
+                    $('.custom-selected-orders').html(html);
+                } else {
                     var html = '<div class="text-center mt-5" style="font-size: 20px;">\
-                          No data found..!\
-                        </div>';
+                                No data found..!\
+                                </div>';
                     $('.custom-selected-orders').html(html);
                 }
             }
+        });
+    });
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var sidebarContainer = document.querySelector('.sidebar-container');
+        var mainContent = document.querySelector('.main-content');
+        var sidebar = document.querySelector('.sidebar');
+
+        // Function to toggle sidebar visibility
+        function toggleSidebar() {
+            sidebarContainer.classList.toggle('sidebar-hidden');
+            // Check if sidebar is hidden
+            if (sidebarContainer.classList.contains('sidebar-hidden')) {
+                // Expand main content to col-xl-12 when sidebar is hidden
+                mainContent.classList.remove('col-xl-8');
+                mainContent.classList.add('col-xl-12');
+                // Hide sidebar by reducing its width to 0
+                sidebar.classList.remove('col-xl-4');
+                sidebar.classList.add('col-xl-0');
+            } else {
+                // Restore main content to col-xl-8 when sidebar is shown
+                mainContent.classList.remove('col-xl-12');
+                mainContent.classList.add('col-xl-8');
+                 // Show sidebar by restoring its width
+                sidebar.classList.remove('col-xl-0');
+                sidebar.classList.add('col-xl-4');
+            }
+        }
+
+        // Initially hide sidebar
+        toggleSidebar();
+
+        // Toggle sidebar visibility when clicking on the 'Show Past Orders' button
+        document.getElementById('btn-show-orders').addEventListener('click', function() {
+            toggleSidebar();
         });
     });
 </script>
