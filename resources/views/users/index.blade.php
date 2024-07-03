@@ -17,7 +17,7 @@
 </div>
 @endif
 <!-- Begin Row -->
-<div class="row flex-row">
+<!-- <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
             <div class="widget-header bordered no-actions1 d-block align-items-center">
@@ -27,8 +27,8 @@
                 {!! Form::open(['method' => 'GET','route' => ['users.index']]) !!}
                 <div class="form-group row d-flex align-items-center mt-3">
                     <div class="col-lg-3">
-                        <label class="form-control-label">Search <div class="d-inline text-muted" style="font-size: 10px;">[User Name/Email/Phone]</div></label>
-                        {!! Form::text('search', '', array('class' => 'form-control')) !!}
+                        <label class="form-control-label">Search</label>
+                        {!! Form::text('search', '', array('class' => 'form-control','placeholder'=>'User Name/Email/Phone')) !!}
                     </div>
                     <div class="col-lg-3">
                     <label class="form-control-label">Role</label>
@@ -38,6 +38,7 @@
                         <label class="form-control-label">&nbsp;</label>
                         <div class="form-action">
                             <input type="submit" class="btn btn-primary btn-square" value="Filter">
+                            <a class="btn btn-primary btn-square ml-1" href="{{ route('users.index') }}"> Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -45,7 +46,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- Begin Row -->
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
@@ -87,9 +88,9 @@
                             @endisset
                         </tbody>
                     </table>
-                    @isset($users)
+                    <!-- @isset($users)
                     {{ $users->render() }}
-                    @endisset
+                    @endisset -->
 
                 </div>
             </div>
@@ -107,10 +108,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function(){
-            $('#user_tbl').tablesorter({
-                cssAsc: 'up',
-		        cssDesc: 'down',
-                cssNone: 'both'
+            // $('#user_tbl').tablesorter({
+            //     cssAsc: 'up',
+		    //     cssDesc: 'down',
+            //     cssNone: 'both'
+            // });
+            $('#user_tbl').DataTable({
+                lengthMenu: [
+                    [10, 25, 50,100,500,1000,'All'],
+                    [10, 25, 50,100,500,1000,'All'],
+                ],
+                "aaSorting": []
             });
         })
     </script>

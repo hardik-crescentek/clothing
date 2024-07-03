@@ -18,7 +18,7 @@
 @endif
 
 <!-- Begin Row -->
-<div class="row flex-row">
+<!-- <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
             <div class="widget-header bordered no-actions1 d-block align-items-center">
@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- Begin Row -->
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
@@ -88,9 +88,9 @@
                             @endisset
                         </tbody>
                     </table>
-                    @isset($suppliers)
+                    <!-- @isset($suppliers)
                     {{ $suppliers->render() }}
-                    @endisset
+                    @endisset -->
 
                 </div>
             </div>
@@ -108,10 +108,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function(){
-            $('#supplier_tbl').tablesorter({
-                cssAsc: 'up',
-		        cssDesc: 'down',
-                cssNone: 'both'
+            // $('#supplier_tbl').tablesorter({
+            //     cssAsc: 'up',
+		    //     cssDesc: 'down',
+            //     cssNone: 'both'
+            // });
+            $('#supplier_tbl').DataTable({
+                lengthMenu: [
+                    [10, 25, 50,100,500,1000,'All'],
+                    [10, 25, 50,100,500,1000,'All'],
+                ],
+                "aaSorting": []
             });
         })
     </script>
