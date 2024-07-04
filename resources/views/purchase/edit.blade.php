@@ -282,7 +282,8 @@
                 </div> -->
                 <div class="form-group row d-flex align-items-center mt-5">
                     <div class="col-lg-12 d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                        <a class="btn btn-secondary btn-lg ml-1" href="{{ route('purchase.index') }}"> Cancel</a>
                     </div>
                 </div>
                 {!! Form::close() !!}

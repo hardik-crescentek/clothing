@@ -184,14 +184,19 @@
                             <h4 class="mb-3">
                                 <div id="grand_total"> Grand Total : </div>
                             </h4>
-                            <div class="float-right mt-3">
-                                <a class="btn btn-secondary btn-square" href="{{route('order.index')}}">Cancel</a>
+                            <!-- <div class="float-right mt-3">
                                 <button type="submit" class="btn btn-primary  btn-square">Save Order</button>
-                            </div>
+                                <a class="btn btn-secondary btn-square" href="{{route('order.index')}}">Cancel</a>
+                            </div> -->
                         </div>
                     </div>
                 </div>
-
+                
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                    </div>
+                </div>
                 {!! Form::close() !!}
             </div>
         </div>

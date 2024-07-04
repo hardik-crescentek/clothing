@@ -22,183 +22,151 @@
                 </div>
                 @endif
                 {!! Form::open(array('route' => 'invoice.store2','method'=>'POST','id'=>'from_edit_order', 'class'=>"form-horizontal form-validate", 'novalidate')) !!}
-
-                <div class="form-group row">
-                    <div class="col-xl-6 mb-3 ">
-                        <label class="form-control-label">Invoic No<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-12">
-                                {!! Form::text('invoice_no', null, array('id' => 'invoice_no','class' => 'form-control','data-validation-error-msg-required'=>'Please Select Customer', 'data-validation'=>"required","readonly"=>"readonly")) !!}
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Invoic No<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text('invoice_no', null, array('id' => 'invoice_no','class' => 'form-control','data-validation-error-msg-required'=>'Please Select Customer', 'data-validation'=>"required","readonly"=>"readonly")) !!}
                     </div>
-                    <div class="col-xl-6 mb-3 ">
-                        <label class="form-control-label">Date of invoice<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-12">
-                                {!! Form::text('generate_date', null, array('id' => 'generate_date','class' => 'form-control', 'data-validation'=>"required")) !!}
-                            </div>
-                        </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Date of invoice<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text('generate_date', null, array('id' => 'generate_date','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Customer<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-8">
-                                {!! Form::select('customer_id',$users,null, array('id'=>'customer_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col-4">
-                                <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('invoice.create2'))]) }}" class="btn btn-primary btn-square">Add Customer</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Sales Person<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-8">
-                                {!! Form::select('seller_id', $sales_person,null, array('id'=>'seller_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col-4">
-                                <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('invoice.create2'))]) }}" class="btn btn-primary btn-square">Add Sales Person</a>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6 mb-3">
-                        <div class="row">
-                            <div class="col-6">
-                                <label class="form-control-label">Payment Terms<span class="text-danger ml-2">*</span></label>
-                                {!! Form::select('payment_terms', ['cash' => 'Cash', 'credit' => 'Credit by Days'],null, array('id'=>'payment_terms','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col-6" id="row-credit-days" style="display: none;">
-                                <label class="form-control-label">Credit Days</label>
-                                {!! Form::text('credit_days', null, array('id'=>'credit_days','class' => 'form-control')) !!}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Payment Receiver<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-8">
-                                {!! Form::select('payment_receiver_id', $payment_receiver,null, array('id'=>'seller_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col-4">
-                                <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('invoice.create2'))]) }}" class="btn btn-primary btn-square">Add Payment Receiver</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6 mb-3">
-                        <div class="row">
-                            <div class="col-6">
-                                <label class="form-control-label">Sales Type<span class="text-danger ml-2">*</span></label>
-                                {!! Form::select('sales_type', ['','Local', 'Out of state', 'International'],null, array('id'=>'sales_type','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col-6">
-                                <label class="form-control-label">Charge in Unit</label>
-                                <div class="mt-2 d-flex">
-                                    <div class="styled-radio mr-4">
-                                        {!! Form::radio('chareg_in_unit', 'Yards', true, array('class' => 'custom-control-input', 'id'=>"chareg_in_unit_yards")) !!}
-                                        <label for="chareg_in_unit_yards">Yards</label>
-                                    </div>
-                                    <div class="styled-radio">
-                                        {!! Form::radio('chareg_in_unit', 'Mtrs', false, array('class' => 'custom-control-input', 'id'=>"chareg_in_unit_mtrs")) !!}
-                                        <label for="chareg_in_unit_mtrs">Mtrs</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 mb-3">
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="form-control-label">Sales Commision</label>
-                                <div class="mt-2 d-flex">
-                                    <div class="styled-radio mr-4">
-                                        {!! Form::radio('sales_commision', 'No', true, array('class' => 'custom-control-input', 'id'=>"sales_commision_no")) !!}
-                                        <label for="sales_commision_no">No</label>
-                                    </div>
-                                    <div class="styled-radio">
-                                        {!! Form::radio('sales_commision', 'Yes', false, array('class' => 'custom-control-input', 'id'=>"sales_commision_yes")) !!}
-                                        <label for="sales_commision_yes">Yes</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-8 commision_part" style="display: none;">
-                                <label class="form-control-label">Commision Type</label>
-                                <div class="mt-2 d-flex">
-                                    <div class="styled-radio mr-4">
-                                        {!! Form::radio('commision_type', 'on_unit', true, array('class' => 'custom-control-input', 'id'=>"commision_type_unit")) !!}
-                                        <label for="commision_type_unit">On Unit Sold</label>
-                                    </div>
-                                    <div class="styled-radio">
-                                        {!! Form::radio('commision_type', 'on_subtotal', false, array('class' => 'custom-control-input', 'id'=>"commision_type_subtotal")) !!}
-                                        <label for="commision_type_subtotal">On Sub Total Amount Of Sale</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row mb-3 commision_part" style="display: none;">
-                    <div class="col-xl-6 mb-3">
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="form-control-label">Commision Amount THB/Unit</label>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        {!! Form::text('commision_amount_thb', 0, array('id' => 'commision_amount_thb','class' => 'form-control', 'data-validation'=>"required")) !!}
-                                        <span class="input-group-addon addon-secondary">THB</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <label class="form-control-label">Commision Amount on Sale</label>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        {!! Form::text('commision_amount_sale', 0, array('id' => 'commision_amount_sale','class' => 'form-control', 'data-validation'=>"required")) !!}
-                                       @php
-                                            $commision_type =   [
-                                                                    "percentage" => '%',
-                                                                    "thb"        => 'THB',
-                                                                ];
-                                       @endphp
-                                        {!!Form::select('subtotal_commision_type', $commision_type, null, ['class' => 'form-control'])!!}
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <div class="col-lg-6">
-                        <div class="row">
-                            <div class="col">
-                                <label class="form-control-label">Article No </label>
-                                <!-- {!! Form::text('search_article',null , array('class' => 'form-control','id'=>'search_article1')) !!} -->
-                                {!! Form::select('search_article',$article_no, '' , array('class' => 'form-control','id'=>'search_article')) !!}
-                            </div>
-                            <div class="col">
-                                <label class="form-control-label">Color </label>
-                                <!-- {!! Form::text('search_color',null , array('class' => 'form-control','id'=>'search_color')) !!} -->
-                                {!! Form::select('search_color',$colors,'' , array('class' => 'form-control','id'=>'search_color')) !!}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <label class=" form-control-label ">Scan Barcode Number</label>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Customer<span class="text-danger ml-2">*</span></label>
                         <div class="input-group">
-                            <span class="input-group-addon addon-secondary"><i class="la la-barcode"></i></span>
-                            {!! Form::text('input_search_barcode', null, array('id'=>'input_search_barcode','placeholder' => 'Barcode Number','class' => 'form-control')) !!}
+                            {!! Form::select('customer_id',$users,null, array('id'=>'customer_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('invoice.create2'))]) }}" title="Add Customer">
+                                        <span><i class="fa fa-plus"></i></span>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Sales Person<span class="text-danger ml-2">*</span></label>
+                        <div class="input-group">
+                            {!! Form::select('seller_id', $sales_person,null, array('id'=>'seller_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('invoice.create2'))]) }}" title="Add Sales Person">
+                                        <span><i class="fa fa-plus"></i></span>
+                                    </a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Payment Terms<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('payment_terms', ['cash' => 'Cash', 'credit' => 'Credit by Days'],null, array('id'=>'payment_terms','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Payment Receiver<span class="text-danger ml-2">*</span></label>
+                        <div class="input-group">
+                            {!! Form::select('payment_receiver_id', $payment_receiver,null, array('id'=>'seller_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('invoice.create2'))]) }}" title="Add Payment Receiver">
+                                        <span><i class="fa fa-plus"></i></span>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Sales Type<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('sales_type', ['','Local', 'Out of state', 'International'],null, array('id'=>'sales_type','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Charge in Unit</label>
+                        <div class="d-flex align-items-center">
+                            <div class="styled-radio mr-3">
+                                {!! Form::radio('chareg_in_unit', 'Yards', true, array('class' => 'custom-control-input', 'id'=>"chareg_in_unit_yards")) !!}
+                                <label for="chareg_in_unit_yards">Yards</label>
+                            </div>
+                            <div class="styled-radio">
+                                {!! Form::radio('chareg_in_unit', 'Mtrs', false, array('class' => 'custom-control-input', 'id'=>"chareg_in_unit_mtrs")) !!}
+                                <label for="chareg_in_unit_mtrs">Mtrs</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Sales Commision</label>
+                        <div class="d-flex align-items-center">
+                            <div class="styled-radio mr-3">
+                                {!! Form::radio('sales_commision', 'No', true, array('class' => 'custom-control-input', 'id'=>"sales_commision_no")) !!}
+                                <label for="sales_commision_no">No</label>
+                            </div>
+                            <div class="styled-radio">
+                                {!! Form::radio('sales_commision', 'Yes', false, array('class' => 'custom-control-input', 'id'=>"sales_commision_yes")) !!}
+                                <label for="sales_commision_yes">Yes</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3 commision_part" style="display: none;">
+                        <label class="form-control-label d-flex">Commision Type</label>
+                        <div class="d-flex align-items-center">
+                            <div class="styled-radio mr-3">
+                                {!! Form::radio('commision_type', 'on_unit', true, array('class' => 'custom-control-input', 'id'=>"commision_type_unit")) !!}
+                                <label for="commision_type_unit">On Unit Sold</label>
+                            </div>
+                            <div class="styled-radio">
+                                {!! Form::radio('commision_type', 'on_subtotal', false, array('class' => 'custom-control-input', 'id'=>"commision_type_subtotal")) !!}
+                                <label for="commision_type_subtotal">On Sub Total Amount Of Sale</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3 commision_part" style="display: none;">
+                        <label class="form-control-label d-flex">Commision Amount THB/Unit</label>
+                        <div class="input-group">
+                            {!! Form::text('commision_amount_thb', 0, array('id' => 'commision_amount_thb','class' => 'form-control', 'data-validation'=>"required")) !!}
+                            <div class="input-group-append">
+                                <span class="input-group-addon addon-secondary">THB</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3 commision_part" style="display: none;">
+                        <label class="form-control-label d-flex">Commision Amount on Sale</label>
+                        <div class="input-group">
+                            {!! Form::text('commision_amount_sale', 0, array('id' => 'commision_amount_sale','class' => 'form-control', 'data-validation'=>"required")) !!}
+                            <div class="input-group-append">
+                                @php
+                                     $commision_type =   [
+                                                             "percentage" => '%',
+                                                             "thb"        => 'THB',
+                                                         ];
+                                @endphp
+                                 {!!Form::select('subtotal_commision_type', $commision_type, null, ['class' => 'form-control'])!!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Article No</label>
+                        {!! Form::select('search_article',$article_no, '' , array('class' => 'form-control','id'=>'search_article')) !!}
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Color</label>
+                        {!! Form::select('search_color',$colors,'' , array('class' => 'form-control','id'=>'search_color')) !!}
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Scan Barcode Number</label>
+                            <div class="input-group form-group">
+                                <span class="input-group-addon addon-secondary"><i class="la la-barcode"></i></span>
+                                {!! Form::text('input_search_barcode', null, array('id'=>'input_search_barcode','placeholder' => 'Barcode Number','class' => 'form-control')) !!}
+                            </div>
+                        </div>
+                    </div>      
+                </div>
+
                 <div class="form-group row d-flex align-items-center">
                     <div id="search_error" class=" col-lg-12 alert alert-danger form-control" style="display: none;"></div>
                 </div>
@@ -322,13 +290,15 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="float-right mt-3">
-                                <button type="submit" class="btn btn-primary btn-lg btn-square" id="final_save_btn">Save Invoice</button>
-                            </div>
                         </div>
                     </div>
                 </div>
 
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg" id="final_save_btn">Save</button>
+                    </div>
+                </div>
                 {!! Form::close() !!}
             </div>
         </div>

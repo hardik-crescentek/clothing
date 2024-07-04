@@ -40,27 +40,21 @@
 
 
                 {!! Form::open(array('route' => 'purchase.import','method'=>'POST','id'=>'from_add_purchase', 'class'=>"form-horizontal form-validate", 'novalidate','files' => true)) !!}
-                <div class="form-group row mb-3">
-                    <div class="col-xl-12">
-                        <div class="row">
-                            <div class="col-xl-6 mb-6">
-                                <label class="form-control-label">Supplier<span class="text-danger ml-2">*</span></label>
-                                <div class="row">
-                                    <div class="col-8">
-                                        {!! Form::select('supplier_id', $suppliers,null, array('id'=>'supplier_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-6 mb-6">
-                                <label class="form-control-label">Select purchase file <span class="text-danger ml-2">*</span></label>
-                                <input type="file" name="purchase_file" class="form-control" required>
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        <label class="form-control-label d-flex">Supplier<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('supplier_id', $suppliers,null, array('id'=>'supplier_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label class="form-control-label d-flex">Select purchase file<span class="text-danger ml-2">*</span></label>
+                        <input type="file" name="purchase_file" class="form-control" required>
                     </div>
                 </div>
-                <div class="form-group float-right">
-                    <button type="button" class="btn btn-danger btn-lg d-none" id="multiple_purchase_delete">Delete Selected</button>
-                    <button type="submit" class="btn btn-primary btn-lg" id="from_add_purchase_btn">Save</button>
+                <div class="form-group row d-flex align-items-center mt-3">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                        <button type="button" class="btn btn-danger btn-lg d-none" id="multiple_purchase_delete">Delete Selected</button>
+                    </div>
                 </div>
                 {!! Form::close() !!}
             </div>

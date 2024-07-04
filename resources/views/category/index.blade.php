@@ -23,9 +23,9 @@
         <div class="widget has-shadow">
             <div class="widget-header bordered no-actions1 d-block align-items-center">
                 {!! Form::open(['method' => 'GET','route' => ['category.index']]) !!}
-                <div class="form-group row d-flex align-items-center mt-3">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Show Category</label>
-                    <div class="col-lg-3">
+                <div class="form-group row d-flex align-items-center mt-3 col-lg-3">
+                    <label class="form-control-label d-flex">Show Category</label>
+                    <div class="ml-1">
                         {!! Form::select('parent', $parent_categories,$parent, array('class' => 'form-control custom-select', 'onchange'=>'this.form.submit()')) !!}
                     </div>
                 </div>
