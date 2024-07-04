@@ -18,26 +18,27 @@
             <div class="widget-body">
                 {!! Form::open(['method' => 'GET','route' => ['payments.pending-payments']]) !!}
                 <div class="form-group row d-flex align-items-center mt-3">
-                    {{-- <div class="col-lg-3">
+                    {{-- <div class="col-lg-2">
                         <label class="form-control-label">Date &nbsp;</label>
                         {!! Form::text('search_date', null, array('class' => 'form-control','id'=>"search_date")) !!}
                     </div> --}}
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">From Date &nbsp;</label>
                         {!! Form::text('from_date', '', array('class' => 'form-control','id'=>"from_date")) !!}
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">To Date &nbsp;</label>
                         {!! Form::text('to_date', '', array('class' => 'form-control','id'=>"to_date")) !!}
                     </div>
                     
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">Customer</label>
                         {!! Form::select('customer_id', $users, $selected_customer, array('class' => 'form-control customer_id','id'=>'customer_id','style'=>'width:100%')) !!}
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         {{-- <label class="form-control-label">&nbsp;</label> --}}
                         <div class="form-action">
+                            <a href="{{ route('payments.pending-payments') }}" class="btn btn-warning btn-square">Reset</a>
                             <input type="submit" class="btn btn-primary btn-square" value="Filter">
                         </div>
                     </div>

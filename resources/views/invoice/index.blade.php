@@ -1,7 +1,15 @@
 @extends('layouts.master')
 @section('title', 'Invoice')
 @section('content')
-
+<!-- Begin Page Header-->
+<div class="row">
+    <div class="page-header">
+        <div class="d-flex align-items-center">
+            <h2 class="page-header-title">Invoice</h2>
+        </div>
+    </div>
+</div>
+<!-- End Page Header -->
 
 @if ($message = Session::get('success'))
 <div class="alert alert-success">
@@ -19,10 +27,10 @@
             <div class="widget-body">
                 {!! Form::open(['method' => 'GET','route' => ['invoice.index']]) !!}
                 <div class="form-group row d-flex align-items-center mt-3">
-                    <div class="col-lg-2">
+                    <!-- <div class="col-lg-2">
                         <label class="form-control-label">Search &nbsp;</label><div class="d-inline h6 text-muted">[Invoice No]</div>
                         {!! Form::text('search', $search, array('class' => 'form-control')) !!}
-                    </div>
+                    </div> -->
                     <div class="col-lg-2">
                         <label class="form-control-label">From Date &nbsp;</label>
                         {!! Form::text('from_date', $from_date, array('class' => 'form-control','id'=>"from_date")) !!}
@@ -32,14 +40,16 @@
                         {!! Form::text('to_date', $to_date, array('class' => 'form-control','id'=>"to_date")) !!}
                     </div>
                     
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">Customer</label>
                         {!! Form::select('customer_id', $users, $selected_customer, array('class' => 'form-control customer_id','id'=>'customer_id','style'=>'width:100%')) !!}
                     </div>
                     <div class="col-lg-2">
                         <label class="form-control-label">&nbsp;</label>
                         <div class="form-action">
+                            <a href="{{ url('/invoice') }}" class="btn btn-warning btn-square">Reset</a>
                             <input type="submit" class="btn btn-primary btn-square" value="Filter">
+                            <!-- <a class="btn btn-primary btn-square ml-1" href="{{ route('invoice.index') }}"> Cancel</a> -->
                         </div>
                     </div>
                 </div>
@@ -114,19 +124,20 @@
                                     {{-- {{print_r(sizeof($invoice->invoice))}} --}}
                                     {{-- @if (!$invoice->invoice)
                                         <a class="btn btn-secondary btn-sm btn-square" href="{{ route('invoice.create',$invoice->id) }}">Generate Invoice</a>
-                                        <a class="btn btn-primary btn-sm btn-square" href="{{ route('invoice.edit',$invoice->id) }}">Edit</a>
+                                        <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('invoice.edit',$invoice->id) }}" data-toggle="tooltip" data-placement="top" title="Edit"></a>
                                         
                                     @else --}}
                                     @role("super-admin")
                                         <iframe src="{{route('invoice.print',$invoice->id)}}" name="print_frame_{{$invoice->id}}" class="d-none"></iframe>
-                                        <a class="btn btn-secondary btn-sm btn-square print col-sm-6"  onclick="document.title='{{$invoice->invoice_no}}';frames['print_frame_{{$invoice->id}}'].print();document.title='Invoice - Premier Collection';return false;" >Print</a>
-                                        <a class="btn btn-primary btn-sm btn-square edit col-sm-6 mt-1" href="{{ route('invoice.edit',$invoice->id) }}" >Edit</a>
+                                        <a class="btn fa fa-print btn-sm btn-info"  onclick="document.title='{{$invoice->invoice_no}}';frames['print_frame_{{$invoice->id}}'].print();document.title='Invoice - Premier Collection';return false;" data-toggle="tooltip" data-placement="top" title="Print"></a>
+                                        <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('invoice.edit',$invoice->id) }}" data-toggle="tooltip" data-placement="top" title="Edit"></a>
                                         {{-- @endif --}}
                                         {!! Form::open(['method' => 'DELETE','route' => ['invoice.destroy', $invoice->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
-                                        {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square delete col-sm-6 mt-1']) !!}
+                                        <!-- {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square delete col-sm-6 mt-1']) !!} -->
+                                        <button type="submit" class="btn-action btn fa fa-trash  btn-sm btn-danger ml-1" data-toggle="tooltip" data-placement="top" title="Delete"></button>
                                         {!! Form::close() !!}
                                     @endrole
-                                    <a class="btn btn-primary btn-sm btn-square payment col-sm-6 ml-0 mt-1" href="{{ route('invoice.add-payment',$invoice->id) }}" >Payments</a>
+                                    <a class="btn fa fa-credit-card btn-sm btn-success ml-1" href="{{ route('invoice.add-payment',$invoice->id) }}" data-toggle="tooltip" data-placement="top" title="Payments"></a>
                                 </td>
                             </tr>
                             @endforeach
@@ -267,4 +278,18 @@
             }
         }
     </style>
+@endpush
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $('#invoice_tbl').DataTable({
+                lengthMenu: [
+                    [10, 25, 50,100,500,1000,'All'],
+                    [10, 25, 50,100,500,1000,'All'],
+                ],
+                "aaSorting": []
+            });
+        })
+    </script>
 @endpush

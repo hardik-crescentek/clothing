@@ -20,7 +20,7 @@
 @endif
 
 <!-- Begin Row -->
-<div class="row flex-row">
+<!-- <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
             <div class="widget-header bordered no-actions1 d-block align-items-center">
@@ -29,11 +29,11 @@
             <div class="widget-body">
                 {!! Form::open(['method' => 'GET','route' => ['audit']]) !!}
                 <div class="form-group row d-flex align-items-center mt-3">
-                    <div class="col-lg-4">
+                    <div class="col-lg-2">
                         <label class="form-control-label col-lg-12">Search <div class="d-inline text-muted" style="font-size: 10px;">[barcode]</div></label>
                         {!! Form::text('search', '', array('class' => 'form-control')) !!}
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">&nbsp;</label>
                         <div class="form-action">
                             <input type="submit" class="btn btn-primary btn-square" value="Filter">
@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- Begin Row -->
 <!-- Begin Row -->
 <div class="row flex-row">
@@ -79,9 +79,9 @@
                             @endisset
                         </tbody>
                     </table>
-                    @isset($audit)
+                    <!-- @isset($audit)
                     {{ $audit->render() }}
-                    @endisset
+                    @endisset -->
 
                 </div>
             </div>
@@ -100,9 +100,14 @@
     <script>
         $(document).ready(function(){
             $('#order_tbl').tablesorter({
-                cssAsc: 'up',
-		        cssDesc: 'down',
-                cssNone: 'both'
+                // cssAsc: 'up',
+		        // cssDesc: 'down',
+                // cssNone: 'both'
+                lengthMenu: [
+                    [10, 25, 50,100,500,1000,'All'],
+                    [10, 25, 50,100,500,1000,'All'],
+                ],
+                "aaSorting": []
             });
         })
     </script>

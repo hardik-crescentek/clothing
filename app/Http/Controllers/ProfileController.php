@@ -26,7 +26,7 @@ class ProfileController extends Controller
 
         //Validate name, email and password fields
         $this->validateWithBag('profile', $request, [
-            'name'    => 'required|max:120',
+            'firstname'    => 'required|max:120',
             'phone'   => 'required',
             'dob'     => 'required',
             'address' => 'required',

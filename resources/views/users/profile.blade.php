@@ -37,78 +37,63 @@
                 </div>
                 @endif
                 {!! Form::model($user, ['method' => 'PUT','route' => 'profile.update', 'class'=>"form-validate", 'novalidate', 'files' => true]) !!}
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Email</label>
-                    <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <label class="form-control-label">Email<span class="text-danger ml-2">*</span></label>
                         <div class="form-control" readonly>{{ $user->email }}</div>
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">FirstName</label>
-                    <div class="col-lg-8">
+                    <div class="col-lg-3">
+                        <label class="form-control-label">FirstName<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('firstname', null, array('placeholder' => 'FirstName','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">LastName</label>
-                    <div class="col-lg-8">
+                    <div class="col-lg-3">
+                        <label class="form-control-label">LastName</label>
                         {!! Form::text('lastname', null, array('placeholder' => 'LastName','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Address</label>
-                    <div class="col-lg-8">
+                    <div class="col-lg-3">
+                        <label class="form-control-label">Address<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('address', null, array('placeholder' => 'Address','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">City</label>
-                    <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <label class="form-control-label">City<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('city', null, array('placeholder' => 'City','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">State</label>
-                    <div class="col-lg-8">
+                    <div class="col-lg-3">
+                        <label class="form-control-label">State</label>
                         {!! Form::text('state', null, array('placeholder' => 'State','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Zip</label>
-                    <div class="col-lg-8">
+                    <div class="col-lg-3">
+                        <label class="form-control-label">Zip<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('zip', null, array('placeholder' => 'Zip','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Date Of Birth</label>
-                    <div class="col-lg-8">
+                    <div class="col-lg-3">
+                        <label class="form-control-label">Date Of Birth</label>
                         {!! Form::text('dob', null, array('id'=>'dob','placeholder' => 'Date of Birth','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Phone</label>
-                    <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <label class="form-control-label">Phone</label>
                         {!! Form::text('phone', null, array('placeholder' => 'Phone','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Image</label>
                     <div class="col-lg-6">
-                        {!! Form::file('avatar', ['id' => 'upload_avatar', 'accept' => 'image/*',
-                        'data-validation'=>"mime",
-                        'data-validation-allowing'=>"jpeg, jpg, png, gif",
-                        'data-validation-error-msg-mime'=>"You can only upload images"]); !!}
+                        <label class="form-control-label">Image</label>
+                        <div class="input-group">
+                            {!! Form::file('avatar', ['id' => 'upload_avatar', 'accept' => 'image/*',
+                            'data-validation'=>"mime",
+                            'data-validation-allowing'=>"jpeg, jpg, png, gif",
+                            'data-validation-error-msg-mime'=>"You can only upload images"]); !!}
+                            <img src="{{ img_url($user->avatar) }}" class="listing-thumb img-thumbnail" alt="" />
+                        </div>
                         <small>
                             <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
                         </small>
                     </div>
-                    <div class="col-lg-3">
-                        <img src="{{ img_url($user->avatar) }}" class="listing-thumb img-thumbnail" alt="" />
-                    </div>
-
                 </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <div class="col-lg-8 offset-lg-3">
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary btn-lg">Save</button>
                     </div>
                 </div>
@@ -184,7 +169,7 @@
                 {!! Form::open(['method' => 'POST','route' => 'setting.update', 'class'=>"form-validate", 'novalidate']) !!}
                 <div class="form-group">
                     <label class="form-control-label">Material Re Order Alert QTY</label>
-                    <input type="text" name="material_min_alert_qty" class="form-control" data-validation="required" value="{{ $settings->material_min_alert_qty }}">
+                    <input type="text" name="material_min_alert_qty" class="form-control" data-validation="required" value="{{ $settings->material_min_alert_qty ?? '' }}">
                 </div>
                 <div class="form-group mt-5">
                     <button type="submit" class="btn btn-primary btn-lg">Update</button>

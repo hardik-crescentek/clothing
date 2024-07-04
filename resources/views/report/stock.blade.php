@@ -38,6 +38,7 @@
                     <div class="col-lg-2">
                         <label class="form-control-label">&nbsp;</label>
                         <div class="form-action">
+                            <a href="{{ route('report.stock') }}" class="btn btn-warning btn-square">Reset</a>
                             <input type="submit" class="btn btn-primary btn-square" value="Filter">
                         </div>
                     </div>

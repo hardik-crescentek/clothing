@@ -2,13 +2,13 @@
 @section('title', 'Inventory')
 @section('content')
 <!-- Begin Page Header-->
-<!-- <div class="row">
+<div class="row">
     <div class="page-header">
         <div class="d-flex align-items-center">
-            <h2 class="page-header-title">Users</h2>
+            <h2 class="page-header-title">Inventory</h2>
         </div>
     </div>
-</div> -->
+</div>
 <!-- End Page Header -->
 
 @if ($message = Session::get('success'))
@@ -26,11 +26,11 @@
             </div>
             <div class="widget-body">
                 {!! Form::open(['method' => 'GET','route' => ['inventory']]) !!}
-                <div class="form-group row d-flex align-items-center mt-3">
-                    <div class="col-lg-3">
+                <div class="form-group row d-flex align-items-center">
+                    <!-- <div class="col-lg-3">
                         <label class="form-control-label">Search <div class="d-inline text-muted" style="font-size: 10px;">[Batch No/Barcode/QR Code]</div></label>
                         {!! Form::text('search', $search, array('class' => 'form-control')) !!}
-                    </div>
+                    </div> -->
                     <div class="col-lg-2">
                         <label class="form-control-label">Article No </label>
                         {!! Form::select('search_article',$article_no,$article , array('class' => 'form-control','id'=>'search_article')) !!}
@@ -39,17 +39,18 @@
                         <label class="form-control-label">Color </label>
                         {!! Form::select('color',$colors,$color , array('class' => 'form-control','id'=>'color')) !!}
                     </div>
-                    <div class="col-lg-2">
+                    <!-- <div class="col-lg-2">
                         <label class="form-control-label">Invoice No</label>
                         {!! Form::text('invoice_no', $invoice_no, array('class' => 'form-control')) !!}
-                    </div>
-                    <div class="col-lg-3">
+                    </div> -->
+                    <div class="col-lg-2">
                         <label class="form-control-label">Materials</label>
                         {!! Form::select('material_id', $materials, $material_id, array('class' => 'form-control custom-select')) !!}
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">&nbsp;</label>
                         <div class="form-action">
+                            <a href="{{ url('/inventory') }}" class="btn btn-warning btn-square">Reset</a>
                             <input type="submit" class="btn btn-primary btn-square" value="Filter">
                         </div>
                     </div>
@@ -62,9 +63,9 @@
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
-            <div class="widget-header bordered no-actions d-flex align-items-center">
+            <!-- <div class="widget-header bordered no-actions d-flex align-items-center">
                 <h4>Inventory Items</h4>
-            </div>
+            </div> -->
             <div class="widget-body">
                 <div class="row">
                     <div class="col-md-12">
@@ -159,9 +160,9 @@
                                     @endisset
                                 </tbody>
                             </table>
-                            @isset($items)
+                            <!-- @isset($items)
                             {{ $items->render() }}
-                            @endisset
+                            @endisset -->
                         </div>
 
                     </div>
@@ -270,10 +271,17 @@
 <script type="text/javascript">
 
     (function($) {
-        $('#tblPurchaseItems_edit').tablesorter({
-            cssAsc: 'up',
-            cssDesc: 'down',
-            cssNone: 'both'
+        // $('#tblPurchaseItems_edit').tablesorter({
+        //     cssAsc: 'up',
+        //     cssDesc: 'down',
+        //     cssNone: 'both'
+        // });
+        $('#tblPurchaseItems_edit').DataTable({
+            lengthMenu: [
+                [10, 25, 50,100,500,1000,'All'],
+                [10, 25, 50,100,500,1000,'All'],
+            ],
+            "aaSorting": []
         });
         $('#search_article').select2();
         $('#color').select2();

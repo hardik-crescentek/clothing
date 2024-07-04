@@ -27,18 +27,19 @@
             <div class="widget-body">
                 {!! Form::open(['method' => 'GET','route' => ['report.purches']]) !!}
                 <div class="form-group row d-flex align-items-center mt-3">
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">From Date &nbsp;</label>
                         {!! Form::text('from_date','', array('class' => 'form-control','id'=>"from_date")) !!}
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">To Date &nbsp;</label>
                         {!! Form::text('to_date','', array('class' => 'form-control','id'=>"to_date")) !!}
                     </div>
 
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">&nbsp;</label>
                         <div class="form-action">
+                            <a href="{{ route('report.purches') }}" class="btn btn-warning btn-square">Reset</a>
                             <input type="submit" name="filter" class="btn btn-primary btn-square" value="Filter">
                         </div>
                     </div>

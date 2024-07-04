@@ -22,7 +22,7 @@
             <div class="widget-body">
                 {!! Form::open(['method' => 'GET','route' => ['report.materialsended']]) !!}
                 <div class="form-group row d-flex align-items-center mt-3">
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">Customer</label>
                         <select name="cust_name" class="form-control" id="cust_name">
                             <option value="" selected>---Select Customer---</option>
@@ -31,21 +31,22 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">Select Material</label>
                         <select name="article_name" class="form-control" id="article_name">
                             <option value="" selected>---Select Material---</option>
                         </select>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">Select Article No</label>
                         <select name="article_code" class="form-control" id="article_code">
                             <option value="" selected>---Select Article No---</option>
                         </select>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <label class="form-control-label">&nbsp;</label>
                         <div class="form-action">
+                            <a href="{{ route('report.materialsended') }}" class="btn btn-warning btn-square">Reset</a>
                             <input type="submit" name="submit" class="btn btn-primary btn-square" value="submit">
                         </div>
                     </div>

@@ -141,7 +141,7 @@
                                             <td class="td-actions">
                                                 <!-- <a data-toggle="modal" data-target="#order-status-model" data-id="{{ $order->id }}" class="btn btn-secondary btn-sm btn-square col-sm-6 mt-1" style="color: #366a2b !important;">Order <br> Status</a> -->
                                                 <a class="btn fa fa-spinner btn-sm btn-primary ml-1"  data-toggle="modal" data-target="#order-status-model" data-id="{{ $order->id }}" data-placement="top" title="Order Status"></a>
-                                                <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('order.edit',$order->id) }}" data-toggle="tooltip" data-placement="top" title="Edit"></a>
+                                                <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('order.edit',$order->id) }}" data-toggle="tooltip" data-placement="top" title="Edit Order"></a>
                                                 {{-- {{print_r(sizeof($order->invoice))}} --}}
                                                 @role('super-admin')
                                                 @if (!$order->invoice)
@@ -149,16 +149,16 @@
                                                     <a class="btn fa fa-file-invoice btn-sm btn-info ml-1" href="{{ route('invoice.create',$order->id) }}" data-toggle="tooltip" data-placement="top" title="Generate Invoice"></a>
                                                 @else
                                                     <!-- <a class="btn btn-primary btn-sm btn-square col-sm-6 mt-1" href="{{ route('invoice.edit',$order->invoice->id) }}" >Edit <br> Invoice</a> -->
-                                                    <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('invoice.edit',$order->invoice->id) }}" data-toggle="tooltip" data-placement="top" title="Edit Invoice"></a>
+                                                    <a class="btn fa fa-file-invoice-dollar btn-sm btn-primary ml-1" href="{{ route('invoice.edit',$order->invoice->id) }}" data-toggle="tooltip" data-placement="top" title="Edit Invoice"></a>
                                                 @endif
                                                 @endrole
+                                                <a class="btn fa fa-eye btn-sm btn-warning ml-1" href="{{ route('order.viewdetails',$order->id) }}" data-toggle="tooltip" data-placement="top" title="View Order Details"></a>
                                                 {!! Form::open(['method' => 'DELETE','route' => ['order.destroy', $order->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
                                                 <!-- {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square delete col-sm-6 mt-1']) !!} -->
                                                 <button type="submit" class="btn-action btn fa fa-trash  btn-sm btn-danger ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
                                                 </button>
                                                 {!! Form::close() !!}
                                                 <!-- <a class="btn btn-primary btn-sm btn-square col-sm-6" href="{{ route('order.viewdetails',$order->id) }}">View Order <br> Details</a> -->
-                                                <a class="btn fa fa-eye btn-sm btn-warning ml-1" href="{{ route('order.viewdetails',$order->id) }}" data-toggle="tooltip" data-placement="top" title="View Order Details"></a>
                                             </td>
                                             @endrole
                                             @role('warehouse')

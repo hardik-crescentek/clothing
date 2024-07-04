@@ -17,78 +17,56 @@
             <div class="widget-body">
                 {!! Form::open(array('route' => ['invoice.save-payment'],'method'=>'post','id'=>'from_add_payment', 'class'=>"form-horizontal form-validate", 'novalidate')) !!}
                 
-                <div class="form-group row">
-                    <div class="col-xl-6 mb-3 ">
-                        <label class="form-control-label">Invoic No<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-12">
-                                {!! Form::text('invoice_no', $invoice->invoice_no, array('id' => 'invoice_no','class' => 'form-control', 'data-validation'=>"required","readonly"=>"readonly")) !!}
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Invoic No<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text('invoice_no', $invoice->invoice_no, array('id' => 'invoice_no','class' => 'form-control', 'data-validation'=>"required","readonly"=>"readonly")) !!}
                     </div>
-                    <div class="col-xl-6 mb-3 ">
-                        <label class="form-control-label">Date of invoice<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-12">
-                                {!! Form::text('generate_date', null, array('id' => 'generate_date','class' => 'form-control', 'data-validation'=>"required")) !!}
-                            </div>
-                        </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Date of invoice<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text('generate_date', null, array('id' => 'generate_date','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Payment Type<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-12">
-                                {!! Form::select('payment_type',["case"=>"Case","chequee"=>"Chequee"], "case", ["class"=>"form-control payment_type","id"=>"payment_type"]) !!}
-                                {!! Form::hidden("invoice_id",$invoice->id, ["class"=>"invoice_id","id"=>"invoice_id"]) !!}
-                                {!! Form::hidden("payment_receiver_id",$invoice->payment_receiver_id, ["class"=>"payment_receiver_id","id"=>"payment_receiver_id"]) !!}
-                            </div>
-                        </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Payment Type<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('payment_type',["case"=>"Case","chequee"=>"Chequee"], "case", ["class"=>"form-control payment_type","id"=>"payment_type"]) !!}
+                        {!! Form::hidden("invoice_id",$invoice->id, ["class"=>"invoice_id","id"=>"invoice_id"]) !!}
+                        {!! Form::hidden("payment_receiver_id",$invoice->payment_receiver_id, ["class"=>"payment_receiver_id","id"=>"payment_receiver_id"]) !!}
                     </div>
-                    <div class="col-xl-6 mb-3" id="div_amount">
-                        <label class="form-control-label">Amount<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-12">
-                                {!! Form::text("amount", null, ["class"=>"form-control amount","id"=>"amount"]) !!}
-                                <div class="alert alert-danger p-1" style="display: none;" id="error_amount1"></div>
-                                <div class="alert alert-danger p-1" style="display: none;" id="error_amount2"></div>
-                            </div>
-                        </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Amount<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text("amount", null, ["class"=>"form-control amount","id"=>"amount"]) !!}
+                        <div class="alert alert-danger p-1" style="display: none;" id="error_amount1"></div>
+                        <div class="alert alert-danger p-1" style="display: none;" id="error_amount2"></div>
                     </div>
                 </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6 mb-3">
-                        <label class="form-control-label">Note</label>
-                        <div class="row">
-                            <div class="col-12">
-                               {!! Form::textarea("note", null, ["class"=>"form-control","id"=>"note","rows"=>5]) !!}
-                            </div>
-                        </div>
+
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Note</label>
+                        {!! Form::textarea("note", null, ["class"=>"form-control","id"=>"note","rows"=>5]) !!}
                     </div>
-                    <div class="col-xl-6 mb-3" style="display: none;" id="div_chequee_no">
+                    <div class="form-group col-lg-3" style="display: none;" id="div_chequee_no">
                         <label class="form-control-label">Chequee Number<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col-12">
-                                {!! Form::text("chequee_no", null, ["class"=>"form-control chequee_no","id"=>"chequee_no"]) !!}
-                            </div>
-                        </div>
+                        {!! Form::text("chequee_no", null, ["class"=>"form-control chequee_no","id"=>"chequee_no"]) !!}
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="form-group col-lg-6">
+                        <label class="form-control-label text-left w-100 text-dark">
+                            Total Amount: <b>{{$invoice->grand_total}}</b>
+                        </label>
+                        <label class="form-control-label text-left w-100 text-dark" id="remaining_amount">
+                            Remaining Amount: <b id="remaining_amount_value">0.00</b>
+                        </label>
+                    </div>
+                </div>
+
                 
-                <div class=" mt-5">
-                    <div class="row">
-                        <div class="col-7">
-                            <div class="text-dark">
-                                Total Amount : <b>{{$invoice->grand_total}} </b>
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div id="remaining_amount" class="float-left text-dark"></div>
-                            <div class="float-right">
-                                <button type="submit" class="btn btn-primary btn-lg btn-square" id="final_save_btn">Save Payment</button>
-                            </div>
-                        </div>
+                <div class="form-group row d-flex mt-2">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg" id="final_save_btn">Save</button>
+                        <a class="btn btn-secondary btn-lg ml-1" href="{{ route('invoice.index') }}"> Cancel</a>
                     </div>
                 </div>
 
