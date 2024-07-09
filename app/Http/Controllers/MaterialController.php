@@ -188,6 +188,7 @@ class MaterialController extends Controller
                         // 'wholesale_price' => $request->wholesale_price,
                         // 'retail_price'    => $request->retail_price,
                         // 'sample_price'    => $request->sample_price,
+                        'unit_purchased_in' => $request->unit_purchased_in,
                     ];
                     // dd($data);
             Material::create($data);
@@ -274,6 +275,7 @@ class MaterialController extends Controller
                     // 'wholesale_price' => $request->wholesale_price,
                     // 'retail_price'    => $request->retail_price,
                     // 'sample_price'    => $request->sample_price,
+                    'unit_purchased_in' => $request->unit_purchased_in,
                 ];
 
         if ($request->image) {

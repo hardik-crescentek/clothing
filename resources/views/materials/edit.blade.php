@@ -62,13 +62,19 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
+                            <label class="form-control-label">Unit Purchased In<span class="text-danger ml-2">*</span></label>
+                            {!! Form::select('unit_purchased_in', ['meter'=>'Meter','yard'=>'Yard'], null, ['class' => 'form-control custom-select', 'data-validation' => 'required']) !!}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
                             <label class="form-control-label d-flex">Price<span class="text-danger ml-2">*</span></label>
                             {!! Form::text('price', null, array('placeholder' => 'Price','class' => 'form-control', 'data-validation'=>"required")) !!}
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
                     <div class="col-lg-2">
                         <label class="form-control-label d-flex">Article No<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('article_no', null, array('placeholder' => 'Article_no','class' => 'form-control', 'data-validation'=>"required",'id'=>"article_no")) !!}
