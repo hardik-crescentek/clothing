@@ -118,6 +118,41 @@
                         </div>
                     </div>
                 </div>
+
+                <br>
+                <div>
+                    <h3>Article List</h3>
+                </div>
+                <br>
+
+                <div class="table-responsive col-12 col-xl-12">
+                    <table class="table table-hover mb-0" id="article_table">
+                        <thead>
+                            <tr>
+                                <th>Article No</th>
+                                <th>Selling Price:</th>
+                                <th>Role</th>
+                                <th>Cut Wholesale</th>
+                                <th>Retail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($articles as $article)
+                                <tr>
+                                    <td>
+                                        <a href="{{ route('client.articles.show', ['article_no' => $article->article_no]) }}">{{ $article->article_no }}</a>
+                                        <input type="hidden" name="article_no[]" value="{{ $article->article_no }}">
+                                    </td>
+                                    <td></td>
+                                    <td>{!! Form::text('roll[]', (isset($article->roll) && !empty($article->roll) ? $article->roll : 0), ['class' => 'form-control']) !!}</td>
+                                    <td>{!! Form::text('cut_wholesale[]', (isset($article->cut_wholesale) && !empty($article->cut_wholesale) ? $article->cut_wholesale : 0), ['class' => 'form-control']) !!}</td>
+                                    <td>{!! Form::text('retail[]', (isset($article->retail) && !empty($article->retail) ? $article->retail : 0), ['class' => 'form-control']) !!}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
                                 
                 <div class="form-group row d-flex align-items-center mt-5">
                     <div class="col-lg-12 d-flex justify-content-center">
@@ -172,5 +207,20 @@
                 }
             })
     })(jQuery);
+
+    $(document).ready(function(){
+        // $('#supplier_tbl').tablesorter({
+        //     cssAsc: 'up',
+        //     cssDesc: 'down',
+        //     cssNone: 'both'
+        // });
+        $('#article_table').DataTable({
+            lengthMenu: [
+                [10, 25, 50,100,500,1000,'All'],
+                [10, 25, 50,100,500,1000,'All'],
+            ],
+            "aaSorting": []
+        });
+    })
 </script>
 @endpush

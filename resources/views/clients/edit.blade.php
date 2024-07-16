@@ -19,6 +19,7 @@
 @endif
 
 <!-- Begin Row -->
+{!! Form::model($user, ['method' => 'POST','route' => ['client.update', $user->id], 'class'=>"form-validate", 'novalidate']) !!}
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
@@ -26,7 +27,6 @@
                 <h4>Edit Client</h4>
             </div>
             <div class="widget-body">
-
 
                 @if (count($errors) > 0)
                 <div class="alert alert-danger">
@@ -39,7 +39,6 @@
                 </div>
                 @endif
 
-                {!! Form::model($user, ['method' => 'POST','route' => ['client.update', $user->id], 'class'=>"form-validate", 'novalidate']) !!}
                 <div class="row">
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Company Name / Shop Name</label>
@@ -114,99 +113,153 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="form-group row d-flex align-items-center mb-5">
-                    <div class="col-lg-5 offset-lg-3">
-                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                    </div>
-                </div> -->
-                <div class="form-group row d-flex align-items-center mt-5">
-                    <div class="col-lg-12 d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary btn-lg">Update</button>
-                        <a class="btn btn-secondary btn-lg ml-1" href="{{ route('clients.index') }}"> Cancel</a>
-                    </div>
-                </div>
-                {!! Form::close() !!}
             </div>
-
         </div>
     </div>
 </div>
 <!-- End Row -->
 
-<div class="row flex-row">
-    <div class="col-xl-12 col-12">
+<div class="row">
+    <div class="col-xl-12">
         <div class="widget has-shadow">
+            <div class="widget-header bordered no-actions d-flex align-items-center">
+                <!-- Tabs Navigation -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#order-history" role="tab" aria-controls="order-history" aria-selected="true">Order History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#client-articles" role="tab" aria-controls="client-articles" aria-selected="false">Client Articles</a>
+                    </li>
+                </ul>
+                <!-- End Tabs Navigation -->
+            </div>
             <div class="widget-body">
-                <div class="col-lg-3">
-                    <label for="article_filter">Article Vise Filter</label>
-                    <select id="article_filter" class="form-control">
-                        <option value="">Select Article No</option>
-                        @foreach ($user->pricelist as $key => $pricelist)
-                            <option value="{{ $pricelist->material->article_no }}">{{ $pricelist->material->article_no }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <br>
-                <div class="table-responsive col-12 col-xl-12">
-                    <table class="table table-hover mb-0 " id="user_tbl">
-                        <thead>
-                            <tr>
-                                <th>Item name<br>Article No</th>
-                                <th>Wholsale Price</th>
-                                <th>Wholesale Payment Terms</th>
-                                <th>Retail Price</th>
-                                <th>Retails Payment Terms</th>
-                                <th>Sample Price</th>
-                                <th>Sample Payment Terms</th>
-                                <th>Note</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="article_table">
-                            @isset($user->pricelist)
-                            @foreach ($user->pricelist as $key => $pricelist)
-                            <tr id="row-{{ $pricelist->id }}">
-                                <td>{{ $pricelist->material->name }} <br />{{ $pricelist->material->article_no }}</td>
-                                <td>
-                                    <input type="hidden" id="material_id_{{ $pricelist->id }}" value="{{ $pricelist->material->id}}">
-                                    <input type="text" id="wholsale_price_{{ $pricelist->id }}" value="{{ $pricelist->wholesale_price != NUll ? $pricelist->wholesale_price : '0.00' }}" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="text" id="w_credit_days_{{ $pricelist->id }}" value="{{ $pricelist->wholesale_credit_days != NUll ? $pricelist->wholesale_credit_days : '0.00' }}" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="text" id="retail_price_{{ $pricelist->id }}" value="{{ $pricelist->price != NUll ? $pricelist->price : '0.00'  }}" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="text" id="r_credit_days_{{ $pricelist->id }}" value="{{ $pricelist->retail_credit_days != NUll ? $pricelist->retail_credit_days : '0.00' }}" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="text" id="sample_price_{{ $pricelist->id }}" value="{{ $pricelist->sample_price != NUll ? $pricelist->sample_price : '0.00'}}" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="text" id="s_credit_days_{{ $pricelist->id }}" value="{{ $pricelist->sample_credit_days != NUll ? $pricelist->sample_credit_days : '0.00' }}" class="form-control">
-                                </td>
-                                <td>
-                                    <textarea id="note_{{ $pricelist->id}}" class="form-control" rows="3">{{ $pricelist->remark_note != null ? $pricelist->remark_note : ''}}</textarea>
-                                </td>
-                                <td class="td-actions">
-                                    <button data-priceitem_id="{{ $pricelist->id }}" class="save_item_price btn btn-success btn-sm btn-square">Save</button>
-                                    <button data-priceitemdelete_id="{{ $pricelist->id }}" class="delete_item_price btn btn-danger btn-sm btn-square">delete</button>
-                                </td>
-                            </tr>
-                            @endforeach
-                            @endisset
-                        </tbody>
-                    </table>
-                    @isset($users)
-                    {{ $users->render() }}
-                    @endisset
-
+                <div class="tab-content">
+                    <!-- Tab Pane for Order History -->
+                    <div class="tab-content mt-3">
+                        <!-- Order History Tab Pane -->
+                        <div class="tab-pane fade show active" id="order-history" role="tabpanel">
+                            <div class="row flex-row">
+                                <div class="col-xl-12 col-12">
+                                    <div class="widget has-shadow">
+                                        <div class="widget-body">
+                                            <div class="col-lg-3">
+                                                <label for="article_filter">Article Vise Filter</label>
+                                            <select id="article_filter" class="form-control">
+                                                <option value="">Select Article No</option>
+                                                @foreach ($user->pricelist as $key => $pricelist)
+                                                <option value="{{ $pricelist->material->article_no }}">{{ $pricelist->material->article_no }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <br>
+                                        <div class="table-responsive col-12 col-xl-12">
+                                            <table class="table table-hover mb-0" id="user_tbl">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Item name<br>Article No</th>
+                                                        <th>Wholesale Price</th>
+                                                        <th>Wholesale Payment Terms</th>
+                                                        <th>Retail Price</th>
+                                                        <th>Retail Payment Terms</th>
+                                                        <th>Sample Price</th>
+                                                        <th>Sample Payment Terms</th>
+                                                        <th>Note</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="article_table">
+                                                    @isset($user->pricelist)
+                                                    @foreach ($user->pricelist as $key => $pricelist)
+                                                    <tr id="row-{{ $pricelist->id }}">
+                                                        <td>{{ $pricelist->material->name }} <br />{{ $pricelist->material->article_no }}</td>
+                                                        <td>
+                                                            <input type="hidden" id="material_id_{{ $pricelist->id }}" value="{{ $pricelist->material->id }}">
+                                                            <input type="text" id="wholesale_price_{{ $pricelist->id }}" value="{{ $pricelist->wholesale_price != null ? $pricelist->wholesale_price : '0.00' }}" class="form-control">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" id="w_credit_days_{{ $pricelist->id }}" value="{{ $pricelist->wholesale_credit_days != null ? $pricelist->wholesale_credit_days : '0.00' }}" class="form-control">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" id="retail_price_{{ $pricelist->id }}" value="{{ $pricelist->price != null ? $pricelist->price : '0.00' }}" class="form-control">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" id="r_credit_days_{{ $pricelist->id }}" value="{{ $pricelist->retail_credit_days != null ? $pricelist->retail_credit_days : '0.00' }}" class="form-control">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" id="sample_price_{{ $pricelist->id }}" value="{{ $pricelist->sample_price != null ? $pricelist->sample_price : '0.00' }}" class="form-control">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" id="s_credit_days_{{ $pricelist->id }}" value="{{ $pricelist->sample_credit_days != null ? $pricelist->sample_credit_days : '0.00' }}" class="form-control">
+                                                        </td>
+                                                        <td>
+                                                            <textarea id="note_{{ $pricelist->id }}" class="form-control" rows="3">{{ $pricelist->remark_note != null ? $pricelist->remark_note : '' }}</textarea>
+                                                        </td>
+                                                        <td class="td-actions">
+                                                            <button data-priceitem_id="{{ $pricelist->id }}" class="save_item_price btn btn-success btn-sm btn-square">Save</button>
+                                                            <button data-priceitemdelete_id="{{ $pricelist->id }}" class="delete_item_price btn btn-danger btn-sm btn-square">Delete</button>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                    @endisset
+                                                </tbody>
+                                            </table>
+                                            @isset($users)
+                                            {{ $users->render() }}
+                                            @endisset
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab Pane for Client Articles -->
+                    <div class="tab-pane fade" id="client-articles" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" id="articles_tbl">
+                                <thead>
+                                    <tr>
+                                        <th>Article Number</th>
+                                        <th>Roll</th>
+                                        <th>Cut Wholesale</th>
+                                        <th>Retail</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($user->clientArticles as $article)
+                                    <tr>
+                                        <td>{{ $article->article_no }}<input type="hidden" name="article_no[]" value="{{ $article->article_no }}"></td>
+                                        <td>{!! Form::text('roll[]', (isset($article->roll) && !empty($article->roll) ? $article->roll : 0), ['class' => 'form-control']) !!}</td>
+                                        <td>{!! Form::text('cut_wholesale[]', (isset($article->cut_wholesale) && !empty($article->cut_wholesale) ? $article->cut_wholesale : 0), ['class' => 'form-control']) !!}</td>
+                                        <td>{!! Form::text('retail[]', (isset($article->retail) && !empty($article->retail) ? $article->retail : 0), ['class' => 'form-control']) !!}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary btn-lg">Update</button>
+                <a class="btn btn-secondary btn-lg ml-1" href="{{ route('clients.index') }}"> Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{!! Form::close() !!}
 
 @endsection
 @push('after-styles')
@@ -222,6 +275,7 @@
 <script src="{{ asset('assets/js/datepicker/moment.min.js') }}"></script>
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous"></script>
 <script type="text/javascript">
     (function($) {
         $('#article_filter').select2();
@@ -372,5 +426,12 @@
             })
         })
     })(jQuery);
+    $('#articles_tbl').DataTable({
+        lengthMenu: [
+            [10, 25, 50, 100, 500, 1000, -1],
+            [10, 25, 50, 100, 500, 1000, "All"]
+        ],
+        "aaSorting": []
+    });
 </script>
 @endpush

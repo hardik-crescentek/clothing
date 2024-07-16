@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('clients', ClientController::class);
     Route::post('clients/update/{id}', [App\Http\Controllers\ClientController::class, 'update'])->name('client.update');
     Route::post('clients/pricebookdelte/{id}', [App\Http\Controllers\ClientController::class, 'deletePriceListData'])->name('client.delete');
+    Route::get('clients/articles/{article_no}', 'ClientController@showArticles')->name('client.articles.show');
+    // Route::post('clients/articles/save/{client_id}', 'ClientController@saveClientArticles')->name('client.articles.save');
 
     # For Category #
 	Route::resource('category', CategoryController::class);

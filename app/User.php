@@ -9,6 +9,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Carbon\Carbon;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\ClientArticle;
 
 
 class User extends Authenticatable
@@ -77,6 +78,11 @@ class User extends Authenticatable
     public function pricelist()
     {
         return $this->hasMany('App\CustomerItemPrice','customer_id')->withTrashed();
+    }
+
+    public function clientArticles()
+    {
+        return $this->hasMany(ClientArticle::class, 'client_id');
     }
 
     protected $appends = ['full_name'];

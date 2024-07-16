@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\User;
 use Hash;
 use App\CustomerItemPrice;
+use App\Material;
+use App\ClientArticle;
+use DB;
 
 //Importing laravel-permission models
 use Spatie\Permission\Models\Role;
@@ -46,7 +49,20 @@ class ClientController extends Controller
         //Get all roles and pass it to the view
         $redirect = $request->input('redirect');
         $business_nature = array_merge(['' => "Select Nature or Business"],config('constants.business_nature'));
-        return view('clients.create', compact('redirect','business_nature'));
+
+        $latestRecordsSubquery = DB::table('materials')
+                                ->select('id', 'article_no', 'color', 'color_no', 'roll', 'cut_wholesale', 'retail', DB::raw('MAX(id) as max_id'))
+                                ->groupBy('article_no')
+                                ->orderBy('max_id', 'desc');
+        
+          // Query to fetch the latest records for each article_no
+        $articles = DB::table('materials')
+                    ->joinSub($latestRecordsSubquery, 'latest_records', function ($join) {
+                        $join->on('materials.id', '=', 'latest_records.id');
+                    })
+                    ->select('materials.article_no', 'materials.color', 'materials.color_no', 'latest_records.roll', 'latest_records.cut_wholesale', 'latest_records.retail')
+                    ->get();
+        return view('clients.create', compact('redirect','business_nature','articles'));
     }
 
     /**
@@ -55,9 +71,38 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // public function store(Request $request)
+    // {
+    //     //Validate name, email and password fields
+    //     $this->validate($request, [
+    //         'firstname' => 'required|max:120',
+    //         'lastname'  => 'required|max:120',
+    //         'email'     => 'required|email|unique:users',
+    //         'password'  => 'required|min:6|confirmed',
+    //         'phone'     => 'required|digits:10',
+    //         'dob'       => 'required',
+    //         'address'   => 'required',
+    //         'city'      => 'required',
+    //         'state'     => 'required',
+    //         'zip'       => 'required',
+    //     ]);
+    //     $input = $request->only('firstname', 'lastname', 'email', 'phone', 'phone2', 'address', 'city', 'state', 'country', 'dob', 'zip','company_name','business_nature', 'business_nature_other', 'newsletter');
+    //     // $input['dob'] = Carbon::createFromFormat('d/m/Y', $request->dob)->format('Y-m-d');
+    //     $input['password'] = Hash::make($request->password);
+    //     $user = User::create($input); //Retrieving only the email and password data
+
+    //     $user->assignRole('client');
+    //     if ($request->input('redirectTo')) {
+    //         return redirect(base64_decode($request->input('redirectTo')))->with('success', 'Client created successfully');
+    //     }
+    //     else{
+    //         return redirect()->route('clients.index')->with('success', 'Client created successfully');
+    //     }
+
+    // }
     public function store(Request $request)
     {
-        //Validate name, email and password fields
+        // Validate name, email and password fields
         $this->validate($request, [
             'firstname' => 'required|max:120',
             'lastname'  => 'required|max:120',
@@ -70,19 +115,37 @@ class ClientController extends Controller
             'state'     => 'required',
             'zip'       => 'required',
         ]);
-        $input = $request->only('firstname', 'lastname', 'email', 'phone', 'phone2', 'address', 'city', 'state', 'country', 'dob', 'zip','company_name','business_nature', 'business_nature_other', 'newsletter');
-        // $input['dob'] = Carbon::createFromFormat('d/m/Y', $request->dob)->format('Y-m-d');
-        $input['password'] = Hash::make($request->password);
-        $user = User::create($input); //Retrieving only the email and password data
 
+        $input = $request->only(
+            'firstname', 'lastname', 'email', 'phone', 'address', 
+            'city', 'state', 'country', 'dob', 'zip', 'company_name', 
+            'business_nature', 'business_nature_other', 'newsletter'
+        );
+
+        $input['password'] = Hash::make($request->password);
+        $user = User::create($input);
         $user->assignRole('client');
+
+        // Save client articles
+        $articlesData = [];
+        foreach ($request->article_no as $index => $articleNo) {
+            $articlesData[] = [
+                'client_id'     => $user->id,
+                'article_no'    => $articleNo,
+                'roll'          => $request->roll[$index],
+                'cut_wholesale' => $request->cut_wholesale[$index],
+                'retail'        => $request->retail[$index],
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ];
+        }
+        ClientArticle::insert($articlesData);
+
         if ($request->input('redirectTo')) {
             return redirect(base64_decode($request->input('redirectTo')))->with('success', 'Client created successfully');
-        }
-        else{
+        } else {
             return redirect()->route('clients.index')->with('success', 'Client created successfully');
         }
-
     }
 
     /**
@@ -105,7 +168,7 @@ class ClientController extends Controller
      */
     public function edit(Request $request,$id)
     {
-        $user = User::with('pricelist.material');
+        $user = User::with('pricelist.material','clientArticles');
         if($request->ajax()){
             $article_no = $request->Article;
             if($article_no == ''){
@@ -178,6 +241,23 @@ class ClientController extends Controller
                 $user->password = Hash::make($request->password);
             }
             $user->save();
+
+            // Update client articles
+            if ($request->has('article_no')) {
+                // Update or create client articles
+                foreach ($request->article_no as $key => $article_no) {
+                    $clientArticle = ClientArticle::updateOrCreate(
+                        ['article_no' => $article_no],
+                        [
+                            'roll' => $request->roll[$key],
+                            'cut_wholesale' => $request->cut_wholesale[$key],
+                            'retail' => $request->retail[$key],
+                            // Add more fields as necessary
+                        ]
+                    );
+                }
+            } 
+
             return redirect()->route('clients.index')->with('success', 'User updated successfully');
         }
     }
@@ -207,5 +287,23 @@ class ClientController extends Controller
         if ($DeletePriceList) {
             return response()->json($data, 200);
         }
+    }
+
+    public function showArticles($article_no)
+    {
+        $articles = Material::where('article_no', $article_no)->get();
+        return view('clients.article', compact('article_no', 'articles'));
+    }
+
+    public function saveClientArticles(Request $request, $client_id)
+    {
+        $data = $request->all();
+        foreach ($data['article_no'] as $key => $article_no) {
+            ClientArticle::updateOrCreate(
+                ['client_id' => $client_id, 'article_no' => $article_no, 'color_no' => $data['color_no'][$key]],
+                ['role' => $data['role'][$key], 'cut_wholesale' => $data['cut_wholesale'][$key], 'retail' => $data['retail'][$key]]
+            );
+        }
+        return redirect()->route('clients.show', $client_id)->with('success', 'Articles updated successfully');
     }
 }
