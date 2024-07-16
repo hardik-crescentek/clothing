@@ -170,38 +170,45 @@
                     <div class="col-md-12">
 
                         <div class="card">
-                            <h4 class="card-header">Purchase Items <a href="javascript:;" class="btn btn-primary p-2 btn-square btn-sm ml-5" id="add_item_model_btn" data-toggle="modal" data-target="#addItemModal">Add Item</a>
+                            <!-- <h4 class="card-header">Purchase Items <a href="javascript:;" class="btn btn-primary p-2 btn-square btn-sm ml-5" id="add_item_model_btn" data-toggle="modal" data-target="#addItemModal">Add Item</a>
                                 <a href="javascript:;" style="display: none;" class="btn btn-primary btn-square btn-md float-right" id="add_single_row" ><i class="la la-plus p-0 m-0"></i></a>
+                            </h4> -->
+                            <h4 class="card-header">Purchase Items 
+                                <a href="javascript:;" class="btn btn-primary p-2 btn-square btn-sm ml-5" id="add_item_model_btn" data-toggle="modal" data-target="#addItemModal">Add Item</a>
+                                <button type="button" class="btn btn-danger p-2 btn-square btn-sm btn-square ml-2" id="delete_selected">Delete</button>
                             </h4>
                             <div class="card-body">
                                 <div class="table-responsive mt-3">
                                     <table id="tblPurchaseItems" class="table table-hover order-list">
                                         <thead>
                                             <tr>
-                                                <th style="width:180px;">Material</th>
-                                                <th style="width:160px;">Color</th>
-                                                <th style="width:150px;">Article No</th>
-                                                <th style="width:150px;">Color No</th>
-                                                <th style="width:150px;">Batch No / Lot No</th>
-                                                <th style="width:150px;">Width</th>
-                                                <th style="width:150px;">Roll No</th>
-                                                <th style="width:150px;">Meter</th>
-                                                <th style="width:150px;">Yard</th>
-                                                <th style="width:150px;">Action</th>
+                                                <th style="width:5%;"><input type="checkbox" id="select_all"></th>
+                                                <th style="width:9%;">Brand</th>
+                                                <th style="width:10%;">Article No</th>
+                                                <th style="width:10%;">Color</th>
+                                                <th style="width:6%;">Color No</th>
+                                                <th style="width:8%;">Batch/Lot No</th>
+                                                <th style="width:9%;">Width(cm)</th>
+                                                <th style="width:8%;">Meter<i class="fas fa-sort sort-icon ml-1"></i></th>
+                                                <th style="width:8%;">Yard<i class="fas fa-sort sort-icon ml-1"></th>
+                                                <th style="width:6%;">Roll No</th>
+                                                <th style="width:20%;">Piece</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($items as $key => $item)
                                             <tr>
-                                                <td>{!! Form::select('material_id[]', $materials,$item['material_id'], array('class' => 'material form-control custom-select' ,'data-validation'=>"required")) !!}</td>
-                                                <td>{!! Form::text('color[]',$item['color'], array('class' => 'color form-control','readonly'=>'readonly')) !!}</td>
+                                                <td><input type="checkbox" class="row_checkbox"></td>
+                                                <td>{!! Form::text('brand[]',$item['brand'], array('class' => 'brand form-control' ,'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
                                                 <td>{!! Form::text('article_no[]', $item['article_no'], array('class' => 'article_no form-control', 'data-validation'=>"required")) !!}</td>
+                                                <td>{!! Form::text('color[]',$item['color'], array('class' => 'color form-control','readonly'=>'readonly')) !!}</td>
                                                 <td>{!! Form::text('color_no[]',$item['color_no'], array('class' => 'color_no form-control','readonly'=>'readonly')) !!}</td>
                                                 <td>{!! Form::text('batch_no[]', $item['batch_no'], array('class' => 'batch_no form-control', 'data-validation'=>"required")) !!}</td>
                                                 <td>{!! Form::number('width[]', $item['width'], array('class' => 'width form-control', 'data-validation'=>"required")) !!}</td>
-                                                <td>{!! Form::text('roll_no[]', $item['roll_no'], array('class' => 'roll_no form-control', 'data-validation'=>"required")) !!}</td>
                                                 <td>{!! Form::number('meter[]', $item['meter'], array('class' => 'meter meter_val form-control', 'data-validation'=>"required", 'id' => 'meter_val')) !!}</td>
-                                                <td><input class="yard form-control" readonly="readonly" value="{{ $item['yard'] }}" type="text"></td>
+                                                <td>{!! Form::number('yard[]', $item['yard'], array('class' => 'yard yard_val form-control', 'data-validation'=>"required", 'id' => 'yard_val')) !!}</td>
+                                                <td>{!! Form::text('roll_no[]', $item['roll_no'], array('class' => 'roll_no form-control', 'data-validation'=>"required")) !!}</td>
+                                                <td>{!! Form::text('piece_no[]', $item['piece_no'], array('class' => 'piece_no form-control', 'readonly'=>'readonly')) !!}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -237,28 +244,20 @@
             <div class="modal-body">
                 <form id="add_item_form" class="">
                     <div class="form-group">
-                        <label class="form-control-label">Select Material<span class="text-danger ml-2">*</span></label>
-                        {!! Form::select('material_id',$materials,null, array('id'=>'add_material_id','class' => 'form-control custom-select ',"placeholder"=>"--Select Material--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label">Select Color<span class="text-danger ml-2">*</span></label>
-                        {!! Form::select('color_id', [''=>'--Select Color--'],null, array('id'=>'add_color_id','class' => 'form-control custom-select', 'data-validation'=>"required",'style'=>"width:100%",'disabled'=>'disabled')) !!}
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label">Purchase Price<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('add_purchase_price', null, array('id'=>'add_purchase_price','placeholder' => 'Purchase Price','class' => 'form-control ','readonly'=>'readonly')) !!}
+                        <label class="form-control-label">Select Invoice No.<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('invoice_no',$invoiceNumbers,null, array('id'=>'add_invoice_no','class' => 'form-control custom-select ',"placeholder"=>"--Select Invoice No.--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
                     </div>
                     <div class="form-group">
                         <label class="form-control-label">Article No.<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('article_no', null, array('id'=>'add_article_no','placeholder' => 'Article No.','class' => 'form-control ', 'data-validation'=>"required",'readonly'=>'readonly')) !!}
+                        {!! Form::select('article_no',$articleNumbers,null, array('id'=>'add_article_no','class' => 'form-control custom-select ',"placeholder"=>"--Select Article No.--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
                         {!! Form::hidden('width', null, array('class' => 'add_width form-control','id'=>"add_width")) !!}
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label">Color No.<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('color_no', null, array('id'=>'add_color_no','placeholder' => 'Color No','class' => 'form-control ', 'data-validation'=>"required",'readonly'=>'readonly')) !!}
+                        <label class="form-control-label">Color<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('color_id',$colorMaterial,null, array('id'=>'add_color_id','class' => 'form-control custom-select ',"placeholder"=>"--Select Color--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label">Batch No. / Lot No.<span class="text-danger ml-2">*</span></label>
+                        <label class="form-control-label">Batch / Lot No.<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('batch_no', null, array('id'=>'add_batch_no','placeholder' => 'Batch No.','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
 
@@ -266,7 +265,7 @@
                         <label class="form-control-label">Number Of Rolls<span class="text-danger ml-2">*</span></label>
                         {!! Form::number('number_of_rows', 1, array('id'=>'add_number_of_rolls', 'class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                    <div class="form-action float-right">
+                    <div class="form-action d-flex justify-content-center">
                         <button name="cancel_btn" id="cancel_btn" class="btn btn-primary">Cancel</button>
                         <button type="submit" id="save_continue" name="save_continue" class="btn btn-primary">Save & Continue</button>
                         <button type="submit" id="save_close" name="save_close" class="btn btn-primary">Save & Close</button>
@@ -278,16 +277,17 @@
 </div>
 <script type="text/template" id="templateAddItem">
 
-    <td>{!! Form::select('material_id[]',$materials,null, array('class' => 'material form-control valid')) !!}</td>
-    <td>{!! Form::select('color[]',[], null, array('class' => 'color form-control valid','id'=>'color')) !!}</td>
+    <td><input type="checkbox" class="row_checkbox"></td>                                    
+    <td>{!! Form::text('brand[]',null, array('class' => 'brand form-control valid','data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
     <td>{!! Form::text('article_no[]', null, array('class' => 'article_no form-control valid', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
+    <td>{!! Form::select('color[]',[], null, array('class' => 'color form-control valid','id'=>'color')) !!}</td>
     <td>{!! Form::text('color_no[]', null, array('class' => 'color_no form-control valid','readonly'=>'readonly','id'=>'color_no')) !!}</td>
     <td>{!! Form::text('batch_no[]', null, array('class' => 'batch_no form-control valid', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('width[]', null, array('class' => 'width form-control valid','readonly'=>'readonly')) !!}</td>
-    <td>{!! Form::text('roll_no[]', null, array('class' => 'roll_no form-control valid', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('meter[]', null, array('class' => 'meter meter_val form-control valid','id' => 'meter_val', 'data-validation'=>"required")) !!}</td>
-    <td><input class="yard form-control" name='yard[]' type="text"></td>
-    <td><button type="button" class="btn btn-danger btn-sm btn-square" id="delete_row">Delete</button></td>
+    <td>{!! Form::text('yard[]', null, array('class' => 'yard yard_val form-control valid','id' => 'yard_val', 'data-validation'=>"required")) !!}</td>
+    <td>{!! Form::text('roll_no[]', null, array('class' => 'roll_no form-control valid', 'data-validation'=>"required")) !!}</td>
+    <td>{!! Form::text('piece_no[]', null, array('class' => 'piece_no form-control valid', 'readonly'=>'readonly')) !!}</td>
 
 </script>
 
@@ -331,11 +331,47 @@
             getTotalMeters();
         });
 
-        $(document).on('click','#delete_row',function(){
-            var row_id=$(this).data('row_id');
-            $('#' + row_id).remove();
+        $(document).on('keyup', '#tblPurchaseItems input.yard', function() {
+            var yard = $(this).val();
+            yard = parseFloat(yard);
+            if (!isNaN(yard) && yard) {
+                var $thisRow = $(this).closest('tr.purchaseItem');
+                $('input.meter', $thisRow).val((yard / 1.09361).toFixed(2));
+                // Trigger recalculation of totals
+                getTotalMeters();
+            }
+        });
+
+        // Select all checkboxes functionality
+        $(document).on('change', '#select_all', function() {
+            $('.row_checkbox').prop('checked', $(this).prop('checked'));
+        });
+
+        // Delete selected items functionality
+        $(document).on('click', '#delete_selected', function() {
+            var selected = [];
+            $('.row_checkbox:checked').each(function() {
+                selected.push($(this).closest('tr'));
+            });
+
+            if (selected.length === 0) {
+                alert("Please select at least one item to delete.");
+            } else {
+                if (confirm("Are you sure you want to delete selected items?")) {
+                    selected.forEach(function(item) {
+                        item.remove();
+                    });
+                    getTotalMeters();
+                }
+            }
+        });
+
+        // Delete row functionality
+        $(document).on('click', '.delete_row', function(){
+            $(this).closest('tr').remove();
             getTotalMeters();
         });
+
         function convertMetersToYards() {
             var meters = $('#total_meter').val();
             if (meters) {
@@ -365,6 +401,76 @@
         }
 
         $(document).ready(function() {
+
+            // sorting logic start
+
+            var sortOrder = 1; // 1 for ascending, -1 for descending
+            var $sortIcon = $('.sort-icon');
+
+            // Handle click event on sort icon
+            $sortIcon.on('click', function() {
+                sortOrder *= -1; // Toggle sort order
+
+                // Update sort icon based on sort order
+                if (sortOrder === 1) {
+                    $sortIcon.removeClass('fa-sort-down').addClass('fa-sort-up');
+                } else {
+                    $sortIcon.removeClass('fa-sort-up').addClass('fa-sort-down');
+                }
+
+                // Sort table rows based on meter value
+                var rows = $('#tblPurchaseItems tbody > tr').get();
+                rows.sort(function(rowA, rowB) {
+                    var meterA = parseFloat($(rowA).find('.meter').val()) || 0;
+                    var meterB = parseFloat($(rowB).find('.meter').val()) || 0;
+                    return sortOrder * (meterA - meterB);
+                });
+
+                // Reorder the table rows
+                $.each(rows, function(index, row) {
+                    $('#tblPurchaseItems').children('tbody').append(row);
+                });
+            });
+
+            // sorting logic end
+
+            var invoiceNumbers = @json($invoiceNumbers); // Convert PHP array to JavaScript array
+
+            // Click event for "Add Item" button
+            $('#add_item_model_btn').on('click', function() {
+                var currentInvoiceNo = $('#invoice_no').val();
+
+                // Update invoice dropdown
+                updateInvoiceDropdown(currentInvoiceNo);
+
+                // Display the modal
+                $('#addItemModal').modal('show');
+            });
+
+            // Function to update the invoice number dropdown
+            function updateInvoiceDropdown(currentInvoiceNo) {
+                $('#add_invoice_no').empty(); // Clear existing options
+
+                // Add the placeholder option
+                $('#add_invoice_no').append('<option value="">--Select Invoice No.--</option>');
+
+                // Add options for all invoice numbers
+                $.each(invoiceNumbers, function(id, number) {
+                    $('#add_invoice_no').append('<option value="' + id + '">' + number + '</option>');
+                });
+
+                // Add current invoice number if it exists and not already in the list
+                if (currentInvoiceNo && !(currentInvoiceNo in invoiceNumbers)) {
+                    $('#add_invoice_no').append('<option value="' + currentInvoiceNo + '">' + currentInvoiceNo + '</option>');
+                }
+            }
+            
+            // Handle form submission inside the modal
+            $('#add_item_form').submit(function(event) {
+                event.preventDefault();
+                // Your logic to handle form submission
+                // Example: AJAX call to submit form data
+            });
 
             $('#supplier_id').change(function() {
                 var supplierId = $(this).val();
@@ -437,14 +543,56 @@
             $('#price_thb').val(price_thb);
         });
         var last_row_data=null;
-        $('#tblPurchaseItems').tablesorter({
-            headers:{
-                6 : {sorter: "inputs"},
-                7 : {sorter: "inputs"},
-                8 : {sorter: "inputs"}
-            },
 
+        // $('#tblPurchaseItems').tablesorter({
+        //     headers:{
+        //         6 : {sorter: "inputs"},
+        //         7 : {sorter: "inputs"},
+        //         8 : {sorter: "inputs"}
+        //     },
+
+        // });
+
+         // Custom parser for meter inputs
+         $.tablesorter.addParser({
+            id: 'meter-parser',
+            is: function(s) {
+                return false;
+            },
+            format: function(s, table, cell, cellIndex) {
+                return parseFloat($(cell).find('input.meter').val()) || 0;
+            },
+            type: 'numeric'
         });
+
+        // Initialize tablesorter with sorting icons
+        $('#tblPurchaseItems').tablesorter({
+            headers: {
+                7: { sorter: 'meter-parser' }, // Assuming meter column is the 8th column (index 7)
+                8: { sorter: 'digit' }   // Assuming yard column is the 9th column (index 8)
+            },
+            widgets: ['zebra', 'columns'],
+            widgetOptions: {
+                columns_zebra: true,
+                columns: ['primary', 'secondary', 'tertiary']
+            }
+        });
+
+        $('#tblPurchaseItems th.header').click(function() {
+            var column = $(this).index();
+            var direction = $(this).hasClass('headerSortUp') ? 'desc' : 'asc';
+
+            // Remove existing sort icons
+            $(this).find('.sort-icon').remove();
+
+            // Add new sort icon
+            if (direction === 'asc') {
+                $(this).append('<span class="sort-icon asc"></span>');
+            } else {
+                $(this).append('<span class="sort-icon desc"></span>');
+            }
+        });
+
 
         $('.material').select2();
         $(document).on('change','.material',function(){
@@ -474,6 +622,35 @@
             });
             $('#'+row_id).find('.color').html(color_list);
         });
+
+        $(document).on('change','#add_article_no',function(){
+            var data = {!! json_encode($materials2) !!};
+            var row_id=$(this).data('row_id');
+            var articleNo = $(this).val();
+            var colorDropdown = $('#add_color_id');
+            var colorList = "<option value=''>--Select Color--</option>";
+
+            // Clear previous selection in material dropdown
+            $('#' + row_id).find('.material').empty();
+
+            $.each(data, function(index, value) {
+                if (articleNo == value.article_no) {
+                    var text = (value.color_no ? value.color_no + ' - ' : '') + value.color;
+                    colorList += "<option value='" + value.id + "'>" + text + "</option>";
+                }
+            });
+
+            colorDropdown.html(colorList).trigger('change');
+        });
+
+        // Reset the form values when the modal is closed
+        $('#addItemModal').on('hidden.bs.modal', function () {
+            $('#add_article_no').val('').trigger('change');
+            // $('#add_color_id').val('').trigger('change');
+            // $('#add_color_id').html("<option value=''>--Select Color--</option>");
+            // Reset other input fields if necessary
+        });
+
         $(document).on('change','.color',function(){
             var id=$(this).val();
             var row_id=$(this).data('row_id');
@@ -491,6 +668,18 @@
         var add_selected_material_name=null;
         var add_color=[];
         $('#add_material_id').select2({
+            dropdownParent: $('#add_item_form'),
+            width: 'resolve',
+        });
+        $('#add_invoice_no').select2({
+            dropdownParent: $('#add_item_form'),
+            width: 'resolve',
+        });
+        $('#add_article_no').select2({
+            dropdownParent: $('#add_item_form'),
+            width: 'resolve',
+        });
+        $('#add_color_id').select2({
             dropdownParent: $('#add_item_form'),
             width: 'resolve',
         });
@@ -594,7 +783,8 @@
                 $($form).trigger("reset");
                 $('#add_material_id').val('').trigger('change');
                 $('#add_color_id').val('').trigger('change');
-                $('#add_color_id').attr('disabled',true);
+                // $('#add_color_id').attr('disabled',true);
+                // $('#add_color_id').attr('disabled',true);
                 if(!save_continue){
                     $('#addItemModal').modal('hide');
                 }
@@ -617,7 +807,7 @@
             $('#add_article_no', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.article_no').val());
             $('#add_color_no', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.color_no').val());
             $('#add_batch_no', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.batch_no').val());
-            $('#add_width', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.width').val());
+            $('#add_width', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.width_cm').val());
             $('#add_number_of_rolls', last_row_data).val(1);
             var roll_no=parseInt($('#tblPurchaseItems tbody tr:last').find('.roll_no').val());
             $('#add_number_of_rolls',last_row_data).data("roll_no",(roll_no+1));
@@ -766,43 +956,47 @@
         if($('#add_number_of_rolls',$form).data('roll_no')){
             roll_no=$('#add_number_of_rolls',$form).data('roll_no');
         }
-        var material_name = $('#add_material_id ', $form).val();
-        var material_id=0;
+        var color_id=0;
         if(roll_no){
-            material_id= $('#add_color_id', $form).val();
-            // console.log(material_id);
+            color_id= $('#add_color_id', $form).val();
         }
         else{
-            material_id = $('#add_color_id option:selected', $form).val();
+            color_id = $('#add_color_id option:selected', $form).val();
         }
-        // var color_id = $('#add_color_id option:selected', $form).text();
         var number_of_rolls = $('#add_number_of_rolls', $form).val();
         var article_no = $('#add_article_no', $form).val();
+        var invoice_no = $('#add_invoice_no', $form).val();
         var color_no = $('#add_color_no', $form).val();
         var batch_no = $('#add_batch_no', $form).val();
-        var width = $('#add_width', $form).val();
         $template = $('#templateAddItem').html();
         for (i = 0; i < number_of_rolls; i++) {
             var $uniqueId = uuid();
             var $tr = $('<tr class="purchaseItem" id="' + $uniqueId + '">').append($template);
             $('#tblPurchaseItems tbody').append($tr);
-            $('#' + $uniqueId).find('.material').val(material_name);
-            $('#' + $uniqueId).find('.material').attr('data-row_id',$uniqueId);
 
             var color_list="";
+            var material_list="";
             $.each({!! json_encode($materials2) !!},function(i,v){
-                if(material_name==v.name){
+                if(article_no==v.article_no){
+                    console.log(v);
                     color_list+="<option value='"+v.id+"'>"+v.color+"</option>";
+                    $('#' + $uniqueId).find('.color_no').val(String(v.color_no).padStart(2,"0"));
+                    $('#' + $uniqueId).find('.width').val(v.width_cm);
+                    $('#' + $uniqueId).find('.brand').val(v.name);    
+                    unit_purchased_in = v.unit_purchased_in;   
+
+                    // Calculate and set the Piece value (concatenation of Article No and Color No)
+                    var pieceValue = article_no + '_' + v.color +  '_' + invoice_no + '_' + (roll_no == 0 ? 1 : roll_no);
+                    $('#' + $uniqueId).find('.piece_no').val(pieceValue);
                 }
             });
 
             $('#' + $uniqueId).find('.color').html(color_list);
-            $('#' + $uniqueId).find('.color').val(material_id);
+            $('#' + $uniqueId).find('.color').val(color_id);
             $('#' + $uniqueId).find('.color').attr('data-row_id',$uniqueId);
+
             $('#' + $uniqueId).find('.article_no').val(article_no);
-            $('#' + $uniqueId).find('.color_no').val(String(color_no).padStart(2,"0"));
             $('#' + $uniqueId).find('.batch_no').val(batch_no);
-            $('#' + $uniqueId).find('.width').val(width);
             if(roll_no){
                 $('#' + $uniqueId).find('.roll_no').val(roll_no);
             }
@@ -810,6 +1004,16 @@
                 $('#' + $uniqueId).find('.roll_no').val(i + 1);
             }
             $('#' + $uniqueId).find('#delete_row').attr("data-row_id",$uniqueId);
+
+
+            // Enable/disable fields based on unit purchased in
+            if (unit_purchased_in === 'meter') {
+                $('#' + $uniqueId).find('.meter').prop('readonly', false);
+                $('#' + $uniqueId).find('.yard').prop('readonly', true);
+            } else if (unit_purchased_in === 'yard') {
+                $('#' + $uniqueId).find('.meter').prop('readonly', true);
+                $('#' + $uniqueId).find('.yard').prop('readonly', false);
+            }
         }
         if(($('.purchaseItem').length)!=0){
             $('#add_single_row').css('display','block');

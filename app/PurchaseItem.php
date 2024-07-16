@@ -13,7 +13,7 @@ class PurchaseItem extends Model
     protected $table = 'purchase_items';
 
     protected $fillable = [
-        "purchase_id","material_id","roll_no","color","color_no","article_no","batch_no","barcode","qrcode","width","qty","available_qty","status", "return_status", 'sort_order','total_qty'
+        "purchase_id","material_id","roll_no","color","color_no","article_no","batch_no","barcode","qrcode","width","qty","available_qty","status", "return_status", 'sort_order','total_qty',"piece_no"
     ];
     protected $guarded = ['id'];
 

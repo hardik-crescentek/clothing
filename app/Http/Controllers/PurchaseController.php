@@ -52,7 +52,10 @@ class PurchaseController extends Controller
         $colors = Color::active()->pluck('name', 'id')->all();
         $suppliers = Supplier::dropdown();
         $items = $request->session()->get('purchase_items', []);
-        return view('purchase.create', compact('categories', 'colors', 'materials','materials2', 'suppliers', 'items'));
+        $invoiceNumbers = \DB::table('purchases')->pluck('invoice_no', 'invoice_no')->toArray();
+        $articleNumbers = Material::active()->pluck('article_no', 'article_no')->toArray();
+        $colorMaterial = Material::active()->pluck('color', 'color')->toArray();
+        return view('purchase.create', compact('categories', 'colors', 'materials','materials2', 'suppliers', 'items','invoiceNumbers','articleNumbers','colorMaterial'));
     }
 
     /**
@@ -95,7 +98,8 @@ class PurchaseController extends Controller
                                 'roll_no'    => $request->input('roll_no.' . $key),
                                 'width'      => $request->input('width.' . $key),
                                 'meter'      => $request->input('meter.' . $key),
-                                'yard'       => meter2yard($request->input('meter.' . $key))
+                                'yard'       => meter2yard($request->input('meter.' . $key)),
+                                'piece_no'   => $request->input('piece_no.' . $key),
                             );
                 $total_qty +=  $request->input('meter.' . $key);
             }
@@ -188,7 +192,8 @@ class PurchaseController extends Controller
                     // "total_tax" => $tax_per_meter * $qty,
                     // "shipping_cost" => $shipping_cost_per_meter * $qty,
                     // "discount" => $request->input("discount"),
-                    'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx' // Validate each file
+                    'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx', // Validate each file
+                    "piece_no" => $item["piece_no"]
                 ];
                 PurchaseItem::create($item_data);
                 $sort_order++;
@@ -435,6 +440,7 @@ class PurchaseController extends Controller
                                 "width"       => $item["width"],
                                 "qty"         => $qty,
                                 "available_qty"=> $qty,
+                                "piece_no"    => $item["piece_no"]
                                 // "price_usd" => $qty * $usd_price_per_meter,
                                 // "thb_ex_rate" => $thb_ex_rate,
                                 // "price_thb" => $qty * $thb_price_per_meter,
