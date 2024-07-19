@@ -176,23 +176,25 @@
                             <h4 class="card-header">Purchase Items 
                                 <a href="javascript:;" class="btn btn-primary p-2 btn-square btn-sm ml-5" id="add_item_model_btn" data-toggle="modal" data-target="#addItemModal">Add Item</a>
                                 <button type="button" class="btn btn-danger p-2 btn-square btn-sm btn-square ml-2" id="delete_selected">Delete</button>
+                                <button type="button" class="btn btn-primary p-2 btn-square btn-sm ml-2" id="generate_roll_piece">Generate Roll & Piece Numbers</button>
                             </h4>
                             <div class="card-body">
                                 <div class="table-responsive mt-3">
                                     <table id="tblPurchaseItems" class="table table-hover order-list">
                                         <thead>
                                             <tr>
-                                                <th style="width:5%;"><input type="checkbox" id="select_all"></th>
+                                                <th style="width:3%;"><input type="checkbox" id="select_all"></th>
                                                 <th style="width:9%;">Brand</th>
                                                 <th style="width:10%;">Article No</th>
-                                                <th style="width:10%;">Color</th>
+                                                <!-- <th style="width:10%;">Invoice No</th> -->
+                                                <th style="width:9%;">Color</th>
                                                 <th style="width:6%;">Color No</th>
                                                 <th style="width:8%;">Batch/Lot No</th>
                                                 <th style="width:9%;">Width(cm)</th>
                                                 <th style="width:8%;">Meter<i class="fas fa-sort sort-icon ml-1"></i></th>
                                                 <th style="width:8%;">Yard<i class="fas fa-sort sort-icon ml-1"></th>
                                                 <th style="width:6%;">Roll No</th>
-                                                <th style="width:20%;">Piece</th>
+                                                <th style="width:23%;">Piece</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -201,6 +203,7 @@
                                                 <td><input type="checkbox" class="row_checkbox"></td>
                                                 <td>{!! Form::text('brand[]',$item['brand'], array('class' => 'brand form-control' ,'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
                                                 <td>{!! Form::text('article_no[]', $item['article_no'], array('class' => 'article_no form-control', 'data-validation'=>"required")) !!}</td>
+                                                <!-- <td>{!! Form::text('invoice_no[]', $item['invoice_no'], array('class' => 'invoice_no form-control', 'data-validation'=>"required")) !!}</td> -->
                                                 <td>{!! Form::text('color[]',$item['color'], array('class' => 'color form-control','readonly'=>'readonly')) !!}</td>
                                                 <td>{!! Form::text('color_no[]',$item['color_no'], array('class' => 'color_no form-control','readonly'=>'readonly')) !!}</td>
                                                 <td>{!! Form::text('batch_no[]', $item['batch_no'], array('class' => 'batch_no form-control', 'data-validation'=>"required")) !!}</td>
@@ -267,7 +270,7 @@
                     </div>
                     <div class="form-action d-flex justify-content-center">
                         <button name="cancel_btn" id="cancel_btn" class="btn btn-primary">Cancel</button>
-                        <button type="submit" id="save_continue" name="save_continue" class="btn btn-primary">Save & Continue</button>
+                        <!-- <button type="submit" id="save_continue" name="save_continue" class="btn btn-primary">Save & Continue</button> -->
                         <button type="submit" id="save_close" name="save_close" class="btn btn-primary">Save & Close</button>
                     </div>
                 </form>
@@ -280,6 +283,7 @@
     <td><input type="checkbox" class="row_checkbox"></td>                                    
     <td>{!! Form::text('brand[]',null, array('class' => 'brand form-control valid','data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
     <td>{!! Form::text('article_no[]', null, array('class' => 'article_no form-control valid', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
+    <!-- <td>{!! Form::text('invoice_no[]', null, array('class' => 'invoice_no form-control valid', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td> -->
     <td>{!! Form::select('color[]',[], null, array('class' => 'color form-control valid','id'=>'color')) !!}</td>
     <td>{!! Form::text('color_no[]', null, array('class' => 'color_no form-control valid','readonly'=>'readonly','id'=>'color_no')) !!}</td>
     <td>{!! Form::text('batch_no[]', null, array('class' => 'batch_no form-control valid', 'data-validation'=>"required")) !!}</td>
@@ -288,6 +292,7 @@
     <td>{!! Form::text('yard[]', null, array('class' => 'yard yard_val form-control valid','id' => 'yard_val', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('roll_no[]', null, array('class' => 'roll_no form-control valid', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('piece_no[]', null, array('class' => 'piece_no form-control valid', 'readonly'=>'readonly')) !!}</td>
+    <td>{!! Form::hidden('invoice_no[]', null, array('class' => 'invoice_no_hidden')) !!}</td>
 
 </script>
 
@@ -402,8 +407,12 @@
 
         $(document).ready(function() {
 
-            // sorting logic start
+            // Add the click event listener to the button
+            $('#generate_roll_piece').click(function() {
+                generateRollAndPieceNumbers();
+            });
 
+            // sorting logic start
             var sortOrder = 1; // 1 for ascending, -1 for descending
             var $sortIcon = $('.sort-icon');
 
@@ -431,7 +440,6 @@
                     $('#tblPurchaseItems').children('tbody').append(row);
                 });
             });
-
             // sorting logic end
 
             var invoiceNumbers = @json($invoiceNumbers); // Convert PHP array to JavaScript array
@@ -532,6 +540,32 @@
                 }
             });
         });
+
+        function generateRollAndPieceNumbers() {
+            // Get all rows of purchase items
+            const $rows = $('#tblPurchaseItems tbody tr');
+            
+            // Update the roll numbers and piece numbers
+            $rows.each((index, row) => {
+                const $row = $(row);
+                const rollNo = index + 1;
+                const articleNo = $row.find('.article_no').val();
+                const colorName = $row.find('.color option:selected').text() || '';
+                const invoiceNo = $row.find('.invoice_no_hidden').val() || '';
+                const dateOfPurchase = $('#purchase_date').val() || '';
+                const totalRolls = $rows.length;
+                console.log("generate piece no and roll no.");
+                console.log(colorName);
+                console.log(invoiceNo);
+                console.log(row);
+                
+                const pieceValue = `${articleNo}_${colorName}_${invoiceNo}_${dateOfPurchase}_${rollNo}_${totalRolls}`;
+                
+                $row.find('.roll_no').val(rollNo);
+                $row.find('.piece_no').val(pieceValue);
+            });
+        }
+
         $('#thb_ex_rate, #price').keyup(function() {
             var price_thb = 0;
             var thb_ex_rate = parseFloat($('#thb_ex_rate').val());
@@ -957,19 +991,25 @@
             roll_no=$('#add_number_of_rolls',$form).data('roll_no');
         }
         var color_id=0;
+        var color_name = '';
         if(roll_no){
             color_id= $('#add_color_id', $form).val();
+            color_name = $('#add_color_id option:selected', $form).text().split(' - ')[1];
         }
         else{
             color_id = $('#add_color_id option:selected', $form).val();
+            color_name = $('#add_color_id option:selected', $form).text().split(' - ')[1];
         }
         var number_of_rolls = $('#add_number_of_rolls', $form).val();
         var article_no = $('#add_article_no', $form).val();
         var invoice_no = $('#add_invoice_no', $form).val();
         var color_no = $('#add_color_no', $form).val();
         var batch_no = $('#add_batch_no', $form).val();
+        var date_of_purchase = $('#purchase_date').val();
+        var total_roll = $('#add_number_of_rolls', $form).val();
         $template = $('#templateAddItem').html();
         for (i = 0; i < number_of_rolls; i++) {
+            var roll_no = i+1;
             var $uniqueId = uuid();
             var $tr = $('<tr class="purchaseItem" id="' + $uniqueId + '">').append($template);
             $('#tblPurchaseItems tbody').append($tr);
@@ -978,7 +1018,6 @@
             var material_list="";
             $.each({!! json_encode($materials2) !!},function(i,v){
                 if(article_no==v.article_no){
-                    console.log(v);
                     color_list+="<option value='"+v.id+"'>"+v.color+"</option>";
                     $('#' + $uniqueId).find('.color_no').val(String(v.color_no).padStart(2,"0"));
                     $('#' + $uniqueId).find('.width').val(v.width_cm);
@@ -986,8 +1025,9 @@
                     unit_purchased_in = v.unit_purchased_in;   
 
                     // Calculate and set the Piece value (concatenation of Article No and Color No)
-                    var pieceValue = article_no + '_' + v.color +  '_' + invoice_no + '_' + (roll_no == 0 ? 1 : roll_no);
-                    $('#' + $uniqueId).find('.piece_no').val(pieceValue);
+                    // var pieceValue = article_no + '_' + color_name +  '_' + invoice_no + '_' + (date_of_purchase ?? '') + '_' + roll_no + '_' + total_roll;
+                    // $('#' + $uniqueId).find('.piece_no').val(pieceValue);
+                    // $('#' + $uniqueId).find('.roll_no').val(roll_no);
                 }
             });
 
@@ -997,13 +1037,9 @@
 
             $('#' + $uniqueId).find('.article_no').val(article_no);
             $('#' + $uniqueId).find('.batch_no').val(batch_no);
-            if(roll_no){
-                $('#' + $uniqueId).find('.roll_no').val(roll_no);
-            }
-            else{
-                $('#' + $uniqueId).find('.roll_no').val(i + 1);
-            }
             $('#' + $uniqueId).find('#delete_row').attr("data-row_id",$uniqueId);
+
+            $('#' + $uniqueId).find('.invoice_no_hidden').val(invoice_no);  // Set the hidden invoice number
 
 
             // Enable/disable fields based on unit purchased in

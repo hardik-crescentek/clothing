@@ -139,99 +139,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="form-group row mb-3">
-                    <div class="col-xl-6">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label class="form-control-label">Payment Terms<span class="text-danger ml-2">*</span></label>
-                                {!! Form::text('payment_terms', null, array('id' => 'payment_terms','class' => 'form-control')) !!}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <label class="form-control-label">Price Per Meter<span class="text-danger ml-2">*</span></label>
-                        <div class="row">
-                            <div class="col">
-                                {!! Form::text('price', null, array('placeholder' => 'USD','id'=>'price','class' => 'form-control', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col">
-                                {!! Form::text('thb_ex_rate', null, array('placeholder' => 'Ex Rate','id'=>'thb_ex_rate','class' => 'form-control', 'data-validation'=>"required")) !!}
-                            </div>
-                            <div class="col">
-                                {!! Form::text('price_thb', null, array('placeholder' => 'Bath','id'=>'price_thb','class' => 'form-control', 'data-validation'=>"required", 'readonly'=>'true')) !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-7">
-                        <div class="row">
-                            <div class="col">
-                                <label class="form-control-label">Shipping Paid</label>
-                                {!! Form::text('shipping_paid', null, array('placeholder' => 'Shipping THB','id'=>'shipping_paid','class' => 'form-control')) !!}
-                            </div>
-                            <div class="col">
-                                <label class="form-control-label">Transportation</label>
-                                {!! Form::text('transportation', null, array('placeholder' => 'THB','id'=>'transportation','class' => 'form-control')) !!}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-5">
-                        <div class="row">
-                            <div class="col">
-                                <label class="form-control-label">Tax</label>
-                                <div class="input-group">
-                                    {!! Form::text('total_tax', null, array('placeholder' => 'Tax','class' => 'form-control','id'=>'tax_per')) !!}
-                                    <span class="input-group-addon addon-secondary">%</span>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <label class="form-control-label">Gross Tax</label>
-                                {!! Form::text('gross_tax', null, array('placeholder' => 'Gross Tax','class' => 'form-control','id'=>'gross_tax')) !!}
-                            </div>
-                            <div class="col">
-                                <label class="form-control-label">Discount</label>
-                                {!! Form::text('discount', null, array('placeholder' => 'discount','class' => 'form-control','id'=>'discount')) !!}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6">
-                        <div class="row">
-                            <div class="col">
-                                <label class="form-control-label">Shippment Cost Shipper</label>
-                                {!! Form::text('shippment_cost_shipper', null, array('placeholder' => 'Shippment Cost Shipper','id'=>'shippment_cost_shipper','class' => 'form-control')) !!}
-                            </div>
-                            <div class="col">
-                                <label class="form-control-label">Shippment Cost Destination</label>
-                                {!! Form::text('shippment_cost_destination', null, array('placeholder' => 'Shippment Cost Destination','id'=>'shippment_cost_destination','class' => 'form-control')) !!}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <label class="form-control-label">Attach Document</label>
-                        <div class="row">
-                            <div class="col">
-                                <div class="custom-file">
-                                    {!! Form::file('attach_document', ['class'=>'custom-file-input','id'=>'attach_document','data-validation'=>"mime",'data-validation-allowing'=>"jpeg, jpg, png, pdf, doc, docx",'data-validation-error-msg-mime'=>"You can only upload image or document file"]) !!}
-                                    <label class="custom-file-label" for="customFile">Choose file</label>
-                                  </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row mb-3">
-                    <div class="col-xl-6">
-                        <label class="form-control-label">Shippment Cost Per Meter</label>
-                        <div class="row">
-                            <div class="col">
-                                {{-- <label class="form-control-label">Shipping Cost</label> --}}
-                                {!! Form::text('shipping_cost_per_meter', null, array('placeholder' => 'Shipping Cost','class' => 'form-control','id'=>'shipping_cost')) !!}
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
@@ -247,21 +154,25 @@
                         <div class="card">
                             <h4 class="card-header">Purchase Items <a href="javascript:;" class="btn btn-primary p-2 btn-square btn-sm ml-5" data-toggle="modal" data-target="#addItemModal">Add Item</a>
                                 <a href="javascript:;" style="display: none;" class="btn btn-primary btn-square btn-md float-right" id="add_single_row" ><i class="la la-plus p-0 m-0"></i></a>
+                                <button type="button" class="btn btn-danger p-2 btn-square btn-sm btn-square ml-2" id="delete_selected">Delete</button>
+                                <button type="button" class="btn btn-primary p-2 btn-square btn-sm ml-2" id="generate_roll_piece">Generate Roll & Piece Numbers</button>
                             </h4>
                             <div class="card-body">
                                 <div class="table-responsive mt-3">
                                     <table id="tblPurchaseItems" class="table table-hover order-list">
                                         <thead>
                                             <tr>
-                                                <th style="width:180px;">Material</th>
-                                                <th style="width:160px;">Color</th>
-                                                <th style="width:150px;">Article No</th>
-                                                <th style="width:150px;">Color No</th>
-                                                <th style="width:150px;">Batch No / Lot No</th>
-                                                <th style="width:150px;">Width</th>
-                                                <th style="width:150px;">Roll No</th>
-                                                <th style="width:150px;">Meter</th>
-                                                <th style="width:150px;">Yard</th>
+                                                <th style="width:3%;"><input type="checkbox" id="select_all"></th>
+                                                <th style="width:9%;">Brand</th>
+                                                <th style="width:10%;">Article No</th>
+                                                <th style="width:9%;">Color</th>
+                                                <th style="width:6%;">Color No</th>
+                                                <th style="width:8%;">Batch/Lot No</th>
+                                                <th style="width:9%;">Width(cm)</th>
+                                                <th style="width:8%;">Meter<i class="fas fa-sort sort-icon ml-1"></i></th>
+                                                <th style="width:8%;">Yard<i class="fas fa-sort sort-icon ml-1"></th>
+                                                <th style="width:6%;">Roll No</th>
+                                                <th style="width:23%;">Piece</th>
                                             </tr>
                                         </thead>
                                         <tbody >
@@ -275,11 +186,6 @@
                     </div>
                 </div>
 
-                <!-- <div class="form-group row mb-4 float-right">
-                    <div class="col">
-                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                    </div>
-                </div> -->
                 <div class="form-group row d-flex align-items-center mt-5">
                     <div class="col-lg-12 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary btn-lg">Update</button>
@@ -431,7 +337,6 @@
     </div>
 </div>
 
-
 <div id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
     <div role="document" class="modal-dialog">
         <div class="modal-content">
@@ -442,43 +347,30 @@
             <div class="modal-body">
                 <form id="add_item_form" class="">
                     <div class="form-group">
-                        <label class="form-control-label">Select Material<span class="text-danger ml-2">*</span></label>
-                        {!! Form::select('material_id', $materials,null, array('id'=>'add_material_id','class' => 'form-control', 'data-validation'=>"required","placeholder"=>"--Select Material--",'style'=>"width:100%")) !!}
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label">Select Color<span class="text-danger ml-2">*</span></label>
-                        {!! Form::select('color_id', [''=>'--Select Color--'],null, array('id'=>'add_color_id','class' => 'form-control custom-select', 'data-validation'=>"required",'style'=>"width:100%",'disabled'=>'disabled')) !!}
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label">Purchase Price<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('add_purchase_price', null, array('id'=>'add_purchase_price','placeholder' => 'Purchase Price','class' => 'form-control ','readonly'=>'readonly')) !!}
+                        <label class="form-control-label">Select Invoice No.<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('invoice_no',$invoiceNumbers,null, array('id'=>'add_invoice_no','class' => 'form-control custom-select ',"placeholder"=>"--Select Invoice No.--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
                     </div>
                     <div class="form-group">
                         <label class="form-control-label">Article No.<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('article_no', null, array('id'=>'add_article_no','placeholder' => 'Article No.','class' => 'form-control', 'data-validation'=>"required",'readonly'=>'readonly')) !!}
-                        {!! Form::hidden('width', null, array('id'=>'add_width','class' => 'form-control add_width')) !!}
-                        {!! Form::hidden('material_name', null, ['id'=>'add_material_name','class' => 'form-control add_material_name']) !!}
+                        {!! Form::select('article_no',$articleNumbers,null, array('id'=>'add_article_no','class' => 'form-control custom-select ',"placeholder"=>"--Select Article No.--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
+                        {!! Form::hidden('width', null, array('class' => 'add_width form-control','id'=>"add_width")) !!}
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label">Color No.<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('color_no', null, array('id'=>'add_color_no','placeholder' => 'Color No','class' => 'form-control ', 'data-validation'=>"required",'readonly'=>'readonly')) !!}
+                        <label class="form-control-label">Color<span class="text-danger ml-2">*</span></label>
+                        {!! Form::select('color_id',$colorMaterial,null, array('id'=>'add_color_id','class' => 'form-control custom-select ',"placeholder"=>"--Select Color--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label">Batch No.<span class="text-danger ml-2">*</span></label>
+                        <label class="form-control-label">Batch / Lot No.<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('batch_no', null, array('id'=>'add_batch_no','placeholder' => 'Batch No.','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                    {{-- <div class="form-group">
-                        <label class="form-control-label">Width<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('width', null, array('id'=>'add_width','placeholder' => 'Width','class' => 'form-control', 'data-validation'=>"required")) !!}
-                    </div> --}}
-
                     <div class="form-group">
                         <label class="form-control-label">Number Of Rolls<span class="text-danger ml-2">*</span></label>
                         {!! Form::number('number_of_rows', 1, array('id'=>'add_number_of_rolls', 'class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                    <div class="form-action float-right">
+
+                    <div class="form-action d-flex justify-content-center">
                         <button name="cancel_btn" id="cancel_btn" class="btn btn-primary">Cancel</button>
-                        <button type="submit" id="save_continue" name="save_continue" class="btn btn-primary">Save & Continue</button>
+                        <!-- <button type="submit" id="save_continue" name="save_continue" class="btn btn-primary">Save & Continue</button> -->
                         <button type="submit" id="save_close" name="save_close" class="btn btn-primary">Save & Close</button>
                     </div>
                 </form>
@@ -488,16 +380,18 @@
 </div>
 <script type="text/template" id="templateAddItem">
 
-    <td>{!! Form::select('material_id[]', $materials,null, array('class' => 'material form-control custom-select valid', 'data-validation'=>"required")) !!}</td>
-    <!-- <td>{!! Form::hidden('material_id[]', null, array('class' => 'meter form-control', 'data-validation'=>"required")) !!}</td> -->
-    <td>{!! Form::select('color[]', [],null, array('class' => 'color form-control valid','id'=>'color')) !!}</td>
+    <td><input type="checkbox" class="row_checkbox"></td>                                    
+    <td>{!! Form::text('brand[]',null, array('class' => 'brand form-control valid','data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
     <td>{!! Form::text('article_no[]', null, array('class' => 'article_no form-control valid', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
+    <td>{!! Form::select('color[]',[], null, array('class' => 'color form-control valid','id'=>'color')) !!}</td>
     <td>{!! Form::text('color_no[]', null, array('class' => 'color_no form-control valid','readonly'=>'readonly','id'=>'color_no')) !!}</td>
     <td>{!! Form::text('batch_no[]', null, array('class' => 'batch_no form-control valid', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('width[]', null, array('class' => 'width form-control valid','readonly'=>'readonly')) !!}</td>
+    <td>{!! Form::text('meter[]', null, array('class' => 'meter meter_val form-control valid','id' => 'meter_val', 'data-validation'=>"required")) !!}</td>
+    <td>{!! Form::text('yard[]', null, array('class' => 'yard yard_val form-control valid','id' => 'yard_val', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('roll_no[]', null, array('class' => 'roll_no form-control valid', 'data-validation'=>"required")) !!}</td>
-    <td>{!! Form::text('meter[]', null, array('class' => 'meter form-control valid', 'data-validation'=>"required")) !!}</td>
-    <td><input class="yard form-control valid" name='yard[]' type="text"></td>
+    <td>{!! Form::text('piece_no[]', null, array('class' => 'piece_no form-control valid', 'readonly'=>'readonly')) !!}</td>
+    <td>{!! Form::hidden('invoice_no[]', null, array('class' => 'invoice_no_hidden')) !!}</td>
 
 </script>
 
@@ -625,6 +519,63 @@
             $('#transport_shippment_cost_per_meter').val(transportationShippingCostPerMeter.toFixed(2));
         }
 
+        // Select all checkboxes functionality
+        $(document).on('change', '#select_all', function() {
+            $('.row_checkbox').prop('checked', $(this).prop('checked'));
+        });
+
+        // Delete selected items functionality
+        $(document).on('click', '#delete_selected', function() {
+            var selected = [];
+            $('.row_checkbox:checked').each(function() {
+                selected.push($(this).closest('tr'));
+            });
+
+            if (selected.length === 0) {
+                alert("Please select at least one item to delete.");
+            } else {
+                if (confirm("Are you sure you want to delete selected items?")) {
+                    // selected.forEach(function(item) {
+                    //     item.remove();
+                    // });
+
+                    selected.forEach(function(row) {
+                        console.log("test this");
+                        var meterValue = parseFloat(row.find('.meter_val').val());
+                        console.log(meterValue);
+                        console.log("meterValue");
+                        if (!isNaN(meterValue)) {
+                            var currentTotal = parseFloat($('#total_meter').val());
+                            var totlameter = currentTotal - meterValue;
+                            $('#total_meter').val(totlameter.toFixed(2)); // Subtract deleted item's meter value
+                            var yards = totlameter * 1.09361;
+                            // Update the Total Yards field
+                            $('#total_yard').val(yards.toFixed(2)); // Adjust to display 2 decimal places
+                        }
+                        row.remove();
+                    });
+                    // getNewAddedMeter();
+                    // updateTotalMeterAfterDelete();
+                }
+            }
+        });
+
+        function updateTotalMeterAfterDelete() {
+            var totalMeter = 0;
+
+            $('.meter').each(function() {
+                var meterValue = parseFloat($(this).val());
+                totalMeter += isNaN(meterValue) ? 0 : meterValue;
+            });
+
+            $('#total_meter').val(totalMeter);
+        }
+
+        // Delete row functionality
+        $(document).on('click', '.delete_row', function(){
+            $(this).closest('tr').remove();
+            getNewAddedMeter();
+        });
         
         function convertMetersToYards() {
             var meters = $('#total_meter').val();
@@ -641,14 +592,14 @@
         // Trigger calculation when any relevant input field changes
         $('#total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
       
-        $(document).on('input', '.meter_val', function(){
-            getTotalMeters();
+        $(document).on('keyup', '.meter_val', function(){
+            // getTotalMeters();
+            getNewAddedMeter();
         });
 
-        $(document).on('click', '#delete_row', function(){
-            var row_id = $(this).data('row_id');
-            $('#' + row_id).remove();
-            getTotalMeters();
+        $(document).on('keyup', '.yard_val', function(){
+            // getTotalMeters();
+            getNewAddedMeter();
         });
 
         function getTotalMeters() {
@@ -667,7 +618,84 @@
             calculateTransportationShippingCostPerMeter();
         }
 
+        $(document).on('click', '#delete_row', function(){
+            var row_id = $(this).data('row_id');
+            $('#' + row_id).remove();
+            getNewAddedMeter();
+        });
+
         $(document).ready(function() {
+
+             // Add the click event listener to the button
+             $('#generate_roll_piece').click(function() {
+                generateRollAndPieceNumbers();
+            });
+
+            // sorting logic start
+            var sortOrder = 1; // 1 for ascending, -1 for descending
+            var $sortIcon = $('.sort-icon');
+
+            // Handle click event on sort icon
+            $sortIcon.on('click', function() {
+                sortOrder *= -1; // Toggle sort order
+
+                // Update sort icon based on sort order
+                if (sortOrder === 1) {
+                    $sortIcon.removeClass('fa-sort-down').addClass('fa-sort-up');
+                } else {
+                    $sortIcon.removeClass('fa-sort-up').addClass('fa-sort-down');
+                }
+
+                // Sort table rows based on meter value
+                var rows = $('#tblPurchaseItems tbody > tr').get();
+                rows.sort(function(rowA, rowB) {
+                    var meterA = parseFloat($(rowA).find('.meter').val()) || 0;
+                    var meterB = parseFloat($(rowB).find('.meter').val()) || 0;
+                    return sortOrder * (meterA - meterB);
+                });
+
+                // Reorder the table rows
+                $.each(rows, function(index, row) {
+                    $('#tblPurchaseItems').children('tbody').append(row);
+                });
+            });
+            // sorting logic end
+
+            // Click event for "Add Item" button
+            $('#add_item_model_btn').on('click', function() {
+                var currentInvoiceNo = $('#invoice_no').val();
+
+                // Update invoice dropdown
+                updateInvoiceDropdown(currentInvoiceNo);
+
+                // Display the modal
+                $('#addItemModal').modal('show');
+            });
+
+            // Function to update the invoice number dropdown
+            function updateInvoiceDropdown(currentInvoiceNo) {
+                $('#add_invoice_no').empty(); // Clear existing options
+
+                // Add the placeholder option
+                $('#add_invoice_no').append('<option value="">--Select Invoice No.--</option>');
+
+                // Add options for all invoice numbers
+                $.each(invoiceNumbers, function(id, number) {
+                    $('#add_invoice_no').append('<option value="' + id + '">' + number + '</option>');
+                });
+
+                // Add current invoice number if it exists and not already in the list
+                if (currentInvoiceNo && !(currentInvoiceNo in invoiceNumbers)) {
+                    $('#add_invoice_no').append('<option value="' + currentInvoiceNo + '">' + currentInvoiceNo + '</option>');
+                }
+            }
+
+            // Handle form submission inside the modal
+             $('#add_item_form').submit(function(event) {
+                event.preventDefault();
+                // Your logic to handle form submission
+                // Example: AJAX call to submit form data
+            });
 
             // Trigger the conversion and calculation when the form is opened or the page is loaded
             convertMetersToYards();
@@ -734,6 +762,31 @@
             });
         });
 
+        function generateRollAndPieceNumbers() {
+            // Get all rows of purchase items
+            const $rows = $('#tblPurchaseItems tbody tr');
+            
+            // Update the roll numbers and piece numbers
+            $rows.each((index, row) => {
+                const $row = $(row);
+                const rollNo = index + 1;
+                const articleNo = $row.find('.article_no').val();
+                const colorName = $row.find('.color option:selected').text() || '';
+                const invoiceNo = $row.find('.invoice_no_hidden').val() || '';
+                const dateOfPurchase = $('#purchase_date').val() || '';
+                const totalRolls = $rows.length;
+                console.log("generate piece no and roll no.");
+                console.log(colorName);
+                console.log(invoiceNo);
+                console.log(row);
+                
+                const pieceValue = `${articleNo}_${colorName}_${invoiceNo}_${dateOfPurchase}_${rollNo}_${totalRolls}`;
+                
+                $row.find('.roll_no').val(rollNo);
+                $row.find('.piece_no').val(pieceValue);
+            });
+        }
+
         $('#thb_ex_rate, #price_usd').keyup(function() {
             var price_thb = 0;
             var thb_ex_rate = parseFloat($('#thb_ex_rate').val());
@@ -749,34 +802,60 @@
         var add_selected_material_name=null;
         var add_color=[];
 
+        $(document).on('change','#add_article_no',function(){
+            var data = {!! json_encode($materials2) !!};
+            var row_id=$(this).data('row_id');
+            var articleNo = $(this).val();
+            var colorDropdown = $('#add_color_id');
+            var colorList = "<option value=''>--Select Color--</option>";
+
+            // Clear previous selection in material dropdown
+            $('#' + row_id).find('.material').empty();
+
+            $.each(data, function(index, value) {
+                if (articleNo == value.article_no) {
+                    var text = (value.color_no ? value.color_no + ' - ' : '') + value.color;
+                    colorList += "<option value='" + value.id + "'>" + text + "</option>";
+                }
+            });
+
+            colorDropdown.html(colorList).trigger('change');
+        });
 
         $('#add_material_id').select2({
             dropdownParent: $('#add_item_form'),
             width: 'resolve',
         });
-        $(document).on('change','#add_material_id',function(){
-            var name=$(this).val();
-            var data={!! json_encode($materials2) !!};
-            $.each(data,function(index,value){
-                if(name==value.name){
-                    add_selected_material_name=value.name;
-                    $('#add_article_no').val(value.article_no);
-                    $('#add_width').val(value.width);
-                    // $('#add_material_name').val(value.name+' - '+value.color);
-                    $('#add_color_id').attr('disabled',false);
+        $('#add_invoice_no').select2({
+            dropdownParent: $('#add_item_form'),
+            width: 'resolve',
+        });
+        $('#add_article_no').select2({
+            dropdownParent: $('#add_item_form'),
+            width: 'resolve',
+        });
+        $('#add_color_id').select2({
+            dropdownParent: $('#add_item_form'),
+            width: 'resolve',
+        });
+        $(document).on('change','#add_article_no',function(){
+            var data = {!! json_encode($materials2) !!};
+            var row_id=$(this).data('row_id');
+            var articleNo = $(this).val();
+            var colorDropdown = $('#add_color_id');
+            var colorList = "<option value=''>--Select Color--</option>";
+
+            // Clear previous selection in material dropdown
+            $('#' + row_id).find('.material').empty();
+
+            $.each(data, function(index, value) {
+                if (articleNo == value.article_no) {
+                    var text = (value.color_no ? value.color_no + ' - ' : '') + value.color;
+                    colorList += "<option value='" + value.id + "'>" + text + "</option>";
                 }
             });
-            add_color.length=0;
-            $.each(data,function(i,v){
-                if(add_selected_material_name==v.name){
-                  var taxt = (v.color_no) ? v.color_no + ' - ' : '';
-                  taxt += v.color;
-                    add_color.push({'id':v.id,'text':taxt});
-                }
-            });
-            $('#add_color_id').html('');
-            $('#add_color_id').html('<option value="" selected="selected">--Select Color--</option>');
-            $('#add_color_id').select2({dropdownParent: $('#add_item_form'),width: 'resolve',data:add_color});
+
+            colorDropdown.html(colorList).trigger('change');
         });
         $('#add_color_id').select2({
             dropdownParent: $('#add_item_form'),
@@ -814,12 +893,13 @@
             onSuccess: function($form) {
                 last_row_data=$form;
                 addItem($form);
+                $($form).trigger("reset");
+                $('#add_material_id').val('').trigger('change');
+                $('#add_color_id').val('').trigger('change');
+                // $('#add_color_id').attr('disabled',true);
+                // $('#add_color_id').attr('disabled',true);
                 if(!save_continue){
-                    $($form).trigger("reset");
                     $('#addItemModal').modal('hide');
-                    $('#add_color_id').attr('disabled',true);
-                    $('#add_color_id').html('');
-                    $('#add_color_id').html('<option value="" selected="selected">--Select Color--</option>');
                 }
                 return false; // Will stop the submission of the form
             },
@@ -1051,59 +1131,70 @@
         if($('#add_number_of_rolls',$form).data('roll_no')){
             roll_no=$('#add_number_of_rolls',$form).data('roll_no');
         }
-        var material_name = $('#add_material_id ', $form).val();
-        var material_id=0;
+        var color_id=0;
         if(roll_no){
-            material_id= $('#add_color_id', $form).val();
-            // console.log(material_id);
+            color_id= $('#add_color_id', $form).val();
+            color_name = $('#add_color_id option:selected', $form).text().split(' - ')[1];
         }
         else{
-            material_id = $('#add_color_id option:selected', $form).val();
+            color_id = $('#add_color_id option:selected', $form).val();
+            color_name = $('#add_color_id option:selected', $form).text().split(' - ')[1];
         }
-        // var color_id = $('#add_color_id option:selected', $form).text();
         var number_of_rolls = $('#add_number_of_rolls', $form).val();
         var article_no = $('#add_article_no', $form).val();
+        var invoice_no = $('#add_invoice_no', $form).val();
         var color_no = $('#add_color_no', $form).val();
         var batch_no = $('#add_batch_no', $form).val();
-        var width = $('#add_width', $form).val();
+        var date_of_purchase = $('#purchase_date').val();
+        var total_roll = $('#add_number_of_rolls', $form).val();
         $template = $('#templateAddItem').html();
         for (i = 0; i < number_of_rolls; i++) {
+            var roll_no = i+1;
             var $uniqueId = uuid();
             var $tr = $('<tr class="purchaseItem" id="' + $uniqueId + '">').append($template);
             $('#tblPurchaseItems tbody').append($tr);
-            $('#' + $uniqueId).find('.material').val(material_name);
-            $('#' + $uniqueId).find('.material').attr('data-row_id',$uniqueId);
-
 
             var color_list="";
+            var material_list="";
             $.each({!! json_encode($materials2) !!},function(i,v){
-                if(material_name==v.name){
+                if(article_no==v.article_no){
+                    console.log(v);
                     color_list+="<option value='"+v.id+"'>"+v.color+"</option>";
+                    $('#' + $uniqueId).find('.color_no').val(String(v.color_no).padStart(2,"0"));
+                    $('#' + $uniqueId).find('.width').val(v.width_cm);
+                    $('#' + $uniqueId).find('.brand').val(v.name);    
+                    unit_purchased_in = v.unit_purchased_in;   
+
+                    // Calculate and set the Piece value (concatenation of Article No and Color No)
+                    // var pieceValue = article_no + '_' + v.color +  '_' + invoice_no + '_' + (date_of_purchase ?? '') + '_' + roll_no + '_' + total_roll;
+                    // $('#' + $uniqueId).find('.piece_no').val(pieceValue);
+                    // $('#' + $uniqueId).find('.roll_no').val(roll_no);
                 }
             });
-            $('#' + $uniqueId).find('.color').html('');
+
             $('#' + $uniqueId).find('.color').html(color_list);
-            $('#' + $uniqueId).find('.color').val(material_id);
+            $('#' + $uniqueId).find('.color').val(color_id);
             $('#' + $uniqueId).find('.color').attr('data-row_id',$uniqueId);
+
             $('#' + $uniqueId).find('.article_no').val(article_no);
-            $('#' + $uniqueId).find('.color_no').val(String(color_no).padStart(2,"0"));
             $('#' + $uniqueId).find('.batch_no').val(batch_no);
-            $('#' + $uniqueId).find('.width').val(width);
-            if(roll_no){
-                $('#' + $uniqueId).find('.roll_no').val(roll_no);
-            }
-            else{
-                $('#' + $uniqueId).find('.roll_no').val(i + 1);
+            $('#' + $uniqueId).find('#delete_row').attr("data-row_id",$uniqueId);
+
+            $('#' + $uniqueId).find('.invoice_no_hidden').val(invoice_no);
+
+            // Enable/disable fields based on unit purchased in
+            if (unit_purchased_in === 'meter') {
+                $('#' + $uniqueId).find('.meter').prop('readonly', false);
+                $('#' + $uniqueId).find('.yard').prop('readonly', true);
+            } else if (unit_purchased_in === 'yard') {
+                $('#' + $uniqueId).find('.meter').prop('readonly', true);
+                $('#' + $uniqueId).find('.yard').prop('readonly', false);
             }
         }
-
         if(($('.purchaseItem').length)!=0){
             $('#add_single_row').css('display','block');
         }
-
-        getNewAddedMeter();
-    };
-
+    }
 
     $(document).on('change','.material',function(){
         var name=$(this).val();
@@ -1132,6 +1223,13 @@
             });
             $('#'+row_id).find('.color').html(color_list);
     });
+
+     // Reset the form values when the modal is closed
+     $('#addItemModal').on('hidden.bs.modal', function () {
+        $('#add_invoice_no').val('').trigger('change');
+        $('#add_article_no').val('').trigger('change');
+    });
+
     $(document).on('change','.color',function(){
             var id=$(this).val();
             var row_id=$(this).data('row_id');
@@ -1205,6 +1303,21 @@
             });
 
             $('#total_meter').val(getNewMeter);
+            var yards = getNewMeter * 1.09361;
+            $('#total_yard').val(yards.toFixed(2)); // Adjust to display 2 decimal places
+        });
+
+        $(".yard").on('keyup',function(){
+            getEditMeter();
+            var getNewMeter = parseFloat($('#total_meter').val());
+            $('.yard').each( function() {
+                var getMe = parseFloat($(this).val());
+                getNewMeter += isNaN(getMe) ? 0 : getMe * 0.9144;
+            });
+
+            $('#total_meter').val(getNewMeter);
+            var yards = getNewMeter * 1.09361;
+            $('#total_yard').val(yards.toFixed(2)); // Adjust to display 2 decimal places
         });
 
     }

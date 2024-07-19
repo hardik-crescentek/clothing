@@ -310,6 +310,9 @@ class PurchaseController extends Controller
         $colors = Color::active()->pluck('name', 'id')->all();
         $suppliers = Supplier::dropdown();
         $items = $purchase->purchase_items()->paginate(env('ITEMS_PER_PAGE'));
+        $invoiceNumbers = \DB::table('purchases')->pluck('invoice_no', 'invoice_no')->toArray();
+        $articleNumbers = Material::active()->pluck('article_no', 'article_no')->toArray();
+        $colorMaterial = Material::active()->pluck('color', 'color')->toArray();
         $orders = OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
         ->leftJoin('users as customer','customer.id','=','orders.customer_id')
         ->leftJoin('users as seller','seller.id','=','orders.seller_id')
@@ -319,7 +322,7 @@ class PurchaseController extends Controller
         ->whereRaw('FIND_IN_SET("'.$purchase->id.'", roll_id)')
         ->select('order_items.*','orders.*','customer.firstname as customer_firstname','customer.lastname as customer_lastname','seller.firstname as seller_firstname','seller.lastname as seller_lastname','purchase_items.*','materials.name as material_name')
         ->get();
-        return view('purchase.edit', compact('purchase', 'categories', 'colors', 'materials','materials2', 'suppliers', 'items','orders'));
+        return view('purchase.edit', compact('purchase', 'categories', 'colors', 'materials','materials2', 'suppliers', 'items','orders','invoiceNumbers','articleNumbers','colorMaterial'));
     }
 
     /**
@@ -361,7 +364,8 @@ class PurchaseController extends Controller
                     'roll_no'     => $request->input('roll_no.' . $key),
                     'width'       => $request->input('width.' . $key),
                     'meter'       => $request->input('meter.' . $key),
-                    'yard'        => meter2yard($request->input('meter.' . $key))
+                    'yard'        => meter2yard($request->input('meter.' . $key)),
+                    'piece_no'   => $request->input('piece_no.' . $key),
                 );
                 $total_qty +=  $request->input('meter.' . $key);
             }
@@ -419,7 +423,6 @@ class PurchaseController extends Controller
 
         $purchase->fill($data);
         $purchase->save();
-
 
         if ($items) {
             $QRCode = Util::generateID();
