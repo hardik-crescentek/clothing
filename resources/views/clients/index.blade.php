@@ -69,12 +69,44 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->phone }}</td>
                                 <td class="td-actions">
+                                    @if($user->images->isNotEmpty())
+                                        <button type="button" class="btn btn-info btn-sm btn-square col-sm-3 mt-1" data-toggle="modal" title="View Images" data-target="#viewImagesModal-{{ $user->id }}">
+                                            View
+                                        </button>
+                                    @endif
                                     <a class="btn btn-primary btn-sm btn-square col-sm-3 mt-1" href="{{ route('clients.edit',$user->id) }}">Edit</a>
                                     {!! Form::open(['method' => 'DELETE','route' => ['clients.destroy', $user->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
                                     {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square col-sm-3 mt-1']) !!}
                                     {!! Form::close() !!}
                                 </td>
                             </tr>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="viewImagesModal-{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="viewImagesModalLabel-{{ $user->id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="viewImagesModalLabel-{{ $user->id }}">Client Images</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                @foreach($user->images as $image)
+                                                    <div class="col-md-4">
+                                                        <img  src="{{ url('public/images/clients/' . $image->name) }}" class="img-fluid" alt="Client Image">
+                                                        <!-- Download Button -->
+                                                    </div>
+                                                    <a href="{{ url('public/images/clients/' . $image->name) }}" download="{{ $image->name }}" class="btn mt-2 fa fa-download">
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             @endforeach
                             @endisset
                         </tbody>

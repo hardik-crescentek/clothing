@@ -9,6 +9,7 @@ use Hash;
 use App\CustomerItemPrice;
 use App\Material;
 use App\ClientArticle;
+use App\ClientImage;
 use DB;
 
 //Importing laravel-permission models
@@ -34,7 +35,7 @@ class ClientController extends Controller
             });
         }
 
-        $clients = $clients->role('client')->orderBy('id','DESC');
+        $clients = $clients->role('client')->orderBy('id','DESC')->with('images');
         $clients = $clients->paginate(env('ITEMS_PER_PAGE'))->appends($request->query());
         return view('clients.index', compact('clients'));
     }
@@ -114,6 +115,7 @@ class ClientController extends Controller
             'city'      => 'required',
             'state'     => 'required',
             'zip'       => 'required',
+            'images.*'  => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // each file must be an image and up to 2MB
         ]);
 
         $input = $request->only(
@@ -140,6 +142,20 @@ class ClientController extends Controller
             ];
         }
         ClientArticle::insert($articlesData);
+
+         // Handle optional image uploads
+        if ($request->hasfile('images')) {
+            foreach ($request->file('images') as $file) {
+                $name = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('images/clients'), $name);
+
+                // Save file information to the database
+                ClientImage::create([
+                    'client_id' => $user->id,
+                    'name' => $name,
+                ]);
+            }
+        }
 
         if ($request->input('redirectTo')) {
             return redirect(base64_decode($request->input('redirectTo')))->with('success', 'Client created successfully');
@@ -227,7 +243,8 @@ class ClientController extends Controller
                 'address'   => 'required',
                 'city'      => 'required',
                 'state'     => 'required',
-                'zip'       => 'required'
+                'zip'       => 'required',
+                'image'     => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
             // Get the user
@@ -257,6 +274,37 @@ class ClientController extends Controller
                     );
                 }
             } 
+
+            // Handle image uploads
+            if ($request->hasFile('images')) {
+                // Get existing images for the user
+                $existingImages = $user->images; // Assuming the user model has a relationship named 'images'
+
+                // Delete old images
+                foreach ($existingImages as $image) {
+                    // Delete the image file
+                    $imagePath = public_path('images/clients/' . $image->name);
+                    if (file_exists($imagePath)) {
+                        unlink($imagePath);
+                    }
+                    // Delete the image record from the database
+                    $image->delete();
+                }
+
+                // Upload new images
+                foreach ($request->file('images') as $file) {
+                    // Generate a unique name for the image
+                    $name = time() . '_' . $file->getClientOriginalName();
+                    // Move the file to the public directory
+                    $file->move(public_path('images/clients'), $name);
+
+                    // Save the new image information to the database
+                    ClientImage::create([
+                        'client_id' => $user->id,
+                        'name' => $name,
+                    ]);
+                }
+            }
 
             return redirect()->route('clients.index')->with('success', 'User updated successfully');
         }

@@ -39,7 +39,7 @@
                 @endif
 
 
-                {!! Form::open(array('route' => 'clients.store','method'=>'POST', 'class'=>"form-validate", 'novalidate')) !!}
+                {!! Form::open(array('route' => 'clients.store','method'=>'POST', 'class'=>"form-validate", 'novalidate', 'enctype' => 'multipart/form-data')) !!}
                 <input type="hidden" name="redirectTo" value="{{$redirect}}">
                 <div class="row">
                     <div class="form-group col-lg-3">
@@ -116,6 +116,13 @@
                             {!! Form::checkbox('newsletter', 1, null ,array('class' => 'form-check-input', 'id' => 'newsletter')) !!}
                             <label for="newsletter" class="form-check-label" for="printWidth">Recive update on new arrivals</label>
                         </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Client Images</label>
+                        {!! Form::file('images[]', array('multiple' => true, 'class' => 'form-control')) !!}
                     </div>
                 </div>
 

@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\ClientArticle;
-
+use App\ClientImage;
 
 class User extends Authenticatable
 {
@@ -83,6 +83,11 @@ class User extends Authenticatable
     public function clientArticles()
     {
         return $this->hasMany(ClientArticle::class, 'client_id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ClientImage::class, 'client_id');
     }
 
     protected $appends = ['full_name'];

@@ -176,7 +176,7 @@
                             <h4 class="card-header">Purchase Items 
                                 <a href="javascript:;" class="btn btn-primary p-2 btn-square btn-sm ml-5" id="add_item_model_btn" data-toggle="modal" data-target="#addItemModal">Add Item</a>
                                 <button type="button" class="btn btn-danger p-2 btn-square btn-sm btn-square ml-2" id="delete_selected">Delete</button>
-                                <button type="button" class="btn btn-primary p-2 btn-square btn-sm ml-2" id="generate_roll_piece">Generate Roll & Piece Numbers</button>
+                                <button type="button" class="btn btn-primary p-2 btn-square btn-sm ml-2" id="generate_roll_piece">Generate Roll & Piece No.</button>
                             </h4>
                             <div class="card-body">
                                 <div class="table-responsive mt-3">
@@ -292,7 +292,7 @@
     <td>{!! Form::text('yard[]', null, array('class' => 'yard yard_val form-control valid','id' => 'yard_val', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('roll_no[]', null, array('class' => 'roll_no form-control valid', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('piece_no[]', null, array('class' => 'piece_no form-control valid', 'readonly'=>'readonly')) !!}</td>
-    <td>{!! Form::hidden('invoice_no[]', null, array('class' => 'invoice_no_hidden')) !!}</td>
+    <td>{!! Form::hidden('add_invoice_no[]', null, array('class' => 'invoice_no_hidden')) !!}</td>
 
 </script>
 
@@ -985,6 +985,25 @@
         $('#shipping_cost').val(shipping_cost.toFixed(2));
 
     }
+
+    // Function to check if the item already exists in the table
+    function isDuplicateItem(invoice_no, article_no, color_id) {
+        let isDuplicate = false;
+        
+        $('#tblPurchaseItems tbody .purchaseItem').each(function() {
+            const existingInvoiceNo = $(this).find('.invoice_no_hidden').val();
+            const existingArticleNo = $(this).find('.article_no').val();
+            const existingColorId = $(this).find('.color').val();
+            
+            if (existingInvoiceNo === invoice_no && existingArticleNo === article_no && existingColorId === color_id) {
+                isDuplicate = true;
+                return false; // Break out of each loop
+            }
+        });
+        
+        return isDuplicate;
+    }
+
     function addItem($form) {
         var roll_no=0;
         if($('#add_number_of_rolls',$form).data('roll_no')){
@@ -1007,6 +1026,13 @@
         var batch_no = $('#add_batch_no', $form).val();
         var date_of_purchase = $('#purchase_date').val();
         var total_roll = $('#add_number_of_rolls', $form).val();
+
+        // Check for duplicates
+        if (isDuplicateItem(invoice_no, article_no, color_id)) {
+            alert('Item with the same Invoice No, Article No, and Color already exists.');
+            return; // Exit function if duplicate found
+        }
+
         $template = $('#templateAddItem').html();
         for (i = 0; i < number_of_rolls; i++) {
             var roll_no = i+1;

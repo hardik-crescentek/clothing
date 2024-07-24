@@ -19,7 +19,7 @@
 @endif
 
 <!-- Begin Row -->
-{!! Form::model($user, ['method' => 'POST','route' => ['client.update', $user->id], 'class'=>"form-validate", 'novalidate']) !!}
+{!! Form::model($user, ['method' => 'POST','route' => ['client.update', $user->id], 'class'=>"form-validate", 'novalidate', 'enctype' => 'multipart/form-data']) !!}
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
@@ -112,6 +112,14 @@
                             <label for="newsletter" class="form-check-label" for="printWidth">Recive update on new arrivals</label>
                         </div>
                     </div>
+
+                    <!-- Upload New Image -->
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Client Images</label>
+                        {!! Form::file('images[]', array('multiple' => true, 'class' => 'form-control')) !!}
+                        <small class="form-text text-muted">Leave Empty if you do not want to change the image.</small>
+                    </div>
+
                 </div>
             </div>
         </div>
