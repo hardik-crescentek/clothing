@@ -166,13 +166,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row my-4">
+                <!-- <div class="row my-4">
                     <div class="col-md-12">
-
                         <div class="card">
-                            <!-- <h4 class="card-header">Purchase Items <a href="javascript:;" class="btn btn-primary p-2 btn-square btn-sm ml-5" id="add_item_model_btn" data-toggle="modal" data-target="#addItemModal">Add Item</a>
-                                <a href="javascript:;" style="display: none;" class="btn btn-primary btn-square btn-md float-right" id="add_single_row" ><i class="la la-plus p-0 m-0"></i></a>
-                            </h4> -->
                             <h4 class="card-header">Purchase Items 
                                 <a href="javascript:;" class="btn btn-primary p-2 btn-square btn-sm ml-5" id="add_item_model_btn" data-toggle="modal" data-target="#addItemModal">Add Item</a>
                                 <button type="button" class="btn btn-danger p-2 btn-square btn-sm btn-square ml-2" id="delete_selected">Delete</button>
@@ -186,7 +182,6 @@
                                                 <th style="width:3%;"><input type="checkbox" id="select_all"></th>
                                                 <th style="width:9%;">Brand</th>
                                                 <th style="width:10%;">Article No</th>
-                                                <!-- <th style="width:10%;">Invoice No</th> -->
                                                 <th style="width:9%;">Color</th>
                                                 <th style="width:6%;">Color No</th>
                                                 <th style="width:8%;">Batch/Lot No</th>
@@ -203,7 +198,6 @@
                                                 <td><input type="checkbox" class="row_checkbox"></td>
                                                 <td>{!! Form::text('brand[]',$item['brand'], array('class' => 'brand form-control' ,'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
                                                 <td>{!! Form::text('article_no[]', $item['article_no'], array('class' => 'article_no form-control', 'data-validation'=>"required")) !!}</td>
-                                                <!-- <td>{!! Form::text('invoice_no[]', $item['invoice_no'], array('class' => 'invoice_no form-control', 'data-validation'=>"required")) !!}</td> -->
                                                 <td>{!! Form::text('color[]',$item['color'], array('class' => 'color form-control','readonly'=>'readonly')) !!}</td>
                                                 <td>{!! Form::text('color_no[]',$item['color_no'], array('class' => 'color_no form-control','readonly'=>'readonly')) !!}</td>
                                                 <td>{!! Form::text('batch_no[]', $item['batch_no'], array('class' => 'batch_no form-control', 'data-validation'=>"required")) !!}</td>
@@ -219,11 +213,7 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                </div>
-                <!-- <div class="form-group float-right">
-                    <button type="submit" class="btn btn-primary btn-lg" id="from_add_purchase_btn">Save</button>
                 </div> -->
                 <div class="form-group row d-flex align-items-center mt-5">
                     <div class="col-lg-12 d-flex justify-content-center">
@@ -389,21 +379,21 @@
             }
         }
 
-        function getTotalMeters() {
-            var totalMeter = 0;
-            $("input[name='meter[]']").each(function(){
-                totalMeter += $(this).val() ? parseFloat($(this).val()) : 0;
-            });
+        // function getTotalMeters() {
+        //     var totalMeter = 0;
+        //     $("input[name='meter[]']").each(function(){
+        //         totalMeter += $(this).val() ? parseFloat($(this).val()) : 0;
+        //     });
 
-            $('#total_meter').val(totalMeter);
-            $('#total_meter').trigger('change');
+        //     $('#total_meter').val(totalMeter);
+        //     $('#total_meter').trigger('change');
 
-            var yards = totalMeter * 1.09361;
-            $('#total_yard').val(yards.toFixed(2));
-            $('#total_yard').trigger('change');
+        //     var yards = totalMeter * 1.09361;
+        //     $('#total_yard').val(yards.toFixed(2));
+        //     $('#total_yard').trigger('change');
 
-            calculateTransportationShippingCostPerMeter();
-        }
+        //     calculateTransportationShippingCostPerMeter();
+        // }
 
         $(document).ready(function() {
 
@@ -942,19 +932,19 @@
         $(document).on('change','#discount',function(){
            shipping_cost();
         });
-        $(document).on('submit','#from_add_purchase',function(){
-            var checkClass =  $('#tblPurchaseItems tbody tr').find('.valid');
-            if (checkClass.length > 0) {
-                return true;
-            }else{
-                new Noty({
-                            type: 'warning',
-                            text: 'Please select item first',
-                            timeout: 2500,
-                        }).show();
-                return false;
-            }
-        });
+        // $(document).on('submit','#from_add_purchase',function(){
+        //     var checkClass =  $('#tblPurchaseItems tbody tr').find('.valid');
+        //     if (checkClass.length > 0) {
+        //         return true;
+        //     }else{
+        //         new Noty({
+        //                     type: 'warning',
+        //                     text: 'Please select item first',
+        //                     timeout: 2500,
+        //                 }).show();
+        //         return false;
+        //     }
+        // });
 
     })(jQuery);
 

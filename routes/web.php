@@ -48,9 +48,14 @@ Route::group(['middleware' => ['auth']], function() {
 
     # For Purchase #
     Route::resource('purchase', PurchaseController::class ,['only' => ['index', 'create', 'store','edit','update','destroy']]);
+    Route::resource('purchase-item', PurchaseItemController::class ,['only' => ['index', 'create', 'store','edit','update','destroy']]);
     Route::delete('purchase_item/{purchaseItem}', [App\Http\Controllers\PurchaseController::class, 'deletePurchaseItem'])->name('purchase.deletePurchaseItem');
     Route::get('get-roll-history', [App\Http\Controllers\PurchaseController::class, 'rollHistory'])->name('purchase.roll-history');
     Route::patch('update-item/', [App\Http\Controllers\PurchaseController::class, 'updatePurchaseItem'])->name('purchase.update-item');
+
+    # For Purchase Item #
+    Route::get('get_purchase_id', [App\Http\Controllers\PurchaseItemController::class, 'getPurchaseId'])->name('get.purchase.id');
+    Route::get('purchase-items-by-invoice', [App\Http\Controllers\PurchaseItemController::class, 'getPurchaseItemsByInvoice'])->name('purchase.items.by.invoice');
 
     Route::get('purchase/import', [App\Http\Controllers\PurchaseController::class, 'import'])->name('purchase.importt');
     Route::post('purchase-import-store', [App\Http\Controllers\PurchaseController::class, 'import_store'])->name('purchase.import');

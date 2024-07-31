@@ -119,12 +119,27 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="form-group col-lg-3">
-                        <label class="form-control-label d-flex">Client Images</label>
-                        {!! Form::file('images[]', array('multiple' => true, 'class' => 'form-control')) !!}
+                <div class="col-lg-3">
+                    <label for="upload_image" class="col-form-label">Client Image</label>
+                    <div class="d-flex align-items-center">
+                        {!! Form::file('image[]', [
+                            'id' => 'upload_image', 
+                            'accept' => 'image/*',
+                            'data-validation' => "mime",
+                            'data-validation-allowing' => "jpeg, jpg, png, gif",
+                            'data-validation-error-msg-mime' => "You can only upload images",
+                            'capture' => "camera",
+                            'class' => 'form-control-file',
+                            'multiple' => true
+                        ]) !!}
+                        <button type="button" class="btn btn-info btn-sl ml-3" onclick="showCamera()" data-toggle="modal" data-target="#myModal">Capture</button>
                     </div>
+                    <small>
+                        <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
+                    </small>
+                    <input type="hidden" name="image_binary[]" class="image_binary"/>
                 </div>
+
 
                 <br>
                 <div>
@@ -173,11 +188,42 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog  modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Modal Header</h4>
+        <button type="button" class="close" onclick="closeWebcame()" data-dismiss="modal">&times;</button>        
+      </div>
+      <div class="modal-body modal-body-cus">
+        <div class="col-md-6 pull-left"> 
+            <div id="my_camera"></div>
+            <input type="hidden" value="" id="row_id" />    
+            <input type="button" value="Capture Image" class="btn btn-success mt-2" onClick="take_snapshot()">
+        </div>
+        <div id="results" class="col-md-6 pull-right">
+            
+            <img src="" class="img-thumbnail min-size-image" />        
+        </div>    
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="closeWebcame()" data-dismiss="modal">Ok</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- End Row -->
 @endsection
 @push('scripts')
 <script src="{{ asset('assets/js/datepicker/moment.min.js') }}"></script>
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
+<script type="text/javascript" src="{{asset('/js/webcam.min.js')}}"></script>
 <script>
     (function($) {
         $('#dob').daterangepicker({
@@ -207,13 +253,30 @@
             }
         })
         $(document).on('change', '#input_business_nature', function() {
-                if ($(this).val() == "other") {
-                    $('.row_business_nature_other').show();
-                } else {
-                    $('.row_business_nature_other').hide();
-                }
-            })
+            if ($(this).val() == "other") {
+                $('.row_business_nature_other').show();
+            } else {
+                $('.row_business_nature_other').hide();
+            }
+        })
     })(jQuery);
+
+    function take_snapshot() {
+        // take snapshot and get image data
+        Webcam.snap(function(data_uri) {
+            $('#image_binary').val(data_uri);
+            $("#results img").attr("src", data_uri);
+        });
+    }
+
+    function showCamera(ele) {
+        Webcam.reset();
+        Webcam.attach('#my_camera');
+    }
+
+    function closeWebcame(){
+        Webcam.reset();
+    }
 
     $(document).ready(function(){
         // $('#supplier_tbl').tablesorter({

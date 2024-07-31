@@ -70,13 +70,13 @@
                                 <td>{{ $user->phone }}</td>
                                 <td class="td-actions">
                                     @if($user->images->isNotEmpty())
-                                        <button type="button" class="btn btn-info btn-sm btn-square col-sm-3 mt-1" data-toggle="modal" title="View Images" data-target="#viewImagesModal-{{ $user->id }}">
-                                            View
-                                        </button>
+                                        <a class="btn fa fa-eye btn-sm btn-warning ml-1"  data-target="#viewImagesModal-{{ $user->id }}"  data-toggle="modal" data-placement="top" title="View Images"></a>
                                     @endif
-                                    <a class="btn btn-primary btn-sm btn-square col-sm-3 mt-1" href="{{ route('clients.edit',$user->id) }}">Edit</a>
+                                    <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('clients.edit',$user->id) }}" data-toggle="tooltip" data-placement="top" title="Edit Client"></a>
                                     {!! Form::open(['method' => 'DELETE','route' => ['clients.destroy', $user->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
-                                    {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square col-sm-3 mt-1']) !!}
+                                    <!-- {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square col-sm-3 mt-1']) !!} -->
+                                    <button type="submit" class="btn-action btn fa fa-trash  btn-sm btn-danger ml-1" data-toggle="tooltip" data-placement="top" title="Delete client">
+                                    </button>
                                     {!! Form::close() !!}
                                 </td>
                             </tr>

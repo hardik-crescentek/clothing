@@ -87,6 +87,7 @@
                 <ul id="dropdown-purchase" class="collapse list-unstyled pt-0 {{ (request()->is('purchase*')) ? 'show' : '' }}">
                     <li><a class="{{ (request()->is('purchase')) ? 'active' : '' }}" href="{{ url('purchase/') }}" title="Purchase">Purchase</a></li>
                     <li><a class="{{ (request()->is('purchase/create')) ? 'active' : '' }}" href="{{ url('purchase/create') }}" title="Add Purchase">Add Purchase</a></li>
+                    <li><a class="{{ (request()->is('purchase-item/create')) ? 'active' : '' }}" href="{{ url('purchase-item/create') }}" title="Add Purchase Item">Add Purchase Item</a></li>
                     <li><a class="{{ (request()->is('purchase/import')) ? 'active' : '' }}" href="{{ route('purchase.importt') }}" title="Import Purchase">Import Purchase</a></li>
                 </ul>
             </li>

@@ -86,13 +86,13 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label class="form-control-label">Total Meter<span class="text-danger ml-2">*</span></label>
-                                {!! Form::text('total_meter', null, array('placeholder' => 'Meters','id'=>'total_meter','class' => 'form-control')) !!}
+                                {!! Form::text('total_meter', null, array('placeholder' => 'Meters','class' => 'form-control total_meter')) !!}
                             </div>
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label class="form-control-label">Total Yards<span class="text-danger ml-2">*</span></label>
-                                {!! Form::text('total_yard', null, array('placeholder' => 'Yards','id'=>'total_yard','class' => 'form-control','readonly'=>'true')) !!}
+                                {!! Form::text('total_yard', null, array('placeholder' => 'Yards','class' => 'form-control','readonly'=>'true')) !!}
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -391,7 +391,7 @@
     <td>{!! Form::text('yard[]', null, array('class' => 'yard yard_val form-control valid','id' => 'yard_val', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('roll_no[]', null, array('class' => 'roll_no form-control valid', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('piece_no[]', null, array('class' => 'piece_no form-control valid', 'readonly'=>'readonly')) !!}</td>
-    <td>{!! Form::hidden('invoice_no[]', null, array('class' => 'invoice_no_hidden')) !!}</td>
+    <td>{!! Form::hidden('add_invoice_no[]', null, array('class' => 'invoice_no_hidden')) !!}</td>
 
 </script>
 
@@ -508,7 +508,7 @@
     (function($) {
 
         function calculateTransportationShippingCostPerMeter() {
-            var totalMeter = parseFloat($('#total_meter').val()) || 0;
+            var totalMeter = parseFloat($('.total_meter').val()) || 0;
             var importTax = parseFloat($('#import_tax').val()) || 0;
             var transportationPaid = parseFloat($('#transport_shipping_paid').val()) || 0;
 
@@ -516,7 +516,11 @@
             var transportationShippingCostPerMeter = (importTax + transportationPaid) / totalMeter;
 
             // Update the displayed value
-            $('#transport_shippment_cost_per_meter').val(transportationShippingCostPerMeter.toFixed(2));
+            if(totalMeter == 0){
+                $('#transport_shippment_cost_per_meter').val(0);
+            } else {
+                $('#transport_shippment_cost_per_meter').val(transportationShippingCostPerMeter.toFixed(2));
+            }
         }
 
         // Select all checkboxes functionality
@@ -544,14 +548,14 @@
                         var meterValue = parseFloat(row.find('.meter_val').val());
                         console.log(meterValue);
                         console.log("meterValue");
-                        if (!isNaN(meterValue)) {
-                            var currentTotal = parseFloat($('#total_meter').val());
-                            var totlameter = currentTotal - meterValue;
-                            $('#total_meter').val(totlameter.toFixed(2)); // Subtract deleted item's meter value
-                            var yards = totlameter * 1.09361;
-                            // Update the Total Yards field
-                            $('#total_yard').val(yards.toFixed(2)); // Adjust to display 2 decimal places
-                        }
+                        // if (!isNaN(meterValue)) {
+                        //     var currentTotal = parseFloat($('#total_meter').val());
+                        //     var totlameter = currentTotal - meterValue;
+                        //     $('#total_meter').val(totlameter.toFixed(2)); // Subtract deleted item's meter value
+                        //     var yards = totlameter * 1.09361;
+                        //     // Update the Total Yards field
+                        //     $('#total_yard').val(yards.toFixed(2)); // Adjust to display 2 decimal places
+                        // }
                         row.remove();
                     });
                     // getNewAddedMeter();
@@ -560,16 +564,16 @@
             }
         });
 
-        function updateTotalMeterAfterDelete() {
-            var totalMeter = 0;
+        // function updateTotalMeterAfterDelete() {
+        //     var totalMeter = 0;
 
-            $('.meter').each(function() {
-                var meterValue = parseFloat($(this).val());
-                totalMeter += isNaN(meterValue) ? 0 : meterValue;
-            });
+        //     $('.meter').each(function() {
+        //         var meterValue = parseFloat($(this).val());
+        //         totalMeter += isNaN(meterValue) ? 0 : meterValue;
+        //     });
 
-            $('#total_meter').val(totalMeter);
-        }
+        //     $('#total_meter').val(totalMeter);
+        // }
 
         // Delete row functionality
         $(document).on('click', '.delete_row', function(){
@@ -590,7 +594,9 @@
         }
         
         // Trigger calculation when any relevant input field changes
-        $('#total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
+        // $('#total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
+        $('.total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
+
       
         $(document).on('keyup', '.meter_val', function(){
             // getTotalMeters();
@@ -1322,20 +1328,20 @@
 
     }
 
-    $(document).on('submit','#from_edit_purchase',function(){
-        var checkNewItemClass =  $('#tblPurchaseItems tbody tr').find('.valid');
-        var checkOldItemClass =  $('#tblPurchaseItems_edit tbody tr').find('.valid');
-        if (checkNewItemClass.length > 0 || checkOldItemClass.length > 0) {
-            return true;
-        }else{
-            new Noty({
-                        type: 'warning',
-                        text: 'Please select item first',
-                        timeout: 2500,
-                    }).show();
-            return false;
-        }
-    });
+    // $(document).on('submit','#from_edit_purchase',function(){
+    //     var checkNewItemClass =  $('#tblPurchaseItems tbody tr').find('.valid');
+    //     var checkOldItemClass =  $('#tblPurchaseItems_edit tbody tr').find('.valid');
+    //     if (checkNewItemClass.length > 0 || checkOldItemClass.length > 0) {
+    //         return true;
+    //     }else{
+    //         new Noty({
+    //                     type: 'warning',
+    //                     text: 'Please select item first',
+    //                     timeout: 2500,
+    //                 }).show();
+    //         return false;
+    //     }
+    // });
 })(jQuery);
 </script>
 @endpush

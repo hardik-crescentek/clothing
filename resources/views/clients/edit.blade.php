@@ -113,13 +113,32 @@
                         </div>
                     </div>
 
-                    <!-- Upload New Image -->
-                    <div class="form-group col-lg-3">
-                        <label class="form-control-label d-flex">Client Images</label>
-                        {!! Form::file('images[]', array('multiple' => true, 'class' => 'form-control')) !!}
-                        <small class="form-text text-muted">Leave Empty if you do not want to change the image.</small>
-                    </div>
+                </div>
 
+                <div class="row">
+                    <!-- Upload New Image -->
+                    <div class="form-group col-lg-6">
+                        <label class="form-control-label">Image</label>
+                        <div style="display: flex; align-items: center;">
+                            {!! Form::file('image[]', [
+                            'id' => 'upload_image', 
+                            'accept' => 'image/*',
+                            'data-validation' => "mime",
+                            'data-validation-allowing' => "jpeg, jpg, png, gif",
+                            'data-validation-error-msg-mime' => "You can only upload images",
+                            'capture' => "camera",
+                            'class' => 'form-control-file',
+                            'multiple' => true
+                        ]) !!}
+                            <button type=button class="btn btn-info btn-sl"  data-toggle="modal" onclick="showComara(this)"  data-target="#myModal" >Capture</button>
+                            <img src="{{ img_url($user->name) }}" class="listing-thumb image-load img-thumbnail " alt="" />
+                        </div>
+                        <small>
+                            <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
+                        </small>
+                        <input type="hidden" name="image_binary" class="image_binary"/> 
+                        <small>Leave Empty if you don't want to change it.</small>
+                    </div>
                 </div>
             </div>
         </div>
@@ -256,6 +275,35 @@
     </div>
 </div>
 
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Modal Header</h4>
+            <button type="button" class="close"  onclick="closeWebcame()"  data-dismiss="modal">&times;</button>        
+        </div>
+        <div class="modal-body modal-body-cus">
+            
+            <div class="col-md-6 pull-left">
+                <div id="my_camera"></div>
+                <input type="hidden" value="" id="row_id" />    
+                <input type="button" value="Capture Image" class="btn btn-success mt-2" onClick="take_snapshot()">
+            </div>
+            <div id="results" class="col-md-6 pull-right">                            
+                <img src=""  class="img-thumbnail min-size-image"/>        
+            </div>    
+            
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="closeWebcame()" data-dismiss="modal">Ok</button>
+        </div>
+        </div>
+
+    </div>
+</div>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-lg-12">
@@ -280,6 +328,7 @@
 </style>
 @endpush
 @push('scripts')
+<script type="text/javascript" src="{{asset('/js/webcam.min.js')}}"></script>
 <script src="{{ asset('assets/js/datepicker/moment.min.js') }}"></script>
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
@@ -433,7 +482,30 @@
              
             })
         })
+
+        Webcam.set({
+			width: 320,
+			height: 240,
+			image_format: 'jpeg',
+			jpeg_quality: 90
+		});
     })(jQuery);
+    function take_snapshot() {
+        // take snapshot and get image data
+        Webcam.snap( function(data_uri) {
+            
+            $("#results img").attr("src", data_uri);
+            $('.image_binary').val(data_uri); 
+            $(".image-load").attr("src", data_uri);                       
+        } );
+    }
+    function showComara(ele){        
+        Webcam.reset();
+		Webcam.attach( '#my_camera' );         
+    }
+    function closeWebcame(){
+        Webcam.reset();
+    }
     $('#articles_tbl').DataTable({
         lengthMenu: [
             [10, 25, 50, 100, 500, 1000, -1],

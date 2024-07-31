@@ -143,17 +143,35 @@ class ClientController extends Controller
         }
         ClientArticle::insert($articlesData);
 
-         // Handle optional image uploads
-        if ($request->hasfile('images')) {
-            foreach ($request->file('images') as $file) {
-                $name = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('images/clients'), $name);
 
-                // Save file information to the database
+        // Handle file-based image uploads
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $file) {
+                $filename = time() . '-' . $file->getClientOriginalName();
+                $file->move(public_path('images/clients'), $filename);
+                
                 ClientImage::create([
                     'client_id' => $user->id,
-                    'name' => $name,
+                    'name' => $filename
                 ]);
+            }
+        }
+
+        // Handle base64 image uploads
+        if ($request->input('image_binary')) {
+            foreach ($request->input('image_binary') as $index => $base64Image) {
+                if (!empty($base64Image)) {
+                    $data = explode(',', $base64Image);
+                    $image = base64_decode($data[1]);
+                    $filename = time() . '-' . $index . '.png';
+                    $path = public_path('images/clients/' . $filename);
+                    file_put_contents($path, $image);
+                    
+                    ClientImage::create([
+                        'client_id' => $client->id,
+                        'name' => $filename
+                    ]);
+                }
             }
         }
 
@@ -244,7 +262,7 @@ class ClientController extends Controller
                 'city'      => 'required',
                 'state'     => 'required',
                 'zip'       => 'required',
-                'image'     => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'images'     => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
             // Get the user
@@ -274,35 +292,54 @@ class ClientController extends Controller
                     );
                 }
             } 
-
-            // Handle image uploads
-            if ($request->hasFile('images')) {
-                // Get existing images for the user
-                $existingImages = $user->images; // Assuming the user model has a relationship named 'images'
-
-                // Delete old images
-                foreach ($existingImages as $image) {
-                    // Delete the image file
-                    $imagePath = public_path('images/clients/' . $image->name);
-                    if (file_exists($imagePath)) {
-                        unlink($imagePath);
+            
+            // Delete old image if a new image is provided
+            if ($request->hasFile('image')) {
+                $oldImages = ClientImage::where('client_id', $user->id)->get();
+                foreach ($oldImages as $oldImage) {
+                    $oldImagePath = public_path('images/clients/' . $oldImage->name);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
                     }
-                    // Delete the image record from the database
-                    $image->delete();
+                    $oldImage->delete();
                 }
 
-                // Upload new images
-                foreach ($request->file('images') as $file) {
-                    // Generate a unique name for the image
-                    $name = time() . '_' . $file->getClientOriginalName();
-                    // Move the file to the public directory
-                    $file->move(public_path('images/clients'), $name);
-
-                    // Save the new image information to the database
+                // Handle file-based image upload
+                foreach ($request->file('image') as $file) {
+                    $filename = time() . '-' . $file->getClientOriginalName();
+                    $file->move(public_path('images/clients'), $filename);
+                    
                     ClientImage::create([
                         'client_id' => $user->id,
-                        'name' => $name,
+                        'name' => $filename
                     ]);
+                }
+            }
+
+            // Handle base64 image upload
+            if ($request->input('image_binary')) {
+                $oldImages = ClientImage::where('client_id', $user->id)->get();
+                foreach ($oldImages as $oldImage) {
+                    $oldImagePath = public_path('images/clients/' . $oldImage->name);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                    $oldImage->delete();
+                }
+
+                foreach ($request->input('image_binary') as $index => $base64Image) {
+                    if (!empty($base64Image)) {
+                        $data = explode(',', $base64Image);
+                        $image = base64_decode($data[1]);
+                        $filename = time() . '-' . $index . '.png';
+                        $path = public_path('images/clients/' . $filename);
+                        file_put_contents($path, $image);
+
+                        ClientImage::create([
+                            'client_id' => $user->id,
+                            'name' => $filename
+                        ]);
+                    }
                 }
             }
 
