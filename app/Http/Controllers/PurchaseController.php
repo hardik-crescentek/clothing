@@ -111,11 +111,11 @@ class PurchaseController extends Controller
         
         $user = Auth::user();
 
-        $tax_per_meter = $request->input("total_tax") / $total_qty;
-        $shipping_cost_per_meter = $request->input("shipping_cost");
-        $usd_price_per_meter = $request->input("price");
-        $thb_price_per_meter = $request->input("price_thb");
-        $thb_ex_rate = $request->input("thb_ex_rate");
+        // $tax_per_meter = $request->input("total_tax") / $total_qty;
+        // $shipping_cost_per_meter = $request->input("shipping_cost");
+        // $usd_price_per_meter = $request->input("price");
+        // $thb_price_per_meter = $request->input("price_thb");
+        // $thb_ex_rate = $request->input("thb_ex_rate");
         // $attachment = Util::uploadFile($request, 'attach_document', config('constants.purchase_attachment'));
 
         // Handle multiple file uploads
@@ -162,45 +162,45 @@ class PurchaseController extends Controller
 
         $purchase = Purchase::create($data);
 
-        if ($items) {
-            $QRCode = Util::generateID();
-            $sort_order = 1;
+        // if ($items) {
+        //     $QRCode = Util::generateID();
+        //     $sort_order = 1;
 
-            foreach ($items as $item) {
-                $color=Material::where('id','=',$item['color'])->first();
-                $barcode = Util::generateID();
-                $new_code = Util::gen_new_barcode_id($item["article_no"]);
-                $qty = $item["meter"];
-                $item_data = [
-                    "purchase_id"=> $purchase->id,
-                    "material_id"=> $item["color"],
-                    "article_no" => $item["article_no"],
-                    "color"      => $color->color,
-                    "color_no"   => $item["color_no"],
-                    "batch_no"   => $item["batch_no"],
-                    "roll_no"    => $sort_order,
-                    "barcode"    => $new_code,
-                    // "barcode"    => $barcode,
-                    "qrcode"     => $QRCode,
-                    "width"      => $item["width"],
-                    "qty"        => $qty,
-                    "available_qty"=> $qty,
-                    'sort_order' => $sort_order,
-                    // "price_usd" => $qty * $usd_price_per_meter,
-                    // "thb_ex_rate" => $thb_ex_rate,
-                    // "price_thb" => $qty * $thb_price_per_meter,
-                    // "total_tax" => $tax_per_meter * $qty,
-                    // "shipping_cost" => $shipping_cost_per_meter * $qty,
-                    // "discount" => $request->input("discount"),
-                    'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx', // Validate each file
-                    "piece_no" => $item["piece_no"]
-                ];
-                PurchaseItem::create($item_data);
-                $sort_order++;
-            }
-        }
+        //     foreach ($items as $item) {
+        //         $color=Material::where('id','=',$item['color'])->first();
+        //         $barcode = Util::generateID();
+        //         $new_code = Util::gen_new_barcode_id($item["article_no"]);
+        //         $qty = $item["meter"];
+        //         $item_data = [
+        //             "purchase_id"=> $purchase->id,
+        //             "material_id"=> $item["color"],
+        //             "article_no" => $item["article_no"],
+        //             "color"      => $color->color,
+        //             "color_no"   => $item["color_no"],
+        //             "batch_no"   => $item["batch_no"],
+        //             "roll_no"    => $sort_order,
+        //             "barcode"    => $new_code,
+        //             // "barcode"    => $barcode,
+        //             "qrcode"     => $QRCode,
+        //             "width"      => $item["width"],
+        //             "qty"        => $qty,
+        //             "available_qty"=> $qty,
+        //             'sort_order' => $sort_order,
+        //             // "price_usd" => $qty * $usd_price_per_meter,
+        //             // "thb_ex_rate" => $thb_ex_rate,
+        //             // "price_thb" => $qty * $thb_price_per_meter,
+        //             // "total_tax" => $tax_per_meter * $qty,
+        //             // "shipping_cost" => $shipping_cost_per_meter * $qty,
+        //             // "discount" => $request->input("discount"),
+        //             'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx', // Validate each file
+        //             "piece_no" => $item["piece_no"]
+        //         ];
+        //         PurchaseItem::create($item_data);
+        //         $sort_order++;
+        //     }
+        // }
 
-        return redirect()->route('purchase.index')->with('success', 'Purchase items added successfully');
+        return redirect()->route('purchase-item.create')->with('success', 'Purchase added successfully');
     }
 
 
@@ -549,4 +549,5 @@ class PurchaseController extends Controller
             'currency_type' => $currencyType
         ]);
     }
+
 }
