@@ -408,12 +408,14 @@
                 <input type="hidden" id="edit_item_id" name="purchaseItemId" value="" />
                 <div class="form-group">
                     <label class="form-control-label">Select Material<span class="text-danger ml-2">*</span></label>
-                    {!! Form::select('material_id', $materials,null, array('id'=>'edit_material_id','class' => 'form-control custom-select', 'data-validation'=>"required",'style'=>'width:100%')) !!}
+                    <input type="hidden" name="mat_id" value="">
+                    {!! Form::select('material_id', $materials,null, array('id'=>'edit_material_id','class' => 'form-control custom-select', 'data-validation'=>"required",'style'=>'width:100%','disabled')) !!}
                 </div>
                 <div class="form-group">
                     <label class="form-control-label">Select Color<span class="text-danger ml-2">*</span></label>
-                    {!! Form::select('color_id', [''=>'--Select Color--'],null, array('id'=>'edit_color_id','class' => 'form-control custom-select', 'data-validation'=>"required",'style'=>"width:100%")) !!}
+                    {!! Form::select('color_id',$colors, null, array('id'=>'edit_color_id','class' => 'form-control custom-select', 'data-validation'=>"required",'style'=>"width:100%",'disabled')) !!}
                 </div>
+
 
                 <div class="form-group">
                     <label class="form-control-label">Article No.<span class="text-danger ml-2">*</span></label>
@@ -439,8 +441,10 @@
                     <label class="form-control-label">Qty<span class="text-danger ml-2">*</span></label>
                     {!! Form::number('qty', 1, array('id'=>'edit_qty', 'class' => 'form-control', 'data-validation'=>"required")) !!}
                 </div>
-                <div class="form-action float-right">
-                    <button type="submit" name="update_btn" class="btn btn-primary">Update</button>
+                <div class="form-group row d-flex align-items-center mt-5">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <button type="submit" name="update_btn" class="btn btn-primary">Update</button>
+                    </div>
                 </div>
                 {!! Form::close() !!}
             </div>
@@ -943,50 +947,115 @@
         });
 
 
+        // $('#editItemModal').on('shown.bs.modal', function(e) {
+        //     var edit_selected_material_name=null;
+        //     var edit_color="<option value=''>--Select Color--</option>";
+        //     var item_id = $(e.relatedTarget).data('item_id');
+        //     var material = $('#item-' + item_id).find('.td-material').data('value');
+        //     var material_name=$('#item-' + item_id).find('.td-material').data('name');
+        //     var color = $('#item-' + item_id).find('.td-color').data('value');
+        //     console.log('color-'+color);
+        //     var article_no = $('#item-' + item_id).find('.td-article_no').data('value');
+        //     var color_no = $('#item-' + item_id).find('.td-color_no').data('value');
+        //     var batch_no = $('#item-' + item_id).find('.td-batch_no').data('value');
+        //     // var width = $('#item-' + item_id).find('.td-width').data('value');
+        //     var roll_no = $('#item-' + item_id).find('.td-roll_no').data('value');
+        //     var qty = $('#item-' + item_id).find('.td-qty').data('value');
+        //     edit_selected_material_name=material_name;
+
+        //     $('#edit_item_id').val(item_id);
+        //     $('#edit_material_id').val(material_name).trigger('change');
+
+
+
+        //     setTimeout(function() {
+        //         console.log('Setting color:', color);
+        //         $('#edit_color_id').val(color).trigger('change');
+        //         console.log('Selected color:', $('#edit_color_id').val());
+        //     }, 500);
+        //     $('#edit_color_id').select2({
+        //         dropdownParent: $('#edit_item_form'),
+        //         width: 'resolve',
+        //     });
+        //     $('#edit_material_id').select2({
+        //         dropdownParent: $('#edit_item_form'),
+        //         width: 'resolve',
+        //     });
+        //     // var data={!! json_encode($materials2) !!};
+        //     // $.each(data,function(i,v){
+        //     //     if(edit_selected_material_name==v.name){
+        //     //         edit_color+="<option value='"+v.id+"'>"+v.color+"</option>";
+        //     //     }
+        //     // });
+        //    // Update the color select element with new options
+
+        //     // $('#edit_color_id').val(color);
+        //     $('#edit_article_no').val(article_no);
+        //     $('#edit_color_no').val(color_no);
+        //     $('#edit_batch_no').val(batch_no);
+        //     // $('#edit_width').val(width);
+        //     $('#edit_roll_no').val(roll_no);
+        //     $('#edit_qty').val(qty);
+
+
+        // });
+
+
         $('#editItemModal').on('shown.bs.modal', function(e) {
-            var edit_selected_material_name=null;
-            var edit_color="<option value=''>--Select Color--</option>";
+            console.log("edit call");
+            var materials2 = @json($materials2);
             var item_id = $(e.relatedTarget).data('item_id');
-            var material = $('#item-' + item_id).find('.td-material').data('value');
-            var material_name=$('#item-' + item_id).find('.td-material').data('name');
-            var color = $('#item-' + item_id).find('.td-color').data('id');
+            var material_name = $('#item-' + item_id).find('.td-material').data('name');
+            var color = $('#item-' + item_id).find('.td-color').data('value');
             var article_no = $('#item-' + item_id).find('.td-article_no').data('value');
             var color_no = $('#item-' + item_id).find('.td-color_no').data('value');
             var batch_no = $('#item-' + item_id).find('.td-batch_no').data('value');
-            // var width = $('#item-' + item_id).find('.td-width').data('value');
             var roll_no = $('#item-' + item_id).find('.td-roll_no').data('value');
             var qty = $('#item-' + item_id).find('.td-qty').data('value');
-            edit_selected_material_name=material_name;
 
             $('#edit_item_id').val(item_id);
             $('#edit_material_id').val(material_name).trigger('change');
+
+            // Initialize select2 for material
             $('#edit_material_id').select2({
                 dropdownParent: $('#edit_item_form'),
                 width: 'resolve',
             });
+
+            // Populate color options based on the selected material
+            var edit_color = "<option value=''>--Select Color--</option>";
+            var material_id = null;
+            $.each(materials2, function(i, v) {
+                console.log("test");
+                if (material_name == v.name) {
+                    console.log(color);
+                    if(color == v.color){
+                        material_id = v.id;
+                    }
+                    edit_color += "<option value='" + v.color + "'>" + v.color + "</option>";
+                }
+            });
+            console.log("material_id");
+            console.log(material_id);
+            $('#edit_color_id').html(edit_color);
+
+            // Initialize select2 for color
             $('#edit_color_id').select2({
                 dropdownParent: $('#edit_item_form'),
                 width: 'resolve',
             });
-            $('#edit_color_id').html('');
-            var data={!! json_encode($materials2) !!};
-            $.each(data,function(i,v){
-                if(edit_selected_material_name==v.name){
-                    edit_color+="<option value='"+v.id+"'>"+v.color+"</option>";
 
-                }
-            });
-            $('#edit_color_id').html(edit_color);
+            // Ensure options are loaded before setting the value
+            $('#edit_color_id').val(color).trigger('change');
 
-            $('#edit_color_id').val(color);
+            // Set other form field values
             $('#edit_article_no').val(article_no);
             $('#edit_color_no').val(color_no);
             $('#edit_batch_no').val(batch_no);
-            // $('#edit_width').val(width);
             $('#edit_roll_no').val(roll_no);
             $('#edit_qty').val(qty);
-
-
+            // Set the material_id hidden input value
+            $('input[name="mat_id"]').val(material_id);
         });
 
         $(document).on('change','#edit_material_id',function(){

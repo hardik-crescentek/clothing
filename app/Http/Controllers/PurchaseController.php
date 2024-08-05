@@ -481,7 +481,7 @@ class PurchaseController extends Controller
 
     public function updatePurchaseItem(Request $request)
     {
-        
+        // dd(request()->all());
         $purchaseItemId = $request->input('purchaseItemId');
         $purchaseItem = PurchaseItem::findOrFail($purchaseItemId);
 
@@ -490,9 +490,10 @@ class PurchaseController extends Controller
         $purchase = $purchaseItem->purchase;
         $purchase->total_qty = ($purchase->total_qty - $purchaseItem->qty) + $qty;
         $purchase->save();
-        $material=Material::find($request->input('color_id'));
+        $material=Material::find($request->input('mat_id'));
         $data = array(
                     'material_id' => $material->id,
+                    // "color"       => $material->color_id,
                     "color"       => $material->color,
                     "color_no"    => $request->input("color_no"),
                     'article_no'  => $request->input('article_no'),
@@ -549,5 +550,4 @@ class PurchaseController extends Controller
             'currency_type' => $currencyType
         ]);
     }
-
 }

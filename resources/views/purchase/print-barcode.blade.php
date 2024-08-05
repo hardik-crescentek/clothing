@@ -103,7 +103,7 @@
             </div>
             <div class="widget-body" id="print-barcodes">
                 <div class="table-responsive">
-                    <table class="barcodelist" style="width: 100mm;">
+                    <table class="barcodelist" style="width: 120mm;">
                         <thead>
                             <tr>
                                 <th style="width: 25mm"></th>
@@ -117,14 +117,40 @@
                             <?php //echo "<pre>"; print_r($purchase); ?>
                             @foreach($purchase->purchase_items as $item)
                             <tr  class="page-break" id="print_single_barcode">
-                                <td style="text-align: center; padding:10px 0px;width: 100%;" colspan="3">
-                                    <ul>
+                                <td style="text-align: center; padding:10px 0px;width: 100%;" colspan="7">
+
+                                    <!-- old code -->
+                                    <!-- <ul>
                                         <li style="list-style:none;margin:0;padding:0 3px;font-weight: lighter;float: left;width: 100%;clear: both;">
                                             @if($printBarcode)
                                             {!! DNS1D::getBarcodeSVG($item->barcode,config('app.BARCODE_TYPE'), 2, 45) !!}
                                             @endif
                                         </li>
+                                    </ul> -->
+                                    <!-- old code -->
+
+                                    <!-- new code -->
+                                    <ul style="list-style: none; margin: 0; padding: 0; display: flex; justify-content: space-between; align-items: center;">
+                                        <li style="margin: 0 3px; font-weight: lighter; flex: 1; text-align: left;">
+                                            @if($printBarcode)
+                                                {!! DNS1D::getBarcodeSVG($item->barcode, config('app.BARCODE_TYPE'), 2, 45) !!}
+                                            @endif
+                                        </li>
+                                        <li style="margin: 0 3px; font-weight: lighter; flex: 1; text-align: right;">
+                                            @if(isset($item->qrcode))
+                                                {!! DNS2D::getBarcodeSVG($item->qrcode, 'QRCODE') !!}
+                                            @endif
+                                        </li>
                                     </ul>
+                                    <ul style="list-style:none;width: 100%; font-family: verdana; margin-top:3px;margin:10px 0px;padding: 0;display: inline-block; color:#000;margin-left:10px;">
+                                        <li style="list-style:none;margin:0;padding:0 3px;font-weight: lighter;float: left;width: 100%;text-align: left;">Piece No : {{$item->piece_no}}</li>
+                                        <li style="list-style:none;margin:0;padding:0 3px;font-weight: lighter;float: left;width: 45%;text-align: left;">ART No : {{$item->article_no}}</li>
+                                        <li style="list-style:none;margin:0;padding:0 3px;font-weight: lighter;float: left;width: 45%;text-align: left;">COL : {{$item->color_no}}</li>
+                                        <li style="list-style:none;margin:0;padding:0 3px;font-weight: lighter;float: left;width: 45%;text-align: left;">QTY MTR : {{$item->qty}}</li>                                        
+                                        <li style="list-style:none;margin:0;padding:0 3px;font-weight: lighter;float: left;width: 45%;text-align: left;">QTY YARDS : {{ decimal_format(meter2yard($item->qty)) }}</li>
+                                    </ul>
+                                    <!-- new code -->
+
                                     <!-- <ul>
                                         <li style="list-style:none;margin:0;padding:0 3px;font-weight: lighter;float: left;width: 45%;">
                                             @if($printBarcode)
@@ -132,7 +158,8 @@
                                             @endif
                                         </li>
                                     </ul> -->
-                                    <ul style="list-style:none;width: 100%; font-family: verdana; margin-top:3px;margin:10px 0px;padding: 0;display: inline-block; color:#000;margin-left:10px;">
+                                    <!-- old code -->
+                                    <!-- <ul style="list-style:none;width: 100%; font-family: verdana; margin-top:3px;margin:10px 0px;padding: 0;display: inline-block; color:#000;margin-left:10px;">
                                         <li style="list-style:none;margin:0;padding:0 3px;font-weight: lighter;float: left;width: 45%;text-align: left;">ART No : {{$item->article_no}}</li>
                                         <li style="list-style:none;margin:0;padding:0 3px;font-weight: lighter;float: left;width: 45%;text-align: left;">Lot NO : {{$purchase->totel_lot}}</li>
 
@@ -156,7 +183,8 @@
                                                     
                                         <li style="list-style:none;margin:0;padding:0 3px;font-weight: lighter;float: left;width: 45%;text-align: left;">AVA. QTY : {{$item->available_qty}}</li>
                                         
-                                    </ul>
+                                    </ul> -->
+                                    <!-- old code -->
                                     
                                 </td>
                                 <td>
@@ -182,7 +210,7 @@
         var divToPrint = document.getElementById('print-barcodes');
         var newWin = window.open('', 'Print-Window');
         newWin.document.open(); 
-        newWin.document.write('<html></head><style>@media print { @page{ size:100mm 50mm;margin:0;padding:0; } tr{ page-break-after: always;font-size:12px; } }</style></head><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.write('<html></head><style>@media print { @page{ size:120mm 50mm;margin:0;padding:0; } tr{ page-break-after: always;font-size:12px; } }</style></head><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
         setTimeout(function() {
             newWin.document.close();
             newWin.close();
@@ -195,7 +223,7 @@
         var divToPrint = document.getElementById('print_single_barcode');
         var newWin = window.open('', 'Print-Window');
         newWin.document.open(); 
-        newWin.document.write('<html></head><style>@media print { @page{ size:100mm 50mm;margin:0;padding:0; } tr{ page-break-after: always;font-size:12px; } }</style></head><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.write('<html></head><style>@media print { @page{ size:120mm 50mm;margin:0;padding:0; } tr{ page-break-after: always;font-size:12px; } }</style></head><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
         setTimeout(function() {
             newWin.document.close();
             newWin.close();
