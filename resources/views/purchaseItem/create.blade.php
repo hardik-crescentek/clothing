@@ -562,15 +562,94 @@
             dropdownParent: $('#add_item_form'),
             width: 'resolve',
         });
-        $(document).on('change','#add_color_id',function(){
-            var id=$(this).val();
-            var data={!! json_encode($materials2) !!};
-            $.each(data,function(index,value){
-                if(id==value.id){
-                    $('#add_color_no').val(String(value.color_no).padStart(2,"0"));
+        // $(document).on('change','#add_color_id',function(){
+        //     // Retrieve the selected values
+        //     const existingInvoiceNo = $('#add_invoice_no').val(); // Get the selected invoice number
+        //     const existingArticleNo = $('#add_article_no').val(); // Get the selected article number
+        //     var selectedText=
+        //     // // $(this).val();
+        //     $('#add_color_id option:selected').text();
+        //     var colorName = selectedText.split('-').pop().trim();
+        //     console.log("Extracted color name: " + colorName);
+        //     var data={!! json_encode($materials2) !!};
+        //     $.each(data,function(index,value){
+        //         if(id==value.id){
+        //             $('#add_color_no').val(String(value.color_no).padStart(2,"0"));
+        //         }
+        //     });
+
+        //     // Check for duplicates in the table
+        //     if (id) {
+        //         isDuplicateItem(existingInvoiceNo, existingArticleNo, id)
+        //     }
+        // });
+
+        $(document).on('change', '#add_color_id', function() {
+            // Retrieve the selected color ID
+            var selectedId = $(this).val(); 
+            console.log("Selected color ID: " + selectedId);
+
+            // Retrieve the selected color text
+            var selectedText = $('#add_color_id option:selected').text();
+            console.log("Selected color text: " + selectedText);
+
+            // Extract the color name from the text
+            var colorName = selectedText.split('-').pop().trim();
+            console.log("Extracted color name: " + colorName);
+
+            // Retrieve other selected values
+            const existingInvoiceNo = $('#add_invoice_no').val(); // Get the selected invoice number
+            const existingArticleNo = $('#add_article_no').val(); // Get the selected article number
+
+            // Update the color name field with the extracted color name
+            $('#add_color_no').val(colorName);
+
+            // Check for duplicates in the table
+            if (selectedId) {
+                if (isDuplicateItem(existingInvoiceNo, existingArticleNo, colorName)) {
+                    alert('This combination of invoice number, article number, and color already exists.');
+
+                     // Reset the form fields
+                    // $('#add_item_form')[0].reset();
+                    
+                    // Optionally, you can hide the modal
+                    $('#addItemModal').modal('hide'); // Replace with your actual modal ID
+                    
+                    return; // Stop further execution
+
+                   
+                }
+            }
+        });
+
+        // Function to check if a combination already exists in the table
+        function isDuplicateItem(invoice_no, article_no, colorName) {
+            let isDuplicate = false;
+
+            $('#purchase_items_table tbody tr').each(function() {
+                const existingInvoiceNo = $(this).find('td').eq(0).text().trim(); // Invoice No is in the first column
+                const existingArticleNo = $(this).find('td').eq(1).text().trim(); // Article No is in the second column
+                const existingColor = $(this).find('td').eq(2).text().trim(); // Color is in the third column
+
+                console.log(existingInvoiceNo+'existingInvoiceNo');
+                console.log(existingArticleNo+'existingArticleNo');
+                console.log(existingColor+'existingColor');
+
+                console.log(invoice_no+'invoice_no');
+                console.log(article_no+'article_no');
+                console.log(colorName+'existingColor');
+
+                // Compare the values
+                if (existingInvoiceNo === invoice_no && existingArticleNo === article_no && existingColor === colorName) {
+                    console.log('matched');
+                    isDuplicate = true;
+                    return false; // Break out of each loop
                 }
             });
-        });
+
+            return isDuplicate;
+        }
+
         $(document).on('click','#add_item_model_btn',function(){
             $('#add_purchase_price').val($('#price').val());
         });
