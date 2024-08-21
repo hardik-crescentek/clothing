@@ -587,15 +587,12 @@
         $(document).on('change', '#add_color_id', function() {
             // Retrieve the selected color ID
             var selectedId = $(this).val(); 
-            console.log("Selected color ID: " + selectedId);
 
             // Retrieve the selected color text
             var selectedText = $('#add_color_id option:selected').text();
-            console.log("Selected color text: " + selectedText);
 
             // Extract the color name from the text
             var colorName = selectedText.split('-').pop().trim();
-            console.log("Extracted color name: " + colorName);
 
             // Retrieve other selected values
             const existingInvoiceNo = $('#add_invoice_no').val(); // Get the selected invoice number
@@ -609,14 +606,13 @@
                 if (isDuplicateItem(existingInvoiceNo, existingArticleNo, colorName)) {
                     alert('This combination of invoice number, article number, and color already exists.');
 
-                     // Reset the form fields
-                    // $('#add_item_form')[0].reset();
+                    // Remove the selected option from the dropdown
+                    $(this).find('option:selected').remove();
                     
-                    // Optionally, you can hide the modal
-                    $('#addItemModal').modal('hide'); // Replace with your actual modal ID
+                    // Clear the color selection
+                    $(this).val('').trigger('change');
                     
                     return; // Stop further execution
-
                    
                 }
             }

@@ -481,6 +481,43 @@
         }
     }
 
+    $(document).ready(function() {
+        $('#from_add_material').on('submit', function(e) {
+            var isValid = true;
+
+            // Validate all Color fields
+            $('input[name="color[]"]').each(function() {
+                var color = $(this).val();
+                if (color === '') {
+                    isValid = false;
+                    $(this).addClass('is-invalid');
+                    alert('Each Color is required');
+                    return false; // Break the loop if an invalid color is found
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+
+            // Validate all Color fields
+            $('input[name="color_no[]"]').each(function() {
+                var color_no = $(this).val();
+                if (color_no === '') {
+                    isValid = false;
+                    $(this).addClass('is-invalid');
+                    alert('Each Color No is required');
+                    return false; // Break the loop if an invalid color is found
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+
+            // Prevent form submission if validation fails
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
+    });
+
     document.getElementById('weightGsm').addEventListener('input', calculateWeights);
 </script>
 @endpush

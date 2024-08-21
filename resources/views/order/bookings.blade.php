@@ -77,14 +77,14 @@
                                 <td>
                                     @if ($order->order_items->count())
                                     @foreach ($order->order_items as $key => $order_item)
-                                    {{$order_item->item->name}} <br />
+                                    {{$order_item->item->name ?? ''}} <br />
                                     @endforeach
                                     @endif
                                 </td>
                                 <td>
                                     @if ($order->order_items->count())
                                     @foreach ($order->order_items as $key => $order_item)
-                                    {{$order_item->item->color}} <br />
+                                    {{$order_item->item->color ?? ''}} <br />
                                     @endforeach
                                     @endif
                                 </td>
