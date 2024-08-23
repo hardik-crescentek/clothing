@@ -79,9 +79,11 @@ class PurchaseController extends Controller
             'transport_shipping_paid' => 'required',
             'transport_shippment_cost_per_meter' => 'required',
             // Add validation for file attachments
-            'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx|max:2048'
+            'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx|max:2048',
             // 'currency_type' => 'required',
             // 'price'                => 'required',
+            'no_of_rolls'          => 'required',
+            'no_of_bales'          => 'required',
         ]);
        
         $total_qty = 0;
@@ -145,6 +147,8 @@ class PurchaseController extends Controller
             "note"                    => $request->input("note"),
             // "attachment"                 => $attachment,
             "attachment"                 => json_encode($attachments),
+            "no_of_rolls"                    => $request->input("no_of_rolls"),
+            "no_of_bales"                    => $request->input("no_of_bales"),
 
             // "total_qty"               => $total_qty,
             // "total_tax"               => $request->input("total_tax"),
@@ -346,7 +350,9 @@ class PurchaseController extends Controller
             'import_tax'           => 'required',
             'transport_shipping_paid' => 'required',
             'transport_shippment_cost_per_meter' => 'required',
-            'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx|max:2048'
+            'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx|max:2048',
+            'no_of_rolls'          => 'required',
+            'no_of_bales'          => 'required',
         ]);
        
         $total_qty = $purchase->total_qty;
@@ -405,6 +411,8 @@ class PurchaseController extends Controller
                     "transport_shippment_cost_per_meter"  => $request->input("transport_shippment_cost_per_meter"),
                     "note"                       => $request->input("note"),
                     "attachment"                 => json_encode($attachments),
+                    "no_of_rolls"                    => $request->input("no_of_rolls"),
+                    "no_of_bales"                    => $request->input("no_of_bales"),
 
 
                     // "total_qty"                  => $total_qty,

@@ -138,6 +138,18 @@
                             {!! Form::text('transport_shippment_cost_per_meter', null, array('class' => 'form-control','id'=>'transport_shippment_cost_per_meter','readonly'=>'readonly')) !!}
                         </div>
                     </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Total No Of Rolls<span class="text-danger ml-2">*</span></label>
+                            {!! Form::text('no_of_rolls', null, array('placeholder' => 'Total No Of Rolls','class' => 'form-control','id'=>'no_of_rolls','data-validation' => "required")) !!}
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Total No Of Bales Arrived<span class="text-danger ml-2">*</span></label>
+                            {!! Form::text('no_of_bales', null, array('placeholder' => 'Total No Of Bales Arrived','class' => 'form-control','id'=>'no_of_bales','data-validation' => "required")) !!}
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">

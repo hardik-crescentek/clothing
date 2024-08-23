@@ -121,8 +121,15 @@ class OrderController extends Controller
     {
         $users=[''=>'--Select Customer--'];
         $users += User::all()->pluck("fullName",'id')->toArray();
+
+        // Fetch the "Direct Sale" user record
+        $directSale = User::where('email', 'direct.sale@example.com')->first();
+
         $sales_user =new User();
-        $sales_person=[""=>'--Select Sales Person--'];
+        $sales_person=[];
+        if ($directSale) {
+            $sales_person[$directSale->id] = $directSale->fullName;
+        }
         $sales_person += $sales_user->role('sales-person')->get()->pluck('fullName', 'id')->toArray();
         $colors = Color::active()->pluck('name', 'id')->all();
         $items = $request->session()->get('order_items', []);
@@ -181,7 +188,6 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        // echo "<pre>"; print_r($request->all()); echo "<br><br>";
         $this->validate($request, [
             'item_id'        => 'required|distinct',
             'name'           => 'required',
@@ -280,7 +286,12 @@ class OrderController extends Controller
             }
 
         }
-        return redirect()->route('order.index')->with('success', 'Order added successfully');
+        $action = $request->input('action');
+        if (isset($action) && $action === 'generate_invoice') {
+            return redirect()->route('invoice.create', $order->id);
+        } else {
+            return redirect()->route('order.index')->with('success', 'Order added successfully');
+        }
     }
 
     /**

@@ -35,7 +35,7 @@
     <div class="col-xl-8 col-12 main-content">
         <div class="widget has-shadow">
             <div class="widget-header bordered no-actions d-flex align-items-center">
-                <h4>Add Order</h4>
+                <h4>New Order</h4>
             </div>
             <div class="widget-body">
                 @if (count($errors) > 0)
@@ -71,7 +71,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <label class="form-control-label">Date of purchase<span class="text-danger ml-2">*</span></label>
+                            <label class="form-control-label">Date<span class="text-danger ml-2">*</span></label>
                             {!! Form::text('purchase_date', null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required")) !!}
                         </div>
                     </div>
@@ -79,9 +79,9 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="form-group">
-                            <label class="form-control-label">Sales Person<span class="text-danger ml-2">*</span></label>
+                            <label class="form-control-label">Sales Person</label>
                             <div class="input-group form-group">
-                                {!! Form::select('selse_person_id', $sales_person,null, array('id'=>'sales_person_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
+                                {!! Form::select('selse_person_id', $sales_person,null, array('id'=>'sales_person_id','class' => 'form-control custom-select')) !!}
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <a href="{{ route('users.create', ['redirect' =>  base64_encode(route('order.create'))]) }}" title="Add Sales Person">
@@ -127,16 +127,16 @@
                     <table class="table table-hover mb-0 " id="tblOrderTable">
                         <thead>
                             <tr>
-                                <th>Item Name</th>
-                                <th>Barcode</th>
-                                <th>Type Of Sale</th>
-                                <th>Price</th>
-                                <th>Meter</th>
-                                <th>Yard</th>
-                                <th>Price</th>
-                                <th>Total Price</th>
-                                <th>Select Role</th>
-                                <th>Action</th>
+                                <th style="width:10%;">Item Name</th>
+                                <th style="width:10%;">Barcode</th>
+                                <th style="width:10%;">Type Of Sale</th>
+                                <th style="width:10%;">Price</th>
+                                <th style="width:10%;">Meter</th>
+                                <th style="width:10%;">Yard</th>
+                                <!-- <th>Price</th> -->
+                                <th style="width:10%;">Total Price</th>
+                                <th style="width:10%;">Select Role</th>
+                                <th style="width:10%;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -153,8 +153,8 @@
                                 <td class="td-selected-role">
                                     <div id="selectedrole-" class="selectedrole"></div>
                                 </td>
-                            <td><input name="yard[]" class="yard form-control" readonly="readonly" value="{{ number_format((float)$item['yard'],2,'.','') }}" type="text"></td>
-                            <td><input name="total_price_table[]" class="total_price_table form-control" readonly="readonly" id="total_price_table" type="text"></td>
+                                <td><input name="yard[]" class="yard form-control" readonly="readonly" value="{{ number_format((float)$item['yard'],2,'.','') }}" type="text"></td>
+                                <td><input name="total_price_table[]" class="total_price_table form-control" readonly="readonly" id="total_price_table" type="text"></td>
                                 <td>
                                     <a class="btn btn-danger btn-sm btn-square">Delete</a>
                                     
@@ -195,6 +195,7 @@
                 <div class="form-group row d-flex align-items-center mt-5">
                     <div class="col-lg-12 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                        <button type="submit" name="action" value="generate_invoice" class="btn btn-primary btn-lg ml-2">Save and Generate Invoice</button>
                     </div>
                 </div>
                 {!! Form::close() !!}
@@ -264,8 +265,8 @@
     <td class="td-type_of_sale" data-value="">{!! Form::select("type_of_sale[]", ["W"=>"Wholsale","R"=>"Retail","P"=>"Sample Price"], null, ['class'=>'form-control type_of_sale','data-validation'=>"required"]) !!}</td>
     <td class="td-price price" data-value="">{!! Form::text('price[]' , 0 , array('class' => 'inv_price form-control', 'data-validation'=>"required",'placeholder'=>"Price" )) !!}</td>
     <td class="td-meter" data-value="">{!! Form::text('meter[]', 0, array('class' => 'inv_meter form-control', 'data-validation'=>"required",'placeholder'=>"Meter")) !!}</td>
-    <td class="td-yard" data-value="">{!! Form::text('yard[]',0 , ['class'=>'inv_yard form-control','readonly'=>'readonly','placeholder'=>"Yard"]) !!}</td>
-    <td class="td-weight" data-value="">{!! Form::text('weight[]',0 , ['class'=>'inv_weight form-control','readonly'=>'readonly','placeholder'=>"Weight"]) !!}</td>
+    <td class="td-yard" data-value="">{!! Form::text('yard[]',0 , ['class'=>'inv_yard form-control','placeholder'=>"Yard"]) !!}</td>
+    <!-- <td class="td-weight" data-value="">{!! Form::text('weight[]',0 , ['class'=>'inv_weight form-control','readonly'=>'readonly','placeholder'=>"Weight"]) !!}</td> -->
     <td  class="td-total-price" id="inv_total_price" data-value="">0</td>
     <td class="td-selected-meter"><div class="data">0</div>
         {!! Form::hidden("selected_meter[]", null, ["class"=>"","id"=>"selected_meter"]) !!}</td>
@@ -520,6 +521,34 @@
                 grandtotal();
             }
         });
+
+        // Function to convert yards to meters
+        function yard2meter(yard) {
+            return yard * 0.9144;
+        }
+
+        // Keyup event handler for .inv_yard field
+        $(document).on('keyup', '.inv_yard', function() {
+            var yard = parseFloat($(this).val()).toFixed(2);
+            var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
+            $(this).attr('data-value', yard);
+            if (!isNaN(yard) && yard) {
+                var $thisRow = $(this).closest('tr');
+                $('.inv_meter', $thisRow).val(yard2meter(yard).toFixed(2));   
+                var weight = $('.inv_weight', $thisRow).attr('data-value');
+                $('.inv_weight', $thisRow).val(weight * yard);
+                                    
+                totalmeter();
+                grandtotal();
+            }
+            if (!isNaN(price) && price) {
+                var total = parseFloat(price * yard).toFixed(2);
+                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+                sub_total();
+                grandtotal();
+            }
+        });
+
         $(document).on('change', '.inv_meter', function() {
             var meter = parseFloat($(this).val()).toFixed(2);
             var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
@@ -1166,12 +1195,23 @@
         </div>';
     $('.custom-selected-orders').html(html);
 
+        // $('#purchase_date').daterangepicker({
+        //     singleDatePicker: true,
+        //     showDropdowns: true,
+        //     locale: {
+        //         format: 'DD/MM/YYYY'
+        //     }
+        // });
+        
         $('#purchase_date').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true,
+            timePicker: true,
+            timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
             locale: {
-                format: 'DD/MM/YYYY'
-            }
+                format: 'DD/MM/YYYY HH:mm'  // Format with date and time
+            },
+            autoApply: false
         });
     // $(document).on('change','#user_id',function(){
     //     var user_id = $(this).val();

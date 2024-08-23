@@ -59,17 +59,18 @@
                                         <thead>
                                             <tr>
                                                 <th style="width:3%;"><input type="checkbox" id="select_all"></th>
-                                                <th style="width:9%;">Brand</th>
-                                                <th style="width:10%;">Article No</th>
-                                                <!-- <th style="width:10%;">Invoice No</th> -->
-                                                <th style="width:9%;">Color</th>
-                                                <th style="width:6%;">Color No</th>
+                                                <th style="width:7%;">Brand</th>
+                                                <th style="width:8%;">Article No</th>
+                                                <th style="width:7%;">Color</th>
+                                                <th style="width:8%;">Color No</th>
                                                 <th style="width:8%;">Batch/Lot No</th>
-                                                <th style="width:9%;">Width(cm)</th>
-                                                <th style="width:8%;">Meter<i class="fas fa-sort sort-icon ml-1"></i></th>
-                                                <th style="width:8%;">Yard<i class="fas fa-sort sort-icon ml-1"></th>
-                                                <th style="width:6%;">Roll No</th>
-                                                <th style="width:23%;">Piece</th>
+                                                <th style="width:6%;">Width(cm)</th>
+                                                <th style="width:7%;">Meter<i class="fas fa-sort sort-icon ml-1"></i></th>
+                                                <th style="width:7%;">Yard<i class="fas fa-sort sort-icon ml-1"></th>
+                                                <th style="width:7%;">Roll No</th>
+                                                <th style="width:14%;">Piece</th>
+                                                <th style="width:9%;">Cost Per Mtr</th>
+                                                <th style="width:9%;">Cost Per Yrd</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -108,6 +109,10 @@
                         {!! Form::select('invoice_no',$invoiceNumbers,null, array('id'=>'add_invoice_no','class' => 'form-control custom-select ',"placeholder"=>"--Select Invoice No.--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
                     </div>
                     <input type="hidden" id="purchase_id" name="purchase_id">
+                    <input type="hidden" id="purchase_ex_rate" name="purchase_ex_rate" class="purchase_ex_rate">
+                    <input type="hidden" id="purchase_total_no_of_rolls" name="purchase_total_no_of_rolls" class="purchase_total_no_of_rolls">
+                    <input type="hidden" id="purchase_transport_shippment_cost_per_meter" name="purchase_transport_shippment_cost_per_meter" class="purchase_transport_shippment_cost_per_meter">
+                    <input type="hidden" id="material_color_no" name="material_color_no" class="material_color_no">
                     <div class="form-group">
                         <label class="form-control-label">Article No.<span class="text-danger ml-2">*</span></label>
                         {!! Form::select('article_no',$articleNumbers,null, array('id'=>'add_article_no','class' => 'form-control custom-select ',"placeholder"=>"--Select Article No.--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
@@ -148,8 +153,14 @@
     <td>{!! Form::text('yard[]', null, array('class' => 'yard yard_val form-control valid','id' => 'yard_val', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('roll_no[]', null, array('class' => 'roll_no form-control valid', 'data-validation'=>"required")) !!}</td>
     <td>{!! Form::text('piece_no[]', null, array('class' => 'piece_no form-control valid', 'readonly'=>'readonly')) !!}</td>
-    <td>{!! Form::hidden('add_invoice_no[]', null, array('class' => 'invoice_no_hidden')) !!}</td>
-    <td>{!! Form::hidden('purchase_id[]', null, array('class' => 'purchase_id')) !!}</td>
+    <td>{!! Form::text('cost_per_mtr[]', null, array('class' => 'cost_per_mtr form-control valid', 'readonly'=>'readonly')) !!}</td>
+    <td>{!! Form::text('cost_per_yrd[]', null, array('class' => 'cost_per_yrd form-control valid', 'readonly'=>'readonly')) !!}</td>
+    <td>{!! Form::hidden('price[]', null, array('class' => 'price form-control valid','readonly'=>'readonly')) !!}</td>
+    <td>{!! Form::hidden('add_invoice_no[]', null, array('class' => 'invoice_no_hidden hidden')) !!}</td>
+    <td>{!! Form::hidden('purchase_id[]', null, array('class' => 'purchase_id hidden')) !!}</td>
+    <td>{!! Form::hidden('purchase_ex_rate[]', null, array('class' => 'purchase_ex_rate hidden')) !!}</td>
+    <td>{!! Form::hidden('purchase_total_no_of_rolls[]', null, array('class' => 'purchase_total_no_of_rolls hidden')) !!}</td>
+    <td>{!! Form::hidden('purchase_transport_shippment_cost_per_meter[]', null, array('class' => 'purchase_transport_shippment_cost_per_meter hidden')) !!}</td>
 
 </script>
 
@@ -160,11 +171,14 @@
             <th>Invoice No</th>
             <th>Article No</th>
             <th>Color</th>
+            <th>Color No</th>
             <th>Batch No</th>
             <th>Roll No</th>
             <th>Width</th>
             <th>Meter</th>
             <th>Yard</th>
+            <th>Cost Per Mtr</th>
+            <th>Cost Per Yrd</th>
         </tr>
     </thead>
     <tbody>
@@ -201,6 +215,10 @@
 
     .form-control {
         width: 100%; /* Full width of the container */
+    }
+
+    .hidden {
+        display: none;
     }
 </style>
 @endpush
@@ -246,6 +264,37 @@
             fetchPurchaseId(invoiceNo);
         });
 
+        $('#search_invoice_no').change(function() {
+            var invoiceNo = $(this).val();
+
+            if (invoiceNo) {
+                $.ajax({
+                    url: '/purchase-by-invoice',
+                    type: 'GET',
+                    data: {
+                        invoice_no: invoiceNo
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Use the ex_rate and no_of_rolls from the response
+                            var exRate = response.data.ex_rate;
+                            var total_no_of_rolls = response.data.total_no_of_rolls;
+                            var transport_shippment_cost_per_meter = response.data.transport_shippment_cost_per_meter;
+
+                            // Populate your form fields or variables
+                            console.log("exRate"+exRate);
+                            $('#purchase_ex_rate').val(exRate);
+                            $('#purchase_total_no_of_rolls').val(total_no_of_rolls);
+                            $('#purchase_transport_shippment_cost_per_meter').val(transport_shippment_cost_per_meter);
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred while fetching purchase details.');
+                    }
+                });
+            }
+        });
+
         $(document).on('keyup', '#tblPurchaseItems input.yard', function() {
             var yard = $(this).val();
             yard = parseFloat(yard);
@@ -275,6 +324,9 @@
                     selected.forEach(function(item) {
                         item.remove();
                     });
+
+                    // Uncheck the "Select All" checkbox after deletion
+                    $('#select_all').prop('checked', false);
                 }
             }
         });
@@ -381,11 +433,14 @@
                                         invoiceNumber,
                                         item.article_no,
                                         item.color,
+                                        item.color_no,
                                         item.batch_no,
                                         item.roll_no,
                                         item.width,
                                         '<td class="td-qty td_meter_count valid" data-value="' + item.qty + '">' + item.qty + '</td>',
-                                        '<td>' + number_format(meter2yard(item.qty), 2, '.', '') + '</td>'
+                                        '<td>' + number_format(meter2yard(item.qty), 2, '.', '') + '</td>',
+                                        parseFloat(item.cost_per_mtr).toFixed(2),
+                                        parseFloat(item.cost_per_yrd).toFixed(2),
                                     ]).draw(false);
                                 });
                             }
@@ -421,17 +476,32 @@
             // Update the roll numbers and piece numbers
             $rows.each((index, row) => {
                 const $row = $(row);
+                const price = parseFloat($row.find('.price').val()) || 0;
                 const rollNo = index + 1;
                 const articleNo = $row.find('.article_no').val();
-                const colorName = $row.find('.color option:selected').text() || '';
+                const colorNo = $row.find('.color_no').val() || '';
                 const invoiceNo = $row.find('.invoice_no_hidden').val() || '';
-                const dateOfPurchase = $('#purchase_date').val() || '';
                 const totalRolls = $rows.length;
+                const purchase_ex_rate =  parseFloat($row.find('.purchase_ex_rate').val()) || 0;;
+                const purchase_total_no_of_rolls = parseFloat($row.find('.purchase_total_no_of_rolls').val()) || 0;
+                const purchase_transport_shippment_cost_per_meter = parseFloat($row.find('.purchase_transport_shippment_cost_per_meter').val()) || 0;
                 
-                const pieceValue = `${articleNo}_${colorName}_${invoiceNo}_${dateOfPurchase}_${rollNo}_${totalRolls}`;
+                // Get today's date in the format 'dd/mm/yyyy'
+                const today = new Date();
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                const year = today.getFullYear();
+                const dateOfPurchase = `${day}/${month}/${year}`;
+                
+                const pieceValue = `${articleNo}_${colorNo}_${invoiceNo}_${dateOfPurchase}_${rollNo}_${totalRolls}`;
+
+                const cost_per_mtr = ((price * purchase_ex_rate) + purchase_transport_shippment_cost_per_meter);
+                const cost_per_yrd = (((price * purchase_ex_rate) + purchase_transport_shippment_cost_per_meter) * 1.09361);
                 
                 $row.find('.roll_no').val(rollNo);
                 $row.find('.piece_no').val(pieceValue);
+                $row.find('.cost_per_mtr').val(cost_per_mtr);
+                $row.find('.cost_per_yrd').val(cost_per_yrd);
             });
         }
 
@@ -485,10 +555,6 @@
             var data={!! json_encode($materials2) !!};
             $.each(data,function(index,value){
                 if(material_name==value.name){
-                    // $('#'+row_id).find('.color').val(value.color);
-                    // $('#'+row_id).find('.color_no').val(String(value.color_no).padStart(2,"0"));
-                    // $('#'+row_id).find('.article_no').val(value.article_no);
-                    // $('#'+row_id).find('.width').val(value.width);
                     $('#'+row_id).find('.color_no').val('');
                     $('#'+row_id).find('.article_no').val('');
                     $('#'+row_id).find('.width').val('');
@@ -562,41 +628,24 @@
             dropdownParent: $('#add_item_form'),
             width: 'resolve',
         });
-        // $(document).on('change','#add_color_id',function(){
-        //     // Retrieve the selected values
-        //     const existingInvoiceNo = $('#add_invoice_no').val(); // Get the selected invoice number
-        //     const existingArticleNo = $('#add_article_no').val(); // Get the selected article number
-        //     var selectedText=
-        //     // // $(this).val();
-        //     $('#add_color_id option:selected').text();
-        //     var colorName = selectedText.split('-').pop().trim();
-        //     console.log("Extracted color name: " + colorName);
-        //     var data={!! json_encode($materials2) !!};
-        //     $.each(data,function(index,value){
-        //         if(id==value.id){
-        //             $('#add_color_no').val(String(value.color_no).padStart(2,"0"));
-        //         }
-        //     });
-
-        //     // Check for duplicates in the table
-        //     if (id) {
-        //         isDuplicateItem(existingInvoiceNo, existingArticleNo, id)
-        //     }
-        // });
 
         $(document).on('change', '#add_color_id', function() {
             // Retrieve the selected color ID
             var selectedId = $(this).val(); 
-
+            
             // Retrieve the selected color text
             var selectedText = $('#add_color_id option:selected').text();
+
+            // Extract the color number (e.g., 02) from the text
+            var colorNo = selectedText.split('-')[0].trim();
+            $('#material_color_no').val(colorNo)
 
             // Extract the color name from the text
             var colorName = selectedText.split('-').pop().trim();
 
             // Retrieve other selected values
-            const existingInvoiceNo = $('#add_invoice_no').val(); // Get the selected invoice number
-            const existingArticleNo = $('#add_article_no').val(); // Get the selected article number
+            const existingInvoiceNo = $('#add_invoice_no').val(); 
+            const existingArticleNo = $('#add_article_no').val();
 
             // Update the color name field with the extracted color name
             $('#add_color_no').val(colorName);
@@ -627,14 +676,6 @@
                 const existingArticleNo = $(this).find('td').eq(1).text().trim(); // Article No is in the second column
                 const existingColor = $(this).find('td').eq(2).text().trim(); // Color is in the third column
 
-                console.log(existingInvoiceNo+'existingInvoiceNo');
-                console.log(existingArticleNo+'existingArticleNo');
-                console.log(existingColor+'existingColor');
-
-                console.log(invoice_no+'invoice_no');
-                console.log(article_no+'article_no');
-                console.log(colorName+'existingColor');
-
                 // Compare the values
                 if (existingInvoiceNo === invoice_no && existingArticleNo === article_no && existingColor === colorName) {
                     console.log('matched');
@@ -645,10 +686,6 @@
 
             return isDuplicate;
         }
-
-        $(document).on('click','#add_item_model_btn',function(){
-            $('#add_purchase_price').val($('#price').val());
-        });
 
         function resetLastRowData(){
             last_row_data = {
@@ -807,11 +844,15 @@
         var number_of_rolls = $('#add_number_of_rolls', $form).val();
         var article_no = $('#add_article_no', $form).val();
         var invoice_no = $('#add_invoice_no', $form).val();
-        var color_no = $('#add_color_no', $form).val();
+        // var color_no = $('#add_color_no', $form).val();
+        var color_no = $('#material_color_no', $form).val();
         var batch_no = $('#add_batch_no', $form).val();
         var date_of_purchase = $('#purchase_date').val();
         var total_roll = $('#add_number_of_rolls', $form).val();
         var purchase_id = $('#purchase_id', $form).val();
+        var purchase_ex_rate = $('#purchase_ex_rate', $form).val();
+        var purchase_total_no_of_rolls = $('#purchase_total_no_of_rolls', $form).val();
+        var purchase_transport_shippment_cost_per_meter = $('#purchase_transport_shippment_cost_per_meter', $form).val();
 
         // Check for duplicates
         if (isDuplicateItem(invoice_no, article_no, color_id)) {
@@ -828,13 +869,14 @@
 
             var color_list="";
             var material_list="";
+            var unit_purchased_in = '';
             $.each({!! json_encode($materials2) !!},function(i,v){
                 if(article_no==v.article_no){
-                    console.log(v);
                     color_list+="<option value='"+v.id+"'>"+v.color+"</option>";
-                    $('#' + $uniqueId).find('.color_no').val(String(v.color_no).padStart(2,"0"));
+                    // $('#' + $uniqueId).find('.color_no').val(String(v.color_no).padStart(2,"0"));
                     $('#' + $uniqueId).find('.width').val(v.width_cm);
                     $('#' + $uniqueId).find('.brand').val(v.name);
+                    $('#' + $uniqueId).find('.price').val(v.price);
                     unit_purchased_in = v.unit_purchased_in;   
                 }
             });
@@ -849,7 +891,13 @@
 
             $('#' + $uniqueId).find('.invoice_no_hidden').val(invoice_no);  // Set the hidden invoice number
 
+            $('#' + $uniqueId).find('.color_no').val(color_no);
+
             $('#' + $uniqueId).find('.purchase_id').val(purchase_id);
+            $('#' + $uniqueId).find('.purchase_ex_rate').val(purchase_ex_rate);
+            $('#' + $uniqueId).find('.purchase_total_no_of_rolls').val(purchase_total_no_of_rolls);
+            $('#' + $uniqueId).find('.purchase_transport_shippment_cost_per_meter').val(purchase_transport_shippment_cost_per_meter);
+
 
             // Enable/disable fields based on unit purchased in
             if (unit_purchased_in === 'meter') {

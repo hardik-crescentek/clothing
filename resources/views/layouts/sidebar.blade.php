@@ -100,7 +100,7 @@
                 </a>
                 <ul id="dropdown-order" class="collapse list-unstyled pt-0 {{ (request()->is('order*')) ? 'show' : '' }}">
                     <li><a class="{{ (request()->is('order')) ? 'active' : '' }}" href="{{ url('order/') }}" title="Orders">Orders</a></li>
-                    <li><a class="{{ (request()->is('order/create')) ? 'active' : '' }}" href="{{ url('order/create') }}" title="Add Order">Add Order</a></li>
+                    <li><a class="{{ (request()->is('order/create')) ? 'active' : '' }}" href="{{ url('order/create') }}" title="Add Order">New Order</a></li>
                 </ul>
             </li>
             @endrole

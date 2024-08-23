@@ -83,6 +83,8 @@ class PurchaseItemController extends Controller
                                 'yard'       => meter2yard($request->input('meter.' . $key)),
                                 'piece_no'   => $request->input('piece_no.' . $key),
                                 'purchase_id'   => $request->input('purchase_id.' . $key),
+                                'cost_per_mtr'   => $request->input('cost_per_mtr.' . $key),
+                                'cost_per_yrd'   => $request->input('cost_per_yrd.' . $key),
                             );
                 $total_qty +=  $request->input('meter.' . $key);
             }
@@ -116,7 +118,9 @@ class PurchaseItemController extends Controller
                     "available_qty"=> $qty,
                     'sort_order' => $sort_order,
                     'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx', // Validate each file
-                    "piece_no" => $item["piece_no"]
+                    "piece_no" => $item["piece_no"],
+                    "cost_per_mtr" => $item["cost_per_mtr"],
+                    "cost_per_yrd" => $item["cost_per_yrd"],
                 ];
                 PurchaseItem::create($item_data);
                 $sort_order++;
@@ -507,6 +511,23 @@ class PurchaseItemController extends Controller
             'data' => [
                 'invoice_no' => $purchase->invoice_no, // Include invoice number
                 'purchase_items' => $purchaseItems
+            ]
+        ]);
+    }
+
+    public function getPurchaseByInvoice(Request $request)
+    {
+        $invoice_no = $request->input('invoice_no');
+
+        $purchase = Purchase::where('invoice_no', $invoice_no)
+                    ->first();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'ex_rate' => $purchase->ex_rate,
+                'total_no_of_rolls' => $purchase->no_of_rolls,
+                'transport_shippment_cost_per_meter' => $purchase->transport_shippment_cost_per_meter
             ]
         ]);
     }

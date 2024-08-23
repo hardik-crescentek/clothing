@@ -35,8 +35,8 @@ class MaterialController extends Controller
             $article=$request->article;
             if($article!=''){
                 $materials = $materials->where('article_no', $article);
-                $colors = ['' => "All Color"];
-                $colors += Material::active()->where('article_no', $article)->get()->pluck('color_code', 'color_no')->all();
+                // $colors = ['' => "All Color"];
+                $colors = Material::active()->where('article_no', $article)->get()->pluck('color_code', 'color_no')->all();
 
                 return response()->json($colors, 200);
             }

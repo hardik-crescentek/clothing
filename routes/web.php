@@ -57,6 +57,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('get_purchase_id', [App\Http\Controllers\PurchaseItemController::class, 'getPurchaseId'])->name('get.purchase.id');
     Route::get('purchase-items-by-invoice', [App\Http\Controllers\PurchaseItemController::class, 'getPurchaseItemsByInvoice'])->name('purchase.items.by.invoice');
 
+    Route::get('purchase-by-invoice', [App\Http\Controllers\PurchaseItemController::class, 'getPurchaseByInvoice'])->name('purchase.by.invoice');
+
     Route::get('purchase/import', [App\Http\Controllers\PurchaseController::class, 'import'])->name('purchase.importt');
     Route::post('purchase-import-store', [App\Http\Controllers\PurchaseController::class, 'import_store'])->name('purchase.import');
     Route::get('purchase/supplier-details/{id}', [App\Http\Controllers\PurchaseController::class, 'supplier_details'])->name('purchase.supplier-details');

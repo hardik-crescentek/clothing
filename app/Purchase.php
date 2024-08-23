@@ -13,7 +13,7 @@ class Purchase extends Model
     protected $guarded = ['id'];
     
     protected $fillable = [
-        "invoice_no", "purchase_date","user_id","supplier_id", "total_qty","total_tax","shipping_cost_per_meter",'discount', "price", "thb_ex_rate", "price_thb", "payment_terms" ,"purchase_type" ,"currency_of_purchase" ,"shipping_paid" ,"transportation", "gross_tax", "shippment_cost_shipper" ,"shippment_cost_destination", "attachment", "note", "status" ,"total_meter","ex_rate","total_yard","import_tax","transport_shipping_paid","transport_shippment_cost_per_meter"
+        "invoice_no", "purchase_date","user_id","supplier_id", "total_qty","total_tax","shipping_cost_per_meter",'discount', "price", "thb_ex_rate", "price_thb", "payment_terms" ,"purchase_type" ,"currency_of_purchase" ,"shipping_paid" ,"transportation", "gross_tax", "shippment_cost_shipper" ,"shippment_cost_destination", "attachment", "note", "status" ,"total_meter","ex_rate","total_yard","import_tax","transport_shipping_paid","transport_shippment_cost_per_meter","no_of_rolls","no_of_bales"
     ];
     /**
      * The attributes that should be cast to native types.

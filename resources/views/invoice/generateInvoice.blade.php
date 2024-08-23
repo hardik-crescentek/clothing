@@ -123,7 +123,7 @@
                                             {!! Form::hidden("selected_meter[".$item->id."]", null, ["class"=>"selected_meter_".$item->id,"id"=>"selected_meter_".$item->id]) !!}
                                         </td>
                                         <td>
-                                        <button type="button" class="btn btn-sm btn-primary btn-square btn-roll-select" data-item_id="{{$item->id}}" data-material_id="{{$item->item['id']}}" data-toggle="modal" data-target="#rollSelectModel">Select Roll</button>
+                                        <!-- <button type="button" class="btn btn-sm btn-primary btn-square btn-roll-select" data-item_id="{{$item->id}}" data-material_id="{{$item->item['id']}}" data-toggle="modal" data-target="#rollSelectModel">Select Roll</button> -->
                                             <div id='item-rolls-{{$item->id }}' class="hidden_div"></div>
                                         </td>
 
