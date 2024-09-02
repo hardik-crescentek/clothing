@@ -39,7 +39,7 @@
                 @endif
 
 
-                {!! Form::open(array('route' => 'clients.store','method'=>'POST', 'class'=>"form-validate", 'novalidate', 'enctype' => 'multipart/form-data')) !!}
+                {!! Form::open(array('route' => 'clients.store','method'=>'POST', 'class'=>"form-validate", 'novalidate','files' => true)) !!}
                 <input type="hidden" name="redirectTo" value="{{$redirect}}">
                 <div class="row">
                     <div class="form-group col-lg-3">
@@ -122,7 +122,7 @@
                 <div class="col-lg-3">
                     <label for="upload_image" class="col-form-label">Client Image</label>
                     <div class="d-flex align-items-center">
-                        {!! Form::file('image[]', [
+                        {!! Form::file('image', [
                             'id' => 'upload_image', 
                             'accept' => 'image/*',
                             'data-validation' => "mime",
@@ -132,12 +132,12 @@
                             'class' => 'form-control-file',
                             'multiple' => true
                         ]) !!}
-                        <button type="button" class="btn btn-info btn-sl ml-3" onclick="showCamera()" data-toggle="modal" data-target="#myModal">Capture</button>
+                        <button type="button" class="btn btn-info btn-sl ml-3" onclick="showComara(this)" data-toggle="modal" data-target="#myModal">Capture</button>
                     </div>
                     <small>
                         <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
                     </small>
-                    <input type="hidden" name="image_binary[]" class="image_binary"/>
+                    <input type="hidden" name="image_binary" class="image_binary"/>
                 </div>
 
 
@@ -259,19 +259,27 @@
                 $('.row_business_nature_other').hide();
             }
         })
+        Webcam.set({
+			width: 320,
+			height: 240,
+			image_format: 'jpeg',
+			jpeg_quality: 90
+		});
     })(jQuery);
 
     function take_snapshot() {
         // take snapshot and get image data
-        Webcam.snap(function(data_uri) {
-            $('#image_binary').val(data_uri);
+        Webcam.snap( function(data_uri) {
+            
             $("#results img").attr("src", data_uri);
-        });
+            $('.image_binary').val(data_uri); 
+            $(".image-load").attr("src", data_uri);                       
+        } );
     }
 
-    function showCamera(ele) {
+    function showComara(ele){        
         Webcam.reset();
-        Webcam.attach('#my_camera');
+		Webcam.attach( '#my_camera' );         
     }
 
     function closeWebcame(){

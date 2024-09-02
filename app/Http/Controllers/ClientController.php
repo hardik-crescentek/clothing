@@ -147,36 +147,47 @@ class ClientController extends Controller
         }
         ClientArticle::insert($articlesData);
 
+        $imagePath = public_path('uploads/') . config('constants.client_img_path');
 
-        // Handle file-based image uploads
         if ($request->hasFile('image')) {
-            foreach ($request->file('image') as $file) {
-                $filename = time() . '-' . $file->getClientOriginalName();
-                $file->move(public_path('images/clients'), $filename);
-                
+            $file = $request->file('image');
+            $filename = time() . '-' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('images', $filename);
+        
+            if ($existingImage) {
+                $existingImage->update([
+                    'name' => $filename,
+                    'path' => $filePath // optional: store the full path if needed
+                ]);
+            } else {
                 ClientImage::create([
                     'client_id' => $user->id,
-                    'name' => $filename
+                    'name' => $filename,
+                    'path' => $filePath // optional
                 ]);
             }
         }
-
-        // Handle base64 image uploads
-        if ($request->input('image_binary')) {
-            foreach ($request->input('image_binary') as $index => $base64Image) {
-                if (!empty($base64Image)) {
-                    $data = explode(',', $base64Image);
-                    $image = base64_decode($data[1]);
-                    $filename = time() . '-' . $index . '.png';
-                    $path = public_path('images/clients/' . $filename);
-                    file_put_contents($path, $image);
-                    
-                    ClientImage::create([
-                        'client_id' => $client->id,
-                        'name' => $filename
-                    ]);
+       
+        if(isset($request->image_binary) && !empty($request->image_binary)){
+            // Get the old image if it exists
+            $oldImage = ClientImage::where('client_id', $user->id)->latest()->first();
+            if ($oldImage) {
+                $oldImagePath = $imagePath . '/' . $oldImage->name;
+                if (File::exists($oldImagePath)) {
+                    File::delete($oldImagePath);
                 }
             }
+            $imageName = Str::random() . ".jpg";
+            $baseFromJavascript = $request->image_binary;
+            $base_to_php = explode(',', $baseFromJavascript);
+            $originalImage = base64_decode($base_to_php[1]);
+            File::put(public_path('uploads/').config('constants.client_img_path') .'/'. $imageName, $originalImage);
+            $data['image'] = config('constants.client_img_path') .'/'. $imageName;
+            Util::genrateThumb($data['image']);
+            ClientImage::create([
+                'client_id' => $user->id,
+                'name' => $imageName
+            ]);
         }
 
         if ($request->input('redirectTo')) {
