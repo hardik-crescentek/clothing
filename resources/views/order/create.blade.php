@@ -384,27 +384,29 @@
         
 
         $(document).on('change','#search_color',function(){
-                var color_no = $(this).val(); 
-                if(color_no!=""){
-                    $.ajax({
-                        url: "{{ route('invoice.getMaterial') }}",
-                        dataType: "json",
-                        data: {
-                            color: color_no,
-                            artical:$("#search_article").val()
-                        },
-                        success: function(data) {
-                            var item_id = $('.inv_item_id_' + data.id).val() ? $('.inv_item_id_' + data.id).val() : 0;
-                            
-                            if (item_id) {
-                                $('#search_error').fadeIn(300).css('display', 'block').html("This material allready selected").fadeOut(3000);
-                            } else {
-                                addSearchMaterial(data);
-                            }
+            var color_no = $(this).val(); 
+            var cus_id = $('#user_id option:selected').val();
+            if(color_no!=""){
+                $.ajax({
+                    url: "{{ route('invoice.getMaterial') }}",
+                    dataType: "json",
+                    data: {
+                        color: color_no,
+                        artical:$("#search_article").val(),
+                        cus_id: cus_id
+                    },
+                    success: function(data) {
+                        var item_id = $('.inv_item_id_' + data.id).val() ? $('.inv_item_id_' + data.id).val() : 0;
+                        
+                        if (item_id) {
+                            $('#search_error').fadeIn(300).css('display', 'block').html("This material allready selected").fadeOut(3000);
+                        } else {
+                            addSearchMaterial(data);
                         }
-                    });
-                }      
-            });
+                    }
+                });
+            }      
+        });
 
         function addSearchMaterial(data) {
             console.log(data);
@@ -429,21 +431,21 @@
             console.log($('#item-' + data.id).find('.inv_price').val())
             $.each(customer_item_price, function(i, v) {
                 if (v.customer_id == user_id && v.material_id == material_id) {
-                    $('#item-' + data.id).find('.inv_price').val(v.wholesale_price);
-                    price_w = v.wholesale_price;
+                    $('#item-' + data.id).find('.inv_price').val(v.cut_wholesale);
+                    price_w = v.cut_wholesale;
                     price_r = v.price;
-                    price_s = v.sample_price;
+                    price_s = v.roll;
                 }
             });
             if(price_w==0){
-                $('#item-' + data.id).find('.inv_price').val(data.wholesale_price);
-                price_w=data.wholesale_price;
+                $('#item-' + data.id).find('.inv_price').val(data.cut_wholesale);
+                price_w=data.cut_wholesale;
             }            
             if(price_r==0){
-                price_r=data.retail_price;
+                price_r=data.retail;
             }
             if(price_s==0){
-                price_s=data.sample_price;
+                price_s=data.roll;
             }
 
             $('#item-' + data.id).find('.inv_price').attr("data-wholesale", price_w);
@@ -1019,8 +1021,8 @@
             var saveBtn = $("button[data-id="+id+"]").html('Save')['0'].outerHTML;
             var cancelBtn = '<button class="btn btn-danger btn-sm btn-square" id="cancle_price_book" data-id="cancle_'+id+'">Cancle</button>';
             $("button[data-id="+id+"]").parent().html(saveBtn+cancelBtn);
-            $("#wholesale_price_"+id).prop('type','text');
-            $("#wholesale_price_day"+id).prop('type','text');
+            $("#cut_wholesale_"+id).prop('type','text');
+            $("#cut_wholesale_day"+id).prop('type','text');
             $("#price_"+id).prop('type','text');
             $("#price_day"+id).prop('type','text');
             $("#sampe_price_"+id).prop('type','text');
@@ -1032,8 +1034,8 @@
             $("#sample_text_"+id).css('display','none');
             $(".show"+id).css('display','block');
 
-            var wholeSale = $("#wholesale_price_"+id).val();
-            var wholeSale_day = $("#wholesale_price_day"+id).val();
+            var wholeSale = $("#cut_wholesale_"+id).val();
+            var wholeSale_day = $("#cut_wholesale_day"+id).val();
             var price = $("#price_"+id).val();
             var price_day = $("#price_day"+id).val();
             var sample = $("#sampe_price_"+id).val();
@@ -1105,12 +1107,12 @@
                                             '<td>' + item.material.name + '</td><td>'+ item.material.article_no+ '</td>'+
                                             '<td>'+
                                                 '<label class="show'+item.id+'" style="display:none">* Price :-</label>'+   
-                                                '<input type="hidden" class="form-control" id="wholesale_price_'+item.id+'" value="'+(item.wholesale_price != null ? item.wholesale_price : '0.00')+'">'+
+                                                '<input type="hidden" class="form-control" id="cut_wholesale_'+item.id+'" value="'+(item.cut_wholesale != null ? item.cut_wholesale : '0.00')+'">'+
                                                 '<label class="show'+item.id+'" style="display:none">* Credit Days :-</label>'+   
-                                                '<input type="hidden" class="form-control" id="wholesale_price_day'+item.id+'" value="'+(item.wholesale_credit_days != null ? item.wholesale_credit_days : '0')+'">'+
+                                                '<input type="hidden" class="form-control" id="cut_wholesale_day'+item.id+'" value="'+(item.wholesale_credit_days != null ? item.wholesale_credit_days : '0')+'">'+
                                                 '<p id="wholesale_text_'+item.id+'">'+
                                                     '<label>* Price :- </label>'+   
-                                                    (item.wholesale_price != null ? item.wholesale_price : '0.00')+ 
+                                                    (item.cut_wholesale != null ? item.cut_wholesale : '0.00')+ 
                                                     '<br>' +
                                                     '<label>* Credit Days :- </label>'+ 
                                                     (item.wholesale_credit_days != null ? item.wholesale_credit_days : '0') +
@@ -1131,12 +1133,12 @@
                                             '</td>'+
                                             '<td>'+
                                                 '<label class="show'+item.id+'" style="display:none">* Price :-</label>'+   
-                                                '<input type="hidden" class="form-control" id="sampe_price_'+item.id+'" value="'+(item.sample_price != null ? item.sample_price : '0.00')+'">'+
+                                                '<input type="hidden" class="form-control" id="sampe_price_'+item.id+'" value="'+(item.roll != null ? item.roll : '0.00')+'">'+
                                                 '<label class="show'+item.id+'" style="display:none">* Credit Days :-</label>'+   
                                                 '<input type="hidden" class="form-control" id="sampe_price_day'+item.id+'" value="'+(item.sample_credit_days != null ? item.sample_credit_days : '0')+'">'+
                                                 '<p id="sample_text_'+item.id+'">'+
                                                     '<label>* Price :- </label>'+   
-                                                    (item.sample_price != null ? item.sample_price : '0.00')+ 
+                                                    (item.roll != null ? item.roll : '0.00')+ 
                                                     '<br>' + 
                                                     '<label>* Credit Days :- </label>'+ 
                                                     (item.sample_credit_days != null ? item.sample_credit_days : '0') +
@@ -1172,8 +1174,8 @@
             var saveBtn = $("button[data-id="+id+"]").html('Edit')['0'].outerHTML;
             
             $("button[data-id="+id+"]").parent().html(saveBtn);
-            $("#wholesale_price_"+id).prop('type','hidden');
-            $("#wholesale_price_day"+id).prop('type','hidden');
+            $("#cut_wholesale_"+id).prop('type','hidden');
+            $("#cut_wholesale_day"+id).prop('type','hidden');
             $("#price_"+id).prop('type','hidden');
             $("#price_day"+id).prop('type','hidden');
             $("#sampe_price_"+id).prop('type','hidden');

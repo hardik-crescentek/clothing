@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ClientArticle;
 use App\Order;
 use App\OrderItem;
 use App\Http\Controllers\Controller;
@@ -228,10 +229,46 @@ class InvoiceController extends Controller
         return view('invoice.createinvoice',compact('article_no', 'colors', 'users','sales_person','payment_receiver','items','customer_item_price'));
     }
 
-    public function getMaterial(Request $request){
+    // public function getMaterial(Request $request){
 
-        $materials = Material::select('id', 'name', 'barcode','color','weight','article_no', 'color_no','wholesale_price', 'retail_price', 'sample_price')
-                        ->where(['article_no' => $request->artical, "color_no"=>$request->color])
+    //     $materials = Material::select('id', 'name', 'barcode','color','weight','article_no', 'color_no','wholesale_price', 'retail_price', 'sample_price')
+    //                     ->where(['article_no' => $request->artical, "color_no"=>$request->color])
+    //                     ->first();
+
+    //     return response()->json($materials, 200);
+    // }
+
+    public function getMaterial(Request $request)
+    {
+        $customerId = $request->cus_id;
+        $articleNo = $request->artical;
+        $colorNo = $request->color;
+
+        // Fetch the material from Material model
+        $material = Material::select('id', 'name', 'barcode', 'color', 'weight', 'article_no', 'color_no', 'cut_wholesale', 'retail', 'roll')
+            ->where(['article_no' => $articleNo, 'color_no' => $colorNo])
+            ->first();
+
+        if ($customerId) {
+            // Fetch from ClientArticle if customer is selected
+            $clientArticle = ClientArticle::select('cut_wholesale', 'retail','roll')
+                ->where(['client_id' => $customerId, 'article_no' => $articleNo])
+                ->first();
+
+            // Override price fields if client article exists
+            if ($clientArticle) {
+                $material->wholesale_price = $clientArticle->cut_wholesale;
+                $material->retail = $clientArticle->retail;
+                $material->roll = $clientArticle->roll; // Assuming sample price is the same as retail
+            }
+        }
+
+        return response()->json($material, 200);
+    }
+
+    public function getClientMaterial(Request $request){
+        $materials = ClientArticle::select('id','roll','cut_wholesale','retail')
+                        ->where(['client_id' => $request->cus_id,'article_no'=>$request->artical])
                         ->first();
 
         return response()->json($materials, 200);

@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('invoice/save-payment', [App\Http\Controllers\InvoiceController::class, 'savePayment'])->name('invoice.save-payment');
     Route::get('invoice/create', [App\Http\Controllers\InvoiceController::class, 'create2'])->name('invoice.create2');
     Route::get('invoice/getMaterial', [App\Http\Controllers\InvoiceController::class, 'getMaterial'])->name('invoice.getMaterial');
+    Route::get('invoice/getClientMaterial', [App\Http\Controllers\InvoiceController::class, 'getClientMaterial'])->name('invoice.getClientMaterial');
     Route::post('store-invoice', [App\Http\Controllers\InvoiceController::class, 'store2'])->name('invoice.store2');
     Route::get('invoice/last-invoice-info', [App\Http\Controllers\InvoiceController::class, 'getLastInvoiceInfo'])->name('invoice.last-invoice');
     Route::get('invoice/pricebook/{id}', [App\Http\Controllers\InvoiceController::class, 'customerPriceBook'])->name('invoice.pricebook');
