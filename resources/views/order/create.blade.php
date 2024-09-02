@@ -463,40 +463,77 @@
         
 
         $(document).on('change','#search_color',function(){
-                var color_no = $(this).val(); 
-                if(color_no!=""){
-                    $.ajax({
-                        url: "{{ route('invoice.getMaterial') }}",
-                        dataType: "json",
-                        data: {
-                            color: color_no,
-                            artical:$("#search_article").val()
-                        },
-                        success: function(data) {
-                            var item_id = $('.inv_item_id_' + data.id).val() ? $('.inv_item_id_' + data.id).val() : 0;
-                            
-                            if (item_id) {
-                                $('#search_error').fadeIn(300).css('display', 'block').html("This material allready selected").fadeOut(3000);
-                            } else {
-                                addSearchMaterial(data);
-                            }
+            var user_id = $('#user_id').val();
+            var search_color = $(this).val();
+            
+            if (search_color && !user_id) {
+                // If color is selected but no customer is selected
+                alert('Please select a customer before selecting a color.');
+                $(this).val(''); // Clear the color selection
+                $('#user_id').focus(); // Focus on the customer select box
+                $("#search_color").html('');
+                return false;
+            }
+            var color_no = $(this).val(); 
+            if(color_no!=""){
+                $.ajax({
+                    url: "{{ route('invoice.getMaterial') }}",
+                    dataType: "json",
+                    data: {
+                        color: color_no,
+                        artical:$("#search_article").val(),
+                        cus_id: user_id
+                    },
+                    success: function(data) {
+                        var item_id = $('.inv_item_id_' + data.id).val() ? $('.inv_item_id_' + data.id).val() : 0;
+                        
+                        if (item_id) {
+                            $('#search_error').fadeIn(300).css('display', 'block').html("This material allready selected").fadeOut(3000);
+                        } else {
+                            addSearchMaterial(data);
                         }
-                    });
-                }      
-            });
+                    }
+                });
+            }      
+        });
+        
+        // Event handler for when the select value changes
+        $(document).on('change', '.unit_of_sale', function() {
+            var unit_purchased_in = $(this).val();
+            var row = $(this).closest('td').parent(); // Find the row or item containing this select
+
+            // Check the value and set read-only attributes for input fields accordingly
+            if (unit_purchased_in === 'meter') {
+                row.find('.inv_meter').prop('readonly', false);
+                row.find('.inv_yard').prop('readonly', true);
+            } else if (unit_purchased_in === 'yard') {
+                row.find('.inv_meter').prop('readonly', true);
+                row.find('.inv_yard').prop('readonly', false);
+            }
+        });
 
         function addSearchMaterial(data) {
             console.log(data);
             $template = $('#templateAddItem_invoice').html();
             // var $uniqueId = uuid();
             var $tr = $('<tr class="invoiceitem" id="item-' + data.id + '">').append($template);
+            var unit_purchased_in = data.unit_purchased_in;
             $('#tblOrderTable tbody').append($tr);
             $('#item-' + data.id).find('#inv_item_id').val(data.id);
             $('#item-' + data.id).find('#inv_item_id').attr('class', 'inv_item_id_' + data.id);
             $('#item-' + data.id).find('.inv_name').val(data.name + " - " + data.color);
             $('#item-' + data.id).find('.inv_price').attr('name', 'price[]');
             $('#item-' + data.id).find('.inv_barcode').val(data.barcode);
-            $('#item-' + data.id).find('.unit_of_sale').val(data.unit_purchased_in);
+            $('#item-' + data.id).find('.unit_of_sale').val(unit_purchased_in);
+            // Enable/disable fields based on unit purchased in
+            if (unit_purchased_in === 'meter') {
+                $('#item-' + data.id).find('.inv_meter').prop('readonly', false);
+                $('#item-' + data.id).find('.inv_yard').prop('readonly', true);
+            } else if (unit_purchased_in === 'yard') {
+                $('#item-' + data.id).find('.inv_meter').prop('readonly', true);
+                $('#item-' + data.id).find('.inv_yard').prop('readonly', false);
+            }
+            //
             $('#item-' + data.id).find('.inv_weight').val(data.weight);
             $('#item-' + data.id).find('.inv_weight').attr("data-value", data.weight);
             $('#item-' + data.id).find('.hidden_div').attr('id', 'item-rolls-' + data.id);
@@ -512,7 +549,7 @@
                     $('#item-' + data.id).find('.inv_price').val(v.wholesale_price);
                     price_w = v.wholesale_price;
                     price_r = v.price;
-                    price_s = v.sample_price;
+                    price_s = v.roll;
                 }
             });
             if(price_w==0){
@@ -520,10 +557,10 @@
                 price_w=data.wholesale_price;
             }            
             if(price_r==0){
-                price_r=data.retail_price;
+                price_r=data.retail;
             }
             if(price_s==0){
-                price_s=data.sample_price;
+                price_s=data.roll;
             }
 
             $('#item-' + data.id).find('.inv_price').attr("data-wholesale", price_w);
@@ -678,12 +715,15 @@
 
         // Keyup event handler for .inv_yard field
         $(document).on('keyup', '.inv_yard', function() {
+            var $thisRow = $(this).closest('tr');
             var yard = parseFloat($(this).val()).toFixed(2);
             var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
+            var discountType = $thisRow.find('.discount_type').val() || 0; // No need for parseFloat
+            var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
             $(this).attr('data-value', yard);
             if (!isNaN(yard) && yard) {
-                var $thisRow = $(this).closest('tr');
-                $('.inv_meter', $thisRow).val(yard2meter(yard).toFixed(2));   
+                var meter = yard2meter(yard).toFixed(2);
+                $('.inv_meter', $thisRow).val(meter);   
                 var weight = $('.inv_weight', $thisRow).attr('data-value');
                 $('.inv_weight', $thisRow).val(weight * yard);
                                     
@@ -691,7 +731,13 @@
                 grandtotal();
             }
             if (!isNaN(price) && price) {
-                var total = parseFloat(price * yard).toFixed(2);
+                var total = parseFloat(price * meter).toFixed(2);
+                 // Apply discount
+                 if (discountType === 'percentage') {
+                    total = total - (total * discountValue / 100);
+                } else if (discountType === 'amount') {
+                    total = total - discountValue;
+                }
                 $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
                 sub_total();
                 grandtotal();
@@ -699,11 +745,13 @@
         });
 
         $(document).on('change', '.inv_meter', function() {
+            var $thisRow = $(this).closest('tr');
             var meter = parseFloat($(this).val()).toFixed(2);
             var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
+            var discountType = $thisRow.find('.discount_type').val() || 0; // No need for parseFloat
+            var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
             $(this).attr('data-value', meter);
             if (!isNaN(meter) && meter) {
-                var $thisRow = $(this).closest('tr');
                 $('.inv_yard', $thisRow).val(meter2yard(meter).toFixed(2));
                 var weight = $('.inv_weight', $thisRow).attr('data-value');
                 $('.inv_weight', $thisRow).val(weight * meter);
@@ -713,6 +761,94 @@
             }
             if (!isNaN(price) && price) {
                 var total = parseFloat(price * meter).toFixed(2);
+                // Apply discount
+                if (discountType === 'percentage') {
+                    total = total - (total * discountValue / 100);
+                } else if (discountType === 'amount') {
+                    total = total - discountValue;
+                }
+                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+                sub_total();
+                grandtotal();
+            }
+        });
+
+        $(document).on('keyup', '.inv_meter', function() {
+            var $thisRow = $(this).closest('tr');
+            var meter = parseFloat($(this).val()).toFixed(2);
+            var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
+            var discountType = $thisRow.find('.discount_type').val() || 0; // No need for parseFloat
+            var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
+            $(this).attr('data-value', meter);
+            if (!isNaN(meter) && meter) {
+                $('.inv_yard', $thisRow).val(meter2yard(meter).toFixed(2));
+                var weight = $('.inv_weight', $thisRow).attr('data-value');
+                $('.inv_weight', $thisRow).val(weight * meter);
+                
+                totalmeter();
+                grandtotal();
+            }
+            if (!isNaN(price) && price) {
+                var total = parseFloat(price * meter).toFixed(2);
+                // Apply discount
+                if (discountType === 'percentage') {
+                    total = total - (total * discountValue / 100);
+                } else if (discountType === 'amount') {
+                    total = total - discountValue;
+                }
+                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+                sub_total();
+                grandtotal();
+            }
+        });
+
+        // $(document).on('keyup', '.inv_price', function() {
+        //     alert("call11");
+        //     var price = parseFloat($(this).val());
+        //     var yard = parseFloat(meter2yard($(this).closest('tr').find('.inv_meter').val()));
+        //     $(this).attr('data-value', price);
+        //     if (!isNaN(yard) && yard) {
+        //         var total = parseFloat(price * yard).toFixed(2);
+        //         $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+        //         sub_total();
+        //         grandtotal();
+        //     }
+        // });
+        // $(document).on('change', '.inv_price', function() {
+        //     var price = parseFloat($(this).val());
+        //     var yard = parseFloat(meter2yard($(this).closest('tr').find('.inv_meter').val()));
+        //     $(this).attr('data-value', price);
+        //     if (!isNaN(yard) && yard) {
+        //         var total = parseFloat(price * yard).toFixed(2);
+        //         $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+        //         sub_total();
+        //         grandtotal();
+        //     }
+        // });
+
+        $(document).on('change', '.inv_price', function() {
+            var $thisRow = $(this).closest('tr');
+            var price = parseFloat($(this).val()).toFixed(2);
+            var meter = parseFloat($(this).closest('tr').find('.inv_meter').val()).toFixed(2);
+            var discountType = $thisRow.find('.discount_type').val() || 0; // No need for parseFloat
+            var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
+            $(this).attr('data-value', meter);
+            if (!isNaN(meter) && meter) {
+                $('.inv_yard', $thisRow).val(meter2yard(meter).toFixed(2));
+                var weight = $('.inv_weight', $thisRow).attr('data-value');
+                $('.inv_weight', $thisRow).val(weight * meter);
+                
+                totalmeter();
+                grandtotal();
+            }
+            if (!isNaN(price) && price) {
+                var total = parseFloat(price * meter).toFixed(2);
+                // Apply discount
+                if (discountType === 'percentage') {
+                    total = total - (total * discountValue / 100);
+                } else if (discountType === 'amount') {
+                    total = total - discountValue;
+                }
                 $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
                 sub_total();
                 grandtotal();
@@ -720,22 +856,28 @@
         });
 
         $(document).on('keyup', '.inv_price', function() {
-            var price = parseFloat($(this).val());
-            var yard = parseFloat(meter2yard($(this).closest('tr').find('.inv_meter').val()));
-            $(this).attr('data-value', price);
-            if (!isNaN(yard) && yard) {
-                var total = parseFloat(price * yard).toFixed(2);
-                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
-                sub_total();
+            var $thisRow = $(this).closest('tr');
+            var price = parseFloat($(this).val()).toFixed(2);
+            var meter = parseFloat($(this).closest('tr').find('.inv_meter').val()).toFixed(2);
+            var discountType = $thisRow.find('.discount_type').val() || 0; // No need for parseFloat
+            var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
+            $(this).attr('data-value', meter);
+            if (!isNaN(meter) && meter) {
+                $('.inv_yard', $thisRow).val(meter2yard(meter).toFixed(2));
+                var weight = $('.inv_weight', $thisRow).attr('data-value');
+                $('.inv_weight', $thisRow).val(weight * meter);
+                
+                totalmeter();
                 grandtotal();
             }
-        });
-        $(document).on('change', '.inv_price', function() {
-            var price = parseFloat($(this).val());
-            var yard = parseFloat(meter2yard($(this).closest('tr').find('.inv_meter').val()));
-            $(this).attr('data-value', price);
-            if (!isNaN(yard) && yard) {
-                var total = parseFloat(price * yard).toFixed(2);
+            if (!isNaN(price) && price) {
+                var total = parseFloat(price * meter).toFixed(2);
+                // Apply discount
+                if (discountType === 'percentage') {
+                    total = total - (total * discountValue / 100);
+                } else if (discountType === 'amount') {
+                    total = total - discountValue;
+                }
                 $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
                 sub_total();
                 grandtotal();
@@ -828,7 +970,7 @@
             $('#' + $uniqueId).find('.roll_id').val(data.id);
             $('#' + $uniqueId).find('.select_roll').val(data.id);
             $('#' + $uniqueId).find('.roll_no').val(data.roll_no);
-            $('#' + $uniqueId).find('.pcs_no').val(data.pcs_no);
+            $('#' + $uniqueId).find('.pcs_no').val(data.piece_no);
             $('#' + $uniqueId).find('.article_no').val(data.article_no);
             $('#' + $uniqueId).find('.color_no').val(data.color_no);
             $('#' + $uniqueId).find('.batch_no').val(data.batch_no);
@@ -1197,8 +1339,8 @@
             var saveBtn = $("button[data-id="+id+"]").html('Save')['0'].outerHTML;
             var cancelBtn = '<button class="btn btn-danger btn-sm btn-square" id="cancle_price_book" data-id="cancle_'+id+'">Cancle</button>';
             $("button[data-id="+id+"]").parent().html(saveBtn+cancelBtn);
-            $("#wholesale_price_"+id).prop('type','text');
-            $("#wholesale_price_day"+id).prop('type','text');
+            $("#cut_wholesale_"+id).prop('type','text');
+            $("#cut_wholesale__day"+id).prop('type','text');
             $("#price_"+id).prop('type','text');
             $("#price_day"+id).prop('type','text');
             $("#sampe_price_"+id).prop('type','text');
@@ -1210,8 +1352,8 @@
             $("#sample_text_"+id).css('display','none');
             $(".show"+id).css('display','block');
 
-            var wholeSale = $("#wholesale_price_"+id).val();
-            var wholeSale_day = $("#wholesale_price_day"+id).val();
+            var wholeSale = $("#cut_wholesale_"+id).val();
+            var wholeSale_day = $("#cut_wholesale_day"+id).val();
             var price = $("#price_"+id).val();
             var price_day = $("#price_day"+id).val();
             var sample = $("#sampe_price_"+id).val();
@@ -1283,9 +1425,9 @@
                                             '<td>' + item.material.name + '</td><td>'+ item.material.article_no+ '</td>'+
                                             '<td>'+
                                                 '<label class="show'+item.id+'" style="display:none">* Price :-</label>'+   
-                                                '<input type="hidden" class="form-control" id="wholesale_price_'+item.id+'" value="'+(item.wholesale_price != null ? item.wholesale_price : '0.00')+'">'+
+                                                '<input type="hidden" class="form-control" id="cut_wholesale_'+item.id+'" value="'+(item.wholesale_price != null ? item.wholesale_price : '0.00')+'">'+
                                                 '<label class="show'+item.id+'" style="display:none">* Credit Days :-</label>'+   
-                                                '<input type="hidden" class="form-control" id="wholesale_price_day'+item.id+'" value="'+(item.wholesale_credit_days != null ? item.wholesale_credit_days : '0')+'">'+
+                                                '<input type="hidden" class="form-control" id="cut_wholesale_day'+item.id+'" value="'+(item.wholesale_credit_days != null ? item.wholesale_credit_days : '0')+'">'+
                                                 '<p id="wholesale_text_'+item.id+'">'+
                                                     '<label>* Price :- </label>'+   
                                                     (item.wholesale_price != null ? item.wholesale_price : '0.00')+ 
@@ -1309,12 +1451,12 @@
                                             '</td>'+
                                             '<td>'+
                                                 '<label class="show'+item.id+'" style="display:none">* Price :-</label>'+   
-                                                '<input type="hidden" class="form-control" id="sampe_price_'+item.id+'" value="'+(item.sample_price != null ? item.sample_price : '0.00')+'">'+
+                                                '<input type="hidden" class="form-control" id="sampe_price_'+item.id+'" value="'+(item.roll != null ? item.roll : '0.00')+'">'+
                                                 '<label class="show'+item.id+'" style="display:none">* Credit Days :-</label>'+   
                                                 '<input type="hidden" class="form-control" id="sampe_price_day'+item.id+'" value="'+(item.sample_credit_days != null ? item.sample_credit_days : '0')+'">'+
                                                 '<p id="sample_text_'+item.id+'">'+
                                                     '<label>* Price :- </label>'+   
-                                                    (item.sample_price != null ? item.sample_price : '0.00')+ 
+                                                    (item.roll != null ? item.roll : '0.00')+ 
                                                     '<br>' + 
                                                     '<label>* Credit Days :- </label>'+ 
                                                     (item.sample_credit_days != null ? item.sample_credit_days : '0') +
@@ -1350,8 +1492,8 @@
             var saveBtn = $("button[data-id="+id+"]").html('Edit')['0'].outerHTML;
             
             $("button[data-id="+id+"]").parent().html(saveBtn);
-            $("#wholesale_price_"+id).prop('type','hidden');
-            $("#wholesale_price_day"+id).prop('type','hidden');
+            $("#cut_wholesale_"+id).prop('type','hidden');
+            $("#cut_wholesale_day"+id).prop('type','hidden');
             $("#price_"+id).prop('type','hidden');
             $("#price_day"+id).prop('type','hidden');
             $("#sampe_price_"+id).prop('type','hidden');
@@ -1373,8 +1515,22 @@
         </div>';
     $('.custom-selected-orders').html(html);
 
+        var currentDate = moment().format('DD/MM/YYYY HH:mm');
         
         $('#purchase_date').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            timePicker: true,
+            timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
+            locale: {
+                format: 'DD/MM/YYYY HH:mm'  // Format with date and time
+            },
+            autoApply: false,
+            startDate: currentDate  // Set the current date and time as the default
+        });
+        $('#purchase_date').val(currentDate);
+
+        $('#delivered_date').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true,
             timePicker: true,
@@ -1393,8 +1549,11 @@
             locale: {
                 format: 'DD/MM/YYYY HH:mm'  // Format with date and time
             },
-            autoApply: false
+            autoApply: false,
+            startDate: currentDate  // Set the current date and time as the default
         });
+        $('#delivered_date').val(currentDate);
+        
     // $(document).on('change','#user_id',function(){
     //     var user_id = $(this).val();
     //     $.ajax({
