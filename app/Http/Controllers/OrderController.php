@@ -196,8 +196,18 @@ class OrderController extends Controller
             'barcode'        => 'required',
             'price'          => 'required',
             'meter'          => 'required',
-            // 'purchase_date'  => 'required'
+            // 'purchase_date'  => 'required',
+            'payment_term'      => 'required|string|in:cash,credit',
+            'credit_day'        => 'nullable|integer|min:1', // Default rule for credit_day
         ]);
+
+        // Add conditional validation for credit_day
+        if ($request->input('payment_term') === 'credit') {
+            $rules['credit_day'] = 'required|integer|min:1'; // Make credit_day required if payment_term is credit
+        } else {
+            $rules['credit_day'] = 'nullable'; // Allow null if payment_term is cash
+        }
+
         $total_qty = 0;
         $items = [];
         $materials = $request->input('item_id');
@@ -221,12 +231,23 @@ class OrderController extends Controller
         // echo "<pre>"; print_r($items); die();
         $request->session()->flash('order_items', $items);
         $user = Auth::user();
+        $payment_term = $request->input("payment_term");
         $data = [
                     "customer_id"=> $request->input('user_id'),
                     "seller_id"  => $request->input('selse_person_id', $user->id),
                     "order_date" => $request->input('purchase_date'),
                     "note"       => $request->input("note"),
                     "role_cutter_name" => $request->input("role_cutter_name"),
+                    "payment_term" => $payment_term,
+                    "credit_day" => isset($payment_term) && ($payment_term == 'cash') ? NULL : $request->input("credit_day"),
+                    "entered_by" => $request->input("entered_by"),
+                    "arranged_by" => $request->input("arranged_by"),
+                    "inspected_by" => $request->input("inspected_by"),
+                    "delivered_by" => $request->input("delivered_by"),
+                    "delivered_date" => $request->input("delivered_date"),
+                    "total_number_of_items" => $request->input("total_number_of_items"),
+                    "approximate_weight" => $request->input("approximate_weight"),
+                    "delivered_date" => $request->input("delivered_date"),
                 ];
         $order = Order::create($data);
         if($items)
@@ -313,7 +334,6 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-
         $users=[''=>'--Select Customer--'];
         $users += User::all()->pluck("fullName",'id')->toArray();
         $sales_user =new User();
@@ -383,6 +403,7 @@ class OrderController extends Controller
                             );
             }
         }
+        $payment_term = $request->input("payment_term");
         $data = [
                     "customer_id"=> $request->input('customer_id'),
                     "seller_id"  => $request->input('seller_id'),
@@ -391,6 +412,16 @@ class OrderController extends Controller
                     "remark"     => $request->input("remark"),
                     "role_cutter_name"     => $request->input("role_cutter_name"),
                     "status"     => $request->input("status"),
+                    "payment_term" => $payment_term,
+                    "credit_day" => isset($payment_term) && ($payment_term == 'cash') ? NULL : $request->input("credit_day"),
+                    "entered_by" => $request->input("entered_by"),
+                    "arranged_by" => $request->input("arranged_by"),
+                    "inspected_by" => $request->input("inspected_by"),
+                    "delivered_by" => $request->input("delivered_by"),
+                    "delivered_date" => $request->input("delivered_date"),
+                    "total_number_of_items" => $request->input("total_number_of_items"),
+                    "approximate_weight" => $request->input("approximate_weight"),
+                    "delivered_date" => $request->input("delivered_date"),
                 ];
         $order->fill($data);
         $order->save();

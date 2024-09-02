@@ -11,6 +11,10 @@ use App\Material;
 use App\ClientArticle;
 use App\ClientImage;
 use DB;
+use Illuminate\Support\Str;
+use File;
+use App\Utils\Util;
+use Illuminate\Support\Facades\Storage;
 
 //Importing laravel-permission models
 use Spatie\Permission\Models\Role;
@@ -202,6 +206,21 @@ class ClientController extends Controller
      */
     public function edit(Request $request,$id)
     {
+        $latestRecordsSubquery = DB::table('materials')
+                                ->select('id', 'article_no', 'color', 'color_no', 'roll', 'cut_wholesale', 'retail', DB::raw('MAX(id) as max_id'))
+                                ->groupBy('article_no')
+                                ->orderBy('max_id', 'desc');
+        
+          // Query to fetch the latest records for each article_no
+        $materials = DB::table('materials')
+                    ->joinSub($latestRecordsSubquery, 'latest_records', function ($join) {
+                        $join->on('materials.id', '=', 'latest_records.id');
+                    })
+                    ->select('materials.article_no', 'materials.color', 'materials.color_no', 'latest_records.roll', 'latest_records.cut_wholesale', 'latest_records.retail')
+                    ->get();
+
+        // echo "<pre>"; print_r($materials); die();
+
         $user = User::with('pricelist.material','clientArticles');
         if($request->ajax()){
             $article_no = $request->Article;
@@ -220,6 +239,33 @@ class ClientController extends Controller
         }
 
         $user = $user->find($id);
+
+        $clientArticles = ClientArticle::where('client_id', $user->id)->get();
+
+        // Fetch all materials
+        $materials = Material::all();
+
+        // Convert client articles to an associative array for quick lookup
+        $clientArticlesMap = $clientArticles->keyBy('article_no');
+
+        // Iterate through materials and match with client articles
+        $matchedData = $materials->map(function($material) use ($clientArticlesMap) {
+            // Find matching client article based on article_no
+            $clientArticle = $clientArticlesMap->get($material->article_no);
+            
+            // echo "<pre>"; print_r($clientArticle->toArray()); die();
+            // Add data from client article if exists, otherwise use material's data
+            $material->roll = $clientArticle ? $clientArticle->roll : $material->roll;
+            $material->cut_wholesale = $clientArticle ? $clientArticle->cut_wholesale : $material->cut_wholesale;
+            $material->retail = $clientArticle ? $clientArticle->retail : $material->retail;
+
+            return $material;
+        });
+        // echo "<pre>"; print_r($matchedData->toArray()); die();
+
+        // Add the matched data to the user's client articles
+        $user->clientArticles = $matchedData;
+        // echo "<pre>"; print_r($user); die();
         $business_nature = array_merge(['' => "Select Nature or Business"],config('constants.business_nature'));
         return view('clients.edit', compact('user','business_nature'));
     }
@@ -282,65 +328,62 @@ class ClientController extends Controller
                 // Update or create client articles
                 foreach ($request->article_no as $key => $article_no) {
                     $clientArticle = ClientArticle::updateOrCreate(
-                        ['article_no' => $article_no],
+                        [
+                            'client_id' => $user->id, // Add client_id to make the condition unique
+                            'article_no' => $article_no,
+                        ],
                         [
                             'roll' => $request->roll[$key],
                             'cut_wholesale' => $request->cut_wholesale[$key],
                             'retail' => $request->retail[$key],
-                            // Add more fields as necessary
                         ]
                     );
                 }
-            } 
+            }
             
-            // Delete old image if a new image is provided
-            if ($request->hasFile('image')) {
-                $oldImages = ClientImage::where('client_id', $user->id)->get();
-                foreach ($oldImages as $oldImage) {
-                    $oldImagePath = public_path('images/clients/' . $oldImage->name);
-                    if (file_exists($oldImagePath)) {
-                        unlink($oldImagePath);
-                    }
-                    $oldImage->delete();
-                }
+            $imagePath = public_path('uploads/') . config('constants.client_img_path');
 
-                // Handle file-based image upload
-                foreach ($request->file('image') as $file) {
-                    $filename = time() . '-' . $file->getClientOriginalName();
-                    $file->move(public_path('images/clients'), $filename);
-                    
+                        
+            // Handle file upload if present
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = time() . '-' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('images', $filename);
+            
+                if ($existingImage) {
+                    $existingImage->update([
+                        'name' => $filename,
+                        'path' => $filePath // optional: store the full path if needed
+                    ]);
+                } else {
                     ClientImage::create([
                         'client_id' => $user->id,
-                        'name' => $filename
+                        'name' => $filename,
+                        'path' => $filePath // optional
                     ]);
                 }
             }
-
-            // Handle base64 image upload
-            if ($request->input('image_binary')) {
-                $oldImages = ClientImage::where('client_id', $user->id)->get();
-                foreach ($oldImages as $oldImage) {
-                    $oldImagePath = public_path('images/clients/' . $oldImage->name);
-                    if (file_exists($oldImagePath)) {
-                        unlink($oldImagePath);
-                    }
-                    $oldImage->delete();
-                }
-
-                foreach ($request->input('image_binary') as $index => $base64Image) {
-                    if (!empty($base64Image)) {
-                        $data = explode(',', $base64Image);
-                        $image = base64_decode($data[1]);
-                        $filename = time() . '-' . $index . '.png';
-                        $path = public_path('images/clients/' . $filename);
-                        file_put_contents($path, $image);
-
-                        ClientImage::create([
-                            'client_id' => $user->id,
-                            'name' => $filename
-                        ]);
+           
+            if(isset($request->image_binary) && !empty($request->image_binary)){
+                // Get the old image if it exists
+                $oldImage = ClientImage::where('client_id', $user->id)->latest()->first();
+                if ($oldImage) {
+                    $oldImagePath = $imagePath . '/' . $oldImage->name;
+                    if (File::exists($oldImagePath)) {
+                        File::delete($oldImagePath);
                     }
                 }
+                $imageName = Str::random() . ".jpg";
+                $baseFromJavascript = $request->image_binary;
+                $base_to_php = explode(',', $baseFromJavascript);
+                $originalImage = base64_decode($base_to_php[1]);
+                File::put(public_path('uploads/').config('constants.client_img_path') .'/'. $imageName, $originalImage);
+                $data['image'] = config('constants.client_img_path') .'/'. $imageName;
+                Util::genrateThumb($data['image']);
+                ClientImage::create([
+                    'client_id' => $user->id,
+                    'name' => $imageName
+                ]);
             }
 
             return redirect()->route('clients.index')->with('success', 'User updated successfully');

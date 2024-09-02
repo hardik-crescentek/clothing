@@ -92,6 +92,28 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- New Payment Term field -->
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="form-control-label">Payment Term<span class="text-danger ml-2">*</span></label>
+                            <div class="input-group">
+                                {!! Form::select('payment_term', ['cash' => 'Cash', 'credit' => 'Credit'], 'cash', array('id' => 'payment_term', 'class' => 'form-control custom-select', 'data-validation' => "required")) !!}
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <a href="#" title="Add Payment Term">
+                                            <span><i class="fa fa-plus"></i></span>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="credit-days" class="form-group d-none col-lg-4">
+                        <label class="form-control-label">Credit Days<span class="text-danger ml-2">*</span></label>
+                        {!! Form::number('credit_day', null, array('id' => 'credit_days', 'class' => 'form-control', 'placeholder' => 'Enter days', 'min' => 1)) !!}
+                    </div>
                 </div>
 
                 <div class="row">
@@ -127,16 +149,19 @@
                     <table class="table table-hover mb-0 " id="tblOrderTable">
                         <thead>
                             <tr>
-                                <th style="width:10%;">Item Name</th>
-                                <th style="width:10%;">Barcode</th>
-                                <th style="width:10%;">Type Of Sale</th>
-                                <th style="width:10%;">Price</th>
-                                <th style="width:10%;">Meter</th>
-                                <th style="width:10%;">Yard</th>
+                                <th style="width:9%;">Brand Name</th>
+                                <th style="width:9%;">Barcode</th>
+                                <th style="width:9%;">Type Of Sale</th>
+                                <th style="width:9%;">Unit Of Sale</th>
+                                <th style="width:9%;">Price</th>
+                                <th style="width:9%;">Meter</th>
+                                <th style="width:9%;">Yard</th>
                                 <!-- <th>Price</th> -->
-                                <th style="width:10%;">Total Price</th>
-                                <th style="width:10%;">Select Role</th>
-                                <th style="width:10%;">Action</th>
+                                <th style="width:9%;">Discount Type</th>
+                                <th style="width:9%;">Discount Value</th>
+                                <th style="width:9%;">Total Amount</th>
+                                <th style="width:9%;">Select Role</th>
+                                <th style="width:9%;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -148,12 +173,15 @@
                                 {!! Form::hidden('color_id[]',$item['color'],array('class'=>'color_id')) !!}
                                 <td>{!! Form::text('barcode[]', $item['barcode'], array('class' => 'barcode form-control', 'data-validation'=>"required")) !!}</td>
                                 <td>{!! Form::select("type_of_sale[]", ["W"=>"Wholsale","R"=>"Retail","P"=>"Sample Price"],null, ['class'=>'form-control type_of_sale','data-validation'=>"required",'id' => 'selected_price']) !!}</td>
+                                <td>{!! Form::select("unit_of_sale[]", ["meter"=>"meter","yard"=>"yard"],null, ['class'=>'form-control unit_of_sale','data-validation'=>"required",'id' => 'unit_price']) !!}</td>
                                 <td>{!! Form::number('price[]' , $item['price'] , array('class' => 'price form-control', 'data-validation'=>"required" )) !!}</td>
                                 <td>{!! Form::number('meter[]', $item['meter'], array('class' => 'meter form-control', 'data-validation'=>"required")) !!}</td>
                                 <td class="td-selected-role">
                                     <div id="selectedrole-" class="selectedrole"></div>
                                 </td>
                                 <td><input name="yard[]" class="yard form-control" readonly="readonly" value="{{ number_format((float)$item['yard'],2,'.','') }}" type="text"></td>
+                                <td>{!! Form::select("discount_type[]", ["percentage"=>"Percentage","amount"=>"Amount"],null, ['class'=>'form-control discount_type','data-validation'=>"required",'id' => 'discount_type']) !!}</td>
+                                <td>{!! Form::number('discount_value[]' , $item['discount_value'] , array('class' => 'discount_value form-control', 'data-validation'=>"required" )) !!}</td>
                                 <td><input name="total_price_table[]" class="total_price_table form-control" readonly="readonly" id="total_price_table" type="text"></td>
                                 <td>
                                     <a class="btn btn-danger btn-sm btn-square">Delete</a>
@@ -191,11 +219,56 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Entered By</label>
+                            {!! Form::text('entered_by', null, array('id'=>'enterd_by','placeholder' => 'Entered By','class' => 'form-control')) !!}
+                        </div>
+                    </div> 
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Arranged By</label>
+                            {!! Form::text('arranged_by', null, array('id'=>'enterd_by','placeholder' => 'Arranged By','class' => 'form-control')) !!}
+                        </div>
+                    </div> 
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Inspected By</label>
+                            {!! Form::text('inspected_by', null, array('id'=>'inspected_by','placeholder' => 'Inspected By','class' => 'form-control')) !!}
+                        </div>
+                    </div> 
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Delivered By</label>
+                            {!! Form::text('delivered_by', null, array('id'=>'delivered_by','placeholder' => 'Delivered By','class' => 'form-control')) !!}
+                        </div>
+                    </div>  
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Delivered Date</label>
+                            {!! Form::text('delivered_date', null, array('id'=>'delivered_date','placeholder' => 'Delivered Date','class' => 'form-control')) !!}
+                        </div>
+                    </div>  
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Total Number of Items.</label>
+                            {!! Form::text('total_number_of_items', null, array('id'=>'total_number_of_items','placeholder' => 'Total Number of Items','class' => 'form-control')) !!}
+                        </div>
+                    </div>  
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Approximate weight</label>
+                            {!! Form::text('approximate_weight', null, array('id'=>'approximate_weight','placeholder' => 'Entered By','class' => 'form-control')) !!}
+                        </div>
+                    </div>  
+                </div>
                 
                 <div class="form-group row d-flex align-items-center mt-5">
                     <div class="col-lg-12 d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
-                        <button type="submit" name="action" value="generate_invoice" class="btn btn-primary btn-lg ml-2">Save and Generate Invoice</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Process Now</button>
+                        <button type="submit" name="action" value="generate_invoice" class="btn btn-primary btn-lg ml-2">Process and Generate Invoice</button>
                     </div>
                 </div>
                 {!! Form::close() !!}
@@ -263,13 +336,19 @@
     {!! Form::hidden('item_id[]',null,array('id'=>'inv_item_id')) !!}
     <td class="td-barcode" data-value="">{!! Form::text('barcode[]', null, array('class' => 'inv_barcode form-control', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
     <td class="td-type_of_sale" data-value="">{!! Form::select("type_of_sale[]", ["W"=>"Wholsale","R"=>"Retail","P"=>"Sample Price"], null, ['class'=>'form-control type_of_sale','data-validation'=>"required"]) !!}</td>
+    <td class="td-unit_of_sale" data-value="">{!! Form::select("unit_of_sale[]", ["meter"=>"meter","yard"=>"yard"], null, ['class'=>'form-control unit_of_sale','data-validation'=>"required"]) !!}</td>
     <td class="td-price price" data-value="">{!! Form::text('price[]' , 0 , array('class' => 'inv_price form-control', 'data-validation'=>"required",'placeholder'=>"Price" )) !!}</td>
     <td class="td-meter" data-value="">{!! Form::text('meter[]', 0, array('class' => 'inv_meter form-control', 'data-validation'=>"required",'placeholder'=>"Meter")) !!}</td>
     <td class="td-yard" data-value="">{!! Form::text('yard[]',0 , ['class'=>'inv_yard form-control','placeholder'=>"Yard"]) !!}</td>
     <!-- <td class="td-weight" data-value="">{!! Form::text('weight[]',0 , ['class'=>'inv_weight form-control','readonly'=>'readonly','placeholder'=>"Weight"]) !!}</td> -->
+    <td class="td-discount_type" data-value="">{!! Form::select("discount_type[]", ["percentage"=>"Percentage","amount"=>"Amount"], null, ['class'=>'form-control discount_type','data-validation'=>"required"]) !!}</td>
+    <td class="td-discount_value" data-value="">{!! Form::text('discount_value[]' , 0 , array('class' => 'discount_value form-control', 'data-validation'=>"required",'placeholder'=>"Discount Value" )) !!}</td>
     <td  class="td-total-price" id="inv_total_price" data-value="">0</td>
-    <td class="td-selected-meter"><div class="data">0</div>
-        {!! Form::hidden("selected_meter[]", null, ["class"=>"","id"=>"selected_meter"]) !!}</td>
+    <!-- <td class="td-selected-meter">
+        <div class="data">0</div>
+        {!! Form::hidden("selected_meter[]", null, ["class"=>"inv_total_selected_roll","id"=>"selected_meter"]) !!}
+    </td> -->
+    <td class="td-selected-meter" data-value="">{!! Form::text('selected_meter[]', 0, array('class' => 'inv_selected_roll form-control', 'data-validation'=>"required")) !!}</td>
     <td>
         <a class="btn btn-danger btn-sm btn-square inv_delete my-1 text-light">Delete</a>
         <button type="button" class="btn btn-sm btn-primary btn-square my-1 btn-roll-select" data-material_id="" data-toggle="modal" data-target="#rollSelectModel">Select Roll</button>
@@ -384,29 +463,27 @@
         
 
         $(document).on('change','#search_color',function(){
-            var color_no = $(this).val(); 
-            var cus_id = $('#user_id option:selected').val();
-            if(color_no!=""){
-                $.ajax({
-                    url: "{{ route('invoice.getMaterial') }}",
-                    dataType: "json",
-                    data: {
-                        color: color_no,
-                        artical:$("#search_article").val(),
-                        cus_id: cus_id
-                    },
-                    success: function(data) {
-                        var item_id = $('.inv_item_id_' + data.id).val() ? $('.inv_item_id_' + data.id).val() : 0;
-                        
-                        if (item_id) {
-                            $('#search_error').fadeIn(300).css('display', 'block').html("This material allready selected").fadeOut(3000);
-                        } else {
-                            addSearchMaterial(data);
+                var color_no = $(this).val(); 
+                if(color_no!=""){
+                    $.ajax({
+                        url: "{{ route('invoice.getMaterial') }}",
+                        dataType: "json",
+                        data: {
+                            color: color_no,
+                            artical:$("#search_article").val()
+                        },
+                        success: function(data) {
+                            var item_id = $('.inv_item_id_' + data.id).val() ? $('.inv_item_id_' + data.id).val() : 0;
+                            
+                            if (item_id) {
+                                $('#search_error').fadeIn(300).css('display', 'block').html("This material allready selected").fadeOut(3000);
+                            } else {
+                                addSearchMaterial(data);
+                            }
                         }
-                    }
-                });
-            }      
-        });
+                    });
+                }      
+            });
 
         function addSearchMaterial(data) {
             console.log(data);
@@ -419,6 +496,7 @@
             $('#item-' + data.id).find('.inv_name').val(data.name + " - " + data.color);
             $('#item-' + data.id).find('.inv_price').attr('name', 'price[]');
             $('#item-' + data.id).find('.inv_barcode').val(data.barcode);
+            $('#item-' + data.id).find('.unit_of_sale').val(data.unit_purchased_in);
             $('#item-' + data.id).find('.inv_weight').val(data.weight);
             $('#item-' + data.id).find('.inv_weight').attr("data-value", data.weight);
             $('#item-' + data.id).find('.hidden_div').attr('id', 'item-rolls-' + data.id);
@@ -431,21 +509,21 @@
             console.log($('#item-' + data.id).find('.inv_price').val())
             $.each(customer_item_price, function(i, v) {
                 if (v.customer_id == user_id && v.material_id == material_id) {
-                    $('#item-' + data.id).find('.inv_price').val(v.cut_wholesale);
-                    price_w = v.cut_wholesale;
+                    $('#item-' + data.id).find('.inv_price').val(v.wholesale_price);
+                    price_w = v.wholesale_price;
                     price_r = v.price;
-                    price_s = v.roll;
+                    price_s = v.sample_price;
                 }
             });
             if(price_w==0){
-                $('#item-' + data.id).find('.inv_price').val(data.cut_wholesale);
-                price_w=data.cut_wholesale;
+                $('#item-' + data.id).find('.inv_price').val(data.wholesale_price);
+                price_w=data.wholesale_price;
             }            
             if(price_r==0){
-                price_r=data.retail;
+                price_r=data.retail_price;
             }
             if(price_s==0){
-                price_s=data.roll;
+                price_s=data.sample_price;
             }
 
             $('#item-' + data.id).find('.inv_price').attr("data-wholesale", price_w);
@@ -506,6 +584,9 @@
         $(document).on('keyup', '.inv_meter', function() {
             var meter = parseFloat($(this).val()).toFixed(2);
             var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
+            var discountType = parseFloat($(this).closest('tr').find('.discount_type').val());
+            var discountVal = parseFloat($(this).closest('tr').find('.discount_value').val()).toFixed(2);
+
             $(this).attr('data-value', meter);
             if (!isNaN(meter) && meter) {
                 var $thisRow = $(this).closest('tr');
@@ -518,7 +599,73 @@
             }
             if (!isNaN(price) && price) {
                 var total = parseFloat(price * meter).toFixed(2);
+
+                // Apply discount
+                if (discountType === 'percentage') {
+                    total = total - (total * discountValue / 100);
+                } else if (discountType === 'amount') {
+                    total = total - discountValue;
+                }
+
                 $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+                sub_total();
+                grandtotal();
+            }
+        });
+
+        // $(document).on('keyup', '.discount_value', function() {
+        //     var meter = parseFloat($(this).val()).toFixed(2);
+        //     var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
+        //     var discountType = parseFloat($(this).closest('tr').find('.discount_type').val());
+        //     var discountVal = parseFloat($(this).closest('tr').find('.discount_value').val()).toFixed(2);
+        //     console.log("price->"+price);
+        //     console.log("discountType->"+discountType);
+        //     console.log("discountVal->"+discountVal);
+
+        //     if (!isNaN(price) && price) {
+        //         var total = parseFloat(price * meter).toFixed(2);
+
+        //         // Apply discount
+        //         if (discountType === 'percentage') {
+        //             total = total - (total * discountValue / 100);
+        //         } else if (discountType === 'amount') {
+        //             total = total - discountValue;
+        //         }
+
+        //         $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+        //         sub_total();
+        //         grandtotal();
+        //     }
+        // });
+
+        $(document).on('input change', '.inv_meter .inv_price, .discount_value, .discount_type', function() {
+            var $thisRow = $(this).closest('tr');
+            var meter = parseFloat($thisRow.find('.inv_meter').val()) || 0;
+            var price = parseFloat($thisRow.find('.inv_price').val()) || 0;
+            var discountType = $thisRow.find('.discount_type').val(); // No need for parseFloat
+            var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
+            console.log('discountType=>'+discountType);
+            console.log('discountValue=>'+discountValue);
+
+            // if (!isNaN(meter)) {
+            //     $thisRow.find('.inv_yard').val(meter2yard(meter).toFixed(2));   
+            //     var weight = $thisRow.find('.inv_weight').attr('data-value') || 0;
+            //     $thisRow.find('.inv_weight').val(weight * meter);
+            // }
+
+            if (!isNaN(price) && !isNaN(meter)) {
+                var total = price * meter;
+
+                // Apply discount based on the selected discount type
+                if (discountType === 'percentage') {
+                    total -= total * (discountValue / 100);
+                } else if (discountType === 'amount') {
+                    total -= discountValue;
+                }
+
+                total = total.toFixed(2);
+
+                $thisRow.find('.td-total-price').attr('data-value', total).html(total);
                 sub_total();
                 grandtotal();
             }
@@ -665,7 +812,8 @@
                     });
 
                     $('#total_selected_meter').html(meter.toFixed(2));
-
+                    console.log("call");
+                    totalmeter();
                 }
             });
 
@@ -870,6 +1018,7 @@
             $('#item-' + item_id).find('.td-selected-meter #selected_meter_' + item_id).val($("#total_selected_meter").html());
             selectedtotalmeter();
             grand_total();
+            totalmeter();
             $('#rollSelectModel').modal('hide');
             $('#rollSelectModel #tblRoll tbody').html('');
             // }
@@ -922,20 +1071,47 @@
 
         function totalmeter() {
             var total = 0;
+            var total_select_roll = 0;
             $.each($('.inv_meter'), function(i, v) {
                 total += Number($(this).val());
             });
-            $('#totalMeter').html("Total Meter : " + total);
-        };
 
-        function selectedtotalmeter() {
-            var total = 0;
-            $.each($('.td-selected-meter'), function(i, v) {
-                total += Number($(v).html());
+            selectedtotalmeter(function(sel_roll_total) {
+                // Update the total meter HTML with both total meter and total selected roll
+                $('#totalMeter').html("Total Meter : " + total + '/' + sel_roll_total);
             });
-            $('#SelectedTotalMeter').html(total.toFixed(2));
         };
 
+        function selectedtotalmeter(callback) {
+            var total = 0;
+
+            // Calculate total from selected meters
+            $.each($('.td-selected-meter'), function(i, v) {
+                var value = $(v).html().trim(); // Ensure there are no extra spaces
+                var number = parseFloat(value); // Convert to float
+                if (!isNaN(number)) {
+                    total += number;
+                } else {
+                    console.warn('Invalid value in td-selected-meter:', value);
+                }
+            });
+
+            // Set the total value with 2 decimal places
+            $('#SelectedTotalMeter').html(total.toFixed(2));
+
+            // Retrieve the value for further processing
+            var sel_roll_total = total.toFixed(2);
+            if (isNaN(sel_roll_total)) {
+                console.warn('Invalid sel_roll_total:', $('#SelectedTotalMeter').html());
+                sel_roll_total = 0; // Fallback to 0 if the value is not valid
+            }
+
+            // Use callback to return the result
+            if (typeof callback === 'function') {
+                callback(sel_roll_total);
+            }
+        }
+        
         function totalrow() {
             var rowCount = $("#tblOrderTable tbody tr").length;
             $('#totalItem').html("Total Items : " + rowCount);
@@ -1021,8 +1197,8 @@
             var saveBtn = $("button[data-id="+id+"]").html('Save')['0'].outerHTML;
             var cancelBtn = '<button class="btn btn-danger btn-sm btn-square" id="cancle_price_book" data-id="cancle_'+id+'">Cancle</button>';
             $("button[data-id="+id+"]").parent().html(saveBtn+cancelBtn);
-            $("#cut_wholesale_"+id).prop('type','text');
-            $("#cut_wholesale_day"+id).prop('type','text');
+            $("#wholesale_price_"+id).prop('type','text');
+            $("#wholesale_price_day"+id).prop('type','text');
             $("#price_"+id).prop('type','text');
             $("#price_day"+id).prop('type','text');
             $("#sampe_price_"+id).prop('type','text');
@@ -1034,8 +1210,8 @@
             $("#sample_text_"+id).css('display','none');
             $(".show"+id).css('display','block');
 
-            var wholeSale = $("#cut_wholesale_"+id).val();
-            var wholeSale_day = $("#cut_wholesale_day"+id).val();
+            var wholeSale = $("#wholesale_price_"+id).val();
+            var wholeSale_day = $("#wholesale_price_day"+id).val();
             var price = $("#price_"+id).val();
             var price_day = $("#price_day"+id).val();
             var sample = $("#sampe_price_"+id).val();
@@ -1107,12 +1283,12 @@
                                             '<td>' + item.material.name + '</td><td>'+ item.material.article_no+ '</td>'+
                                             '<td>'+
                                                 '<label class="show'+item.id+'" style="display:none">* Price :-</label>'+   
-                                                '<input type="hidden" class="form-control" id="cut_wholesale_'+item.id+'" value="'+(item.cut_wholesale != null ? item.cut_wholesale : '0.00')+'">'+
+                                                '<input type="hidden" class="form-control" id="wholesale_price_'+item.id+'" value="'+(item.wholesale_price != null ? item.wholesale_price : '0.00')+'">'+
                                                 '<label class="show'+item.id+'" style="display:none">* Credit Days :-</label>'+   
-                                                '<input type="hidden" class="form-control" id="cut_wholesale_day'+item.id+'" value="'+(item.wholesale_credit_days != null ? item.wholesale_credit_days : '0')+'">'+
+                                                '<input type="hidden" class="form-control" id="wholesale_price_day'+item.id+'" value="'+(item.wholesale_credit_days != null ? item.wholesale_credit_days : '0')+'">'+
                                                 '<p id="wholesale_text_'+item.id+'">'+
                                                     '<label>* Price :- </label>'+   
-                                                    (item.cut_wholesale != null ? item.cut_wholesale : '0.00')+ 
+                                                    (item.wholesale_price != null ? item.wholesale_price : '0.00')+ 
                                                     '<br>' +
                                                     '<label>* Credit Days :- </label>'+ 
                                                     (item.wholesale_credit_days != null ? item.wholesale_credit_days : '0') +
@@ -1133,12 +1309,12 @@
                                             '</td>'+
                                             '<td>'+
                                                 '<label class="show'+item.id+'" style="display:none">* Price :-</label>'+   
-                                                '<input type="hidden" class="form-control" id="sampe_price_'+item.id+'" value="'+(item.roll != null ? item.roll : '0.00')+'">'+
+                                                '<input type="hidden" class="form-control" id="sampe_price_'+item.id+'" value="'+(item.sample_price != null ? item.sample_price : '0.00')+'">'+
                                                 '<label class="show'+item.id+'" style="display:none">* Credit Days :-</label>'+   
                                                 '<input type="hidden" class="form-control" id="sampe_price_day'+item.id+'" value="'+(item.sample_credit_days != null ? item.sample_credit_days : '0')+'">'+
                                                 '<p id="sample_text_'+item.id+'">'+
                                                     '<label>* Price :- </label>'+   
-                                                    (item.roll != null ? item.roll : '0.00')+ 
+                                                    (item.sample_price != null ? item.sample_price : '0.00')+ 
                                                     '<br>' + 
                                                     '<label>* Credit Days :- </label>'+ 
                                                     (item.sample_credit_days != null ? item.sample_credit_days : '0') +
@@ -1174,8 +1350,8 @@
             var saveBtn = $("button[data-id="+id+"]").html('Edit')['0'].outerHTML;
             
             $("button[data-id="+id+"]").parent().html(saveBtn);
-            $("#cut_wholesale_"+id).prop('type','hidden');
-            $("#cut_wholesale_day"+id).prop('type','hidden');
+            $("#wholesale_price_"+id).prop('type','hidden');
+            $("#wholesale_price_day"+id).prop('type','hidden');
             $("#price_"+id).prop('type','hidden');
             $("#price_day"+id).prop('type','hidden');
             $("#sampe_price_"+id).prop('type','hidden');
@@ -1197,15 +1373,19 @@
         </div>';
     $('.custom-selected-orders').html(html);
 
-        // $('#purchase_date').daterangepicker({
-        //     singleDatePicker: true,
-        //     showDropdowns: true,
-        //     locale: {
-        //         format: 'DD/MM/YYYY'
-        //     }
-        // });
         
         $('#purchase_date').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            timePicker: true,
+            timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
+            locale: {
+                format: 'DD/MM/YYYY HH:mm'  // Format with date and time
+            },
+            autoApply: false
+        });
+
+        $('#delivered_date').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true,
             timePicker: true,
@@ -1432,6 +1612,19 @@
         // Toggle sidebar visibility when clicking on the 'Show Past Orders' button
         document.getElementById('btn-show-orders').addEventListener('click', function() {
             toggleSidebar();
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const paymentTerm = document.getElementById('payment_term');
+        const creditDays = document.getElementById('credit-days');
+
+        paymentTerm.addEventListener('change', function () {
+            if (paymentTerm.value === 'credit') {
+                creditDays.classList.remove('d-none');
+            } else {
+                creditDays.classList.add('d-none');
+            }
         });
     });
 </script>

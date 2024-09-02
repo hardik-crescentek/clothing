@@ -256,7 +256,7 @@ class InvoiceController extends Controller
                 ->first();
 
             // Override price fields if client article exists
-            if ($clientArticle) {
+            if (isset($clientArticle) && !empty($clientArticle)) {
                 $material->wholesale_price = $clientArticle->cut_wholesale;
                 $material->retail = $clientArticle->retail;
                 $material->roll = $clientArticle->roll; // Assuming sample price is the same as retail

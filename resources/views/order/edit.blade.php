@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Date of purchase<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('purchase_date', null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required")) !!}
+                        {!! Form::text('purchase_date', isset($order->order_date) ? $order->order_date : null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Status<span class="text-danger ml-2">*</span></label>
@@ -68,6 +68,30 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Payment Term Field -->
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Payment Term<span class="text-danger ml-2">*</span></label>
+                            <div class="input-group">
+                                {!! Form::select('payment_term', ['cash' => 'Cash', 'credit' => 'Credit'], $order->payment_term, ['id' => 'payment_term', 'class' => 'form-control custom-select', 'data-validation' => "required"]) !!}
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <a href="#" title="Add Payment Term">
+                                            <span><i class="fa fa-plus"></i></span>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Credit Days Field -->
+                    <div id="credit-days" class="form-group col-lg-3 {{ $order->payment_term === 'credit' ? '' : 'd-none' }}">
+                        <label class="form-control-label">Credit Days<span class="text-danger ml-2">*</span></label>
+                        {!! Form::number('credit_day', $order->credit_day, ['id' => 'credit_days', 'class' => 'form-control', 'placeholder' => 'Enter days', 'min' => 1]) !!}
+                    </div>
+
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Article No</label>
                         {!! Form::text('search_article',null , array('class' => 'form-control','id'=>'search_article')) !!}
@@ -138,6 +162,51 @@
                             </h4>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Entered By</label>
+                            {!! Form::text('entered_by', null, array('id'=>'enterd_by','placeholder' => 'Entered By','class' => 'form-control')) !!}
+                        </div>
+                    </div> 
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Arranged By</label>
+                            {!! Form::text('arranged_by', null, array('id'=>'enterd_by','placeholder' => 'Arranged By','class' => 'form-control')) !!}
+                        </div>
+                    </div> 
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Inspected By</label>
+                            {!! Form::text('inspected_by', null, array('id'=>'inspected_by','placeholder' => 'Inspected By','class' => 'form-control')) !!}
+                        </div>
+                    </div> 
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Delivered By</label>
+                            {!! Form::text('delivered_by', null, array('id'=>'delivered_by','placeholder' => 'Delivered By','class' => 'form-control')) !!}
+                        </div>
+                    </div>  
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Delivered Date</label>
+                            {!! Form::text('delivered_date', isset($order->delivered_date) ? $order->delivered_date : null, array('id'=>'delivered_date','placeholder' => 'Delivered Date','class' => 'form-control')) !!}
+                        </div>
+                    </div>  
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Total Number of Items.</label>
+                            {!! Form::text('total_number_of_items', null, array('id'=>'total_number_of_items','placeholder' => 'Total Number of Items','class' => 'form-control')) !!}
+                        </div>
+                    </div>  
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Approximate weight</label>
+                            {!! Form::text('approximate_weight', null, array('id'=>'approximate_weight','placeholder' => 'Entered By','class' => 'form-control')) !!}
+                        </div>
+                    </div>  
                 </div>
 
                 <div class="form-group row d-flex align-items-center mt-5">
@@ -505,17 +574,29 @@
             });
             $('#totalMeter').html("Total Meter : " + total);
         };
-        // $('#purchase_date').daterangepicker({
+
+        $('#purchase_date').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            timePicker: true,
+            timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
+            locale: {
+                format: 'DD/MM/YYYY HH:mm'  // Format with date and time
+            },
+            autoApply: false
+        });
+
+        // $('#delivered_date').daterangepicker({
         //     singleDatePicker: true,
         //     showDropdowns: true,
+        //     timePicker: true,
+        //     timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
         //     locale: {
-        //         format: 'DD/MM/YYYY'
-        //     }
+        //         format: 'DD/MM/YYYY HH:mm'  // Format with date and time
+        //     },
+        //     autoApply: false
         // });
 
-         $('#purchase_date').datepicker({
-            format: 'yyyy-mm-dd'
-        });
         
         function grand_total() {
             var total = 0;
@@ -544,5 +625,24 @@
 
         });
     })(jQuery);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const paymentTermSelect = document.getElementById('payment_term');
+        const creditDaysDiv = document.getElementById('credit-days');
+
+        function toggleCreditDaysField() {
+            if (paymentTermSelect.value === 'credit') {
+                creditDaysDiv.classList.remove('d-none');
+            } else {
+                creditDaysDiv.classList.add('d-none');
+            }
+        }
+
+        // Initial check on page load
+        toggleCreditDaysField();
+
+        // Add event listener to toggle field based on selection
+        paymentTermSelect.addEventListener('change', toggleCreditDaysField);
+    });
 </script>
 @endpush
