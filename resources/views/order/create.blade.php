@@ -907,9 +907,9 @@
 
                 // Apply discount
                 if (discountType === 'percentage') {
-                    total = total - (total * discountValue / 100);
+                    total = parseFloat(total - (total * discountValue / 100)).toFixed(2);
                 } else if (discountType === 'amount') {
-                    total = total - discountValue;
+                    total = parseFloat(total - discountValue).toFixed(2);
                 }
                 $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
                 sub_total();
