@@ -22,10 +22,6 @@ class MaterialController extends Controller
      */
     public function index(Request $request)
     {
-
-        //         Util::genrateThumb('materials/a.jpg');
-        //         Util::genrateThumb('materials/a.png');
-        // die;
         $materials = Material::with('category', 'color')->orderBy('id','DESC');
 
         $article_no = ['' => "Select Article No"];
@@ -35,8 +31,12 @@ class MaterialController extends Controller
             $article=$request->article;
             if($article!=''){
                 $materials = $materials->where('article_no', $article);
-                // $colors = ['' => "All Color"];
-                $colors = Material::active()->where('article_no', $article)->get()->pluck('color_code', 'color_no')->all();
+                if ($request->has('specific_page') && $request->specific_page == 'materials_page') {
+                    $colors = ['' => "All Color"];
+                    $colors += Material::active()->where('article_no', $article)->get()->pluck('color_code', 'color_no')->all();
+                } else {
+                    $colors = Material::active()->where('article_no', $article)->get()->pluck('color_code', 'color_no')->all();
+                }
 
                 return response()->json($colors, 200);
             }
@@ -64,7 +64,7 @@ class MaterialController extends Controller
         //color search
         $color=$request->color;
         if($color!=''){
-            $materials = $materials->where('color', $color);
+            $materials = $materials->where('color_no', $color);
             $query_param['color'] = $color;
         }
 

@@ -581,15 +581,15 @@
             console.log($('#item-' + data.id).find('.inv_price').val())
             $.each(customer_item_price, function(i, v) {
                 if (v.customer_id == user_id && v.material_id == material_id) {
-                    $('#item-' + data.id).find('.inv_price').val(v.wholesale_price);
-                    price_w = v.wholesale_price;
+                    $('#item-' + data.id).find('.inv_price').val(v.cut_wholesale);
+                    price_w = v.cut_wholesale;
                     price_r = v.price;
                     price_s = v.roll    ;
                 }
             });
             if(price_w==0){
-                $('#item-' + data.id).find('.inv_price').val(data.wholesale_price);
-                price_w=data.wholesale_price;
+                $('#item-' + data.id).find('.inv_price').val(data.cut_wholesale);
+                price_w=data.cut_wholesale;
             }            
             if(price_r==0){
                 price_r=data.retail;
@@ -1189,8 +1189,12 @@
                 value: new_role_id,
             });
             $('#item-rolls-' + item_id).append(input_hidden);
-            $('#item-' + item_id + ' .td-selected-meter').html($("#total_selected_meter").html());
-            $('#item-' + item_id).find('.td-selected-meter #selected_meter_' + item_id).val($("#total_selected_meter").html());
+            var total_selected_meter = $("#total_selected_meter").html();
+            $('#item-' + item_id + ' .td-selected-meter').html(total_selected_meter);
+            $('#item-' + item_id).find('.td-selected-meter #selected_meter_' + item_id).val(total_selected_meter);
+
+            // Set the value of the inv_meter field to the total_selected_meter value
+            $('#item-' + item_id).find('.td-meter .inv_meter').val(total_selected_meter);
             selectedtotalmeter();
             grand_total();
             totalmeter();
@@ -1459,12 +1463,12 @@
                                             '<td>' + item.material.name + '</td><td>'+ item.material.article_no+ '</td>'+
                                             '<td>'+
                                                 '<label class="show'+item.id+'" style="display:none">* Price :-</label>'+   
-                                                '<input type="hidden" class="form-control" id="cut_wholesale_'+item.id+'" value="'+(item.wholesale_price != null ? item.wholesale_price : '0.00')+'">'+
+                                                '<input type="hidden" class="form-control" id="cut_wholesale_'+item.id+'" value="'+(item.cut_wholesale != null ? item.cut_wholesale : '0.00')+'">'+
                                                 '<label class="show'+item.id+'" style="display:none">* Credit Days :-</label>'+   
                                                 '<input type="hidden" class="form-control" id="cut_wholesale_day'+item.id+'" value="'+(item.wholesale_credit_days != null ? item.wholesale_credit_days : '0')+'">'+
                                                 '<p id="wholesale_text_'+item.id+'">'+
                                                     '<label>* Price :- </label>'+   
-                                                    (item.wholesale_price != null ? item.wholesale_price : '0.00')+ 
+                                                    (item.cut_wholesale != null ? item.cut_wholesale : '0.00')+ 
                                                     '<br>' +
                                                     '<label>* Credit Days :- </label>'+ 
                                                     (item.wholesale_credit_days != null ? item.wholesale_credit_days : '0') +

@@ -51,6 +51,7 @@
                         <label class="form-control-label">&nbsp;</label>
                         <div class="form-action">
                             <input type="submit" class="btn btn-primary btn-square" value="Filter">
+                            <a href="{{ route('materials.index') }}" class="btn btn-secondary btn-square">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -180,7 +181,8 @@
                     url: "{{ route('materials.index') }}",
                     dataType: "json",
                     data: {
-                        article: article_no
+                        article: article_no,
+                        specific_page: 'materials_page'
                     },
                     success: function(data) {
                         console.log(data);
