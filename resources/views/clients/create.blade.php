@@ -1,15 +1,6 @@
 @extends('layouts.master')
 @section('title', 'Clients')
 @section('content')
-<!-- Begin Page Header-->
-<!-- <div class="row">
-    <div class="page-header">
-        <div class="d-flex align-items-center">
-            <h2 class="page-header-title">Clients</h2>
-        </div>
-    </div>
-</div> -->
-<!-- End Page Header -->
 
 @if ($message = Session::get('success'))
 <div class="alert alert-success">
@@ -185,6 +176,9 @@
                         </small>
                         <input type="hidden" name="image_binary" class="image_binary"/>
                     </div>
+                    <div class="col-lg-3">
+                        <img id="image_preview" src="#" alt="Image Preview" style="display:none; max-width: 100px; margin-top: 10px;" />
+                    </div>
                 </div>
 
 
@@ -334,12 +328,17 @@
         Webcam.reset();
     }
 
+    document.getElementById('upload_image').addEventListener('change', function(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('image_preview');
+            output.src = reader.result;
+            output.style.display = 'block';  // Show the image preview
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    });
+
     $(document).ready(function(){
-        // $('#supplier_tbl').tablesorter({
-        //     cssAsc: 'up',
-        //     cssDesc: 'down',
-        //     cssNone: 'both'
-        // });
         $('#article_table').DataTable({
             lengthMenu: [
                 [10, 25, 50,100,500,1000,'All'],

@@ -348,7 +348,7 @@
         <div class="data">0</div>
         {!! Form::hidden("selected_meter[]", null, ["class"=>"inv_total_selected_roll","id"=>"selected_meter"]) !!}
     </td> -->
-    <td class="td-selected-meter" data-value="">{!! Form::text('selected_meter[]', 0, array('class' => 'inv_selected_roll form-control', 'data-validation'=>"required")) !!}</td>
+    <td class="td-selected-meter" data-value="">{!! Form::hidden('selected_meter[]', 0, array('class' => 'inv_selected_roll form-control', 'data-validation'=>"required")) !!}</td>
     <td>
         <a class="btn btn-danger btn-sm btn-square inv_delete my-1 text-light">Delete</a>
         <button type="button" class="btn btn-sm btn-primary btn-square my-1 btn-roll-select" data-material_id="" data-toggle="modal" data-target="#rollSelectModel">Select Roll</button>
@@ -776,145 +776,53 @@
             }
         });
 
-        $(document).on('change', '.inv_meter', function() {
-            var $thisRow = $(this).closest('tr');
-            var meter = parseFloat($(this).val()).toFixed(2);
-            var unit_of_sale = $thisRow.find('.unit_of_sale').val() || ''; 
-            var yard = meter2yard(meter).toFixed(2);
-            var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
-            var discountType = $thisRow.find('.discount_type').val() || 0; // No need for parseFloat
+        // Convert meter to yard
+        function meterToYard(meter) {
+            return meter2yard(meter).toFixed(2);
+        }
+
+        // Calculate total price based on discount
+        function calculateTotal(price, amount, discountType, discountValue) {
+            let total = parseFloat(price * amount).toFixed(2);
+            if (discountType === 'percentage') {
+                total = parseFloat(total - (total * discountValue / 100)).toFixed(2);
+            } else if (discountType === 'amount') {
+                total = parseFloat(total - discountValue).toFixed(2);
+            }
+            return total;
+        }
+
+        // Handle the calculation logic
+        function handleCalculation($thisRow) {
+            var meter = parseFloat($thisRow.find('.inv_meter').val()).toFixed(2);
+            var price = parseFloat($thisRow.find('.inv_price').val()).toFixed(2);
+            var unit_of_sale = $thisRow.find('.unit_of_sale').val() || '';
+            var discountType = $thisRow.find('.discount_type').val() || 0;
             var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
-            $(this).attr('data-value', meter);
+            
             if (!isNaN(meter) && meter) {
-                $('.inv_yard', $thisRow).val(meter2yard(meter).toFixed(2));
-                var weight = $('.inv_weight', $thisRow).attr('data-value');
+                $('.inv_yard', $thisRow).val(meterToYard(meter));
+                var weight = parseFloat($('.inv_weight', $thisRow).attr('data-value')) || 0;
                 $('.inv_weight', $thisRow).val(weight * meter);
                 
                 totalmeter();
                 grandtotal();
             }
+
             if (!isNaN(price) && price) {
-                if(unit_of_sale == 'yard'){
-                    var total = parseFloat(price * yard).toFixed(2);
-                } else {
-                    var total = parseFloat(price * meter).toFixed(2);
-                }
-                // Apply discount
-                if (discountType === 'percentage') {
-                    total = parseFloat(total - (total * discountValue / 100)).toFixed(2);
-                } else if (discountType === 'amount') {
-                    total = parseFloat(total - discountValue).toFixed(2);
-                }
-                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+                var yard = meterToYard(meter);
+                var total = unit_of_sale === 'yard' ? calculateTotal(price, yard, discountType, discountValue) : calculateTotal(price, meter, discountType, discountValue);
+                $('.td-total-price', $thisRow).attr('data-value', total).html(total);
+
                 sub_total();
                 grandtotal();
             }
-        });
+        }
 
-        $(document).on('keyup', '.inv_meter', function() {
+        // Event handler for 'change' and 'keyup' events
+        $(document).on('change keyup', '.inv_meter, .inv_price', function() {
             var $thisRow = $(this).closest('tr');
-            var meter = parseFloat($(this).val()).toFixed(2);
-            var unit_of_sale = $thisRow.find('.unit_of_sale').val() || ''; 
-            var yard = meter2yard(meter).toFixed(2);
-            var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
-            var discountType = $thisRow.find('.discount_type').val() || 0; // No need for parseFloat
-            var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
-            $(this).attr('data-value', meter);
-            if (!isNaN(meter) && meter) {
-                $('.inv_yard', $thisRow).val(meter2yard(meter).toFixed(2));
-                var weight = $('.inv_weight', $thisRow).attr('data-value');
-                $('.inv_weight', $thisRow).val(weight * meter);
-                
-                totalmeter();
-                grandtotal();
-            }
-            if (!isNaN(price) && price) {
-                if(unit_of_sale == 'yard'){
-                    var total = parseFloat(price * yard).toFixed(2);
-                } else {
-                    var total = parseFloat(price * meter).toFixed(2);
-                }
-                // Apply discount
-                if (discountType === 'percentage') {
-                    total = parseFloat(total - (total * discountValue / 100)).toFixed(2);
-                } else if (discountType === 'amount') {
-                    total = parseFloat(total - discountValue).toFixed(2);
-                }
-                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
-                sub_total();
-                grandtotal();
-            }
-        });
-
-        $(document).on('change', '.inv_price', function() {
-            var $thisRow = $(this).closest('tr');
-            var price = parseFloat($(this).val()).toFixed(2);
-            var meter = parseFloat($(this).closest('tr').find('.inv_meter').val()).toFixed(2);
-            var unit_of_sale = $thisRow.find('.unit_of_sale').val() || ''; 
-            var yard = meter2yard(meter).toFixed(2);
-            var discountType = $thisRow.find('.discount_type').val() || 0; 
-            var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
-            $(this).attr('data-value', meter);
-            if (!isNaN(meter) && meter) {
-                $('.inv_yard', $thisRow).val(meter2yard(meter).toFixed(2));
-                var weight = $('.inv_weight', $thisRow).attr('data-value');
-                $('.inv_weight', $thisRow).val(weight * meter);
-                
-                totalmeter();
-                grandtotal();
-            }
-            if (!isNaN(price) && price) {
-                if(unit_of_sale == 'yard'){
-                    var total = parseFloat(price * yard).toFixed(2);
-                } else {
-                    var total = parseFloat(price * meter).toFixed(2);
-                }
-                // Apply discount
-                if (discountType === 'percentage') {
-                    total = parseFloat(total - (total * discountValue / 100)).toFixed(2);
-                } else if (discountType === 'amount') {
-                    total = parseFloat(total - discountValue).toFixed(2);
-                }
-                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
-                sub_total();
-                grandtotal();
-            }
-        });
-
-        $(document).on('keyup', '.inv_price', function() {
-            var $thisRow = $(this).closest('tr');
-            var price = parseFloat($(this).val()).toFixed(2);
-            var meter = parseFloat($(this).closest('tr').find('.inv_meter').val()).toFixed(2);
-            var unit_of_sale = $thisRow.find('.unit_of_sale').val() || ''; 
-            var yard = meter2yard(meter).toFixed(2);
-            var discountType = $thisRow.find('.discount_type').val() || 0; // No need for parseFloat
-            var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
-            $(this).attr('data-value', meter);
-            if (!isNaN(meter) && meter) {
-                $('.inv_yard', $thisRow).val(meter2yard(meter).toFixed(2));
-                var weight = $('.inv_weight', $thisRow).attr('data-value');
-                $('.inv_weight', $thisRow).val(weight * meter);
-                
-                totalmeter();
-                grandtotal();
-            }
-            if (!isNaN(price) && price) {
-                if(unit_of_sale == 'yard'){
-                    var total = parseFloat(price * yard).toFixed(2);
-                } else {
-                    var total = parseFloat(price * meter).toFixed(2);
-                }
-
-                // Apply discount
-                if (discountType === 'percentage') {
-                    total = parseFloat(total - (total * discountValue / 100)).toFixed(2);
-                } else if (discountType === 'amount') {
-                    total = parseFloat(total - discountValue).toFixed(2);
-                }
-                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
-                sub_total();
-                grandtotal();
-            }
+            handleCalculation($thisRow);
         });
 
         $('#generate_date').daterangepicker({
@@ -1195,6 +1103,9 @@
 
             // Set the value of the inv_meter field to the total_selected_meter value
             $('#item-' + item_id).find('.td-meter .inv_meter').val(total_selected_meter);
+            // Trigger the calculation logic for the updated inv_meter value
+            var $thisRow = $('#item-' + item_id);
+            handleCalculation($thisRow);
             selectedtotalmeter();
             grand_total();
             totalmeter();
@@ -1250,16 +1161,21 @@
 
         function totalmeter() {
             var total = 0;
-            var total_select_roll = 0;
+
+            // Calculate the total meter value
             $.each($('.inv_meter'), function(i, v) {
                 total += Number($(this).val());
             });
 
-            selectedtotalmeter(function(sel_roll_total) {
-                // Update the total meter HTML with both total meter and total selected roll
-                $('#totalMeter').html("Total Meter : " + total + '/' + sel_roll_total);
-            });
-        };
+            // Convert meters to yards
+            var totalYard = total * 1.09361;
+
+            // Log the result for debugging
+            console.log('totalYard => ' + totalYard);
+
+            // Update the total meter HTML with both total meter and total yards
+            $('#totalMeter').html("Total Meter: " + total.toFixed(2) + " / " + totalYard.toFixed(2));
+        }
 
         function selectedtotalmeter(callback) {
             var total = 0;

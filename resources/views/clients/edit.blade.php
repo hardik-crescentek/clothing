@@ -1,16 +1,6 @@
 @extends('layouts.master')
 @section('title', 'Clients')
 @section('content')
-<!-- Begin Page Header-->
-<!-- <div class="row">
-    <div class="page-header">
-        <div class="d-flex align-items-center">
-            <h2 class="page-header-title">Edit User</h2>
-        </div>
-    </div>
-</div> -->
-<!-- End Page Header -->
-
 
 @if ($message = Session::get('success'))
 <div class="alert alert-success">
@@ -182,6 +172,9 @@
                         </small>
                         <input type="hidden" name="image_binary" class="image_binary"/> 
                         <small>Leave Empty if you don't want to change it.</small>
+                    </div>
+                    <div class="col-lg-3">
+                        <img id="image_preview" src="#" alt="Image Preview" style="display:none; max-width: 100px; margin-top: 10px;" />
                     </div>
                 </div>
             </div>
@@ -543,13 +536,44 @@
             $(".image-load").attr("src", data_uri);                       
         } );
     }
+    
     function showComara(ele){        
         Webcam.reset();
 		Webcam.attach( '#my_camera' );         
     }
+
     function closeWebcame(){
         Webcam.reset();
     }
+
+    // document.getElementById('upload_image').addEventListener('change', function(event) {
+    //     var input = event.target;
+    //     var file = input.files[0];
+    //     var reader = new FileReader();
+        
+    //     reader.onload = function(e) {
+    //         var preview = document.getElementById('image_preview');
+    //         preview.src = e.target.result;
+    //         preview.style.display = 'block';
+    //     };
+        
+    //     if (file) {
+    //         reader.readAsDataURL(file);
+    //     } else {
+    //         document.getElementById('image_preview').style.display = 'none';
+    //     }
+    // });
+
+    document.getElementById('upload_image').addEventListener('change', function(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('image_preview');
+            output.src = reader.result;
+            output.style.display = 'block';  // Show the image preview
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    });
+
     $('#articles_tbl').DataTable({
         lengthMenu: [
             [10, 25, 50, 100, 500, 1000, -1],
