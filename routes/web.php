@@ -158,4 +158,34 @@ Route::group(['middleware' => ['auth']], function() {
             return 'Error creating storage link: ' . $e->getMessage();
         }
     });
+
+    Route::get('clearRoutes', function () {
+        try {
+            // Execute the route:clear Artisan command
+            Artisan::call('route:clear');
+            return 'Route cache cleared successfully.';
+        } catch (\Exception $e) {
+            return 'Error clearing route cache: ' . $e->getMessage();
+        }
+    });
+
+    Route::get('clearCache', function () {
+        try {
+            // Execute the cache:clear Artisan command
+            Artisan::call('cache:clear');
+            return 'Application cache cleared successfully.';
+        } catch (\Exception $e) {
+            return 'Error clearing application cache: ' . $e->getMessage();
+        }
+    });
+
+    Route::get('optimize', function () {
+        try {
+            // Execute the optimize Artisan command
+            Artisan::call('optimize');
+            return 'Application optimized successfully.';
+        } catch (\Exception $e) {
+            return 'Error optimizing application: ' . $e->getMessage();
+        }
+    });
 });

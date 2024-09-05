@@ -525,9 +525,9 @@ class PurchaseItemController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'ex_rate' => $purchase->ex_rate,
-                'total_no_of_rolls' => $purchase->no_of_rolls,
-                'transport_shippment_cost_per_meter' => $purchase->transport_shippment_cost_per_meter
+                'ex_rate' => $purchase->ex_rate ?? 0,
+                'total_no_of_rolls' => $purchase->no_of_rolls ?? 0,
+                'transport_shippment_cost_per_meter' => $purchase->transport_shippment_cost_per_meter ?? 0
             ]
         ]);
     }

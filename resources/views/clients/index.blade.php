@@ -64,10 +64,10 @@
                             @isset($clients)
                             @foreach ($clients as $key => $user)
                             <tr>
-                                <td>{{ $user->company_name }}</td>
-                                <td>{{ $user->firstname }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->phone }}</td>
+                                <td><a href="{{ route('clients.edit',$user->id) }}">{{ $user->company_name }}</a></td>
+                                <td><a href="{{ route('clients.edit',$user->id) }}">{{ $user->firstname }}</a></td>
+                                <td><a href="{{ route('clients.edit',$user->id) }}">{{ $user->email }}</a></td>
+                                <td><a href="{{ route('clients.edit',$user->id) }}">{{ $user->phone }}</a></td>
                                 <td class="td-actions">
                                     @if($user->images->isNotEmpty())
                                         <a class="btn fa fa-eye btn-sm btn-warning ml-1"  data-target="#viewImagesModal-{{ $user->id }}"  data-toggle="modal" data-placement="top" title="View Images"></a>

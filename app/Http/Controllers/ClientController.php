@@ -125,7 +125,7 @@ class ClientController extends Controller
         $input = $request->only(
             'firstname', 'lastname', 'email', 'phone', 'address', 
             'city', 'state', 'country', 'dob', 'zip', 'company_name', 
-            'business_nature', 'business_nature_other', 'newsletter'
+            'business_nature', 'business_nature_other', 'newsletter', 'skype','facebook','pinterest','wechat','whatsapp','line'
         );
 
         $input['password'] = Hash::make($request->password);

@@ -98,6 +98,51 @@
 
                 <div class="row">
                     <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Skype</label>
+                        <div class="input-group">
+                            {!! Form::text('skype', null, array('placeholder' => 'Skype','class' => 'form-control')) !!}
+                            <span class="input-group-addon addon-secondary"><i class="la la-skype" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Facebook</label>
+                        <div class="input-group">
+                            {!! Form::text('facebook', null, array('placeholder' => 'Facebook','class' => 'form-control')) !!}
+                            <span class="input-group-addon addon-secondary"><i class="la la-facebook" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Pinterest</label>
+                        <div class="input-group">
+                            {!! Form::text('pinterest', null, array('placeholder' => 'Pinterest','class' => 'form-control')) !!}
+                            <span class="input-group-addon addon-secondary"><i class="la la-pinterest" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">WeChat</label>
+                        <div class="input-group">
+                            {!! Form::text('wechat', null, array('placeholder' => 'WeChat','class' => 'form-control')) !!}
+                            <span class="input-group-addon addon-secondary"><i class="la la-wechat" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Whatsapp</label>
+                        <div class="input-group">
+                            {!! Form::text('whatsapp', null, array('placeholder' => 'Whatsapp','class' => 'form-control')) !!}
+                            <span class="input-group-addon addon-secondary"><i class="la la-whatsapp" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Line</label>
+                        <!-- <div class="input-group"> -->
+                            {!! Form::text('line', null, array('placeholder' => 'Line','class' => 'form-control')) !!}
+                            <!-- <span class="input-group-addon addon-secondary"> <img src="{{ asset('assets/img/icons8-line-50.png') }}" height="20px" width="20px"></span> -->
+                        <!-- </div> -->
+                    </div>
+                    <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Email<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('email', null, array('placeholder' => 'Email','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
@@ -106,18 +151,17 @@
                         {!! Form::password('password', array('placeholder' => 'Password','class' => 'form-control')) !!}
                         <small>Leave Empty if you don't want to change it.</small>
                     </div>
+                </div>
+                
+                <div class="row">
                     <div class="form-group col-lg-3 d-flex align-items-center">
                         <div class="form-check">
                             {!! Form::checkbox('newsletter', 1, null ,array('class' => 'form-check-input', 'id' => 'newsletter')) !!}
                             <label for="newsletter" class="form-check-label" for="printWidth">Recive update on new arrivals</label>
                         </div>
                     </div>
-
-                </div>
-
-                <div class="row">
                     <!-- Upload New Image -->
-                    <div class="form-group col-lg-6">
+                    <div class="form-group col-lg-3">
                         <label class="form-control-label">Image</label>
                         <div style="display: flex; align-items: center;">
                             {!! Form::file('image[]', [

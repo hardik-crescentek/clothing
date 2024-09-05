@@ -100,16 +100,53 @@
 
                 <div class="row">
                     <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Skype</label>
+                        <div class="input-group">
+                            {!! Form::text('skype', null, array('placeholder' => 'Skype','class' => 'form-control')) !!}
+                            <span class="input-group-addon addon-secondary"><i class="la la-skype" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Facebook</label>
+                        <div class="input-group">
+                            {!! Form::text('facebook', null, array('placeholder' => 'Facebook','class' => 'form-control')) !!}
+                            <span class="input-group-addon addon-secondary"><i class="la la-facebook" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Pinterest</label>
+                        <div class="input-group">
+                            {!! Form::text('pinterest', null, array('placeholder' => 'Pinterest','class' => 'form-control')) !!}
+                            <span class="input-group-addon addon-secondary"><i class="la la-pinterest" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">WeChat</label>
+                        <div class="input-group">
+                            {!! Form::text('wechat', null, array('placeholder' => 'WeChat','class' => 'form-control')) !!}
+                            <span class="input-group-addon addon-secondary"><i class="la la-wechat" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Whatsapp</label>
+                        <div class="input-group">
+                            {!! Form::text('whatsapp', null, array('placeholder' => 'Whatsapp','class' => 'form-control')) !!}
+                            <span class="input-group-addon addon-secondary"><i class="la la-whatsapp" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Line</label>
+                        <!-- <div class="input-group"> -->
+                            {!! Form::text('line', null, array('placeholder' => 'Line','class' => 'form-control')) !!}
+                            <!-- <span class="input-group-addon addon-secondary"> <img src="{{ asset('assets/img/icons8-line-50.png') }}" height="20px" width="20px"></span> -->
+                        <!-- </div> -->
+                    </div>
+                    <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Email<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('email', null, array('placeholder' => 'Email','class' => 'form-control', 'data-validation'=>"required")) !!}
-                    </div>
-                    <div class="form-group col-lg-3">
-                        <label class="form-control-label d-flex">Password<span class="text-danger ml-2">*</span></label>
-                        {!! Form::password('password', array('placeholder' => 'Password','class' => 'form-control', 'data-validation'=>"required")) !!}
-                    </div>
-                    <div class="form-group col-lg-3">
-                        <label class="form-control-label d-flex">Confirm Password<span class="text-danger ml-2">*</span></label>
-                        {!! Form::password('password_confirmation', array('placeholder' => 'Confirm Password','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
                     <div class="form-group col-lg-3 d-flex align-items-center">
                         <div class="form-check">
@@ -119,26 +156,37 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3">
-                    <label for="upload_image" class="col-form-label">Client Image</label>
-                    <div class="d-flex align-items-center">
-                        {!! Form::file('image', [
-                            'id' => 'upload_image', 
-                            'accept' => 'image/*',
-                            'data-validation' => "mime",
-                            'data-validation-allowing' => "jpeg, jpg, png, gif",
-                            'data-validation-error-msg-mime' => "You can only upload images",
-                            'capture' => "camera",
-                            'class' => 'form-control-file',
-                            'multiple' => true
-                        ]) !!}
-                        <button type="button" class="btn btn-info btn-sl ml-3" onclick="showComara(this)" data-toggle="modal" data-target="#myModal">Capture</button>
+                <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Password<span class="text-danger ml-2">*</span></label>
+                        {!! Form::password('password', array('placeholder' => 'Password','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                    <small>
-                        <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
-                    </small>
-                    <input type="hidden" name="image_binary" class="image_binary"/>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Confirm Password<span class="text-danger ml-2">*</span></label>
+                        {!! Form::password('password_confirmation', array('placeholder' => 'Confirm Password','class' => 'form-control', 'data-validation'=>"required")) !!}
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="upload_image" class="col-form-label">Client Image</label>
+                        <div class="d-flex align-items-center">
+                            {!! Form::file('image', [
+                                'id' => 'upload_image', 
+                                'accept' => 'image/*',
+                                'data-validation' => "mime",
+                                'data-validation-allowing' => "jpeg, jpg, png, gif",
+                                'data-validation-error-msg-mime' => "You can only upload images",
+                                'capture' => "camera",
+                                'class' => 'form-control-file',
+                                'multiple' => true
+                            ]) !!}
+                            <button type="button" class="btn btn-info btn-sl ml-3" onclick="showComara(this)" data-toggle="modal" data-target="#myModal">Capture</button>
+                        </div>
+                        <small>
+                            <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
+                        </small>
+                        <input type="hidden" name="image_binary" class="image_binary"/>
+                    </div>
                 </div>
+
 
 
                 <br>
