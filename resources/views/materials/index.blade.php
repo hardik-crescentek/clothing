@@ -1,26 +1,25 @@
 @extends('layouts.master')
 @section('title', 'Materials')
 @section('content')
-<!-- Begin Page Header-->
-<!-- <div class="row">
-    <div class="page-header">
-        <div class="d-flex align-items-center">
-            <h2 class="page-header-title">Users</h2>
-        </div>
-    </div>
-</div> -->
-<!-- End Page Header -->
 
 @if ($message = Session::get('success'))
 <div class="alert alert-success">
     {{ $message }}
 </div>
 @endif
-<style> 
-    svg:not(:root) {
-      overflow: show !important;
+
+<style>
+    .details-row {
+        padding-left: 20px; /* Adjust as needed for indentation */
+        background-color: #f8f9fa; /* Optional: Light background color for child rows */
+    }
+    .horizontal-line-row td {
+        border-bottom: 1px solid #dee2e6; /* Light grey border for the horizontal line */
+        padding: 0; /* Remove padding if needed */
+        margin: 0; /* Remove margin if needed */
     }
 </style>
+
 <!-- Begin Row -->
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
@@ -31,21 +30,17 @@
             <div class="widget-body">
                 {!! Form::open(['method' => 'GET','route' => ['materials.index']]) !!}
                 <div class="form-group row d-flex align-items-center mt-3">
-                    {{-- <div class="col-lg-2">
-                        <label class="form-control-label">Search &nbsp;</label><div class="d-inline h6 text-muted">[Name]</div>
-                        {!! Form::text('search', $search, array('class' => 'form-control')) !!}
-                    </div> --}}
                     <div class="col-lg-2">
                         <label class="form-control-label">Article No </label>
-                        {!! Form::select('search_article',$article_no,$article , array('class' => 'form-control','id'=>'search_article')) !!}
+                        {!! Form::select('search_article', $article_no, $article, ['class' => 'form-control', 'id' => 'search_article']) !!}
                     </div>
                     <div class="col-lg-2">
                         <label class="form-control-label">Color </label>
-                        {!! Form::select('color',$colors,$color , array('class' => 'form-control','id'=>'color')) !!}
+                        {!! Form::select('color', $colors, $color, ['class' => 'form-control', 'id' => 'color']) !!}
                     </div>
                     <div class="col-lg-2">
                         <label class="form-control-label">Category</label>
-                        {!! Form::select('category_id', $categories, $category_id, array('class' => 'form-control custom-select','id'=>'category')) !!}
+                        {!! Form::select('category_id', $categories, $category_id, ['class' => 'form-control custom-select', 'id' => 'category']) !!}
                     </div>
                     <div class="col-lg-2">
                         <label class="form-control-label">&nbsp;</label>
@@ -60,138 +55,138 @@
         </div>
     </div>
 </div>
+
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
             <div class="widget-body">
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0 " id="material_tbl">
+                    <table class="table table-hover mb-0" id="material_tbl">
                         <thead>
                             <tr>
-                                <!-- <th>Category</th> -->
-                                <th>Name</th>
-                                <th>Article No</th>
-                                <th>Color No</th>
-                                <th>Color</th>
-                                <th>Price From Supplier</th>
-                                <th>Our Final Cost Price</th>
-                                <th data-sorter="false">Image</th>
-                                <th data-sorter="false">Barcode</th>
-                                <th data-sorter="false">QR Code</th>
-                                <th data-sorter="false">Status</th>
-                                @role('super-admin|stock-adder')<th data-sorter="false" width="100px" >Action</th>@endrole
+                                <th colspan="3">Name</th>
+                                <th colspan="3">Article No</th>
+                                <th colspan="3">Barcode</th>
+                                <th colspan="3">QR Code</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @isset($materials)
-                            @foreach ($materials as $key => $material)
-                            <tr class="material-link" data-id="{{$material->id}}">
-                                <!-- <td>{{ $material->category->name }}</td> -->
-                                <td>{{ $material->name }}</td>
-                                <td>{{ $material->article_no }}</td>
-                                <td>{{$material->color_no}}</td>
-                                <td>{{ $material->color }}</td>
-                                <td></td>
-                                <td></td>
-                                <td><img src="{{ img_url($material->image) }}" class="listing-thumb img-thumbnail" alt=""/></td>
-                                <td>{!! DNS1D::getBarcodeSVG($material->barcode,config('app.BARCODE_TYPE'), 1, 40) !!}</td>
-                                <td>{!! DNS2D::getBarcodeSVG($material->article_no,'QRCODE') !!}</td>
-                                <td>
-                                    @if($material->status)
-                                    <span class="badge-text badge-text-small success">Active</span>
-                                    @else
-                                    <span class="badge-text badge-text-small info">Inactive</span>
-                                    @endif
-                                </td>
-                                @role('super-admin|stock-adder')
-                                <td class="td-actions">
-                                    <a class="btn btn-primary btn-sm btn-square col-sm-12" href="{{ route('materials.edit',$material->id) }}">Edit</a>
-                                    {!! Form::open(['method' => 'DELETE','route' => ['materials.destroy', $material->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
-                                    {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square col-sm-12 mt-1']) !!}
-                                    {!! Form::close() !!}
-                                </td>
-                                @endrole
-                            </tr>
+                            @foreach ($groupedMaterials as $articleNo => $group)
+                                <!-- Main Row -->
+                                <tr class="summary-row" data-article-no="{{ $articleNo }}" onclick="toggleDetails('{{ $articleNo }}')">
+                                    <td colspan="3">{{ $group->first()->name }}</td>
+                                    <td colspan="3">{{ $articleNo }}</td>
+                                    <td colspan="3">{!! DNS1D::getBarcodeSVG($articleNo, config('app.BARCODE_TYPE'), 1, 40) !!}</td>
+                                    <td colspan="3">{!! DNS2D::getBarcodeSVG($articleNo, 'QRCODE') !!}</td>
+                                </tr>
+
+                                <!-- Header Row for Detailed View -->
+                                <tr class="details-header-row font-weight-bold bg-dark text-light" data-article-no="{{ $articleNo }}" style="display: none;">
+                                    <th>=></th>
+                                    <th>Name</th>
+                                    <th>Article No</th>
+                                    <th>Color No</th>
+                                    <th>Color</th>
+                                    <th>Price From Supplier</th>
+                                    <th>Our Final Cost Price</th>
+                                    <th>Image</th>
+                                    <th>Barcode</th>
+                                    <th>QR Code</th>
+                                    <th>Status</th>
+                                    @role('super-admin|stock-adder')<th>Action</th>@endrole
+                                </tr>
+
+                                @foreach ($group as $index => $material)
+                                    <!-- Detailed Row -->
+                                    <tr class="details-row" data-article-no="{{ $articleNo }}" style="display: none;">
+                                        <td>=></td>
+                                        <td>{{ $material->name }}</td>
+                                        <td>{{ $material->article_no }}</td>
+                                        <td>{{ $material->color_no }}</td>
+                                        <td>{{ $material->color }}</td>
+                                        <td>{{ $material->price_from_supplier }}</td>
+                                        <td>{{ $material->final_cost_price }}</td>
+                                        <td><img src="{{ img_url($material->image) }}" class="listing-thumb img-thumbnail" alt=""/></td>
+                                        <td>{!! DNS1D::getBarcodeSVG($material->barcode, config('app.BARCODE_TYPE'), 1, 40) !!}</td>
+                                        <td>{!! DNS2D::getBarcodeSVG($material->article_no, 'QRCODE') !!}</td>
+                                        <td>
+                                            @if($material->status)
+                                            <span class="badge-text badge-text-small success">Active</span>
+                                            @else
+                                            <span class="badge-text badge-text-small info">Inactive</span>
+                                            @endif
+                                        </td>
+                                        @role('super-admin|stock-adder')
+                                            <td>
+                                                <a class="btn btn-primary btn-sm" href="{{ route('materials.edit', $material->id) }}">Edit</a>
+                                                {!! Form::open(['method' => 'DELETE', 'route' => ['materials.destroy', $material->id], 'style' => 'display:inline', 'onsubmit' => 'return delete_confirm()']) !!}
+                                                {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm mt-1']) !!}
+                                                {!! Form::close() !!}
+                                            </td>
+                                        @endrole
+                                    </tr>
+                                    @endforeach
+                                    <!-- Horizontal Line Row -->
+                                    <tr class="horizontal-line-row" data-article-no="{{ $articleNo }}" style="display: none;">
+                                        <td colspan="12">
+                                            <hr style="border: 1px solid #dee2e6; margin: 0;">
+                                        </td>
+                                    </tr>
                             @endforeach
-                            @endisset
                         </tbody>
                     </table>
                     @isset($materials)
                         {{ $materials->render() }}
                     @endisset
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- End Row -->
+
+@endsection
+
+@push('after-styles')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+@endpush
+
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script>
     function delete_confirm() {
         return confirm("Are you sure want to delete?");
     }
 
-    // $(document).on("click", "tr.material-link td:not(:first-child, :last-child)", function() {
-    //     var id = $(this).data('id');
-    //     materialInfo(id);
-    // });
-
-    // $(document).on("click", ".material-info", function() {
-    //     var id = $(this).data('id');
-    //     materialInfo(id);
-    // });
-
-    // function materialInfo(id) {
-    //     htmltext = '';
-    //     $('#product-content').html(htmltext);
-    //     $('#product-details').modal('show');
-    // }
-</script>
-@endsection
-@push('after-styles')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-<style>
-    .selection{
-        display:block !important;
+    function toggleDetails(articleNo) {
+        $(`.details-header-row[data-article-no="${articleNo}"]`).toggle();
+        $(`.details-row[data-article-no="${articleNo}"]`).toggle();
+        $(`.horizontal-line-row[data-article-no="${articleNo}"]`).toggle();
     }
 
-</style>
-@endpush
-@push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('#material_tbl').tablesorter({
-                cssAsc: 'up',
-		        cssDesc: 'down',
-                cssNone: 'both'
+    $(document).ready(function(){
+        $('#material_tbl').tablesorter();
+        
+        // Initialize Select2 with full width
+        $('#search_article').select2({  });
+        $('#color').select2({  });
+        $('#category').select2({  });
+
+        // Load colors based on selected article
+        $('#search_article').change(function(){
+            var article_no = $(this).val();
+            $("#color").html('');
+            $.ajax({
+                url: "{{ route('materials.index') }}",
+                dataType: "json",
+                data: { article: article_no , specific_page: 'materials_page'},
+                success: function(data) {
+                    $.each(data, function(index, value){
+                        $("#color").append(`<option value="${index}">${value}</option>`);
+                    });
+                }
             });
-            $('#search_article').select2();
-            $('#color').select2();
-            $('#category').select2();
-
-
-            // Article Wise Color Selection
-
-            $(document).on('change','#search_article',function(){
-                var article_no = $(this).val();
-                $("#color").html('');
-                $.ajax({
-                    url: "{{ route('materials.index') }}",
-                    dataType: "json",
-                    data: {
-                        article: article_no,
-                        specific_page: 'materials_page'
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        $.each(data,function(i){
-                            $("#color").append(`<option value="${i}">${data[i]}</option>`);
-                        })
-                    }
-                });
-            });
-        })
-    </script>
+        });
+    });
+</script>
 @endpush

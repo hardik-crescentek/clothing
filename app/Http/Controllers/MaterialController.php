@@ -83,11 +83,14 @@ class MaterialController extends Controller
             $materials->appends($query_param);
         }
 
-
         $categories = [0 => "Select Category"];
         $categories += Category::active()->pluck('name', 'id')->all();
 
+        // Group materials by article_no
+        $groupedMaterials = $materials->groupBy('article_no');
+
         $data = [
+                    'groupedMaterials' => $groupedMaterials,
                     'materials' => $materials,
                     'categories' => $categories,
                     'category_id' => $category_id,

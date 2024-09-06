@@ -245,7 +245,7 @@ class InvoiceController extends Controller
         $colorNo = $request->color;
 
         // Fetch the material from Material model
-        $material = Material::select('id', 'name', 'barcode', 'color', 'weight', 'article_no', 'color_no', 'cut_wholesale', 'retail', 'roll','unit_purchased_in')
+        $material = Material::select('id', 'name', 'barcode', 'color', 'weight', 'article_no', 'color_no', 'cut_wholesale', 'retail', 'roll','unit_purchased_in','weight_gsm','weight_per_mtr','weight_per_yard')
             ->where(['article_no' => $articleNo, 'color_no' => $colorNo])
             ->first();
 
