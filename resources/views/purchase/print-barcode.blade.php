@@ -217,13 +217,13 @@
             CallAfterWindowLoad();
         }, 10);
     }
-
+    
     function print_single_barcode() {
         $('.print_single_barcode').hide();
         var divToPrint = document.getElementById('print_single_barcode');
         var newWin = window.open('', 'Print-Window');
         newWin.document.open(); 
-        newWin.document.write('<html></head><style>@media print { @page{ size:120mm 50mm;margin:0;padding:0; } tr{ page-break-after: always;font-size:12px; } }</style></head><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.write('<html></head><style>@media print { @page{ size:100mm 40mm;margin:0;padding:0; } tr{ page-break-after: always;font-size:12px; } }</style></head><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
         setTimeout(function() {
             newWin.document.close();
             newWin.close();
