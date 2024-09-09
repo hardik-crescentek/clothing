@@ -95,10 +95,10 @@
                                             <div class="row">
                                                 @foreach($user->images as $image)
                                                     <div class="col-md-4">
-                                                        <img  src="{{ url('public/images/clients/' . $image->name) }}" class="img-fluid" alt="Client Image">
+                                                        <img  src="{{ url('public/uploads/clients/' . $image->name) }}" class="img-fluid" alt="Client Image">
                                                         <!-- Download Button -->
                                                     </div>
-                                                    <a href="{{ url('public/images/clients/' . $image->name) }}" download="{{ $image->name }}" class="btn mt-2 fa fa-download">
+                                                    <a href="{{ url('public/uploads/clients/' . $image->name) }}" download="{{ $image->name }}" class="btn mt-2 fa fa-download">
                                                     </a>
                                                 @endforeach
                                             </div>
