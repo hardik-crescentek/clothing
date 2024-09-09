@@ -155,12 +155,12 @@
     <td>{!! Form::text('piece_no[]', null, array('class' => 'piece_no form-control valid', 'readonly'=>'readonly')) !!}</td>
     <td>{!! Form::text('cost_per_mtr[]', null, array('class' => 'cost_per_mtr form-control valid', 'readonly'=>'readonly')) !!}</td>
     <td>{!! Form::text('cost_per_yrd[]', null, array('class' => 'cost_per_yrd form-control valid', 'readonly'=>'readonly')) !!}</td>
-    <td>{!! Form::hidden('price[]', null, array('class' => 'price form-control valid','readonly'=>'readonly')) !!}</td>
-    <td>{!! Form::hidden('add_invoice_no[]', null, array('class' => 'invoice_no_hidden hidden')) !!}</td>
-    <td>{!! Form::hidden('purchase_id[]', null, array('class' => 'purchase_id hidden')) !!}</td>
-    <td>{!! Form::hidden('purchase_ex_rate[]', null, array('class' => 'purchase_ex_rate hidden')) !!}</td>
-    <td>{!! Form::hidden('purchase_total_no_of_rolls[]', null, array('class' => 'purchase_total_no_of_rolls hidden')) !!}</td>
-    <td>{!! Form::hidden('purchase_transport_shippment_cost_per_meter[]', null, array('class' => 'purchase_transport_shippment_cost_per_meter hidden')) !!}</td>
+    {!! Form::hidden('price[]', null, array('class' => 'price form-control valid','readonly'=>'readonly')) !!}
+    {!! Form::hidden('add_invoice_no[]', null, array('class' => 'invoice_no_hidden hidden')) !!}
+    {!! Form::hidden('purchase_id[]', null, array('class' => 'purchase_id hidden')) !!}
+    {!! Form::hidden('purchase_ex_rate[]', null, array('class' => 'purchase_ex_rate hidden')) !!}
+    {!! Form::hidden('purchase_total_no_of_rolls[]', null, array('class' => 'purchase_total_no_of_rolls hidden')) !!}
+    {!! Form::hidden('purchase_transport_shippment_cost_per_meter[]', null, array('class' => 'purchase_transport_shippment_cost_per_meter hidden')) !!}
 
 </script>
 
@@ -495,13 +495,13 @@
                 
                 const pieceValue = `${articleNo}_${colorNo}_${invoiceNo}_${dateOfPurchase}_${rollNo}_${totalRolls}`;
 
-                const cost_per_mtr = ((price * purchase_ex_rate) + purchase_transport_shippment_cost_per_meter);
-                const cost_per_yrd = (((price * purchase_ex_rate) + purchase_transport_shippment_cost_per_meter) * 1.09361);
+                const cost_per_mtr = parseFloat((price * purchase_ex_rate) + purchase_transport_shippment_cost_per_meter).toFixed(3);
+                const cost_per_yrd = parseFloat(((price * purchase_ex_rate) + purchase_transport_shippment_cost_per_meter) * 0.9144).toFixed(3);
                 
-                $row.find('.roll_no').val(rollNo);
-                $row.find('.piece_no').val(pieceValue);
-                $row.find('.cost_per_mtr').val(cost_per_mtr);
-                $row.find('.cost_per_yrd').val(cost_per_yrd);
+                $row.find('.roll_no').val(rollNo).attr('title', `Roll No: ${rollNo}`);
+                $row.find('.piece_no').val(pieceValue).attr('title', `Piece No: ${pieceValue}`);
+                $row.find('.cost_per_mtr').val(cost_per_mtr).attr('title', `Cost per Meter: ${cost_per_mtr}`);
+                $row.find('.cost_per_yrd').val(cost_per_yrd).attr('title', `Cost per Yard: ${cost_per_yrd}`);
             });
         }
 
@@ -874,24 +874,24 @@
                 if(article_no==v.article_no){
                     color_list+="<option value='"+v.id+"'>"+v.color+"</option>";
                     // $('#' + $uniqueId).find('.color_no').val(String(v.color_no).padStart(2,"0"));
-                    $('#' + $uniqueId).find('.width').val(v.width_cm);
-                    $('#' + $uniqueId).find('.brand').val(v.name);
+                    $('#' + $uniqueId).find('.width').val(v.width_cm).attr('title', `Width: ${v.width_cm}`);
+                    $('#' + $uniqueId).find('.brand').val(v.name).attr('title', `Brand: ${v.name}`);
                     $('#' + $uniqueId).find('.price').val(v.price);
                     unit_purchased_in = v.unit_purchased_in;   
                 }
             });
 
             $('#' + $uniqueId).find('.color').html(color_list);
-            $('#' + $uniqueId).find('.color').val(color_id);
+            $('#' + $uniqueId).find('.color').val(color_id).attr('title', `Color: ${$('#' + $uniqueId).find('.color option:selected').text()}`);
             $('#' + $uniqueId).find('.color').attr('data-row_id',$uniqueId);
 
-            $('#' + $uniqueId).find('.article_no').val(article_no);
-            $('#' + $uniqueId).find('.batch_no').val(batch_no);
+            $('#' + $uniqueId).find('.article_no').val(article_no).attr('title', `Article No: ${article_no}`);
+            $('#' + $uniqueId).find('.batch_no').val(batch_no).attr('title', `Batch No.: ${batch_no}`);
             $('#' + $uniqueId).find('#delete_row').attr("data-row_id",$uniqueId);
 
             $('#' + $uniqueId).find('.invoice_no_hidden').val(invoice_no);  // Set the hidden invoice number
 
-            $('#' + $uniqueId).find('.color_no').val(color_no);
+            $('#' + $uniqueId).find('.color_no').val(color_no).attr('title', `Color No.: ${color_no}`);
 
             $('#' + $uniqueId).find('.purchase_id').val(purchase_id);
             $('#' + $uniqueId).find('.purchase_ex_rate').val(purchase_ex_rate);
