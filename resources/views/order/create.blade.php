@@ -503,6 +503,8 @@
             var $thisRow = $(this).closest('tr');
             var unit_purchased_in = $(this).val();
 
+            $(this).attr('title',`Unit Of Sale : ${unit_purchased_in}`);
+
             // Set read-only attributes based on unit_of_sale
             $thisRow.find('.inv_meter').prop('readonly', unit_purchased_in === 'yard');
             $thisRow.find('.inv_yard').prop('readonly', unit_purchased_in === 'meter');
@@ -520,13 +522,16 @@
             $('#tblOrderTable tbody').append($tr);
             $('#item-' + data.id).find('#inv_item_id').val(data.id);
             $('#item-' + data.id).find('#inv_item_id').attr('class', 'inv_item_id_' + data.id);
-            $('#item-' + data.id).find('.inv_name').val(data.name + " - " + data.color);
+            $('#item-' + data.id).find('.inv_name').val(data.name + " - " + data.color).attr('title', `Brand Name: ${data.name}`);
             $('#item-' + data.id).find('.inv_price').attr('name', 'price[]');
-            $('#item-' + data.id).find('.inv_barcode').val(data.barcode);
+            $('#item-' + data.id).find('.type_of_sale').attr('title', 'Type Of Sale: WholSale');
+            $('#item-' + data.id).find('.discount_type').attr('title', 'Discount Type: Percentage');
+            $('#item-' + data.id).find('.discount_value').attr('title', 'Discount Value: 0');
+            $('#item-' + data.id).find('.inv_barcode').val(data.barcode).attr('title', `Barcode: ${data.barcode}`);
             // $('#item-' + data.id).find('#inv_weight_gsm').attr("data-gsm", data.weight_gsm);
             // $('#item-' + data.id).find('.td-weight_gsm').val(data.weight_gsm);
             $('#item-' + data.id).find('.td-weight_gsm').attr("data-gsm", data.weight_gsm);
-            $('#item-' + data.id).find('.unit_of_sale').val(unit_purchased_in);
+            $('#item-' + data.id).find('.unit_of_sale').val(unit_purchased_in).attr('title', `Unit Of Sale: ${unit_purchased_in}`);
             // Enable/disable fields based on unit purchased in
             if (unit_purchased_in === 'meter') {
                 $('#item-' + data.id).find('.inv_meter').prop('readonly', false);
@@ -554,8 +559,6 @@
                     price_s = v.roll;
                 }
             });
-            console.log("call");
-            console.log(data.cut_wholesale);
             if(unit_purchased_in == "meter"){
                 var cut_wholesale_price = parseFloat(data.cut_wholesale/0.9144).toFixed(2);
                 var retail_price = parseFloat(data.retail/0.9144).toFixed(2);
@@ -566,7 +569,7 @@
                 var roll_price = data.roll;
             }
             if(price_w==0){
-                $('#item-' + data.id).find('.inv_price').val(cut_wholesale_price);
+                $('#item-' + data.id).find('.inv_price').val(cut_wholesale_price).attr('Title',`Price : ${cut_wholesale_price}`);
                 price_w=cut_wholesale_price;
             }            
             if(price_r==0){
@@ -583,17 +586,26 @@
             $('.type_of_sale').on('change', function() {
                 var price_input = $(this).parents('tr').find('.inv_price');
                 var price=0;
+                var saleType = '';
                 if(this.value=="W"){
                     price = price_input.attr("data-wholesale");
+                    saleType = 'Wholesale';
+
                 }
                 if(this.value=="R"){
                     price = price_input.attr("data-retail");
+                    saleType = 'Retail';
                 }
                 if(this.value=="P"){
                     price = price_input.attr("data-sample");
+                    saleType = 'Sample';
                 }
-                price_input.val(price);
 
+                // Set the title attribute to display the selected sale type
+                $(this).prop('title', 'Type of Sale: ' + saleType);
+               
+                price_input.val(price);
+               
                 if (!isNaN(price) && price) {
                     var price = parseFloat(price).toFixed(2) || 0;
                 } else {
@@ -609,7 +621,7 @@
                 $(this).attr('data-value', yard);
                 if (!isNaN(yard) && yard) {
                     var meter = yard2meter(yard).toFixed(2);
-                    $('.inv_meter', $thisRow).val(meter);   
+                    $('.inv_meter', $thisRow).val(meter).attr('title',`Meter : ${meter}`);   
                     var weight = $('.inv_weight', $thisRow).attr('data-value');
                     $('.inv_weight', $thisRow).val(weight * yard);
                                         
@@ -695,10 +707,15 @@
             var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
             var discountType = $thisRow.find('.discount_type').val() || 0; // No need for parseFloat
             var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
+
+            $thisRow.find('.inv_meter').attr('title',`Meter : ${meter}`);
+            $thisRow.find('.inv_yard').attr('title',`Meter : ${yard}`);
+            $thisRow.find('.discount_type').attr('title',`Discount Type: ${discountType}`);
+            $thisRow.find('.discount_value').attr('title',`Discount Value: ${discountValue}`);
             $(this).attr('data-value', yard);
             if (!isNaN(yard) && yard) {
                 var meter = yard2meter(yard).toFixed(2);
-                $('.inv_meter', $thisRow).val(meter);   
+                $('.inv_meter', $thisRow).val(meter).attr('title',`Meter : ${meter}`);   
                 var weight = $('.inv_weight', $thisRow).attr('data-value');
                 $('.inv_weight', $thisRow).val(weight * yard);
                                     
@@ -717,7 +734,7 @@
                 } else if (discountType === 'amount') {
                     total = parseFloat(total - discountValue).toFixed(2);
                 }
-                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total).attr('title', `Total Amount: ${total}`);
                 sub_total();
                 grandtotal();
             }
@@ -747,8 +764,14 @@
             var discountType = $thisRow.find('.discount_type').val() || 0;
             var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
             
+            $thisRow.find('.inv_meter').attr('title',`Meter : ${meter}`);
+            $thisRow.find('.discount_type').attr('title',`Discount Type: ${discountType}`);
+            $thisRow.find('.discount_value').attr('title',`Discount Value: ${discountValue}`);
+            $thisRow.find('.inv_price').attr('title',`Price : ${price}`);
+
             if (!isNaN(meter) && meter) {
-                $('.inv_yard', $thisRow).val(meterToYard(meter));
+                var yard = meterToYard(meter);
+                $('.inv_yard', $thisRow).val(yard).attr('title',`Yard : ${yard}`);
                 var weight = parseFloat($('.inv_weight', $thisRow).attr('data-value')) || 0;
                 $('.inv_weight', $thisRow).val(weight * meter);
                 
@@ -759,7 +782,7 @@
             if (!isNaN(price) && price) {
                 var yard = meterToYard(meter);
                 var total = unit_of_sale === 'yard' ? calculateTotal(price, yard, discountType, discountValue) : calculateTotal(price, meter, discountType, discountValue);
-                $('.td-total-price', $thisRow).attr('data-value', total).html(total);
+                $('.td-total-price', $thisRow).attr('data-value', total).html(total).attr('title', `Total Amount: ${total}`);
 
                 sub_total();
                 grandtotal();
@@ -1024,11 +1047,11 @@
             });
             $('#item-rolls-' + item_id).append(input_hidden);
             var total_selected_meter = $("#total_selected_meter").html();
-            $('#item-' + item_id + ' .td-selected-meter').html(total_selected_meter);
+            $('#item-' + item_id + ' .td-selected-meter').html(total_selected_meter).attr('title',`Selected Role: ${total_selected_meter}`);
             $('#item-' + item_id).find('.td-selected-meter #selected_meter_' + item_id).val(total_selected_meter);
 
             // Set the value of the inv_meter field to the total_selected_meter value
-            $('#item-' + item_id).find('.td-meter .inv_meter').val(total_selected_meter);
+            $('#item-' + item_id).find('.td-meter .inv_meter').val(total_selected_meter).attr('title',`Meter : ${meter}`);
             // Trigger the calculation logic for the updated inv_meter value
             var $thisRow = $('#item-' + item_id);
             handleCalculation($thisRow);
