@@ -119,7 +119,9 @@ class ClientController extends Controller
             'city'      => 'required',
             'state'     => 'required',
             'zip'       => 'required',
-            'images.*'  => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // each file must be an image and up to 2MB
+            // 'images.*'  => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // each file must be an image and up to 2MB
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validation rules for images
+            'captured_image' => 'nullable|string', // Optional base64 image
         ]);
 
         $input = $request->only(
@@ -149,35 +151,53 @@ class ClientController extends Controller
 
         $imagePath = public_path('uploads/') . config('constants.client_img_path');
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '-' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('images', $filename);
+        // if ($request->hasFile('image')) {
+        //     $file = $request->file('image');
+        //     $filename = time() . '-' . $file->getClientOriginalName();
+        //     $filePath = $file->storeAs('images', $filename);
+
+        //     // Update or create the client image record
+        //     $existingImage = ClientImage::where('client_id', $user->id)->latest()->first();
         
-            if ($existingImage) {
-                $existingImage->update([
-                    'name' => $filename,
-                    'path' => $filePath // optional: store the full path if needed
-                ]);
-            } else {
-                ClientImage::create([
-                    'client_id' => $user->id,
-                    'name' => $filename,
-                    'path' => $filePath // optional
-                ]);
-            }
-        }
+        //     if ($existingImage) {
+        //         $existingImage->update([
+        //             'name' => $filename,
+        //             'path' => $filePath // optional: store the full path if needed
+        //         ]);
+        //     } else {
+        //         ClientImage::create([
+        //             'client_id' => $user->id,
+        //             'name' => $filename,
+        //             'path' => $filePath // optional
+        //         ]);
+        //     }
+        // }
        
+        // if(isset($request->image_binary) && !empty($request->image_binary)){
+        //     // Get the old image if it exists
+        //     $oldImage = ClientImage::where('client_id', $user->id)->latest()->first();
+        //     if ($oldImage) {
+        //         $oldImagePath = $imagePath . '/' . $oldImage->name;
+        //         if (File::exists($oldImagePath)) {
+        //             File::delete($oldImagePath);
+        //         }
+        //     }
+        //     $imageName = Str::random() . ".jpg";
+        //     $baseFromJavascript = $request->image_binary;
+        //     $base_to_php = explode(',', $baseFromJavascript);
+        //     $originalImage = base64_decode($base_to_php[1]);
+        //     File::put(public_path('uploads/').config('constants.client_img_path') .'/'. $imageName, $originalImage);
+        //     $data['image'] = config('constants.client_img_path') .'/'. $imageName;
+        //     Util::genrateThumb($data['image']);
+        //     ClientImage::create([
+        //         'client_id' => $user->id,
+        //         'name' => $imageName
+        //     ]);
+        // }
+
         if(isset($request->image_binary) && !empty($request->image_binary)){
             // Get the old image if it exists
-            $oldImage = ClientImage::where('client_id', $user->id)->latest()->first();
-            if ($oldImage) {
-                $oldImagePath = $imagePath . '/' . $oldImage->name;
-                if (File::exists($oldImagePath)) {
-                    File::delete($oldImagePath);
-                }
-            }
-            $imageName = Str::random() . ".jpg";
+            $imageName = 'captured_' .Str::random() . ".jpg";
             $baseFromJavascript = $request->image_binary;
             $base_to_php = explode(',', $baseFromJavascript);
             $originalImage = base64_decode($base_to_php[1]);
@@ -188,6 +208,15 @@ class ClientController extends Controller
                 'client_id' => $user->id,
                 'name' => $imageName
             ]);
+        }
+
+        // Handle multiple image uploads
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageName = $image->getClientOriginalName(); // Get the image name
+                $image->storeAs('clients', $imageName); // Store the image
+                $user->images()->create(['name' => $imageName]); // Save only image name
+            }
         }
 
         if ($request->input('redirectTo')) {
@@ -319,7 +348,9 @@ class ClientController extends Controller
                 'city'      => 'required',
                 'state'     => 'required',
                 'zip'       => 'required',
-                'images'     => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                // 'images'     => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validation rules for images
+                'captured_image' => 'nullable|string', // Optional base64 image
             ]);
 
             // Get the user
@@ -352,39 +383,34 @@ class ClientController extends Controller
                 }
             }
             
-            $imagePath = public_path('uploads/') . config('constants.client_img_path');
+            // $imagePath = public_path('uploads/') . config('constants.client_img_path');
 
                         
-            // Handle file upload if present
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $filename = time() . '-' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('images', $filename);
+            // // Handle file upload if present
+            // if ($request->hasFile('image')) {
+            //     $file = $request->file('image');
+            //     $filename = time() . '-' . $file->getClientOriginalName();
+            //     $filePath = $file->storeAs(config('constants.client_img_path'), $filename);
+            //      // Get the old image if it exists
+            //     // $existingImage = ClientImage::where('client_id', $user->id)->latest()->first();
             
-                if ($existingImage) {
-                    $existingImage->update([
-                        'name' => $filename,
-                        'path' => $filePath // optional: store the full path if needed
-                    ]);
-                } else {
-                    ClientImage::create([
-                        'client_id' => $user->id,
-                        'name' => $filename,
-                        'path' => $filePath // optional
-                    ]);
-                }
-            }
+            //     // if ($existingImage) {
+            //     //     $existingImage->update([
+            //     //         'name' => $filename,
+            //     //         'path' => $filePath // optional: store the full path if needed
+            //     //     ]);
+            //     // } else {
+            //         ClientImage::create([
+            //             'client_id' => $user->id,
+            //             'name' => $filename,
+            //             'path' => $filePath // optional
+            //         ]);
+            //     // }
+            // }
            
             if(isset($request->image_binary) && !empty($request->image_binary)){
                 // Get the old image if it exists
-                $oldImage = ClientImage::where('client_id', $user->id)->latest()->first();
-                if ($oldImage) {
-                    $oldImagePath = $imagePath . '/' . $oldImage->name;
-                    if (File::exists($oldImagePath)) {
-                        File::delete($oldImagePath);
-                    }
-                }
-                $imageName = Str::random() . ".jpg";
+                $imageName = 'captured_' .Str::random() . ".jpg";
                 $baseFromJavascript = $request->image_binary;
                 $base_to_php = explode(',', $baseFromJavascript);
                 $originalImage = base64_decode($base_to_php[1]);
@@ -396,6 +422,31 @@ class ClientController extends Controller
                     'name' => $imageName
                 ]);
             }
+
+            // Handle multiple image uploads
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imageName = $image->getClientOriginalName(); // Get the image name
+                    $image->storeAs('clients', $imageName); // Store the image
+                    $user->images()->create(['name' => $imageName]); // Save only image name
+                }
+            }
+
+            // Handle captured image
+            // if (isset($request->image_binary) && !empty($request->image_binary)) {
+            //     $data_uri = $request->input('captured_image');
+            //     $data_uri = str_replace('data:image/jpeg;base64,', '', $data_uri);
+            //     $data_uri = str_replace('data:image/png;base64,', '', $data_uri);
+            //     $data_uri = str_replace('data:image/jpg;base64,', '', $data_uri);
+            //     $data_uri = str_replace('data:image/gif;base64,', '', $data_uri);
+            //     $data_uri = str_replace('data:image/svg+xml;base64,', '', $data_uri);
+            //     $data_uri = str_replace(' ', '+', $data_uri);
+            //     $imageName = 'captured_' . time() . '.jpg';
+            //     \Storage::disk('public')->path('clients/' . $imageName, base64_decode($data_uri));
+                
+            //     // Update or create captured image record
+            //     $user->images()->create(['name' => $imageName]);
+            // }
 
             return redirect()->route('clients.index')->with('success', 'User updated successfully');
         }

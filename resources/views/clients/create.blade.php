@@ -156,7 +156,8 @@
                         <label class="form-control-label d-flex">Confirm Password<span class="text-danger ml-2">*</span></label>
                         {!! Form::password('password_confirmation', array('placeholder' => 'Confirm Password','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                    <div class="col-lg-3">
+                    
+                    <!-- <div class="col-lg-3">
                         <label for="upload_image" class="col-form-label">Client Image</label>
                         <div class="d-flex align-items-center">
                             {!! Form::file('image', [
@@ -178,6 +179,25 @@
                     </div>
                     <div class="col-lg-3">
                         <img id="image_preview" src="#" alt="Image Preview" style="display:none; max-width: 100px; margin-top: 10px;" />
+                    </div> -->
+                    <div class="form-group col-lg-6">
+                        <label for="images form-control-label">Upload Images:</label>
+                        <div style="display: flex; align-items: center;">
+                            <input type="file" id="images" name="images[]" multiple  onchange="previewImages()">
+                            
+                            <button type=button class="btn btn-info btn-sl"  data-toggle="modal" onclick="showComara(this)"  data-target="#myModal" >Capture</button>
+                            <div class="form-group image-preview" id="image-preview"></div>
+                            <img class="listing-thumb image-load img-thumbnail " alt="" />
+                            <input type="hidden" name="image_binary" class="image_binary"/> 
+                            
+                            <div id="preview-container" style="display: flex; max-width: 100px; margin-top: 10px;margin-left: 2px;">
+                            </div>
+                            <img id="image_preview" src="#" alt="Image Preview" style="display:none; max-width: 100px; margin-top: 10px;margin-left: 2px;" />
+                        </div>
+                        <small>
+                            <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
+                        </small>
+                        <small>Leave Empty if you don't want to change it.</small>
                     </div>
                 </div>
 
@@ -328,15 +348,39 @@
         Webcam.reset();
     }
 
-    document.getElementById('upload_image').addEventListener('change', function(event) {
-        var reader = new FileReader();
-        reader.onload = function(){
-            var output = document.getElementById('image_preview');
-            output.src = reader.result;
-            output.style.display = 'block';  // Show the image preview
+    // document.getElementById('upload_image').addEventListener('change', function(event) {
+    //     var reader = new FileReader();
+    //     reader.onload = function(){
+    //         var output = document.getElementById('image_preview');
+    //         output.src = reader.result;
+    //         output.style.display = 'block';  // Show the image preview
+    //     }
+    //     reader.readAsDataURL(event.target.files[0]);
+    // });
+
+    function previewImages() {
+        const previewContainer = document.getElementById('preview-container');
+        previewContainer.innerHTML = ''; // Clear previous previews
+
+        const files = document.getElementById('images').files;
+        for (const file of files) {
+            if (!file.type.startsWith('image/')) { 
+                continue;
+            }
+
+            const img = document.createElement('img');
+            img.classList.add('img-thumbnail');
+            img.file = file;
+
+            previewContainer.appendChild(img); 
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(event.target.files[0]);
-    });
+    }
 
     $(document).ready(function(){
         $('#article_table').DataTable({

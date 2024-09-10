@@ -9,7 +9,7 @@
 @endif
 
 <!-- Begin Row -->
-{!! Form::model($user, ['method' => 'POST','route' => ['client.update', $user->id], 'class'=>"form-validate", 'novalidate', 'enctype' => 'multipart/form-data']) !!}
+{!! Form::model($user, ['method' => 'POST','route' => ['client.update', $user->id], 'class'=>"form-validate", 'novalidate','files' => true]) !!}
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
@@ -151,10 +151,41 @@
                         </div>
                     </div>
                     <!-- Upload New Image -->
-                    <div class="form-group col-lg-3">
-                        <label class="form-control-label">Image</label>
+
+                    <div class="form-group col-lg-6">
+                        <label for="images form-control-label">Upload Images:</label>
+                        @if($user->images->isNotEmpty())
+                            <a class="btn fa fa-eye btn-sm btn-warning ml-1"  data-target="#viewImagesModal-{{ $user->id }}"  data-toggle="modal" data-placement="top" title="View Images"></a>
+                        @endif
                         <div style="display: flex; align-items: center;">
-                            {!! Form::file('image[]', [
+                            <input type="file" id="images" name="images[]" multiple  onchange="previewImages()">
+                            
+                            <button type=button class="btn btn-info btn-sl"  data-toggle="modal" onclick="showComara(this)"  data-target="#myModal" >Capture</button>
+                            <div class="form-group image-preview" id="image-preview"></div>
+                            <img src="{{ img_url($user->name) }}" class="listing-thumb image-load img-thumbnail " alt="" />
+                            <input type="hidden" name="image_binary" class="image_binary"/> 
+                            
+                            <div id="results">
+                                @if($user->image_binary)
+                                <img src="{{ Storage::url($client->image_binary) }}" class="img-thumbnail min-size-image"/>
+                                @endif
+                            </div>
+                            <div id="preview-container" style="display: flex; max-width: 100px; margin-top: 10px;margin-left: 2px;">
+                            </div>
+                            <img id="image_preview" src="#" alt="Image Preview" style="display:none; max-width: 100px; margin-top: 10px;margin-left: 2px;" />
+                        </div>
+                        <small>
+                            <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
+                        </small>
+                        <small>Leave Empty if you don't want to change it.</small>
+                    </div>
+
+
+
+                    <!-- <div class="form-group col-lg-3">
+                        <label class="form-control-label">Upload Images:</label>
+                        <div style="display: flex; align-items: center;">
+                            {!! Form::file('images', [
                             'id' => 'upload_image', 
                             'accept' => 'image/*',
                             'data-validation' => "mime",
@@ -163,7 +194,7 @@
                             'capture' => "camera",
                             'class' => 'form-control-file',
                             'multiple' => true
-                        ]) !!}
+                        ]) !!}`
                             <button type=button class="btn btn-info btn-sl"  data-toggle="modal" onclick="showComara(this)"  data-target="#myModal" >Capture</button>
                             <img src="{{ img_url($user->name) }}" class="listing-thumb image-load img-thumbnail " alt="" />
                         </div>
@@ -175,7 +206,33 @@
                     </div>
                     <div class="col-lg-3">
                         <img id="image_preview" src="#" alt="Image Preview" style="display:none; max-width: 100px; margin-top: 10px;" />
-                    </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="viewImagesModal-{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="viewImagesModalLabel-{{ $user->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewImagesModalLabel-{{ $user->id }}">Client Images</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @foreach($user->images as $image)
+                        <div class="col-md-4 mt-5">
+                            <img  src="{{ url('public/uploads/clients/' . $image->name) }}" class="img-fluid" alt="Client Image">
+                            <!-- Download Button -->
+                        </div>
+                        <a href="{{ url('public/uploads/clients/' . $image->name) }}" download="{{ $image->name }}" class="btn fa fa-download mt-5">
+                        </a>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -361,6 +418,16 @@
     .selection{
         display:block !important;
     }
+    .image-preview {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .image-preview img {
+        max-width: 150px;
+        max-height: 150px;
+        margin: 5px;
+        border: 1px solid #ddd;
+    }
 
 </style>
 @endpush
@@ -533,7 +600,7 @@
             
             $("#results img").attr("src", data_uri);
             $('.image_binary').val(data_uri); 
-            $(".image-load").attr("src", data_uri);                       
+            $(".image-load").attr("src", data_uri);               
         } );
     }
     
@@ -546,33 +613,49 @@
         Webcam.reset();
     }
 
-    // document.getElementById('upload_image').addEventListener('change', function(event) {
-    //     var input = event.target;
-    //     var file = input.files[0];
-    //     var reader = new FileReader();
-        
-    //     reader.onload = function(e) {
-    //         var preview = document.getElementById('image_preview');
-    //         preview.src = e.target.result;
-    //         preview.style.display = 'block';
-    //     };
-        
-    //     if (file) {
-    //         reader.readAsDataURL(file);
-    //     } else {
-    //         document.getElementById('image_preview').style.display = 'none';
-    //     }
-    // });
+    // function previewImages() {
+    //     const previewContainer = document.getElementById('image-preview');
+    //     previewContainer.innerHTML = ''; // Clear previous previews
 
-    document.getElementById('upload_image').addEventListener('change', function(event) {
-        var reader = new FileReader();
-        reader.onload = function(){
-            var output = document.getElementById('image_preview');
-            output.src = reader.result;
-            output.style.display = 'block';  // Show the image preview
+    //     const files = document.getElementById('images').files;
+    //     for (const file of files) {
+    //         if (file && file.type.startsWith('image/')) {
+    //             const reader = new FileReader();
+                
+    //             reader.onload = function(event) {
+    //                 const img = document.createElement('img');
+    //                 img.src = event.target.result;
+    //                 previewContainer.appendChild(img);
+    //             };
+
+    //             reader.readAsDataURL(file);
+    //         }
+    //     }
+    // }
+
+    function previewImages() {
+        const previewContainer = document.getElementById('preview-container');
+        previewContainer.innerHTML = ''; // Clear previous previews
+
+        const files = document.getElementById('images').files;
+        for (const file of files) {
+            if (!file.type.startsWith('image/')) { 
+                continue;
+            }
+
+            const img = document.createElement('img');
+            img.classList.add('img-thumbnail');
+            img.file = file;
+
+            previewContainer.appendChild(img); 
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(event.target.files[0]);
-    });
+    }
 
     $('#articles_tbl').DataTable({
         lengthMenu: [
