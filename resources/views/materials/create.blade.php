@@ -82,27 +82,60 @@
                             {!! Form::text('article_no', null, ['id'=>'article_no','placeholder' => 'Give Article Name', 'class' => 'form-control', 'data-validation' => 'required']) !!}
                         </div>
                     </div>
+                </div>
+                <div class="row">
+                    <!-- First Column with lg-2 width -->
                     <div class="col-lg-2">
-                        <div class="form-group justify-content-center align-items-center">
+                        <div class="form-group">
                             <label class="form-control-label">Selling Price:</label>
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label class="form-control-label">ROLL</label>
-                            {!! Form::text('roll',0, array('class' => 'form-control col-lg-12','id'=>"sample",'data-validation' => "number",'data-validation-allowing'=>"float",'placeholder' => 'Sample Price')) !!}
+
+                    <!-- Second Column with lg-5 width (to account for lg-7 used in remaining columns) -->
+                    <div class="col-lg-5">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">ROLL (per yrd)</label>
+                                    {!! Form::text('roll', 0, ['class' => 'form-control', 'id' => 'sample', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Sample Price']) !!}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">WHOLESALE (per yrd)</label>
+                                    {!! Form::text('cut_wholesale', 0, ['class' => 'form-control', 'id' => 'wholesale', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'WholeSale Price']) !!}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">RETAIL (per yrd)</label>
+                                    {!! Form::text('retail', 0, ['class' => 'form-control', 'id' => 'retail', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Retail Price']) !!}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label class="form-control-label">CUT WHOLESALE</label>
-                            {!! Form::text('cut_wholesale',0, array('class' => 'form-control col-lg-12','id'=>"wholesale",'data-validation' => "number",'data-validation-allowing'=>"float",'placeholder' => 'WholeSale Price')) !!}
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label class="form-control-label">RETAIL</label>
-                            {!! Form::text('retail',0, array('class' => 'form-control col-lg-12','id'=>"retail",'data-validation' => "number",'data-validation-allowing'=>"float",'placeholder' => 'Retail Price')) !!}
+
+                    <!-- Third Column with lg-5 width (to account for lg-7 used in remaining columns) -->
+                    <div class="col-lg-5">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">ROLL (per mtr)</label>
+                                    {!! Form::text('roll_per_mtr', 0, ['class' => 'form-control', 'id' => 'sample', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Sample Price']) !!}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">WHOLESALE (per mtr)</label>
+                                    {!! Form::text('cut_wholesale_per_mtr', 0, ['class' => 'form-control', 'id' => 'wholesale', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'WholeSale Price']) !!}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">RETAIL (per mtr)</label>
+                                    {!! Form::text('retail_per_mtr', 0, ['class' => 'form-control', 'id' => 'retail', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Retail Price']) !!}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

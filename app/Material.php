@@ -11,7 +11,7 @@ class Material extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        "name", "category_id","selvage","construction", "color","color_no","article_no",'width','weight', "image", "barcode", "description", "min_alert_qty", "status","wholesale_price","retail_price","sample_price","supplier_id","made_in","currency","price","roll","cut_wholesale","retail","width_inch","width_cm","weight_gsm","weight_per_mtr","weight_per_yard","unit_purchased_in"
+        "name", "category_id","selvage","construction", "color","color_no","article_no",'width','weight', "image", "barcode", "description", "min_alert_qty", "status","wholesale_price","retail_price","sample_price","supplier_id","made_in","currency","price","roll","roll_per_mtr","cut_wholesale","cut_wholesale_per_mtr","retail","retail_per_mtr","width_inch","width_cm","weight_gsm","weight_per_mtr","weight_per_yard","unit_purchased_in"
     ];
 
     protected $dates = ['deleted_at'];

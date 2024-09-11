@@ -32,16 +32,12 @@
                 {!! Form::open(array('route' => 'purchase-item.store','method'=>'POST','id'=>'from_add_purchase', 'class'=>"form-horizontal form-validate", 'novalidate','files' => true)) !!}
                 <div class="row my-4">
                     <div class="col-md-12">
-
-     
-
                         <div class="card">
                             <div class="card-header d-flex align-items-center justify-content-between">
                                 <div class="button-group">
                                     <h4 class="card-title">Purchase Items</h4>
                                     <a href="javascript:;" class="btn btn-primary p-2 btn-square btn-sm ml-2" id="add_item_model_btn" data-toggle="modal" data-target="#addItemModal">Add Item</a>
                                     <button type="button" class="btn btn-danger p-2 btn-square btn-sm ml-2" id="delete_selected">Delete</button>
-                                    <button type="button" class="btn btn-primary p-2 btn-square btn-sm ml-2" id="generate_roll_piece">Generate Roll & Piece No.</button>
                                 </div>
                                 <div class="invoice-dropdown-container d-flex align-items-center">
                                     <label for="search_invoice_no" class="mb-0 mr-2">Invoice No<span class="text-danger ml-2">*</span>:</label>
@@ -71,6 +67,7 @@
                                                 <th style="width:14%;">Piece</th>
                                                 <th style="width:9%;">Cost Per Mtr</th>
                                                 <th style="width:9%;">Cost Per Yrd</th>
+                                                <th style="width: 5%;"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -85,12 +82,12 @@
                 </div>
                 <div class="form-group row d-flex align-items-center mt-5">
                     <div class="col-lg-12 d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary btn-lg mr-2" id="generate_roll_piece">Generate Roll & Piece No.</button>
                         <button type="submit" class="btn btn-primary btn-lg" id="from_add_purchase_btn">Save</button>
                     </div>
                 </div>
                 {!! Form::close() !!}
             </div>
-
         </div>
     </div>
 </div>
@@ -161,6 +158,7 @@
     {!! Form::hidden('purchase_ex_rate[]', null, array('class' => 'purchase_ex_rate hidden')) !!}
     {!! Form::hidden('purchase_total_no_of_rolls[]', null, array('class' => 'purchase_total_no_of_rolls hidden')) !!}
     {!! Form::hidden('purchase_transport_shippment_cost_per_meter[]', null, array('class' => 'purchase_transport_shippment_cost_per_meter hidden')) !!}
+    <td><button type="button" class="btn btn-secondary copy_row_btn">+</button></td>
 
 </script>
 
@@ -332,6 +330,19 @@
         });
 
         $(document).ready(function() {
+
+            // Add More button click event
+            $(document).on('click', '.copy_row_btn', function() {
+                var row = $(this).closest('tr'); // Get the closest row to the clicked button
+                var newRow = row.clone(true); // Clone the existing row
+
+                $('#tblPurchaseItems tbody').append(newRow); // Append the cloned row to the table body
+
+                row.find('select').each(function(i) {
+                    newRow.find('select').eq(i).val($(this).val())
+                })
+            });
+            //end addmore code
 
             $('#add_item_model_btn').click(function(event) {
                 var invoiceNo = $('#search_invoice_no').val();
@@ -884,9 +895,10 @@
             $('#' + $uniqueId).find('.color').html(color_list);
             $('#' + $uniqueId).find('.color').val(color_id).attr('title', `Color: ${$('#' + $uniqueId).find('.color option:selected').text()}`);
             $('#' + $uniqueId).find('.color').attr('data-row_id',$uniqueId);
+            $('#' + $uniqueId).find('.color').attr('readonly', true);
 
             $('#' + $uniqueId).find('.article_no').val(article_no).attr('title', `Article No: ${article_no}`);
-            $('#' + $uniqueId).find('.batch_no').val(batch_no).attr('title', `Batch No.: ${batch_no}`);
+            $('#' + $uniqueId).find('.batch_no').val(batch_no).attr('title', `Batch No.: ${batch_no}`).attr('readonly',true);
             $('#' + $uniqueId).find('#delete_row').attr("data-row_id",$uniqueId);
 
             $('#' + $uniqueId).find('.invoice_no_hidden').val(invoice_no);  // Set the hidden invoice number
@@ -907,6 +919,13 @@
                 $('#' + $uniqueId).find('.meter').prop('readonly', true);
                 $('#' + $uniqueId).find('.yard').prop('readonly', false);
             }
+            
+            disableAddItemButton();
+        }
+        // Disable the Add Item button by preventing its default action
+        function disableAddItemButton() {
+            $('#add_item_model_btn').addClass('disabled'); // Add a disabled class
+            $('#add_item_model_btn').off('click'); // Disable the click event
         }
     }
 </script>

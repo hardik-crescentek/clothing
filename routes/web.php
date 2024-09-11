@@ -65,6 +65,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('purchase/printall', [App\Http\Controllers\PurchaseController::class, 'print_all'])->name('purchase.printall');
     Route::post('purchase/multiple-delete', [App\Http\Controllers\PurchaseController::class, 'multipleDelete'])->name('purchase.multiple-delete');
 
+    Route::get('fetch-material-price',[App\Http\Controllers\PurchaseItemController::class, 'fetchPrice'])->name('purchase.items.fetchPrice');
+
     # For Supplier #
     Route::resource('supplier', SupplierController::class);
 

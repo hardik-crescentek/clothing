@@ -244,7 +244,7 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$id)
+    public function editOld(Request $request,$id)
     {
         $latestRecordsSubquery = DB::table('materials')
                                 ->select('id', 'article_no', 'color', 'color_no', 'roll', 'cut_wholesale', 'retail', DB::raw('MAX(id) as max_id'))
@@ -259,7 +259,7 @@ class ClientController extends Controller
                     ->select('materials.article_no', 'materials.color', 'materials.color_no', 'latest_records.roll', 'latest_records.cut_wholesale', 'latest_records.retail')
                     ->get();
 
-        // echo "<pre>"; print_r($materials); die();
+        // echo "<pre>"; print_r($materials->toArray()); die();
 
         $user = User::with('pricelist.material','clientArticles');
         if($request->ajax()){
@@ -308,6 +308,127 @@ class ClientController extends Controller
         // echo "<pre>"; print_r($user); die();
         $business_nature = array_merge(['' => "Select Nature or Business"],config('constants.business_nature'));
         return view('clients.edit', compact('user','business_nature'));
+    }
+
+    // public function edit(Request $request, $id)
+    // {
+    //     // Query to fetch the latest records for each article_no
+    //     $latestRecordsSubquery = DB::table('materials')
+    //         ->select('id', 'article_no', 'color', 'color_no', 'roll', 'cut_wholesale', 'retail', DB::raw('MAX(id) as max_id'))
+    //         ->groupBy('article_no')
+    //         ->orderBy('max_id', 'desc');
+
+    //     // Fetch latest materials based on the subquery
+    //     $materials = DB::table('materials')
+    //         ->joinSub($latestRecordsSubquery, 'latest_records', function ($join) {
+    //             $join->on('materials.id', '=', 'latest_records.id');
+    //         })
+    //         ->select('materials.article_no', 'materials.color', 'materials.color_no', 'latest_records.roll', 'latest_records.cut_wholesale', 'latest_records.retail')
+    //         ->get();
+
+    //     // Fetch the user with related pricelist and clientArticles
+    //     $userQuery = User::with('pricelist.material', 'clientArticles');
+        
+    //     if ($request->ajax()) {
+    //         $article_no = $request->get('Article', '');
+
+    //         // Conditionally filter by article_no if provided
+    //         if (!empty($article_no)) {
+    //             $userQuery->with(['pricelist' => function ($q) use ($article_no) {
+    //                 $q->whereHas('material', function ($query) use ($article_no) {
+    //                     $query->where('article_no', $article_no);
+    //                 });
+    //             }]);
+    //         }
+
+    //         $user = $userQuery->find($id);
+    //         return response()->json($user);
+    //     }
+
+    //     // Fetch the user and their related client articles
+    //     $user = $userQuery->find($id);
+    //     $clientArticles = ClientArticle::where('client_id', $user->id)->get()->keyBy('article_no');
+
+    //     // Combine material data with client articles data
+    //     $matchedData = $materials->map(function ($material) use ($clientArticles) {
+    //         // Get the client article for the current material
+    //         $clientArticle = $clientArticles->get($material->article_no);
+
+    //         // Update material fields if client article exists
+    //         $material->roll = $clientArticle->roll ?? $material->roll;
+    //         $material->cut_wholesale = $clientArticle->cut_wholesale ?? $material->cut_wholesale;
+    //         $material->retail = $clientArticle->retail ?? $material->retail;
+
+    //         return $material;
+    //     });
+
+    //     // Attach matched data to user
+    //     $user->clientArticles = $matchedData;
+
+    //     // Fetch business nature options
+    //     $business_nature = array_merge(['' => "Select Nature or Business"], config('constants.business_nature'));
+
+    //     // Render the view with the required data
+    //     return view('clients.edit', compact('user', 'business_nature'));
+    // }
+    public function edit(Request $request, $id)
+    {
+        // Fetch all materials and group them by article_no
+        $materials = DB::table('materials')
+            ->select('id', 'article_no', 'color', 'color_no', 'roll', 'cut_wholesale', 'retail')
+            ->get()
+            ->groupBy('article_no')
+            ->map(function ($group) {
+                // Return the first record from each group
+                return $group->first();
+            });
+
+        // Fetch the user with related pricelist and clientArticles
+        $userQuery = User::with('pricelist.material', 'clientArticles');
+        
+        if ($request->ajax()) {
+            $article_no = $request->get('Article', '');
+
+            // Conditionally filter by article_no if provided
+            if (!empty($article_no)) {
+                $userQuery->with(['pricelist' => function ($q) use ($article_no) {
+                    $q->whereHas('material', function ($query) use ($article_no) {
+                        $query->where('article_no', $article_no);
+                    });
+                }]);
+            }
+
+            $user = $userQuery->find($id);
+            return response()->json($user);
+        }
+
+        // Fetch the user and their related client articles
+        $user = $userQuery->find($id);
+        $clientArticles = ClientArticle::where('client_id', $user->id)->get()->keyBy('article_no');
+
+        // Combine material data with client articles data
+        $matchedData = $materials->map(function ($material) use ($clientArticles) {
+            // Get the client article for the current material
+            $clientArticle = $clientArticles->get($material->article_no);
+
+            // Update material fields if client article exists
+            if ($clientArticle) {
+                $material->roll = $clientArticle->roll ?? $material->roll;
+                $material->cut_wholesale = $clientArticle->cut_wholesale ?? $material->cut_wholesale;
+                $material->retail = $clientArticle->retail ?? $material->retail;
+            }
+
+            return $material;
+        });
+
+        // Attach matched data to user
+        $user->clientArticles = $matchedData;
+
+        // Fetch business nature options
+        $business_nature = array_merge(['' => "Select Nature or Business"], config('constants.business_nature'));
+
+        // Render the view with the required data
+        return view('clients.edit', compact('user', 'business_nature'));
     }
 
     /**
@@ -369,6 +490,14 @@ class ClientController extends Controller
             if ($request->has('article_no')) {
                 // Update or create client articles
                 foreach ($request->article_no as $key => $article_no) {
+                     // Log the incoming data
+                    \Log::info('Updating/Creating ClientArticle:', [
+                        'client_id' => $user->id,
+                        'article_no' => $article_no,
+                        'roll' => $request->roll[$key],
+                        'cut_wholesale' => $request->cut_wholesale[$key],
+                        'retail' => $request->retail[$key]
+                    ]);
                     $clientArticle = ClientArticle::updateOrCreate(
                         [
                             'client_id' => $user->id, // Add client_id to make the condition unique

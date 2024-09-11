@@ -69,6 +69,7 @@ class PurchaseItemController extends Controller
         $total_qty = 0;
         $items = [];
         $materials = $request->input('color');
+        // dd(request()->all());
         if (is_array($materials)) {
             foreach ($materials as $key => $value) {
                 $items[] = array(
@@ -93,11 +94,11 @@ class PurchaseItemController extends Controller
 
         $collection = collect($items);
         $items = $collection->sortBy('meter');
-        
+
         if ($items) {
             $QRCode = Util::generateID();
             $sort_order = 1;
-
+            
             foreach ($items as $item) {
                 $color=Material::where('id','=',$item['color'])->first();
                 $barcode = Util::generateID();
@@ -530,5 +531,17 @@ class PurchaseItemController extends Controller
                 'transport_shippment_cost_per_meter' => $purchase->transport_shippment_cost_per_meter ?? 0
             ]
         ]);
+    }
+
+    public function fetchPrice(Request $request)
+    {
+        $materialId = $request->input('material_id');
+        $unitOfSale = $request->input('unit_of_sale');
+
+        // Fetch the price based on materialId and unitOfSale
+        $price = Material::where('id', $materialId)->value('price'); // Example query, adjust as needed
+
+        // Return price in response
+        return response()->json(['price' => $price]);
     }
 }

@@ -260,7 +260,7 @@
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label class="form-control-label">Approximate weight</label>
-                            {!! Form::text('approximate_weight', null, array('id'=>'approximate_weight','placeholder' => 'Entered By','class' => 'form-control')) !!}
+                            {!! Form::text('approximate_weight', null, array('id'=>'approximate_weight','placeholder' => 'Approximate Weight','class' => 'form-control')) !!}
                         </div>
                     </div>  
                 </div>
@@ -349,6 +349,8 @@
         {!! Form::hidden("selected_meter[]", null, ["class"=>"inv_total_selected_roll","id"=>"selected_meter"]) !!}
     </td> -->
     {!! Form::hidden('inv_weight_gsm[]', null, ['class' => 'td-weight_gsm', 'data-gsm' => '']) !!}
+    {!! Form::hidden('inv_weight_per_mtr[]', null, ['class' => 'td-weight_per_mtr', 'data-weight_per_mtr' => '']) !!}
+    {!! Form::hidden('inv_weight_per_yard[]', null, ['class' => 'td-weight_per_yard', 'data-weight_per_yard' => '']) !!}
     <td class="td-selected-meter" data-value="">{!! Form::hidden('selected_meter[]', 0, array('class' => 'inv_selected_roll form-control', 'data-validation'=>"required")) !!}</td>
     <td>
         <a class="btn btn-danger btn-sm btn-square inv_delete my-1 text-light">Delete</a>
@@ -499,54 +501,143 @@
         });
 
         // Event handler for unit_of_sale change
-        $(document).on('change', '.unit_of_sale', function() {
-            var $thisRow = $(this).closest('tr');
-            var unit_purchased_in = $(this).val();
+        // $(document).on('change', '.unit_of_sale', function() {
+        //     var $thisRow = $(this).closest('tr');
+        //     var unit_purchased_in = $(this).val();
+        //     var unit_of_sale = $(this).val(); 
+        //     var materialId = $thisRow.find('.inv_item_id').val(); 
 
-            $(this).attr('title',`Unit Of Sale : ${unit_purchased_in}`);
+        //     $(this).attr('title',`Unit Of Sale : ${unit_purchased_in}`);
+
+        //     // Set read-only attributes based on unit_of_sale
+        //     $thisRow.find('.inv_meter').prop('readonly', unit_purchased_in === 'yard');
+        //     $thisRow.find('.inv_yard').prop('readonly', unit_purchased_in === 'meter');
+
+        //     // Fetch price from server
+        //     fetchMaterialPrice(materialId, unit_of_sale, $thisRow);
+        // });
+
+        $(document).on('change', '.unit_of_sale, .type_of_sale', function() {
+            var $thisRow = $(this).closest('tr');
+            var unit_of_sale = $thisRow.find('.unit_of_sale').val();
+            var type_of_sale = $thisRow.find('.type_of_sale').val();
+            var materialId = $thisRow.find('.inv_item_id').val();
+
+            // Set the title attribute to display the selected unit of sale
+            $(this).attr('title', `Unit Of Sale: ${unit_of_sale}`);
 
             // Set read-only attributes based on unit_of_sale
-            $thisRow.find('.inv_meter').prop('readonly', unit_purchased_in === 'yard');
-            $thisRow.find('.inv_yard').prop('readonly', unit_purchased_in === 'meter');
+            $thisRow.find('.inv_meter').prop('readonly', unit_of_sale === 'yard');
+            $thisRow.find('.inv_yard').prop('readonly', unit_of_sale === 'meter');
 
-            // Handle calculations
-            handleCalculation($thisRow);
+            // Fetch price from server
+            fetchMaterialPrice(materialId, unit_of_sale, type_of_sale, $thisRow);
         });
+
+        // function fetchMaterialPrice(materialId, unit_of_sale, $thisRow) {
+        //     $.ajax({
+        //         url: "{{ route('invoice.getMaterial') }}",
+        //         dataType: "json",
+        //         data: {
+        //             artical: $("#search_article").val(),
+        //             color: $("#search_color").val(),
+        //             cus_id: $('#user_id').val()
+        //         },
+        //         success: function(data) {
+        //             var price = 0;
+                    
+        //             if (unit_of_sale === 'yard') {
+        //                 price = parseFloat(data.cut_wholesale) || 0;
+        //             } else if (unit_of_sale === 'meter') {
+        //                 price = parseFloat(data.cut_wholesale_per_mtr) || 0;
+        //             }
+
+        //             $thisRow.find('.inv_price').val(price.toFixed(2)).attr('title', `Price : ${price.toFixed(2)}`);
+                    
+        //             // Update calculations
+        //             handleCalculation($thisRow);
+        //         }
+        //     });
+        // }
+
+        function fetchMaterialPrice(materialId, unit_of_sale, type_of_sale, $thisRow) {
+            $.ajax({
+                url: "{{ route('invoice.getMaterial') }}",
+                type: "GET",
+                dataType: "json",
+                data: {
+                    artical: $("#search_article").val(),
+                    color: $("#search_color").val(),
+                    cus_id: $('#user_id').val(),
+                    material_id: materialId
+                },
+                success: function(data) {
+                    var price = 0;
+
+                    // Determine price based on unit_of_sale and type_of_sale
+                    if (unit_of_sale === 'yard') {
+                        if (type_of_sale === 'W') {  // Wholesale
+                            price = parseFloat(data.cut_wholesale) || 0;
+                        } else if (type_of_sale === 'R') {  // Retail
+                            price = parseFloat(data.retail) || 0;
+                        } else if (type_of_sale === 'P') {  // Sample
+                            price = parseFloat(data.roll) || 0;
+                        }
+                    } else if (unit_of_sale === 'meter') {
+                        if (type_of_sale === 'W') {  // Wholesale
+                            price = parseFloat(data.cut_wholesale_per_mtr) || 0;
+                        } else if (type_of_sale === 'R') {  // Retail
+                            price = parseFloat(data.retail_per_mtr) || 0;
+                        } else if (type_of_sale === 'P') {  // Sample
+                            price = parseFloat(data.roll_per_mtr) || 0;
+                        }
+                    }
+
+                    // Update price input and title
+                    $thisRow.find('.inv_price').val(price.toFixed(2)).attr('title', `Price: ${price.toFixed(2)}`);
+
+                    // Perform additional calculations if needed
+                    handleCalculation($thisRow);
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', status, error);
+                    // Handle error appropriately
+                }
+            });
+        }
 
         function addSearchMaterial(data) {
             console.log(data);
             $template = $('#templateAddItem_invoice').html();
-            // var $uniqueId = uuid();
             var $tr = $('<tr class="invoiceitem" id="item-' + data.id + '">').append($template);
             var unit_purchased_in = data.unit_purchased_in;
+
             $('#tblOrderTable tbody').append($tr);
-            $('#item-' + data.id).find('#inv_item_id').val(data.id);
-            $('#item-' + data.id).find('#inv_item_id').attr('class', 'inv_item_id_' + data.id);
-            $('#item-' + data.id).find('.inv_name').val(data.name + " - " + data.color).attr('title', `Brand Name: ${data.name}`);
-            $('#item-' + data.id).find('.inv_price').attr('name', 'price[]');
-            $('#item-' + data.id).find('.type_of_sale').attr('title', 'Type Of Sale: WholSale');
-            $('#item-' + data.id).find('.discount_type').attr('title', 'Discount Type: Percentage');
-            $('#item-' + data.id).find('.discount_value').attr('title', 'Discount Value: 0');
-            $('#item-' + data.id).find('.inv_barcode').val(data.barcode).attr('title', `Barcode: ${data.barcode}`);
-            // $('#item-' + data.id).find('#inv_weight_gsm').attr("data-gsm", data.weight_gsm);
-            // $('#item-' + data.id).find('.td-weight_gsm').val(data.weight_gsm);
-            $('#item-' + data.id).find('.td-weight_gsm').attr("data-gsm", data.weight_gsm);
-            $('#item-' + data.id).find('.unit_of_sale').val(unit_purchased_in).attr('title', `Unit Of Sale: ${unit_purchased_in}`);
+            const $itemRow = $('#item-' + data.id);
+            
+            // Set initial values
+            $itemRow.find('#inv_item_id').val(data.id);
+            $itemRow.find('#inv_item_id').attr('class', 'inv_item_id_' + data.id);
+            $itemRow.find('.inv_name').val(data.name + " - " + data.color).attr('title', `Brand Name: ${data.name}`);
+            $itemRow.find('.inv_price').attr('name', 'price[]');
+            $itemRow.find('.type_of_sale').attr('title', 'Type Of Sale: WholSale');
+            $itemRow.find('.discount_type').attr('title', 'Discount Type: Percentage');
+            $itemRow.find('.discount_value').attr('title', 'Discount Value: 0');
+            $itemRow.find('.inv_barcode').val(data.barcode).attr('title', `Barcode: ${data.barcode}`);
+            $itemRow.find('.td-weight_gsm').attr("data-gsm", data.weight_gsm);
+            $itemRow.find('.td-weight_per_mtr').attr("data-weight_per_mtr", data.weight_per_mtr);
+            $itemRow.find('.td-weight_per_yard').attr("data-weight_per_yard", data.weight_per_yard);
+            $itemRow.find('.unit_of_sale').val(unit_purchased_in).attr('title', `Unit Of Sale: ${unit_purchased_in}`);
+            $itemRow.find('.inv_weight').val(data.weight);
+            $itemRow.find('.inv_weight').attr("data-value", data.weight);
+            $itemRow.find('.hidden_div').attr('id', 'item-rolls-' + data.id);
+            $itemRow.find('.btn-roll-select').data('material_id', data.id);
+            $itemRow.find('#selected_meter').attr('class', 'selected_meter_' + data.id);
+            $itemRow.find('.inv_delete').attr('data-id', 'item-' + data.id);
+            
             // Enable/disable fields based on unit purchased in
-            if (unit_purchased_in === 'meter') {
-                $('#item-' + data.id).find('.inv_meter').prop('readonly', false);
-                $('#item-' + data.id).find('.inv_yard').prop('readonly', true);
-            } else if (unit_purchased_in === 'yard') {
-                $('#item-' + data.id).find('.inv_meter').prop('readonly', true);
-                $('#item-' + data.id).find('.inv_yard').prop('readonly', false);
-            }
-            //
-            $('#item-' + data.id).find('.inv_weight').val(data.weight);
-            $('#item-' + data.id).find('.inv_weight').attr("data-value", data.weight);
-            $('#item-' + data.id).find('.hidden_div').attr('id', 'item-rolls-' + data.id);
-            $('#item-' + data.id).find('.btn-roll-select').data('material_id', data.id);
-            $('#item-' + data.id).find('#selected_meter').attr('class', 'selected_meter_' + data.id);
-            $('#item-' + data.id).find('.inv_delete').attr('data-id', 'item-' + data.id);
+            toggleUnitFields($itemRow, unit_purchased_in);
+            
             var user_id = $('#customer_id option:selected').val();
             var material_id = data.id;
             var price_w = price_r = price_s = 0;
@@ -560,14 +651,16 @@
                 }
             });
             if(unit_purchased_in == "meter"){
-                var cut_wholesale_price = parseFloat(data.cut_wholesale/0.9144).toFixed(2);
-                var retail_price = parseFloat(data.retail/0.9144).toFixed(2);
-                var roll_price = parseFloat(data.roll/0.9144).toFixed(2);
+                var cut_wholesale_price = data.cut_wholesale_per_mtr === "" ? 0 : parseFloat(data.cut_wholesale_per_mtr).toFixed(3) || 0;
+                var retail_price = data.retail_per_mtr === "" ? 0 : parseFloat(data.retail_per_mtr).toFixed(3) || 0;
+                var roll_price = data.roll_per_mtr === "" ? 0 : parseFloat(data.roll_per_mtr).toFixed(3) || 0;
+
             } else {
-                var cut_wholesale_price = data.cut_wholesale;
-                var retail_price = data.retail;
-                var roll_price = data.roll;
+                var cut_wholesale_price = data.cut_wholesale === "" ? 0 : parseFloat(data.cut_wholesale).toFixed(3) || 0;
+                var retail_price = data.retail_price === "" ? 0 : parseFloat(data.retail_price).toFixed(3) || 0;
+                var roll_price = data.roll_price === "" ? 0 : parseFloat(data.roll_price).toFixed(3) || 0;
             }
+            console.log("price "+ cut_wholesale_price);
             if(price_w==0){
                 $('#item-' + data.id).find('.inv_price').val(cut_wholesale_price).attr('Title',`Price : ${cut_wholesale_price}`);
                 price_w=cut_wholesale_price;
@@ -583,34 +676,105 @@
             $('#item-' + data.id).find('.inv_price').attr("data-retail", price_r);
             $('#item-' + data.id).find('.inv_price').attr("data-sample", price_s);
 
+            // $('.type_of_sale').on('change', function() {
+            //     var price_input = $(this).parents('tr').find('.inv_price');
+            //     var price=0;
+            //     var saleType = '';
+            //     if(this.value=="W"){
+            //         price = price_input.attr("data-wholesale");
+            //         saleType = 'Wholesale';
+
+            //     }
+            //     if(this.value=="R"){
+            //         price = price_input.attr("data-retail");
+            //         saleType = 'Retail';
+            //     }
+            //     if(this.value=="P"){
+            //         price = price_input.attr("data-sample");
+            //         saleType = 'Sample';
+            //     }
+
+            //     // Set the title attribute to display the selected sale type
+            //     $(this).prop('title', 'Type of Sale: ' + saleType);
+               
+            //     price_input.val(price);
+               
+            //     if (!isNaN(price) && price) {
+            //         var price = parseFloat(price).toFixed(2) || 0;
+            //     } else {
+            //         var price = 0;
+            //     }
+            //     var $thisRow = $(this).closest('tr');
+            //     var meter = parseFloat($thisRow.find('.inv_meter').val()).toFixed(2) || 0;
+            //     var yard = meter2yard(meter).toFixed(2);
+            //     var unit_of_sale = $thisRow.find('.unit_of_sale').val() || ''; 
+            //     var discountType = $thisRow.find('.discount_type').val() || ''; 
+            //     var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
+
+            //     $(this).attr('data-value', yard);
+            //     if (!isNaN(yard) && yard) {
+            //         var meter = yard2meter(yard).toFixed(2);
+            //         $('.inv_meter', $thisRow).val(meter).attr('title',`Meter : ${meter}`);   
+            //         var weight = $('.inv_weight', $thisRow).attr('data-value');
+            //         $('.inv_weight', $thisRow).val(weight * yard);
+                                        
+            //         totalmeter();
+            //         grandtotal();
+            //     }
+            //     if(price == 0){
+            //         total = 0;
+            //         $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+            //         sub_total();
+            //         grandtotal();
+            //     } else if (!isNaN(price) && price) {
+            //         if(unit_of_sale == 'yard'){
+            //             var total = parseFloat(price * yard).toFixed(2);
+            //         } else {
+            //             var total = parseFloat(price * meter).toFixed(2);
+            //         }
+            //         // Apply discount
+            //         if (discountType === 'percentage') {
+            //             total = parseFloat(total - (total * discountValue / 100));
+            //         } else if (discountType === 'amount') {
+            //             total = parseFloat(total - discountValue).toFixed(2);
+            //         }
+            //         $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+            //         sub_total();
+            //         grandtotal();
+            //     }
+            // });
+
             $('.type_of_sale').on('change', function() {
                 var price_input = $(this).parents('tr').find('.inv_price');
-                var price=0;
+                var price = 0;
                 var saleType = '';
-                if(this.value=="W"){
+
+                if (this.value == "W") {
                     price = price_input.attr("data-wholesale");
                     saleType = 'Wholesale';
-
                 }
-                if(this.value=="R"){
+                if (this.value == "R") {
                     price = price_input.attr("data-retail");
                     saleType = 'Retail';
                 }
-                if(this.value=="P"){
+                if (this.value == "P") {
                     price = price_input.attr("data-sample");
                     saleType = 'Sample';
                 }
+                console.log("this.value "+price);
+                console.log("price "+price);
 
                 // Set the title attribute to display the selected sale type
                 $(this).prop('title', 'Type of Sale: ' + saleType);
-               
+
                 price_input.val(price);
-               
+
                 if (!isNaN(price) && price) {
-                    var price = parseFloat(price).toFixed(2) || 0;
+                    price = parseFloat(price).toFixed(2);
                 } else {
-                    var price = 0;
+                    price = 0;
                 }
+
                 var $thisRow = $(this).closest('tr');
                 var meter = parseFloat($thisRow.find('.inv_meter').val()).toFixed(2) || 0;
                 var yard = meter2yard(meter).toFixed(2);
@@ -619,32 +783,79 @@
                 var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
 
                 $(this).attr('data-value', yard);
+
+                // Function to update prices based on unit of sale
+                function updatePricesBasedOnUnit(unit_purchased_in, data) {
+                    var cut_wholesale_price = 0;
+                    var retail_price = 0;
+                    var roll_price = 0;
+
+                    if (unit_purchased_in === "meter") {
+                        cut_wholesale_price = data.cut_wholesale_per_mtr === "" ? 0 : parseFloat(data.cut_wholesale_per_mtr).toFixed(3);
+                        retail_price = data.retail_per_mtr === "" ? 0 : parseFloat(data.retail_per_mtr).toFixed(3);
+                        roll_price = data.roll_per_mtr === "" ? 0 : parseFloat(data.roll_per_mtr).toFixed(3);
+                    } else {
+                        cut_wholesale_price = data.cut_wholesale === "" ? 0 : parseFloat(data.cut_wholesale).toFixed(3);
+                        retail_price = data.retail_price === "" ? 0 : parseFloat(data.retail_price).toFixed(3);
+                        roll_price = data.roll_price === "" ? 0 : parseFloat(data.roll_price).toFixed(3);
+                    }
+
+                    // Update the price based on unit_purchased_in
+                    switch (saleType) {
+                        case 'Wholesale':
+                            price = cut_wholesale_price;
+                            break;
+                        case 'Retail':
+                            price = retail_price;
+                            break;
+                        case 'Sample':
+                            price = roll_price;
+                            break;
+                    }
+                }
+
+                // Assuming `data` is available and contains pricing info
+                var data = {
+                    cut_wholesale_per_mtr: price_input.attr("data-wholesale-per-mtr"),
+                    retail_per_mtr: price_input.attr("data-retail-per-mtr"),
+                    roll_per_mtr: price_input.attr("data-roll-per-mtr"),
+                    cut_wholesale: price_input.attr("data-wholesale"),
+                    retail_price: price_input.attr("data-retail"),
+                    roll_price: price_input.attr("data-sample")
+                };
+
+                // updatePricesBasedOnUnit(unit_of_sale, data);
+
                 if (!isNaN(yard) && yard) {
                     var meter = yard2meter(yard).toFixed(2);
-                    $('.inv_meter', $thisRow).val(meter).attr('title',`Meter : ${meter}`);   
+                    $('.inv_meter', $thisRow).val(meter).attr('title', `Meter : ${meter}`);   
                     var weight = $('.inv_weight', $thisRow).attr('data-value');
                     $('.inv_weight', $thisRow).val(weight * yard);
-                                        
+
                     totalmeter();
                     grandtotal();
                 }
-                if(price == 0){
+
+                var total = 0;
+                if (price == 0) {
                     total = 0;
                     $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
                     sub_total();
                     grandtotal();
                 } else if (!isNaN(price) && price) {
-                    if(unit_of_sale == 'yard'){
-                        var total = parseFloat(price * yard).toFixed(2);
+                    if (unit_of_sale == 'yard') {
+                        total = parseFloat(price * yard).toFixed(2);
                     } else {
-                        var total = parseFloat(price * meter).toFixed(2);
+                        total = parseFloat(price * meter).toFixed(2);
                     }
+
                     // Apply discount
                     if (discountType === 'percentage') {
-                        total = parseFloat(total - (total * discountValue / 100));
+                        total = parseFloat(total - (total * discountValue / 100)).toFixed(2);
                     } else if (discountType === 'amount') {
                         total = parseFloat(total - discountValue).toFixed(2);
                     }
+
                     $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
                     sub_total();
                     grandtotal();
@@ -684,6 +895,16 @@
                         }
                     }
                 });
+            }
+        }
+
+        function toggleUnitFields($itemRow, unitPurchasedIn) {
+            if (unitPurchasedIn === 'meter') {
+                $itemRow.find('.inv_meter').prop('readonly', false);
+                $itemRow.find('.inv_yard').prop('readonly', true);
+            } else if (unitPurchasedIn === 'yard') {
+                $itemRow.find('.inv_meter').prop('readonly', true);
+                $itemRow.find('.inv_yard').prop('readonly', false);
             }
         }
 
@@ -1177,9 +1398,11 @@
 
             // Iterate over each row
             $('.invoiceitem').each(function() {
+                console.log("Call");
                 // Get the meter and yard values from the inputs
                 var meter = Number($(this).find('.inv_meter').val()) || 0;
                 var yard = Number($(this).find('.inv_yard').val()) || 0;
+                var unit_of_sale = $(this).find('.unit_of_sale').val(); 
 
                 // If yard is given, convert it to meter
                 if (yard > 0 && meter === 0) {
@@ -1191,12 +1414,20 @@
                 var itemId = $(this).find('.inv_meter').data('item-id'); // Get the item ID
 
                 // Find the corresponding GSM value using the data-gsm attribute
-                var gsm = Number($(this).closest('tr').find('.td-weight_gsm').data('gsm')) || 0;
-
-                console.log("Meter Value: " + meter + " Yard Value: " + yard + " GSM Value: " + gsm);
+                var weight_per_mtr = Number($(this).closest('tr').find('.td-weight_per_mtr').data('weight_per_mtr')) || 0;
+                var weight_per_yard = Number($(this).closest('tr').find('.td-weight_per_yard').data('weight_per_yard')) || 0;
+                console.log("weight_per_mtr "+weight_per_mtr);
+                console.log("weight_per_yard"+weight_per_yard);
+                console.log("unit_of_sale"+unit_of_sale);
 
                 // Calculate weight for this item
-                var weight = yard * gsm;
+                if(unit_of_sale == 'yard'){
+                    var weight = yard * weight_per_yard;
+                } else {
+                    var weight = meter * weight_per_mtr;
+                }
+                console.log('unit_of_sale '+unit_of_sale);
+                console.log('weight '+weight);
 
                 // Accumulate totals
                 totalMeter += meter;

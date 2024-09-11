@@ -179,9 +179,6 @@
                         </small>
                         <small>Leave Empty if you don't want to change it.</small>
                     </div>
-
-
-
                     <!-- <div class="form-group col-lg-3">
                         <label class="form-control-label">Upload Images:</label>
                         <div style="display: flex; align-items: center;">
@@ -612,26 +609,6 @@
     function closeWebcame(){
         Webcam.reset();
     }
-
-    // function previewImages() {
-    //     const previewContainer = document.getElementById('image-preview');
-    //     previewContainer.innerHTML = ''; // Clear previous previews
-
-    //     const files = document.getElementById('images').files;
-    //     for (const file of files) {
-    //         if (file && file.type.startsWith('image/')) {
-    //             const reader = new FileReader();
-                
-    //             reader.onload = function(event) {
-    //                 const img = document.createElement('img');
-    //                 img.src = event.target.result;
-    //                 previewContainer.appendChild(img);
-    //             };
-
-    //             reader.readAsDataURL(file);
-    //         }
-    //     }
-    // }
 
     function previewImages() {
         const previewContainer = document.getElementById('preview-container');
