@@ -209,6 +209,10 @@
                             <h4 class="mb-3">
                                 <div id="totalMeter"> Total Meter : </div>
                             </h4>
+                            <div class="form-group mb-3">
+                                <label for="gst_checkbox">Apply GST/VAT ({{ $vat }}%) ? :</label>
+                                <input type="checkbox" class="mt-1" id="gst_checkbox" />
+                            </div>
                             <h4 class="mb-3">
                                 <div id="grand_total"> Grand Total : </div>
                             </h4>
@@ -1490,8 +1494,37 @@
             $('.td-total-price').each(function() {
                 grand_total += Number($(this).attr('data-value'));
             });
-            $('#grand_total').html("Grand Total : "  + formatMoney(grand_total));
+
+            // Get VAT rate (can be passed from backend using Blade)
+            var vatRate = {{ $vat }};
+
+            // Call the common function to update the grand total with or without VAT
+            updateGrandTotalWithVAT(grand_total, vatRate);
         };
+
+        // Function to calculate VAT and update grand total
+        function updateGrandTotalWithVAT(grandTotal, vatRate) {
+            // Format the base grand total
+            var formattedGrandTotal = formatMoney(grandTotal);
+
+            // Check if the GST/VAT checkbox is checked
+            if ($('#gst_checkbox').is(':checked')) {
+                // Calculate the VAT based on the grand total and VAT rate
+                var vatAmount = (grandTotal * vatRate) / 100;
+                grandTotal += vatAmount; // Add VAT to the grand total
+
+                // Update the displayed grand total with VAT included
+                $('#grand_total').html("Grand Total (incl. VAT): " + formatMoney(grandTotal));
+            } else {
+                // Update the displayed grand total without VAT
+                $('#grand_total').html("Grand Total: " + formattedGrandTotal);
+            }
+        }
+
+        // Use the 'change' event listener for the GST/VAT checkbox
+        $('#gst_checkbox').on('change', function() {
+            grandtotal(); 
+        });
         
         function formatMoney(number) {
           return number.toLocaleString('th-TH', { style: 'currency', currency: 'THB' });
@@ -1511,7 +1544,11 @@
             }
             var grand_total = sub_total + tax - discount;
 
-            $('#grand_total').val(parseFloat(grand_total.toFixed(2)));
+            // Get VAT rate (can be passed from backend using Blade)
+            var vatRate = {{ $vat }};
+
+            // Call the common function to update the grand total with or without VAT
+            updateGrandTotalWithVAT(grand_total, vatRate);
         }
         
         $('#final_save_btn').on('click', function() {

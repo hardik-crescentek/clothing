@@ -169,7 +169,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
@@ -178,55 +177,39 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="row my-4">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <h4 class="card-header">Purchase Items 
-                                <a href="javascript:;" class="btn btn-primary p-2 btn-square btn-sm ml-5" id="add_item_model_btn" data-toggle="modal" data-target="#addItemModal">Add Item</a>
-                                <button type="button" class="btn btn-danger p-2 btn-square btn-sm btn-square ml-2" id="delete_selected">Delete</button>
-                                <button type="button" class="btn btn-primary p-2 btn-square btn-sm ml-2" id="generate_roll_piece">Generate Roll & Piece No.</button>
-                            </h4>
-                            <div class="card-body">
-                                <div class="table-responsive mt-3">
-                                    <table id="tblPurchaseItems" class="table table-hover order-list">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:3%;"><input type="checkbox" id="select_all"></th>
-                                                <th style="width:9%;">Brand</th>
-                                                <th style="width:10%;">Article No</th>
-                                                <th style="width:9%;">Color</th>
-                                                <th style="width:6%;">Color No</th>
-                                                <th style="width:8%;">Batch/Lot No</th>
-                                                <th style="width:9%;">Width(cm)</th>
-                                                <th style="width:8%;">Meter<i class="fas fa-sort sort-icon ml-1"></i></th>
-                                                <th style="width:8%;">Yard<i class="fas fa-sort sort-icon ml-1"></th>
-                                                <th style="width:6%;">Roll No</th>
-                                                <th style="width:23%;">Piece</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($items as $key => $item)
-                                            <tr>
-                                                <td><input type="checkbox" class="row_checkbox"></td>
-                                                <td>{!! Form::text('brand[]',$item['brand'], array('class' => 'brand form-control' ,'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
-                                                <td>{!! Form::text('article_no[]', $item['article_no'], array('class' => 'article_no form-control', 'data-validation'=>"required")) !!}</td>
-                                                <td>{!! Form::text('color[]',$item['color'], array('class' => 'color form-control','readonly'=>'readonly')) !!}</td>
-                                                <td>{!! Form::text('color_no[]',$item['color_no'], array('class' => 'color_no form-control','readonly'=>'readonly')) !!}</td>
-                                                <td>{!! Form::text('batch_no[]', $item['batch_no'], array('class' => 'batch_no form-control', 'data-validation'=>"required")) !!}</td>
-                                                <td>{!! Form::number('width[]', $item['width'], array('class' => 'width form-control', 'data-validation'=>"required")) !!}</td>
-                                                <td>{!! Form::number('meter[]', $item['meter'], array('class' => 'meter meter_val form-control', 'data-validation'=>"required", 'id' => 'meter_val')) !!}</td>
-                                                <td>{!! Form::number('yard[]', $item['yard'], array('class' => 'yard yard_val form-control', 'data-validation'=>"required", 'id' => 'yard_val')) !!}</td>
-                                                <td>{!! Form::text('roll_no[]', $item['roll_no'], array('class' => 'roll_no form-control', 'data-validation'=>"required")) !!}</td>
-                                                <td>{!! Form::text('piece_no[]', $item['piece_no'], array('class' => 'piece_no form-control', 'readonly'=>'readonly')) !!}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                
+                <hr class="mt-5;">
+                <div class="widget-header bordered no-actions d-flex align-items-center justify-content-between" id="toggle-form" style="padding: 15px; background-color: #f8f9fa; cursor: pointer; border: 1px solid #dee2e6;">
+                    <h4 class="mb-0">Add Article & Color</h4>
+                    <button class="btn btn-outline-gray btn-sm" id="toggle-icon" style="font-size: 24px;">+</button>
+                </div>
+
+                <div id="additional-section" style="display: none; margin-top: 20px;">
+                    <div class="form-group row" id="form-rows">
+                        <div class="col-md-4">
+                            <label for="article">Article:</label>
+                            <select class="form-control-label select2 article-select" name="articles[0][article]" data-article-id="1">
+                                <option value="">Select Article</option>
+                                <!-- Options will be dynamically populated -->
+                            </select>
+                            <input type="hidden" name="articles[0][article_id]" class="article-id" value="1">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="color">Color:</label>
+                            <select class="form-control-label select2 color-select" name="articles[0][colors][]" multiple="multiple">
+                                <option value="">Select Color</option>
+                                <!-- Options will be dynamically populated -->
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="button" id="add-row" class="btn btn-success mt-4">+</button>
                         </div>
                     </div>
-                </div> -->
+                </div>
+                <hr>
+
                 <div class="form-group row d-flex align-items-center mt-5">
                     <div class="col-lg-12 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary btn-lg" id="from_add_purchase_btn">Save</button>
@@ -238,66 +221,6 @@
         </div>
     </div>
 </div>
-
-<div id="addItemModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-    <div role="document" class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 id="modal-header" class="modal-title">Add Purchase Item</h5>
-                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-                <form id="add_item_form" class="">
-                    <div class="form-group">
-                        <label class="form-control-label">Select Invoice No.<span class="text-danger ml-2">*</span></label>
-                        {!! Form::select('invoice_no',$invoiceNumbers,null, array('id'=>'add_invoice_no','class' => 'form-control custom-select ',"placeholder"=>"--Select Invoice No.--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label">Article No.<span class="text-danger ml-2">*</span></label>
-                        {!! Form::select('article_no',$articleNumbers,null, array('id'=>'add_article_no','class' => 'form-control custom-select ',"placeholder"=>"--Select Article No.--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
-                        {!! Form::hidden('width', null, array('class' => 'add_width form-control','id'=>"add_width")) !!}
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label">Color<span class="text-danger ml-2">*</span></label>
-                        {!! Form::select('color_id',$colorMaterial,null, array('id'=>'add_color_id','class' => 'form-control custom-select ',"placeholder"=>"--Select Color--", 'data-validation'=>"required",'style'=>"width:100%")) !!}
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label">Batch / Lot No.<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('batch_no', null, array('id'=>'add_batch_no','placeholder' => 'Batch No.','class' => 'form-control', 'data-validation'=>"required")) !!}
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-control-label">Number Of Rolls<span class="text-danger ml-2">*</span></label>
-                        {!! Form::number('number_of_rows', 1, array('id'=>'add_number_of_rolls', 'class' => 'form-control', 'data-validation'=>"required")) !!}
-                    </div>
-                    <div class="form-action d-flex justify-content-center">
-                        <button name="cancel_btn" id="cancel_btn" class="btn btn-primary">Cancel</button>
-                        <!-- <button type="submit" id="save_continue" name="save_continue" class="btn btn-primary">Save & Continue</button> -->
-                        <button type="submit" id="save_close" name="save_close" class="btn btn-primary">Save & Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<script type="text/template" id="templateAddItem">
-
-    <td><input type="checkbox" class="row_checkbox"></td>                                    
-    <td>{!! Form::text('brand[]',null, array('class' => 'brand form-control valid','data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
-    <td>{!! Form::text('article_no[]', null, array('class' => 'article_no form-control valid', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
-    <!-- <td>{!! Form::text('invoice_no[]', null, array('class' => 'invoice_no form-control valid', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td> -->
-    <td>{!! Form::select('color[]',[], null, array('class' => 'color form-control valid','id'=>'color')) !!}</td>
-    <td>{!! Form::text('color_no[]', null, array('class' => 'color_no form-control valid','readonly'=>'readonly','id'=>'color_no')) !!}</td>
-    <td>{!! Form::text('batch_no[]', null, array('class' => 'batch_no form-control valid', 'data-validation'=>"required")) !!}</td>
-    <td>{!! Form::text('width[]', null, array('class' => 'width form-control valid','readonly'=>'readonly')) !!}</td>
-    <td>{!! Form::text('meter[]', null, array('class' => 'meter meter_val form-control valid','id' => 'meter_val', 'data-validation'=>"required")) !!}</td>
-    <td>{!! Form::text('yard[]', null, array('class' => 'yard yard_val form-control valid','id' => 'yard_val', 'data-validation'=>"required")) !!}</td>
-    <td>{!! Form::text('roll_no[]', null, array('class' => 'roll_no form-control valid', 'data-validation'=>"required")) !!}</td>
-    <td>{!! Form::text('piece_no[]', null, array('class' => 'piece_no form-control valid', 'readonly'=>'readonly')) !!}</td>
-    <td>{!! Form::hidden('add_invoice_no[]', null, array('class' => 'invoice_no_hidden')) !!}</td>
-
-</script>
-
 <!-- End Row -->
 @endsection
 @push('after-styles')
@@ -305,6 +228,21 @@
 <style>
     .selection{
         display:block !important;
+    }
+    .select2-container {
+        width: 100% !important; /* Ensures Select2 takes the full width of its container */
+    }
+    
+    /* Custom styles for select2 */
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        border: none !important;
+    }
+    .select2-container .select2-selection--multiple .select2-selection__rendered {
+        display: ruby !important;
+    }
+    .select2-container--default .select2-search--inline .select2-search__field {
+        width: 100% !important; /* Set full width */
+        min-width: 100px; /* Ensure there's a minimum width for better display */
     }
 </style>
 @endpush
@@ -338,47 +276,6 @@
             getTotalMeters();
         });
 
-        $(document).on('keyup', '#tblPurchaseItems input.yard', function() {
-            var yard = $(this).val();
-            yard = parseFloat(yard);
-            if (!isNaN(yard) && yard) {
-                var $thisRow = $(this).closest('tr.purchaseItem');
-                $('input.meter', $thisRow).val((yard / 1.09361).toFixed(2));
-                // Trigger recalculation of totals
-                getTotalMeters();
-            }
-        });
-
-        // Select all checkboxes functionality
-        $(document).on('change', '#select_all', function() {
-            $('.row_checkbox').prop('checked', $(this).prop('checked'));
-        });
-
-        // Delete selected items functionality
-        $(document).on('click', '#delete_selected', function() {
-            var selected = [];
-            $('.row_checkbox:checked').each(function() {
-                selected.push($(this).closest('tr'));
-            });
-
-            if (selected.length === 0) {
-                alert("Please select at least one item to delete.");
-            } else {
-                if (confirm("Are you sure you want to delete selected items?")) {
-                    selected.forEach(function(item) {
-                        item.remove();
-                    });
-                    getTotalMeters();
-                }
-            }
-        });
-
-        // Delete row functionality
-        $(document).on('click', '.delete_row', function(){
-            $(this).closest('tr').remove();
-            getTotalMeters();
-        });
-
         function convertMetersToYards() {
             var meters = $('#total_meter').val();
             if (meters) {
@@ -391,71 +288,148 @@
             }
         }
 
-        // function getTotalMeters() {
-        //     var totalMeter = 0;
-        //     $("input[name='meter[]']").each(function(){
-        //         totalMeter += $(this).val() ? parseFloat($(this).val()) : 0;
-        //     });
-
-        //     $('#total_meter').val(totalMeter);
-        //     $('#total_meter').trigger('change');
-
-        //     var yards = totalMeter * 1.09361;
-        //     $('#total_yard').val(yards.toFixed(2));
-        //     $('#total_yard').trigger('change');
-
-        //     calculateTransportationShippingCostPerMeter();
-        // }
-
         $(document).ready(function() {
 
-            // Add the click event listener to the button
-            $('#generate_roll_piece').click(function() {
-                generateRollAndPieceNumbers();
+            // Toggle the additional form section
+            $('#toggle-form').on('click', function(event) {
+                // Prevent form submission on button click
+                event.preventDefault();
+
+                // Toggle the visibility of the section
+                $('#additional-section').toggle();
+                
+                // Toggle the + to - and vice versa
+                var icon = $('#toggle-icon');
+                icon.text(icon.text() === '+' ? '-' : '+');
             });
+
+            // Initialize Select2
+            function initializeSelect2() {
+                $('.article-select').select2({
+                    placeholder: "-- Select Article --",
+                    allowClear: true
+                });
+                
+                $('.color-select').select2({
+                    placeholder: "-- Select Colors --",
+                    allowClear: true,
+                    tags: true
+                });
+            }
+
+            function populateArticles() {
+                $.ajax({
+                    url: '{{ route('get.articles') }}',
+                    type: 'GET',
+                    success: function(data) {
+                        $('.article-select').each(function() {
+                            var $articleSelect = $(this);
+                            var $materialIdInput = $articleSelect.closest('.form-group.row').find('.material-id');
+                            var selectedValue = $articleSelect.val(); // Preserve selected value
+                            $articleSelect.empty(); // Clear existing options
+
+                            // Populate new options
+                            $.each(data, function(key, value) {
+                                $articleSelect.append(new Option(value, key, false, false)); // Display name, use ID
+                            });
+
+                            // Set placeholder option
+                            $articleSelect.prepend(new Option("-- Select Article --", "", true, false));
+                            $articleSelect.val(selectedValue).trigger('change'); // Restore selection
+
+                            // Set material_id
+                            $articleSelect.on('change', function() {
+                                var selectedId = $(this).val();
+                                $materialIdInput.val(selectedId);
+                            });
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching articles:', error); // Debug: Check for errors
+                    }
+                });
+            }
+
+            function populateColors(articleSelect) {
+                var article = $(articleSelect).val();
+                var $colorSelect = $(articleSelect).closest('.form-group.row').find('.color-select');
+
+                if (article) {
+                    $.ajax({
+                        url: '{{ route('get.colors') }}',
+                        type: 'GET',
+                        data: { article: article },
+                        success: function(data) {
+                            var selectedValues = $colorSelect.val(); // Preserve selected values
+                            $colorSelect.empty(); // Clear existing options
+
+                            $.each(data, function(index, color) {
+                                $colorSelect.append(new Option(color.name, color.color_id, false, false)); // Display name, use color_id
+                            });
+
+                            $colorSelect.val(selectedValues).trigger('change'); // Restore selections
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error fetching colors:', error); // Debug: Check for errors
+                        }
+                    });
+                } else {
+                    $colorSelect.empty().trigger('change'); // Clear the color dropdown if no article is selected
+                }
+            }
+
+            // Handle article change to populate colors
+            $('#additional-section').on('change', '.article-select', function() {
+                populateColors(this);
+            });
+
+            // Add new row
+            $('#add-row').on('click', function() {
+                var index = $('#additional-section .form-group.row').length;
+                var newRow = `
+                    <div class="form-group row">
+                        <div class="col-md-4">
+                            <label for="article">Article:</label>
+                            <select class="form-control-label select2 article-select" name="articles[${index}][article]">
+                                <option>-- Select Article --</option>
+                                <!-- Options will be dynamically populated -->
+                            </select>
+                            <input type="hidden" name="articles[${index}][material_id]" class="material-id">
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label for="color">Color # with Check Box</label>
+                            <select class="form-control-label select2 color-select" name="articles[${index}][colors][]" multiple="multiple">
+                                <option>-- Select Color --</option>
+                                <!-- Options will be dynamically populated -->
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <button type="button" class="btn btn-danger remove-row mt-4">-</button>
+                        </div>
+                    </div>
+                `;
+                
+                $('#additional-section').append(newRow);
+                initializeSelect2(); // Reinitialize Select2 for new elements
+                populateArticles();
+            });
+
+            // Remove row
+            $('#additional-section').on('click', '.remove-row', function() {
+                $(this).closest('.form-group.row').remove();
+            });
+
+            // Initialize Select2 and populate articles on document ready
+            initializeSelect2();
+            populateArticles();
 
             // sorting logic start
             var sortOrder = 1; // 1 for ascending, -1 for descending
             var $sortIcon = $('.sort-icon');
 
-            // Handle click event on sort icon
-            $sortIcon.on('click', function() {
-                sortOrder *= -1; // Toggle sort order
-
-                // Update sort icon based on sort order
-                if (sortOrder === 1) {
-                    $sortIcon.removeClass('fa-sort-down').addClass('fa-sort-up');
-                } else {
-                    $sortIcon.removeClass('fa-sort-up').addClass('fa-sort-down');
-                }
-
-                // Sort table rows based on meter value
-                var rows = $('#tblPurchaseItems tbody > tr').get();
-                rows.sort(function(rowA, rowB) {
-                    var meterA = parseFloat($(rowA).find('.meter').val()) || 0;
-                    var meterB = parseFloat($(rowB).find('.meter').val()) || 0;
-                    return sortOrder * (meterA - meterB);
-                });
-
-                // Reorder the table rows
-                $.each(rows, function(index, row) {
-                    $('#tblPurchaseItems').children('tbody').append(row);
-                });
-            });
-            // sorting logic end
-
             var invoiceNumbers = @json($invoiceNumbers); // Convert PHP array to JavaScript array
-
-            // Click event for "Add Item" button
-            $('#add_item_model_btn').on('click', function() {
-                var currentInvoiceNo = $('#invoice_no').val();
-
-                // Update invoice dropdown
-                updateInvoiceDropdown(currentInvoiceNo);
-
-                // Display the modal
-                $('#addItemModal').modal('show');
-            });
 
             // Function to update the invoice number dropdown
             function updateInvoiceDropdown(currentInvoiceNo) {
@@ -543,31 +517,6 @@
             });
         });
 
-        function generateRollAndPieceNumbers() {
-            // Get all rows of purchase items
-            const $rows = $('#tblPurchaseItems tbody tr');
-            
-            // Update the roll numbers and piece numbers
-            $rows.each((index, row) => {
-                const $row = $(row);
-                const rollNo = index + 1;
-                const articleNo = $row.find('.article_no').val();
-                const colorName = $row.find('.color option:selected').text() || '';
-                const invoiceNo = $row.find('.invoice_no_hidden').val() || '';
-                const dateOfPurchase = $('#purchase_date').val() || '';
-                const totalRolls = $rows.length;
-                console.log("generate piece no and roll no.");
-                console.log(colorName);
-                console.log(invoiceNo);
-                console.log(row);
-                
-                const pieceValue = `${articleNo}_${colorName}_${invoiceNo}_${dateOfPurchase}_${rollNo}_${totalRolls}`;
-                
-                $row.find('.roll_no').val(rollNo);
-                $row.find('.piece_no').val(pieceValue);
-            });
-        }
-
         $('#thb_ex_rate, #price').keyup(function() {
             var price_thb = 0;
             var thb_ex_rate = parseFloat($('#thb_ex_rate').val());
@@ -580,15 +529,6 @@
         });
         var last_row_data=null;
 
-        // $('#tblPurchaseItems').tablesorter({
-        //     headers:{
-        //         6 : {sorter: "inputs"},
-        //         7 : {sorter: "inputs"},
-        //         8 : {sorter: "inputs"}
-        //     },
-
-        // });
-
          // Custom parser for meter inputs
          $.tablesorter.addParser({
             id: 'meter-parser',
@@ -599,280 +539,6 @@
                 return parseFloat($(cell).find('input.meter').val()) || 0;
             },
             type: 'numeric'
-        });
-
-        // Initialize tablesorter with sorting icons
-        $('#tblPurchaseItems').tablesorter({
-            headers: {
-                7: { sorter: 'meter-parser' }, // Assuming meter column is the 8th column (index 7)
-                8: { sorter: 'digit' }   // Assuming yard column is the 9th column (index 8)
-            },
-            widgets: ['zebra', 'columns'],
-            widgetOptions: {
-                columns_zebra: true,
-                columns: ['primary', 'secondary', 'tertiary']
-            }
-        });
-
-        $('#tblPurchaseItems th.header').click(function() {
-            var column = $(this).index();
-            var direction = $(this).hasClass('headerSortUp') ? 'desc' : 'asc';
-
-            // Remove existing sort icons
-            $(this).find('.sort-icon').remove();
-
-            // Add new sort icon
-            if (direction === 'asc') {
-                $(this).append('<span class="sort-icon asc"></span>');
-            } else {
-                $(this).append('<span class="sort-icon desc"></span>');
-            }
-        });
-
-
-        $('.material').select2();
-        $(document).on('change','.material',function(){
-            var material_name=$(this).val();
-            var row_id=$(this).data('row_id');
-            var data={!! json_encode($materials2) !!};
-            $.each(data,function(index,value){
-                if(material_name==value.name){
-                    // $('#'+row_id).find('.color').val(value.color);
-                    // $('#'+row_id).find('.color_no').val(String(value.color_no).padStart(2,"0"));
-                    // $('#'+row_id).find('.article_no').val(value.article_no);
-                    // $('#'+row_id).find('.width').val(value.width);
-                    $('#'+row_id).find('.color_no').val('');
-                    $('#'+row_id).find('.article_no').val('');
-                    $('#'+row_id).find('.width').val('');
-                    $('#'+row_id).find('.batch_no').val('');
-                    $('#'+row_id).find('.roll_no').val('');
-                }
-            });
-            var color_list="<option value=''>--Select Color--</option>";
-            $.each(data,function(i,v){
-                if(material_name==v.name){
-                  var taxt = (v.color_no) ? v.color_no + ' - ' : '';
-                  taxt += v.color;
-                    color_list+="<option value='"+v.id+"'>"+taxt+"</option>";
-                }
-            });
-            $('#'+row_id).find('.color').html(color_list);
-        });
-
-        $(document).on('change','#add_article_no',function(){
-            var data = {!! json_encode($materials2) !!};
-            var row_id=$(this).data('row_id');
-            var articleNo = $(this).val();
-            var colorDropdown = $('#add_color_id');
-            var colorList = "<option value=''>--Select Color--</option>";
-
-            // Clear previous selection in material dropdown
-            $('#' + row_id).find('.material').empty();
-
-            $.each(data, function(index, value) {
-                if (articleNo == value.article_no) {
-                    var text = (value.color_no ? value.color_no + ' - ' : '') + value.color;
-                    colorList += "<option value='" + value.id + "'>" + text + "</option>";
-                }
-            });
-
-            colorDropdown.html(colorList).trigger('change');
-        });
-
-        // Reset the form values when the modal is closed
-        $('#addItemModal').on('hidden.bs.modal', function () {
-            $('#add_article_no').val('').trigger('change');
-            // $('#add_color_id').val('').trigger('change');
-            // $('#add_color_id').html("<option value=''>--Select Color--</option>");
-            // Reset other input fields if necessary
-        });
-
-        $(document).on('change','.color',function(){
-            var id=$(this).val();
-            var row_id=$(this).data('row_id');
-            var data={!! json_encode($materials2) !!};
-            $.each(data,function(index,value){
-                if(id==value.id){
-                    // $('#'+row_id).find('.color').val(value.color);
-                    $('#'+row_id).find('.color_no').val(String(value.color_no).padStart(2,"0"));
-                    $('#'+row_id).find('.article_no').val(value.article_no);
-                    $('#'+row_id).find('.width').val(value.width);
-                }
-            });
-        });
-
-        var add_selected_material_name=null;
-        var add_color=[];
-        $('#add_material_id').select2({
-            dropdownParent: $('#add_item_form'),
-            width: 'resolve',
-        });
-        $('#add_invoice_no').select2({
-            dropdownParent: $('#add_item_form'),
-            width: 'resolve',
-        });
-        $('#add_article_no').select2({
-            dropdownParent: $('#add_item_form'),
-            width: 'resolve',
-        });
-        $('#add_color_id').select2({
-            dropdownParent: $('#add_item_form'),
-            width: 'resolve',
-        });
-        $(document).on('change','#add_material_id',function(){
-            var name=$(this).val();
-            var data={!! json_encode($materials2) !!};
-            $.each(data,function(index,value){
-                if(name==value.name){
-                    add_selected_material_name=value.name;
-                    $('#add_article_no').val(value.article_no);
-                    $('#add_width').val(value.width);
-                    // $('#add_color_no').val(value.color_no);
-                    $('#add_color_id').attr('disabled',false);
-                }
-            });
-            add_color.length=0;
-            $.each(data,function(i,v){
-                if(add_selected_material_name==v.name){
-                    var taxt = (v.color_no) ? v.color_no + ' - ' : '';
-                    taxt += v.color;
-                    add_color.push({'id':v.id,'text':taxt});
-                }
-            });
-            $('#add_color_id').html('');
-            $('#add_color_id').html('<option value="" selected="selected">--Select Color--</option>');
-            $('#add_color_id').select2({dropdownParent: $('#add_item_form'),width: 'resolve',data:add_color});
-
-
-        });
-        $('#add_color_id').select2({
-            dropdownParent: $('#add_item_form'),
-            width: 'resolve',
-        });
-        $(document).on('change','#add_color_id',function(){
-            var id=$(this).val();
-            var data={!! json_encode($materials2) !!};
-            $.each(data,function(index,value){
-                if(id==value.id){
-                    $('#add_color_no').val(String(value.color_no).padStart(2,"0"));
-                    // $('#add_material_id').val(value.id);
-                }
-            });
-        });
-        $(document).on('click','#add_item_model_btn',function(){
-            $('#add_purchase_price').val($('#price').val());
-        });
-
-        $.validate({
-            form: '#from_add_material',
-            modules: 'file'
-        });
-
-        var save_continue = false;
-        $(document).on('click','#save_continue',function(){
-            save_continue = true;
-        });
-
-        function resetLastRowData(){
-            last_row_data = {
-                meter: [],
-                color_no: [],
-                width: [],
-                article_no: [],
-                batch_no: [],
-                roll_no: []
-            };
-
-            $('.meter_val').each(function(){
-                last_row_data.meter.push($(this).val());
-            });
-
-            $('.color_no').each(function(){
-                last_row_data.color_no.push($(this).val());
-            });
-
-            $('.width').each(function(){
-                last_row_data.width.push($(this).val());
-            });
-
-            $('.article_no').each(function(){
-                last_row_data.article_no.push($(this).val());
-            });
-
-            $('.batch_no').each(function(){
-                last_row_data.batch_no.push($(this).val());
-            });
-
-            $('.roll_no').each(function(){
-                last_row_data.roll_no.push($(this).val());
-            });
-        }
-
-        $(document).on('click','#save_close',function(){
-            save_continue = false;
-        });
-        $.validate({
-            form: '#add_item_form',
-            onSuccess: function($form) {
-                last_row_data=$form;
-                addItem($form);
-                $($form).trigger("reset");
-                $('#add_material_id').val('').trigger('change');
-                $('#add_color_id').val('').trigger('change');
-                // $('#add_color_id').attr('disabled',true);
-                // $('#add_color_id').attr('disabled',true);
-                if(!save_continue){
-                    $('#addItemModal').modal('hide');
-                }
-                return false; // Will stop the submission of the form
-            },
-        });
-
-
-        $(document).on('click','#cancel_btn',function(){
-            $('#add_item_form').trigger("reset");
-            $('#addItemModal').modal('hide');
-            $('#add_color_id').attr('disabled',true);
-            $('#add_color_id').val(['','--Select Color--']);
-            return false;
-        });
-        $(document).on('click','#add_single_row',function(){
-            $('#add_material_id', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.material').val());
-            $('#add_color_id', last_row_data).html($('#tblPurchaseItems tbody tr:last').find('.color').html());
-            $('#add_color_id', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.color option:selected').val());
-            $('#add_article_no', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.article_no').val());
-            $('#add_color_no', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.color_no').val());
-            $('#add_batch_no', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.batch_no').val());
-            $('#add_width', last_row_data).val($('#tblPurchaseItems tbody tr:last').find('.width_cm').val());
-            $('#add_number_of_rolls', last_row_data).val(1);
-            var roll_no=parseInt($('#tblPurchaseItems tbody tr:last').find('.roll_no').val());
-            $('#add_number_of_rolls',last_row_data).data("roll_no",(roll_no+1));
-
-            addItem(last_row_data);
-
-        });
-
-        $('#genrate_code').on("click", function() {
-            $.get('{{url("genrate_code")}}', function(data) {
-                $("#input_barcode").val(data);
-            });
-        });
-
-        $(document).on('keyup', '#tblPurchaseItems input.yard', function() {
-            var yard = $(this).val();
-            meter = parseFloat(yard);
-            if (!isNaN(yard) && yard) {
-                var $thisRow = $(this).closest('tr.purchaseItem');
-                $('input.meter', $thisRow).val((yard/1.094).toFixed(2));
-            }
-        });
-        $(document).on('keyup', '#tblPurchaseItems input.meter', function() {
-            var meter = $(this).val();
-            meter = parseFloat(meter);
-            if (!isNaN(meter) && meter) {
-                var $thisRow = $(this).closest('tr.purchaseItem');
-                $('input.yard', $thisRow).val(meter2yard(meter));
-            }
         });
 
         $(window).keydown(function(e) {
@@ -944,19 +610,6 @@
         $(document).on('change','#discount',function(){
            shipping_cost();
         });
-        // $(document).on('submit','#from_add_purchase',function(){
-        //     var checkClass =  $('#tblPurchaseItems tbody tr').find('.valid');
-        //     if (checkClass.length > 0) {
-        //         return true;
-        //     }else{
-        //         new Noty({
-        //                     type: 'warning',
-        //                     text: 'Please select item first',
-        //                     timeout: 2500,
-        //                 }).show();
-        //         return false;
-        //     }
-        // });
 
     })(jQuery);
 
@@ -988,100 +641,5 @@
 
     }
 
-    // Function to check if the item already exists in the table
-    function isDuplicateItem(invoice_no, article_no, color_id) {
-        let isDuplicate = false;
-        
-        $('#tblPurchaseItems tbody .purchaseItem').each(function() {
-            const existingInvoiceNo = $(this).find('.invoice_no_hidden').val();
-            const existingArticleNo = $(this).find('.article_no').val();
-            const existingColorId = $(this).find('.color').val();
-            
-            if (existingInvoiceNo === invoice_no && existingArticleNo === article_no && existingColorId === color_id) {
-                isDuplicate = true;
-                return false; // Break out of each loop
-            }
-        });
-        
-        return isDuplicate;
-    }
-
-    function addItem($form) {
-        var roll_no=0;
-        if($('#add_number_of_rolls',$form).data('roll_no')){
-            roll_no=$('#add_number_of_rolls',$form).data('roll_no');
-        }
-        var color_id=0;
-        var color_name = '';
-        if(roll_no){
-            color_id= $('#add_color_id', $form).val();
-            color_name = $('#add_color_id option:selected', $form).text().split(' - ')[1];
-        }
-        else{
-            color_id = $('#add_color_id option:selected', $form).val();
-            color_name = $('#add_color_id option:selected', $form).text().split(' - ')[1];
-        }
-        var number_of_rolls = $('#add_number_of_rolls', $form).val();
-        var article_no = $('#add_article_no', $form).val();
-        var invoice_no = $('#add_invoice_no', $form).val();
-        var color_no = $('#add_color_no', $form).val();
-        var batch_no = $('#add_batch_no', $form).val();
-        var date_of_purchase = $('#purchase_date').val();
-        var total_roll = $('#add_number_of_rolls', $form).val();
-
-        // Check for duplicates
-        if (isDuplicateItem(invoice_no, article_no, color_id)) {
-            alert('Item with the same Invoice No, Article No, and Color already exists.');
-            return; // Exit function if duplicate found
-        }
-
-        $template = $('#templateAddItem').html();
-        for (i = 0; i < number_of_rolls; i++) {
-            var roll_no = i+1;
-            var $uniqueId = uuid();
-            var $tr = $('<tr class="purchaseItem" id="' + $uniqueId + '">').append($template);
-            $('#tblPurchaseItems tbody').append($tr);
-
-            var color_list="";
-            var material_list="";
-            $.each({!! json_encode($materials2) !!},function(i,v){
-                if(article_no==v.article_no){
-                    color_list+="<option value='"+v.id+"'>"+v.color+"</option>";
-                    $('#' + $uniqueId).find('.color_no').val(String(v.color_no).padStart(2,"0"));
-                    $('#' + $uniqueId).find('.width').val(v.width_cm);
-                    $('#' + $uniqueId).find('.brand').val(v.name);    
-                    unit_purchased_in = v.unit_purchased_in;   
-
-                    // Calculate and set the Piece value (concatenation of Article No and Color No)
-                    // var pieceValue = article_no + '_' + color_name +  '_' + invoice_no + '_' + (date_of_purchase ?? '') + '_' + roll_no + '_' + total_roll;
-                    // $('#' + $uniqueId).find('.piece_no').val(pieceValue);
-                    // $('#' + $uniqueId).find('.roll_no').val(roll_no);
-                }
-            });
-
-            $('#' + $uniqueId).find('.color').html(color_list);
-            $('#' + $uniqueId).find('.color').val(color_id);
-            $('#' + $uniqueId).find('.color').attr('data-row_id',$uniqueId);
-
-            $('#' + $uniqueId).find('.article_no').val(article_no);
-            $('#' + $uniqueId).find('.batch_no').val(batch_no);
-            $('#' + $uniqueId).find('#delete_row').attr("data-row_id",$uniqueId);
-
-            $('#' + $uniqueId).find('.invoice_no_hidden').val(invoice_no);  // Set the hidden invoice number
-
-
-            // Enable/disable fields based on unit purchased in
-            if (unit_purchased_in === 'meter') {
-                $('#' + $uniqueId).find('.meter').prop('readonly', false);
-                $('#' + $uniqueId).find('.yard').prop('readonly', true);
-            } else if (unit_purchased_in === 'yard') {
-                $('#' + $uniqueId).find('.meter').prop('readonly', true);
-                $('#' + $uniqueId).find('.yard').prop('readonly', false);
-            }
-        }
-        if(($('.purchaseItem').length)!=0){
-            $('#add_single_row').css('display','block');
-        }
-    }
 </script>
 @endpush

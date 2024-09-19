@@ -171,6 +171,10 @@
                     <label class="form-control-label">Material Re Order Alert QTY</label>
                     <input type="text" name="material_min_alert_qty" class="form-control" data-validation="required" value="{{ $settings->material_min_alert_qty ?? '' }}">
                 </div>
+                <div class="form-group">
+                    <label class="form-control-label">VAT(%)</label>
+                    <input type="text" name="vat" class="form-control" data-validation="required" value="{{ $settings->vat ?? '' }}">
+                </div>
                 <div class="form-group mt-5">
                     <button type="submit" class="btn btn-primary btn-lg">Update</button>
                 </div>

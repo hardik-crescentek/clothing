@@ -10,6 +10,8 @@ use App\Color;
 use App\Supplier;
 use App\InvoiceItemRoll;
 use App\PurchaseImportFiles;
+use App\PurchaseArticle;
+use App\PurchaseArticleColor;
 use App\Order;
 use App\OrderItem;
 use App\Utils\Util;
@@ -20,6 +22,8 @@ use File;
 use App\Imports\PurchaseImport;
 use App\Imports\PurchaseItemsimport;
 use App\Imports\StockIncoming;
+use Carbon\Carbon;
+use DNS1D;
 
 class PurchaseItemController extends Controller
 {
@@ -52,7 +56,17 @@ class PurchaseItemController extends Controller
         $colors = Color::active()->pluck('name', 'id')->all();
         $suppliers = Supplier::dropdown();
         $items = $request->session()->get('purchase_items', []);
-        $invoiceNumbers = \DB::table('purchases')->pluck('invoice_no', 'invoice_no')->toArray();
+        // $invoiceNumbers = \DB::table('purchases')->pluck('invoice_no', 'invoice_no')->toArray();
+         // Fetch invoice numbers and created dates
+        $invoiceNumbers = \DB::table('purchases')
+                            ->select('invoice_no', 'created_at')
+                            ->orderBy('created_at','desc')
+                            ->whereNull('deleted_at')
+                            ->get()
+                            ->mapWithKeys(function ($item) {
+                                return [$item->invoice_no => Carbon::parse($item->created_at)->format('d/m/Y')];
+                            })
+                            ->toArray();
         $articleNumbers = Material::active()->pluck('article_no', 'article_no')->toArray();
         $colorMaterial = Material::active()->pluck('color', 'color')->toArray();
         return view('purchaseItem.create', compact('categories', 'colors', 'materials','materials2', 'suppliers', 'items','invoiceNumbers','articleNumbers','colorMaterial'));
@@ -69,7 +83,6 @@ class PurchaseItemController extends Controller
         $total_qty = 0;
         $items = [];
         $materials = $request->input('color');
-        // dd(request()->all());
         if (is_array($materials)) {
             foreach ($materials as $key => $value) {
                 $items[] = array(
@@ -108,7 +121,7 @@ class PurchaseItemController extends Controller
                     "purchase_id"=> $item["purchase_id"],
                     "material_id"=> $item["color"],
                     "article_no" => $item["article_no"],
-                    "color"      => $color->color,
+                    "color"      => $item["color"],
                     "color_no"   => $item["color_no"],
                     "batch_no"   => $item["batch_no"],
                     "roll_no"    => $sort_order,
@@ -502,7 +515,22 @@ class PurchaseItemController extends Controller
                     ->first();
 
         if ($purchase) {
-            $purchaseItems = $purchase->purchase_items;
+            $purchaseItems = $purchase->purchase_items->map(function($item) use ($purchase) {
+                $item->barcode_svg = DNS1D::getBarcodeSVG($item->barcode, config('app.BARCODE_TYPE'), 1, 40);
+                $item->print_url = route('printbarcode', [
+                    'id' => $purchase->id,
+                    'invoice_no' => $purchase->invoice_no,
+                    'printBarcode' => 1,
+                    'printQRCode' => 1,
+                    'printWithBatchNo' => 1,
+                    'printWithArticleNo' => 1,
+                    'printWithRollNo' => 1,
+                    'printInvoice' => 1,
+                    'printColor' => 1,
+                    'printWidth' => 1
+                ]);
+                return $item;
+            });
         } else {
             $purchaseItems = [];
         }
@@ -510,7 +538,7 @@ class PurchaseItemController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'invoice_no' => $purchase->invoice_no, // Include invoice number
+                'invoice_no' =>  $purchase ? $purchase->invoice_no : null, // Include invoice number
                 'purchase_items' => $purchaseItems
             ]
         ]);
@@ -543,5 +571,45 @@ class PurchaseItemController extends Controller
 
         // Return price in response
         return response()->json(['price' => $price]);
+    }
+
+    public function getArticlesByInvoice(Request $request)
+    {
+        $invoiceNo = $request->input('invoice_no');
+
+        if ($invoiceNo) {
+            $purchase = Purchase::where('invoice_no', $invoiceNo)->first();
+        } else {
+            return response()->json(['success' => false]);
+        }
+
+        if ($purchase) {
+            // Fetch all articles related to the invoice number
+            $articles = PurchaseArticle::where('purchase_id', $purchase->id)
+                ->get(['id', 'article'])
+                ->mapWithKeys(function ($article) {
+                    return [$article->id => ['name' => $article->article]];
+                });
+
+            // Fetch all colors related to the articles
+            $articleColors = [];
+            foreach ($articles->keys() as $articleId) {
+                $colors = PurchaseArticleColor::where('purchase_article_id', $articleId)
+                    ->get(['id', 'color', 'color_no'])
+                    ->mapWithKeys(function ($color) {
+                        return [$color->id => ['color' => $color->color, 'color_no' => $color->color_no]];
+                    });
+                $articleColors[$articleId] = $colors; // Mapping article ID to its colors
+            }
+        } else {
+            return response()->json(['success' => false]);
+        }
+
+        // Return the articles and their colors as JSON response
+        return response()->json([
+            'success' => true,
+            'articles' => $articles,
+            'articleColors' => $articleColors, // Sending colors mapped to articles
+        ]);
     }
 }

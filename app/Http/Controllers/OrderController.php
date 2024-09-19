@@ -12,6 +12,7 @@ use App\Material;
 use App\Color;
 use App\PurchaseItem;
 use App\Purchase;
+use App\Settings;
 use App\Invoice;
 use App\InvoiceItem;
 use App\InvoiceItemRoll;
@@ -145,9 +146,12 @@ class OrderController extends Controller
                     ->get()
                     ->pluck('color_code','color_no')
                     ->all();
+                    
+        // gst or vat amount from settings
+        $vat = Settings::where('id', 1)->value('vat') ?? 0;
 
         // echo "<pre>"; print_r($article_no); die();
-        return view('order/create', compact('article_no', 'colors', 'users', 'sales_person', 'colors', 'items','customer_item_price'));
+        return view('order/create', compact('article_no', 'colors', 'users', 'sales_person', 'colors', 'items','customer_item_price','vat'));
     }
 
     /**
@@ -188,6 +192,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        // dd(request()->all());
         $this->validate($request, [
             'item_id'        => 'required|distinct',
             'name'           => 'required',
@@ -196,7 +201,7 @@ class OrderController extends Controller
             'barcode'        => 'required',
             'price'          => 'required',
             'meter'          => 'required',
-            // 'purchase_date'  => 'required',
+            'purchase_date'  => 'required',
             'payment_term'      => 'required|string|in:cash,credit',
             'credit_day'        => 'nullable|integer|min:1', // Default rule for credit_day
         ]);
@@ -249,6 +254,7 @@ class OrderController extends Controller
                     "approximate_weight" => $request->input("approximate_weight"),
                     "delivered_date" => $request->input("delivered_date"),
                 ];
+        // dd($data);
         $order = Order::create($data);
         if($items)
         {

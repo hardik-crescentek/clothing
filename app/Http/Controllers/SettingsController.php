@@ -69,11 +69,20 @@ class SettingsController extends Controller
      */
     public function update(Request $request)
     {
-        // echo "<pre>"; print_r($request->all()); die();
         $settings = Settings::find(1);
-        $settings->material_min_alert_qty = $request->material_min_alert_qty;
-        $settings->update();
-        return redirect()->route('profile')->with('success', 'Setting update successfully');
+
+        if ($settings) {
+            // Update the settings record if it exists
+            $settings->material_min_alert_qty = $request->input('material_min_alert_qty', NULL);
+            $settings->vat = $request->input('vat', 0);
+            $settings->save();
+            
+            return redirect()->route('profile')->with('success', 'Setting updated successfully');
+        } else {
+            // Handle the case where the settings record does not exist
+            // You can either create a new record or return an error message
+            return redirect()->route('profile')->with('error', 'Settings record not found.');
+        }
     }
 
     /**

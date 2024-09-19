@@ -10,16 +10,18 @@ use App\Color;
 use App\Supplier;
 use App\InvoiceItemRoll;
 use App\PurchaseImportFiles;
+use App\PurchaseArticle;
+use App\PurchaseArticleColor;
 use App\Order;
 use App\OrderItem;
 use App\Utils\Util;
-use Validator;
 use Auth;
 use Excel;
 use File;
 use App\Imports\PurchaseImport;
 use App\Imports\PurchaseItemsimport;
 use App\Imports\StockIncoming;
+use DB;
 
 class PurchaseController extends Controller
 {
@@ -31,10 +33,10 @@ class PurchaseController extends Controller
     public function index(Request $request)
     {
         // $purchases = Purchase::with('supplier')->orderBy('id','DESC')->paginate(env('ITEMS_PER_PAGE'))->appends($request->query());
-        $purchases = Purchase::leftJoin('purchase_items','purchase_items.purchase_id','=','purchases.id')
-        ->with('supplier')->orderBy('id','DESC')
-        ->select('purchases.*','purchase_items.available_qty as available_qty')
-        ->get();
+        $purchases = Purchase::leftJoin('purchase_items', 'purchase_items.purchase_id', '=', 'purchases.id')
+            ->with('supplier')->orderBy('id', 'DESC')
+            ->select('purchases.*', 'purchase_items.available_qty as available_qty')
+            ->get();
         // echo "<pre>"; print_r($purchases); die();
         return view('purchase.index', compact('purchases'));
     }
@@ -47,7 +49,7 @@ class PurchaseController extends Controller
     public function create(Request $request)
     {
         $categories = Category::active()->pluck('name', 'id')->all();
-        $materials = Material::active()->orderBy('name','ASC')->get()->pluck('name', 'name');
+        $materials = Material::active()->orderBy('name', 'ASC')->get()->pluck('name', 'name');
         $materials2 = Material::active()->get();
         $colors = Color::active()->pluck('name', 'id')->all();
         $suppliers = Supplier::dropdown();
@@ -55,7 +57,7 @@ class PurchaseController extends Controller
         $invoiceNumbers = \DB::table('purchases')->pluck('invoice_no', 'invoice_no')->toArray();
         $articleNumbers = Material::active()->pluck('article_no', 'article_no')->toArray();
         $colorMaterial = Material::active()->pluck('color', 'color')->toArray();
-        return view('purchase.create', compact('categories', 'colors', 'materials','materials2', 'suppliers', 'items','invoiceNumbers','articleNumbers','colorMaterial'));
+        return view('purchase.create', compact('categories', 'colors', 'materials', 'materials2', 'suppliers', 'items', 'invoiceNumbers', 'articleNumbers', 'colorMaterial'));
     }
 
     /**
@@ -85,24 +87,24 @@ class PurchaseController extends Controller
             'no_of_rolls'          => 'required',
             'no_of_bales'          => 'required',
         ]);
-       
+
         $total_qty = 0;
         $items = [];
         $materials = $request->input('color');
         if (is_array($materials)) {
             foreach ($materials as $key => $value) {
                 $items[] = array(
-                                'material_id'=> $value,
-                                'color'      => $request->input('color.' . $key),
-                                'article_no' => $request->input('article_no.' . $key),
-                                'color_no'   => $request->input('color_no.' . $key),
-                                'batch_no'   => $request->input('batch_no.' . $key),
-                                'roll_no'    => $request->input('roll_no.' . $key),
-                                'width'      => $request->input('width.' . $key),
-                                'meter'      => $request->input('meter.' . $key),
-                                'yard'       => meter2yard($request->input('meter.' . $key)),
-                                'piece_no'   => $request->input('piece_no.' . $key),
-                            );
+                    'material_id' => $value,
+                    'color'      => $request->input('color.' . $key),
+                    'article_no' => $request->input('article_no.' . $key),
+                    'color_no'   => $request->input('color_no.' . $key),
+                    'batch_no'   => $request->input('batch_no.' . $key),
+                    'roll_no'    => $request->input('roll_no.' . $key),
+                    'width'      => $request->input('width.' . $key),
+                    'meter'      => $request->input('meter.' . $key),
+                    'yard'       => meter2yard($request->input('meter.' . $key)),
+                    'piece_no'   => $request->input('piece_no.' . $key),
+                );
                 $total_qty +=  $request->input('meter.' . $key);
             }
         }
@@ -110,7 +112,7 @@ class PurchaseController extends Controller
 
         $collection = collect($items);
         $items = $collection->sortBy('meter');
-        
+
         $user = Auth::user();
 
         // $tax_per_meter = $request->input("total_tax") / $total_qty;
@@ -204,22 +206,104 @@ class PurchaseController extends Controller
         //     }
         // }
 
+        // Process each article and its colors
+
+        $articles = $request->input('articles', []);
+
+        $transformedArticles = [];
+    
+        foreach ($articles as $article) {
+            $articleData = [
+                'article' => $article['article'] ?? null,
+                'article_id' => $article['article_id'] ?? null,
+                'colors' => [],
+            ];
+    
+            if (isset($article['colors']) && is_array($article['colors'])) {
+                foreach ($article['colors'] as $colorId) {
+                    // Fetch color details
+                    $colorDetails = $this->getColorDetails($colorId); // Custom method to fetch color details
+    
+                    $articleData['colors'][] = [
+                        'color_id' => $colorDetails['id'] ?? null,
+                        'name' => $colorDetails['name'] ?? null,
+                        'color_no' => $colorDetails['color_no'] ?? null,
+                    ];
+                }
+            }
+    
+            $transformedArticles[] = $articleData;
+        }
+
+        // Iterate over the transformed articles and save them
+        foreach ($transformedArticles as $articleData) {
+            $article = $articleData['article'];
+            $articleId = $articleData['article_id'];
+            $colors = $articleData['colors'] ?? [];
+            $purchaseArticle = new PurchaseArticle([
+                'purchase_id' => $purchase->id,
+                'material_id' => $article, // Use the correct material ID
+                'article' => $article,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+            $purchaseArticle->save();
+            foreach ($colors as $color) {
+                $purchaseArticleColor = new PurchaseArticleColor([
+                    'purchase_id' => $purchase->id,
+                    'purchase_article_id' => $purchaseArticle->id,
+                    'material_id' => $color['color_id'], // Set the material ID for color
+                    'color' => $color['name'], // Set color name,
+                    'color_no' => $color['color_no'], // Set color name,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+                $purchaseArticleColor->save();
+                // Find the PurchaseArticle by ID and update its material_id
+                $purchaseArticle = PurchaseArticle::find($purchaseArticle->id);
+                if ($purchaseArticle) {
+                    $purchaseArticle->material_id = $color['color_id']; // Update material_id
+                    $purchaseArticle->updated_at = now();
+                    $purchaseArticle->save(); // Save the changes
+                }
+            }
+        }
+
         return redirect()->route('purchase-item.create')->with('success', 'Purchase added successfully');
     }
 
+    private function getColorDetails($colorId)
+    {
+        // Fetch color details from database
+        $color = DB::table('materials')->where('id', $colorId)->first(['id', 'color','color_no']);
 
-     public function import()
-    {   
-        $purchases = \Session::get('purchases');
-        if (!empty($purchases)) 
-        {
-            $suppliers = Supplier::dropdown();
-            return view('purchase.import', compact('purchases','suppliers'));
+       // Check if a color was found
+        if ($color) {
+            return [
+                'id' => $color->id,
+                'name' => $color->color,
+                'color_no' => $color->color_no,
+            ];
         }
-        else
-        {
+
+        // Return default values if no color was found
+        return [
+            'id' => null,
+            'name' => 'Unknown',
+            'color_no' => 'Unknown',
+        ];
+    }
+
+
+    public function import()
+    {
+        $purchases = \Session::get('purchases');
+        if (!empty($purchases)) {
             $suppliers = Supplier::dropdown();
-            return view('purchase.import', compact('purchases','suppliers'));
+            return view('purchase.import', compact('purchases', 'suppliers'));
+        } else {
+            $suppliers = Supplier::dropdown();
+            return view('purchase.import', compact('purchases', 'suppliers'));
         }
     }
 
@@ -239,15 +323,14 @@ class PurchaseController extends Controller
 
         $path_org = $request->file('purchase_file');
         $file_org_name = $request->file('purchase_file')->getClientOriginalName();
-        $chk_files = PurchaseImportFiles::where('file_name',$file_org_name)->first();
-        if (!empty($chk_files) && $chk_files != '') 
-        {
-            return redirect()->route('purchase.importt')->with('error', 'This purchase file is already uploaded at : '.date("d-m-Y h:i A",strtotime($chk_files->created_at)));
+        $chk_files = PurchaseImportFiles::where('file_name', $file_org_name)->first();
+        if (!empty($chk_files) && $chk_files != '') {
+            return redirect()->route('purchase.importt')->with('error', 'This purchase file is already uploaded at : ' . date("d-m-Y h:i A", strtotime($chk_files->created_at)));
         }
         // echo "<pre>"; print_r($chk_files); die();
 
         $public_path = public_path('uploads/purchase_import_files/');
-        if(!File::isDirectory($public_path)){
+        if (!File::isDirectory($public_path)) {
             File::makeDirectory($public_path, 0777, true, true);
         }
         $path_org->move($public_path, $file_org_name);
@@ -256,22 +339,20 @@ class PurchaseController extends Controller
         $purchaseImportFiles->file_name = $file_org_name;
         $purchaseImportFiles->save();
 
-        
+
         // echo "<pre>"; print_r($model_name->getRowCount()); die();
         $purchase_idss = implode(",", $model_name->getRowCount());
-        $purchases_data = Purchase::whereIn('id',explode(",",$purchase_idss))->with('supplier')->orderBy('id','DESC')->get();
+        $purchases_data = Purchase::whereIn('id', explode(",", $purchase_idss))->with('supplier')->orderBy('id', 'DESC')->get();
         $purchases = $purchases_data;
-        return \Redirect::back()->with( ['purchases' => $purchases]);
+        return \Redirect::back()->with(['purchases' => $purchases]);
     }
 
     public function print_all(Request $request)
     {
         $purchase = array();
-        if ($request->purchase_id != '') 
-        {
+        if ($request->purchase_id != '') {
             $purchase_ids[] = "";
-            foreach ($request->purchase_id as $key => $value) 
-            {
+            foreach ($request->purchase_id as $key => $value) {
                 $purchase_ids[] = $value;
             }
             $purchase = Purchase::with('purchase_items')->whereIn('id', $purchase_ids)->get();
@@ -279,14 +360,14 @@ class PurchaseController extends Controller
         // echo "<pre>"; print_r($purchase); die();
         return view('purchase.print-all-barcode', compact('purchase'));
     }
-    
+
     public function supplier_details($id)
     {
-        $supplier   = Supplier::select('name')->where('id',$id)->first();
-        $purchases = Purchase::where('supplier_id',$id)->with('supplier')->orderBy('id','DESC')->get();
-        return view('purchase.supplier_details', compact('purchases','supplier'));
+        $supplier   = Supplier::select('name')->where('id', $id)->first();
+        $purchases = Purchase::where('supplier_id', $id)->with('supplier')->orderBy('id', 'DESC')->get();
+        return view('purchase.supplier_details', compact('purchases', 'supplier'));
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -305,29 +386,98 @@ class PurchaseController extends Controller
      * @param  \App\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function edit(Purchase $purchase)
+    public function edit(Purchase $purchase, Request $request)
     {
-        // dd($purchase);
+        // Fetch necessary data for the view
         $categories = Category::active()->pluck('name', 'id')->all();
-        $materials = Material::active()->orderBy('name','ASC')->get()->pluck('name', 'name');
+        $materials = Material::active()->orderBy('name', 'ASC')->get()->pluck('name', 'name');
         $materials2 = Material::active()->get();
-        $colors = Color::active()->pluck('name', 'id')->all();
+        $colors = Color::active()->pluck('name', 'id')->toArray();
         $suppliers = Supplier::dropdown();
         $items = $purchase->purchase_items()->paginate(env('ITEMS_PER_PAGE'));
         $invoiceNumbers = \DB::table('purchases')->pluck('invoice_no', 'invoice_no')->toArray();
         $articleNumbers = Material::active()->pluck('article_no', 'article_no')->toArray();
         $colorMaterial = Material::active()->pluck('color', 'color')->toArray();
-        $orders = OrderItem::leftJoin('orders','orders.id','=','order_items.order_id')
-        ->leftJoin('users as customer','customer.id','=','orders.customer_id')
-        ->leftJoin('users as seller','seller.id','=','orders.seller_id')
-        ->leftJoin('purchase_items','purchase_items.id','=','order_items.item_id')
-        ->leftJoin('materials','materials.id','=','purchase_items.material_id')
-        ->with('invoice')
-        ->whereRaw('FIND_IN_SET("'.$purchase->id.'", roll_id)')
-        ->select('order_items.*','orders.*','customer.firstname as customer_firstname','customer.lastname as customer_lastname','seller.firstname as seller_firstname','seller.lastname as seller_lastname','purchase_items.*','materials.name as material_name')
-        ->get();
-        return view('purchase.edit', compact('purchase', 'categories', 'colors', 'materials','materials2', 'suppliers', 'items','orders','invoiceNumbers','articleNumbers','colorMaterial'));
+
+        // Fetch articles for the purchase
+        $articles = PurchaseArticle::where('purchase_id', $purchase->id)->get();
+
+        // Fetch and group colors by purchase_article_id
+        $articleColors = DB::table('purchase_article_colors')
+            ->leftJoin('purchase_articles', 'purchase_articles.id', '=', 'purchase_article_colors.purchase_article_id')
+            ->where('purchase_article_colors.purchase_id', $purchase->id)
+            ->select('purchase_article_colors.*', 'purchase_articles.article')
+            ->get()
+            ->groupBy('purchase_article_id');
+
+        // Get all colors available for each article
+        $allMaterials = DB::table('materials')
+            ->select('article_no', 'color', 'id as color_id') // Ensure `color_id` is selected
+            ->get()
+            ->groupBy('article_no');
+
+        $articlesWithColors = $articles->map(function ($article) use ($articleColors, $allMaterials) {
+            $selectedColors = $articleColors->get($article->id, collect())->map(function ($color) {
+                return [
+                    'color_id' => $color->material_id ?? null,
+                    'name' => $color->color ?? ''
+                ];
+            })->toArray(); // Ensure it's an array
+            
+                $allColors = $allMaterials[$article->article]->map(function ($color) {
+                    return [
+                        'color_id' => $color->material_id ?? null,
+                        'name' => $color->color ?? ''
+                    ];
+                })->toArray(); // Ensure it's an array
+            
+                return [
+                    'article_id' => $article->material_id,
+                    'article_name' => $article->article,
+                    'colors' => $selectedColors, // Ensure it's an array
+                    'all_colors' => $allColors // Ensure it's an array
+                ];
+            });    
+                        
+        // Fetch orders
+        $orders = OrderItem::leftJoin('orders', 'orders.id', '=', 'order_items.order_id')
+            ->leftJoin('users as customer', 'customer.id', '=', 'orders.customer_id')
+            ->leftJoin('users as seller', 'seller.id', '=', 'orders.seller_id')
+            ->leftJoin('purchase_items', 'purchase_items.id', '=', 'order_items.item_id')
+            ->leftJoin('materials', 'materials.id', '=', 'purchase_items.material_id')
+            ->with('invoice')
+            ->whereRaw('FIND_IN_SET("' . $purchase->id . '", roll_id)')
+            ->select(
+                'order_items.*',
+                'orders.*',
+                'customer.firstname as customer_firstname',
+                'customer.lastname as customer_lastname',
+                'seller.firstname as seller_firstname',
+                'seller.lastname as seller_lastname',
+                'purchase_items.*',
+                'materials.name as material_name'
+            )
+            ->get();
+
+        // Return view with the necessary data
+        return view('purchase.edit', compact(
+            'purchase',
+            'categories',
+            'materials',
+            'materials2',
+            'suppliers',
+            'items',
+            'orders',
+            'invoiceNumbers',
+            'articleNumbers',
+            'colorMaterial',
+            'articlesWithColors',
+            'colors',
+            'articles',
+            'articleColors'
+        ));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -354,11 +504,11 @@ class PurchaseController extends Controller
             'no_of_rolls'          => 'required',
             'no_of_bales'          => 'required',
         ]);
-       
+
         $total_qty = $purchase->total_qty;
         $items = [];
         $materials = $request->input('color');
-        
+
         if (is_array($materials)) {
             foreach ($materials as $key => $value) {
                 $items[] = array(
@@ -382,7 +532,7 @@ class PurchaseController extends Controller
         $thb_price_per_meter = $request->input("price_thb");
         $thb_ex_rate = $request->input("thb_ex_rate");
 
-         // Handle multiple file uploads
+        // Handle multiple file uploads
         if ($request->hasFile('attach_documents')) {
             $attachments = [];
             foreach ($request->file('attach_documents') as $file) {
@@ -390,44 +540,44 @@ class PurchaseController extends Controller
                 $attachments[] = $filename; // Collect the file paths
             }
         } else {
-                $attachments = json_decode($purchase->attachment, true);
+            $attachments = json_decode($purchase->attachment, true);
         }
- 
+
         $user = Auth::user();
 
         $data = [
-                    "invoice_no"                 => $request->input("invoice_no"),
-                    "purchase_date"              => $request->input("purchase_date"),
-                    "user_id"                    => $user->id,
-                    "supplier_id"                => $request->input("supplier_id"),
-                    "purchase_type"              => $request->input("purchase_type"),
-                    "currency_of_purchase"       => $request->input("currency_of_purchase"),
-                    "ex_rate"                    => $request->input("ex_rate"),
-                    "total_meter"                => $request->input("total_meter"),
-                    "total_yard"                 => $request->input("total_yard"),
-                    "import_tax"                 => $request->input("import_tax"),
-                    "transport_shipping_paid"    => $request->input("transport_shipping_paid"),
-                    "discount"                   => $request->input("discount"),
-                    "transport_shippment_cost_per_meter"  => $request->input("transport_shippment_cost_per_meter"),
-                    "note"                       => $request->input("note"),
-                    "attachment"                 => json_encode($attachments),
-                    "no_of_rolls"                    => $request->input("no_of_rolls"),
-                    "no_of_bales"                    => $request->input("no_of_bales"),
+            "invoice_no"                 => $request->input("invoice_no"),
+            "purchase_date"              => $request->input("purchase_date"),
+            "user_id"                    => $user->id,
+            "supplier_id"                => $request->input("supplier_id"),
+            "purchase_type"              => $request->input("purchase_type"),
+            "currency_of_purchase"       => $request->input("currency_of_purchase"),
+            "ex_rate"                    => $request->input("ex_rate"),
+            "total_meter"                => $request->input("total_meter"),
+            "total_yard"                 => $request->input("total_yard"),
+            "import_tax"                 => $request->input("import_tax"),
+            "transport_shipping_paid"    => $request->input("transport_shipping_paid"),
+            "discount"                   => $request->input("discount"),
+            "transport_shippment_cost_per_meter"  => $request->input("transport_shippment_cost_per_meter"),
+            "note"                       => $request->input("note"),
+            "attachment"                 => json_encode($attachments),
+            "no_of_rolls"                    => $request->input("no_of_rolls"),
+            "no_of_bales"                    => $request->input("no_of_bales"),
 
 
-                    // "total_qty"                  => $total_qty,
-                    // "total_tax"                  => $request->input("total_tax"),
-                    // "shipping_cost_per_meter"    => $request->input("shipping_cost_per_meter"),
-                    // "price"                      => $usd_price_per_meter,
-                    // "thb_ex_rate"                => $thb_ex_rate,
-                    // "price_thb"                  => $thb_price_per_meter,
-                    // "payment_terms"              => $request->input("payment_terms"),
-                    // "shipping_paid"              => $request->input("shipping_paid"),
-                    // "transportation"             => $request->input("transportation"),
-                    // "gross_tax"                  => $request->input("gross_tax"),
-                    // "shippment_cost_shipper"     => $request->input("shippment_cost_shipper"),
-                    // "shippment_cost_destination" => $request->input("shippment_cost_destination"),
-                ];
+            // "total_qty"                  => $total_qty,
+            // "total_tax"                  => $request->input("total_tax"),
+            // "shipping_cost_per_meter"    => $request->input("shipping_cost_per_meter"),
+            // "price"                      => $usd_price_per_meter,
+            // "thb_ex_rate"                => $thb_ex_rate,
+            // "price_thb"                  => $thb_price_per_meter,
+            // "payment_terms"              => $request->input("payment_terms"),
+            // "shipping_paid"              => $request->input("shipping_paid"),
+            // "transportation"             => $request->input("transportation"),
+            // "gross_tax"                  => $request->input("gross_tax"),
+            // "shippment_cost_shipper"     => $request->input("shippment_cost_shipper"),
+            // "shippment_cost_destination" => $request->input("shippment_cost_destination"),
+        ];
 
         $purchase->fill($data);
         $purchase->save();
@@ -435,31 +585,68 @@ class PurchaseController extends Controller
         if ($items) {
             $QRCode = Util::generateID();
             foreach ($items as $item) {
-                $color=Material::where('id','=',$item['color'])->first();
+                $color = Material::where('id', '=', $item['color'])->first();
                 $barcode = Util::generateID();
                 $qty = $item["meter"];
                 $item_data = [
-                                "purchase_id" => $purchase->id,
-                                "material_id" => $item["color"],
-                                "color"       => $color->color,
-                                "color_no"    => $item["color_no"],
-                                "article_no"  => $item["article_no"],
-                                "batch_no"    => $item["batch_no"],
-                                "roll_no"     => $item["roll_no"],
-                                "barcode"     => $barcode,
-                                "qrcode"      => $QRCode,
-                                "width"       => $item["width"],
-                                "qty"         => $qty,
-                                "available_qty"=> $qty,
-                                "piece_no"    => $item["piece_no"]
-                                // "price_usd" => $qty * $usd_price_per_meter,
-                                // "thb_ex_rate" => $thb_ex_rate,
-                                // "price_thb" => $qty * $thb_price_per_meter,
-                                // "total_tax" => $tax_per_meter * $qty,
-                                // "shipping_cost" => $shipping_cost_per_meter * $qty,
-                                // "discount" => $request->input("discount"),
-                            ];
+                    "purchase_id" => $purchase->id,
+                    "material_id" => $item["color"],
+                    "color"       => $color->color,
+                    "color_no"    => $item["color_no"],
+                    "article_no"  => $item["article_no"],
+                    "batch_no"    => $item["batch_no"],
+                    "roll_no"     => $item["roll_no"],
+                    "barcode"     => $barcode,
+                    "qrcode"      => $QRCode,
+                    "width"       => $item["width"],
+                    "qty"         => $qty,
+                    "available_qty" => $qty,
+                    "piece_no"    => $item["piece_no"]
+                    // "price_usd" => $qty * $usd_price_per_meter,
+                    // "thb_ex_rate" => $thb_ex_rate,
+                    // "price_thb" => $qty * $thb_price_per_meter,
+                    // "total_tax" => $tax_per_meter * $qty,
+                    // "shipping_cost" => $shipping_cost_per_meter * $qty,
+                    // "discount" => $request->input("discount"),
+                ];
                 PurchaseItem::create($item_data);
+            }
+        }
+
+        // Soft delete existing articles and their colors
+        DB::table('purchase_articles')
+            ->where('purchase_id', $purchase->id)
+            ->update(['deleted_at' => now(),'updated_at' => now()]);
+
+        DB::table('purchase_article_colors')
+            ->where('purchase_id', $purchase->id)
+            ->update(['deleted_at' => now(),'updated_at' => now()]);
+
+        // Loop through articles and update or insert data
+        foreach ($request->input('articles', []) as  $articleData) {
+            $material = Material::where('article_no',$articleData['article'])->first();
+            // Insert the article
+            $articleId = DB::table('purchase_articles')->insertGetId([
+                'purchase_id' => $purchase->id,
+                'material_id' => $material->id ?? $articleData['article'], // Use a default value or handle accordingly
+                'article'     => $articleData['article'],
+                'created_at'  => now(),
+                'updated_at'  => now()
+            ]);
+
+            // Insert new colors for this article
+            foreach ($articleData['colors'] as $colorIndex => $colorId) {
+                // Get color details (including name, color_no, etc.)
+                $colorDetails = $this->getColorDetails($colorId);
+                DB::table('purchase_article_colors')->insert([
+                    'purchase_id'         => $purchase->id,
+                    'purchase_article_id' => $articleId ?? $colorDetails['id'],
+                    'material_id'         => $colorId,
+                    'color'               => $colorDetails['name'], // Get the color name
+                    'color_no'            => $colorDetails['color_no'], // Get the color number
+                    'created_at'  => now(),
+                    'updated_at'  => now()
+                ]);
             }
         }
 
@@ -498,38 +685,38 @@ class PurchaseController extends Controller
         $purchase = $purchaseItem->purchase;
         $purchase->total_qty = ($purchase->total_qty - $purchaseItem->qty) + $qty;
         $purchase->save();
-        $material=Material::find($request->input('mat_id'));
+        $material = Material::find($request->input('mat_id'));
         $data = array(
-                    'material_id' => $material->id,
-                    // "color"       => $material->color_id,
-                    "color"       => $material->color,
-                    "color_no"    => $request->input("color_no"),
-                    'article_no'  => $request->input('article_no'),
-                    'batch_no'    => $request->input('batch_no'),
-                    'roll_no'     => $request->input('roll_no'),
-                    // 'width'   => $request->input('width'),
-                    "qty"         => $qty,
-                    "available_qty" => $qty - ($purchaseItem->qty - $purchaseItem->available_qty),
-                );
-        
+            'material_id' => $material->id,
+            // "color"       => $material->color_id,
+            "color"       => $material->color,
+            "color_no"    => $request->input("color_no"),
+            'article_no'  => $request->input('article_no'),
+            'batch_no'    => $request->input('batch_no'),
+            'roll_no'     => $request->input('roll_no'),
+            // 'width'   => $request->input('width'),
+            "qty"         => $qty,
+            "available_qty" => $qty - ($purchaseItem->qty - $purchaseItem->available_qty),
+        );
+
         $purchaseItem->fill($data);
         $purchaseItem->save();
         return redirect()->route('purchase.edit', $purchaseItem->purchase_id)->with('success', 'Purchase Item successfully updated.');
-
     }
     public function rollHistory(Request $request)
     {
-        return InvoiceItemRoll::where('roll_id','=',$request->input('item_id'))->with('invoice.customer','invoice_item')->get();
+        return InvoiceItemRoll::where('roll_id', '=', $request->input('item_id'))->with('invoice.customer', 'invoice_item')->get();
     }
 
-    public function multipleDelete(Request $request) {
+    public function multipleDelete(Request $request)
+    {
 
         $selectedItems = $request->selectedItems;
 
         $purchases = Purchase::whereIn('id', $selectedItems)->delete();
 
-        if($purchases) {
-            
+        if ($purchases) {
+
             $purchasesItems = PurchaseItem::whereIn('purchase_id', $selectedItems)->delete();
             return response()->json(['success' => true, 'message' => 'Selected Purchase deleted successfully.'], 200);
         } else {
@@ -537,7 +724,7 @@ class PurchaseController extends Controller
         }
     }
 
-    
+
     public function getSuppliers(Request $request)
     {
         // Implement logic to fetch purchase type and currency type based on $supplierId
@@ -557,5 +744,38 @@ class PurchaseController extends Controller
             'purchase_type' => $purchaseType,
             'currency_type' => $currencyType
         ]);
+    }
+
+    public function getArticles()
+    {
+        // Fetch articles with their IDs or names as needed
+        $articles = DB::table('materials')
+            ->whereNull('deleted_at')
+            ->select('article_no', 'article_no') // Assuming 'id' is the article_id
+            ->distinct()
+            ->pluck('article_no', 'article_no') // Pluck with ID as key and name as value
+            ->toArray();
+
+        return response()->json($articles);
+    }
+
+    public function getColors(Request $request)
+    {
+        $article = $request->input('article');
+
+        // Fetch colors based on the selected article
+        $colors = DB::table('materials')
+            ->whereNull('deleted_at')
+            ->where('article_no', $article)
+            ->pluck('color', 'id') // Assuming 'id' is the color_id
+            ->toArray();
+
+        // Map color names to color_id and names
+        $colorData = [];
+        foreach ($colors as $id => $name) {
+            $colorData[] = ['color_id' => $id, 'name' => $name];
+        }
+
+        return response()->json($colorData);
     }
 }

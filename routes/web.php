@@ -53,6 +53,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('get-roll-history', [App\Http\Controllers\PurchaseController::class, 'rollHistory'])->name('purchase.roll-history');
     Route::patch('update-item/', [App\Http\Controllers\PurchaseController::class, 'updatePurchaseItem'])->name('purchase.update-item');
 
+    Route::get('/get-articles', 'PurchaseController@getArticles')->name('get.articles');
+    Route::get('/get-colors', 'PurchaseController@getColors')->name('get.colors');
+
     # For Purchase Item #
     Route::get('get_purchase_id', [App\Http\Controllers\PurchaseItemController::class, 'getPurchaseId'])->name('get.purchase.id');
     Route::get('purchase-items-by-invoice', [App\Http\Controllers\PurchaseItemController::class, 'getPurchaseItemsByInvoice'])->name('purchase.items.by.invoice');
@@ -66,6 +69,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('purchase/multiple-delete', [App\Http\Controllers\PurchaseController::class, 'multipleDelete'])->name('purchase.multiple-delete');
 
     Route::get('fetch-material-price',[App\Http\Controllers\PurchaseItemController::class, 'fetchPrice'])->name('purchase.items.fetchPrice');
+
+    Route::get('get-articles-by-invoice', 'PurchaseItemController@getArticlesByInvoice');
 
     # For Supplier #
     Route::resource('supplier', SupplierController::class);

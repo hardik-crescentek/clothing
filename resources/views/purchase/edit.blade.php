@@ -86,13 +86,14 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label class="form-control-label">Total Meter<span class="text-danger ml-2">*</span></label>
-                                {!! Form::text('total_meter', null, array('placeholder' => 'Meters','class' => 'form-control total_meter')) !!}
+                                <!-- {!! Form::text('total_meter', null, array('placeholder' => 'Meters','class' => 'form-control total_meter','id'=>'total_meter')) !!} -->
+                                {!! Form::text('total_meter', null, array('placeholder' => 'Meters','id'=>'total_meter','class' => 'form-control total_meter','data-validation' => "required")) !!}
                             </div>
                         </div>
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label class="form-control-label">Total Yards<span class="text-danger ml-2">*</span></label>
-                                {!! Form::text('total_yard', null, array('placeholder' => 'Yards','class' => 'form-control','readonly'=>'true')) !!}
+                                {!! Form::text('total_yard', null, array('placeholder' => 'Yards','class' => 'form-control total_yard','id'=>'total_yard','readonly'=>'true')) !!}
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -159,6 +160,58 @@
                         </div>
                     </div>
                 </div>
+
+                <hr class="mt-5;">
+                <div class="widget-header bordered no-actions d-flex align-items-center justify-content-between" id="toggle-form" style="padding: 15px; background-color: #f8f9fa; cursor: pointer; border: 1px solid #dee2e6;">
+                    <h4 class="mb-0">Add Article & Color</h4>
+                    <button class="btn btn-outline-gray btn-sm" id="toggle-icon" style="font-size: 24px;">+</button>
+                </div>
+                               
+
+                <div id="additional-section">
+                    @foreach($articlesWithColors as $index => $articleWithColors)
+                        <div class="form-group row">
+                            <!-- Article Dropdown -->
+                            <div class="col-md-4">
+                                <label for="article">Article:</label>
+                                <select class="form-control select2 article-select" name="articles[{{ $index }}][article]" data-index="{{ $index }}">
+                                    <option value="">-- Select Article --</option>
+                                    @foreach($articleNumbers as $articleNumber)
+                                        <option value="{{ $articleNumber }}" {{ $articleWithColors['article_name'] == $articleNumber ? 'selected' : '' }}>
+                                            {{ $articleNumber }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" name="articles[{{ $index }}][article_id]" class="article-id" value="{{ $articleWithColors['article_id'] }}">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="color">Color:</label>
+                                <select class="form-control select2 color-select" name="articles[{{ $index }}][colors][]" multiple="multiple">
+                                    @foreach($articleWithColors['all_colors'] as $color)
+                                        <option value="{{ $color['color_id'] }}" 
+                                            {{ in_array($color['color_id'], $articleWithColors['colors']) ? 'selected' : '' }}>
+                                            {{ $color['name'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+
+                            <!-- Add or Remove Button -->
+                            <div class="col-md-4">
+                                @if($loop->first)
+                                    <button type="button" id="add-row" class="btn btn-success mt-4">+</button>
+                                @else
+                                    <button type="button" class="btn btn-danger remove-row mt-4">-</button>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+
+                <hr>
 
                 <div class="row my-4">
                     <div class="col-md-12">
@@ -511,20 +564,172 @@
     .selection{
         display:block !important;
     }
+    .select2-container {
+        width: 100% !important; /* Ensures Select2 takes the full width of its container */
+    }
+    
+    /* Custom styles for select2 */
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        border: none !important;
+    }
+    .select2-container .select2-selection--multiple .select2-selection__rendered {
+        display: ruby !important;
+    }
+    .select2-container--default .select2-search--inline .select2-search__field {
+        width: 100% !important; /* Set full width */
+        min-width: 100px; /* Ensure there's a minimum width for better display */
+    }
 </style>
 @endpush
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script src="{{ asset('assets/js/datepicker/moment.min.js') }}"></script>
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/parsers/parser-input-select.min.js" integrity="sha512-1yWDRolEDA6z68VeUHdXNFZhWYteCOlutcPMPuDtX1f7/doKecWLx87shPRKx8zmxdWA0FV9mNRUr9NnSwzwyw==" crossorigin="anonymous"></script>
+
 <script type="text/javascript">
+
     function delete_confirm() {
         return confirm("Are you sure want to delete?");
     }
     (function($) {
 
+        function fetchColors(article, $colorSelect, selectedColorIds = []) {
+            $.ajax({
+                url: '{{ route('get.colors') }}',
+                type: 'GET',
+                data: { article: article },
+                success: function(data) {
+                    $colorSelect.empty(); // Clear existing options
+
+                    // Populate new options
+                    $.each(data, function(index, color) {
+                        var isSelected = selectedColorIds.includes(color.color_id.toString()); // Check if color is selected
+                        $colorSelect.append(new Option(color.name, color.color_id, false, isSelected));
+                    });
+
+                    $colorSelect.trigger('change'); // Trigger change to initialize Select2
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching colors:', error);
+                }
+            });
+        }
+
+        function populateArticleSelect() {
+            $.ajax({
+                url: '{{ route('get.articles') }}',
+                type: 'GET',
+                success: function(data) {
+                    $('.article-select').each(function() {
+                        var $articleSelect = $(this);
+                        var selectedValue = $articleSelect.val(); // Preserve selected value
+
+                        $articleSelect.empty(); // Clear existing options
+
+                        // Populate new options
+                        $.each(data, function(key, value) {
+                            $articleSelect.append(new Option(value, key, false, selectedValue === key));
+                        });
+
+                        // Set placeholder option
+                        $articleSelect.prepend(new Option("-- Select Article --", "", true, !selectedValue));
+                        $articleSelect.val(selectedValue).trigger('change'); // Restore selection
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching articles:', error);
+                }
+            });
+        }
+
+        // On article change, fetch the related colors and populate
+        $(document).on('change', '.article-select', function() {
+            var selectedArticle = $(this).val();
+            var $colorSelect = $(this).closest('.form-group.row').find('.color-select');
+
+            // Fetch colors for the selected article
+            if (selectedArticle) {
+                var selectedColorIds = @json($articlesWithColors).find(a => a.article_name === selectedArticle)?.colors.map(c => c.color_id) || [];
+                fetchColors(selectedArticle, $colorSelect, selectedColorIds);
+            } else {
+                $colorSelect.empty().append(new Option("-- Select Color --", ""));
+            }
+        });
+
+        // On page load, populate colors for already selected articles
+        $('.article-select').each(function() {
+            var selectedArticle = $(this).val();
+            var $colorSelect = $(this).closest('.form-group.row').find('.color-select');
+            var selectedColorIds = @json($articlesWithColors).find(a => a.article_name === selectedArticle)?.colors.map(c => c.color_id) || [];
+
+            // Fetch and populate colors for the selected article
+            if (selectedArticle) {
+                fetchColors(selectedArticle, $colorSelect, selectedColorIds);
+            }
+        });
+
+        // Add new row dynamically
+        $('#add-row').on('click', function() {
+            var index = $('#additional-section .form-group.row').length;
+            var newRow = `
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label for="article">Article:</label>
+                        <select class="form-control select2 article-select" name="articles[${index}][article]">
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="color">Color:</label>
+                        <select class="form-control select2 color-select" name="articles[${index}][colors][]" multiple="multiple">
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-danger remove-row mt-4">-</button>
+                    </div>
+                </div>
+            `;
+
+            // Append new row and initialize Select2
+            $('#additional-section').append(newRow);
+            initializeSelect2();
+
+            // Populate the article select for the new row
+            var $newArticleSelect = $('#additional-section .article-select').last();
+            populateArticleSelect();
+
+            // Populate colors when an article is selected in the new row
+            $newArticleSelect.on('change', function() {
+                var selectedArticle = $(this).val();
+                var $newColorSelect = $(this).closest('.form-group.row').find('.color-select');
+                fetchColors(selectedArticle, $newColorSelect);
+            });
+        });
+
+        // Initialize Select2 for existing rows
+        function initializeSelect2() {
+            $('.select2').select2();
+        }
+
+        // Initialize Select2 on page load
+        initializeSelect2();
+
+        // Populate articles on page load
+        populateArticleSelect();
+
+        // Remove a row
+        $(document).on('click', '.remove-row', function() {
+            $(this).closest('.form-group.row').remove();
+        });
+
         function calculateTransportationShippingCostPerMeter() {
-            var totalMeter = parseFloat($('.total_meter').val()) || 0;
+            var totalMeter = parseFloat($('#total_meter').val()) || 0;
             var importTax = parseFloat($('#import_tax').val()) || 0;
             var transportationPaid = parseFloat($('#transport_shipping_paid').val()) || 0;
 
@@ -611,7 +816,7 @@
         
         // Trigger calculation when any relevant input field changes
         // $('#total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
-        $('.total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
+        $('#total_meter, #import_tax, #transport_shipping_paid').on('input', calculateTransportationShippingCostPerMeter);
 
       
         $(document).on('keyup', '.meter_val', function(){
@@ -647,6 +852,22 @@
         });
 
         $(document).ready(function() {
+
+            // Toggle the additional form section
+            $('#toggle-form').on('click', function(event) {
+                // Prevent form submission on button click
+                event.preventDefault();
+
+                // Toggle the visibility of the section
+                $('#additional-section').toggle();
+                
+                // Toggle the + to - and vice versa
+                var icon = $('#toggle-icon');
+                icon.text(icon.text() === '+' ? '-' : '+');
+            });    
+
+
+
 
              // Add the click event listener to the button
              $('#generate_roll_piece').click(function() {
