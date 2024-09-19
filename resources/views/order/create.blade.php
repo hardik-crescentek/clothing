@@ -214,12 +214,8 @@
                                 <input type="checkbox" class="mt-1" id="gst_checkbox" />
                             </div>
                             <h4 class="mb-3">
-                                <div id="grand_total"> Grand Total : </div>
+                                <div id="grand_total" name="grand_total"> Grand Total : </div>
                             </h4>
-                            <!-- <div class="float-right mt-3">
-                                <button type="submit" class="btn btn-primary  btn-square">Save Order</button>
-                                <a class="btn btn-secondary btn-square" href="{{route('order.index')}}">Cancel</a>
-                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -352,10 +348,13 @@
         <div class="data">0</div>
         {!! Form::hidden("selected_meter[]", null, ["class"=>"inv_total_selected_roll","id"=>"selected_meter"]) !!}
     </td> -->
+    <td class="td-selected-meter" data-value="">{!! Form::hidden('selected_meter[]', 0, array('class' => 'inv_selected_roll form-control', 'data-validation'=>"required")) !!}</td>
     {!! Form::hidden('inv_weight_gsm[]', null, ['class' => 'td-weight_gsm', 'data-gsm' => '']) !!}
     {!! Form::hidden('inv_weight_per_mtr[]', null, ['class' => 'td-weight_per_mtr', 'data-weight_per_mtr' => '']) !!}
     {!! Form::hidden('inv_weight_per_yard[]', null, ['class' => 'td-weight_per_yard', 'data-weight_per_yard' => '']) !!}
-    <td class="td-selected-meter" data-value="">{!! Form::hidden('selected_meter[]', 0, array('class' => 'inv_selected_roll form-control', 'data-validation'=>"required")) !!}</td>
+    {!! Form::hidden('grand_total', 0, array('class' => 'grand_total form-control', 'data-validation'=>"required")) !!}
+    {!! Form::hidden('vat_percentage', 0, array('class' => 'vat_percentage form-control', 'data-validation'=>"required")) !!}
+    {!! Form::hidden('vat_amount', 0, array('class' => 'vat_amount form-control', 'data-validation'=>"required")) !!}
     <td>
         <a class="btn btn-danger btn-sm btn-square inv_delete my-1 text-light">Delete</a>
         <button type="button" class="btn btn-sm btn-primary btn-square my-1 btn-roll-select" data-material_id="" data-toggle="modal" data-target="#rollSelectModel">Select Roll</button>
@@ -504,23 +503,6 @@
             }      
         });
 
-        // Event handler for unit_of_sale change
-        // $(document).on('change', '.unit_of_sale', function() {
-        //     var $thisRow = $(this).closest('tr');
-        //     var unit_purchased_in = $(this).val();
-        //     var unit_of_sale = $(this).val(); 
-        //     var materialId = $thisRow.find('.inv_item_id').val(); 
-
-        //     $(this).attr('title',`Unit Of Sale : ${unit_purchased_in}`);
-
-        //     // Set read-only attributes based on unit_of_sale
-        //     $thisRow.find('.inv_meter').prop('readonly', unit_purchased_in === 'yard');
-        //     $thisRow.find('.inv_yard').prop('readonly', unit_purchased_in === 'meter');
-
-        //     // Fetch price from server
-        //     fetchMaterialPrice(materialId, unit_of_sale, $thisRow);
-        // });
-
         $(document).on('change', '.unit_of_sale, .type_of_sale', function() {
             var $thisRow = $(this).closest('tr');
             var unit_of_sale = $thisRow.find('.unit_of_sale').val();
@@ -537,32 +519,6 @@
             // Fetch price from server
             fetchMaterialPrice(materialId, unit_of_sale, type_of_sale, $thisRow);
         });
-
-        // function fetchMaterialPrice(materialId, unit_of_sale, $thisRow) {
-        //     $.ajax({
-        //         url: "{{ route('invoice.getMaterial') }}",
-        //         dataType: "json",
-        //         data: {
-        //             artical: $("#search_article").val(),
-        //             color: $("#search_color").val(),
-        //             cus_id: $('#user_id').val()
-        //         },
-        //         success: function(data) {
-        //             var price = 0;
-                    
-        //             if (unit_of_sale === 'yard') {
-        //                 price = parseFloat(data.cut_wholesale) || 0;
-        //             } else if (unit_of_sale === 'meter') {
-        //                 price = parseFloat(data.cut_wholesale_per_mtr) || 0;
-        //             }
-
-        //             $thisRow.find('.inv_price').val(price.toFixed(2)).attr('title', `Price : ${price.toFixed(2)}`);
-                    
-        //             // Update calculations
-        //             handleCalculation($thisRow);
-        //         }
-        //     });
-        // }
 
         function fetchMaterialPrice(materialId, unit_of_sale, type_of_sale, $thisRow) {
             $.ajax({
@@ -679,74 +635,6 @@
             $('#item-' + data.id).find('.inv_price').attr("data-wholesale", price_w);
             $('#item-' + data.id).find('.inv_price').attr("data-retail", price_r);
             $('#item-' + data.id).find('.inv_price').attr("data-sample", price_s);
-
-            // $('.type_of_sale').on('change', function() {
-            //     var price_input = $(this).parents('tr').find('.inv_price');
-            //     var price=0;
-            //     var saleType = '';
-            //     if(this.value=="W"){
-            //         price = price_input.attr("data-wholesale");
-            //         saleType = 'Wholesale';
-
-            //     }
-            //     if(this.value=="R"){
-            //         price = price_input.attr("data-retail");
-            //         saleType = 'Retail';
-            //     }
-            //     if(this.value=="P"){
-            //         price = price_input.attr("data-sample");
-            //         saleType = 'Sample';
-            //     }
-
-            //     // Set the title attribute to display the selected sale type
-            //     $(this).prop('title', 'Type of Sale: ' + saleType);
-               
-            //     price_input.val(price);
-               
-            //     if (!isNaN(price) && price) {
-            //         var price = parseFloat(price).toFixed(2) || 0;
-            //     } else {
-            //         var price = 0;
-            //     }
-            //     var $thisRow = $(this).closest('tr');
-            //     var meter = parseFloat($thisRow.find('.inv_meter').val()).toFixed(2) || 0;
-            //     var yard = meter2yard(meter).toFixed(2);
-            //     var unit_of_sale = $thisRow.find('.unit_of_sale').val() || ''; 
-            //     var discountType = $thisRow.find('.discount_type').val() || ''; 
-            //     var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
-
-            //     $(this).attr('data-value', yard);
-            //     if (!isNaN(yard) && yard) {
-            //         var meter = yard2meter(yard).toFixed(2);
-            //         $('.inv_meter', $thisRow).val(meter).attr('title',`Meter : ${meter}`);   
-            //         var weight = $('.inv_weight', $thisRow).attr('data-value');
-            //         $('.inv_weight', $thisRow).val(weight * yard);
-                                        
-            //         totalmeter();
-            //         grandtotal();
-            //     }
-            //     if(price == 0){
-            //         total = 0;
-            //         $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
-            //         sub_total();
-            //         grandtotal();
-            //     } else if (!isNaN(price) && price) {
-            //         if(unit_of_sale == 'yard'){
-            //             var total = parseFloat(price * yard).toFixed(2);
-            //         } else {
-            //             var total = parseFloat(price * meter).toFixed(2);
-            //         }
-            //         // Apply discount
-            //         if (discountType === 'percentage') {
-            //             total = parseFloat(total - (total * discountValue / 100));
-            //         } else if (discountType === 'amount') {
-            //             total = parseFloat(total - discountValue).toFixed(2);
-            //         }
-            //         $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
-            //         sub_total();
-            //         grandtotal();
-            //     }
-            // });
 
             $('.type_of_sale').on('change', function() {
                 var price_input = $(this).parents('tr').find('.inv_price');
@@ -1332,68 +1220,6 @@
             });
             $('#sub_total').val(total_price.toFixed(2));
         };
-
-        // function totalmeter() {
-        //     var total = 0;
-        //     var totalWeight = 0;
-
-        //     // Calculate the total meter value
-        //     // $.each($('.inv_meter'), function(i, v) {
-        //     //     total += Number($(this).val());
-        //     // });
-        //     $.each($('.inv_meter'), function(i, v) {
-        //         var meter = Number($(this).val());
-        //         var gsm = Number($(this).data('weight-gsm')); // Get the GSM from a data attribute
-        //         console.log("gsm"+gsm);
-        //         console.log("meter"+meter);
-        //         var weight = meter * gsm;
-                
-        //         total += meter;
-        //         totalWeight += weight;
-        //     });
-
-        //     // Convert meters to yards
-        //     var totalYard = total * 1.09361;
-
-        //     // Update the total meter HTML with both total meter and total yards
-        //     $('#totalMeter').html("Total Meter: " + total.toFixed(2) + " / " + totalYard.toFixed(2));
-        //     // Update the approximate weight HTML
-        //     $('#approximate_weight').val(totalWeight.toFixed(2));
-        // }
-
-        // function totalmeter() {
-        //     var total = 0;
-        //     var totalWeight = 0;
-
-        //     // Iterate over each inv_meter input
-        //     $('.inv_meter').each(function() {
-        //         var meter = Number($(this).val()) || 0;
-        //         var yard = meter2yard(meter);
-        //         var itemId = $(this).data('item-id'); // Get the item ID from the meter input
-
-        //        // Find the corresponding GSM value using the data-value attribute
-        //         var gsm = Number($(this).closest('tr').find('.td-weight_gsm').data('gsm')) || 0;
-
-        //         console.log("Meter Value: " + meter + " GSM Value: " + gsm);
-
-        //         // Calculate weight for this item
-        //         var weight = yard * gsm;
-
-        //         // Accumulate totals
-        //         total += meter;
-        //         totalWeight += weight;
-        //     });
-
-        //     // Convert meters to yards
-        //     var totalYard = total * 1.09361;
-
-        //     // Update the total meter HTML with both total meter and total yards
-        //     $('#totalMeter').html("Total Meter: " + total.toFixed(2) + " / " + totalYard.toFixed(2));
-
-        //     // Update the approximate weight HTML
-        //     $('#approximate_weight').val(totalWeight.toFixed(2));
-        // }
-
         
         function totalmeter() {
             var totalMeter = 0;
@@ -1504,8 +1330,9 @@
 
         // Function to calculate VAT and update grand total
         function updateGrandTotalWithVAT(grandTotal, vatRate) {
+            console.log("fun call "+ grandTotal);
             // Format the base grand total
-            var formattedGrandTotal = formatMoney(grandTotal);
+            // var formattedGrandTotal = grandTotal;
 
             // Check if the GST/VAT checkbox is checked
             if ($('#gst_checkbox').is(':checked')) {
@@ -1514,10 +1341,16 @@
                 grandTotal += vatAmount; // Add VAT to the grand total
 
                 // Update the displayed grand total with VAT included
-                $('#grand_total').html("Grand Total (incl. VAT): " + formatMoney(grandTotal));
+                console.log("total is "+grandTotal);
+                $('#grand_total').html("Grand Total (incl. VAT): " + "฿" + grandTotal);
+                $('.grand_total').val(grandTotal);
+                $('.vat_percentage').val(vatRate);
+                $('.vat_amount').val(vatAmount);
             } else {
+                console.log("total is  222 "+grandTotal);
                 // Update the displayed grand total without VAT
-                $('#grand_total').html("Grand Total: " + formattedGrandTotal);
+                $('#grand_total').html("Grand Total: " + "฿" + grandTotal);
+                $('.grand_total').val(grandTotal);
             }
         }
 
@@ -1531,6 +1364,7 @@
         }
 
         function grand_total() {
+            console.log("call");
             var sub_total = parseFloat($('#sub_total').val());
             var tax_val = $('.tax').val() == '' ? 0 : $('.tax').val();
             var tax = (sub_total * parseFloat(tax_val)) / 100;
@@ -1545,10 +1379,10 @@
             var grand_total = sub_total + tax - discount;
 
             // Get VAT rate (can be passed from backend using Blade)
-            var vatRate = {{ $vat }};
+            // var vatRate = {{ $vat }};
 
             // Call the common function to update the grand total with or without VAT
-            updateGrandTotalWithVAT(grand_total, vatRate);
+            // updateGrandTotalWithVAT(grand_total, vatRate);
         }
         
         $('#final_save_btn').on('click', function() {
@@ -1802,101 +1636,6 @@
         });
         $('#delivered_date').val(currentDate);
         
-    // $(document).on('change','#user_id',function(){
-    //     var user_id = $(this).val();
-    //     $.ajax({
-    //         url: "{{ route('get_customer_orders') }}",
-    //         dataType: "json",
-    //         data: {
-    //             user_id: user_id
-    //         },
-    //         success: function(data) {
-
-    //             // console.log(data);
-    //             if (data.status === 200) 
-    //             {
-    //                 $(".custom-selected-orders").html('');
-    //                 var html = '';
-    //                 $.each(data.response,function(i,order_data){
-
-    //                     // console.log(order_data.order_date);
-    //                     html += '<div class="row col-md-12 mt-3">\
-    //                             <div class="form-group col-md-3">\
-    //                                 <h5>Order ID</h5>\
-    //                                 <span>'+order_data.id+'</span>\
-    //                             </div>\
-    //                              <div class="form-group col-md-4">\
-    //                                 <h5>Order Date</h5>\
-    //                                 <span>'+order_data.order_date+'</span>\
-    //                             </div>\
-    //                             <div class="form-group col-md-5">\
-    //                                 <h5>Order Note</h5>\
-    //                                 <span>'+order_data.note+'</span>\
-    //                             </div>\
-    //                         </div>';
-    //                         var html_item = '';
-    //                         var total_item_id = 0;
-    //                         var total_meater = 0;
-    //                         var grand_total = 0;
-    //                         if (order_data.order_item_data.length > 0) {
-    //                         html_item += '<table class="table mt-3 table-order-history">\
-    //                             <thead>\
-    //                                 <tr>\
-    //                                     <th scope="col">Order Type</th>\
-    //                                     <th scope="col">Meater</th>\
-    //                                     <th scope="col">Price</th>\
-    //                                 </tr>\
-    //                             </thead>\
-    //                             <tbody>';
-    //                             $.each(order_data.order_item_data,function(i,order_item_data){
-    //                                 html_item += '<tr>\
-    //                                     <td>'+order_item_data.type_of_sale+'</td>\
-    //                                     <td>'+order_item_data.meter+'</td>\
-    //                                     <td>'+order_item_data.price+'</td>\
-    //                                 </tr>';
-    //                                 total_item_id += 1;
-    //                                 total_meater += order_item_data.meter;
-    //                                 grand_total += parseInt(order_item_data.price);
-    //                                 })
-    //                             html_item += '</tbody>\
-    //                         </table>';
-    //                         }
-    //                         html += html_item;
-    //                         html += '<div class="">\
-    //                                 <div class="row">\
-    //                                     <div class="col-4">\
-    //                                         <h4 class="mb-2 ml-2">\
-    //                                             <div id="totalItem"> Total Items : '+total_item_id+'</div>\
-    //                                         </h4>\
-    //                                     </div>\
-    //                                     <div class="col-4">\
-    //                                         <h4 class="mb-2">\
-    //                                             <div id="totalMeter"> Total Meter : '+total_meater+'</div>\
-    //                                         </h4>\
-    //                                     </div>\
-    //                                     <div class="col-4">\
-    //                                         <h4 class="mb-2">\
-    //                                             <div id="grand_total"> Grand Total : '+grand_total+'</div>\
-    //                                         </h4>\
-    //                                     </div>\
-    //                                 </div>\
-    //                             </div>';
-    //                         html += '<hr>';
-
-    //                     $('.custom-selected-orders').html(html);
-    //                     // $("#search_color").append(`<option value="${i}">${data[i]}</option>`);
-    //                 })
-    //             }
-    //             else
-    //             {
-    //                 var html = '<div class="text-center mt-5" style="font-size: 20px;">\
-    //                       No data found..!\
-    //                     </div>';
-    //                 $('.custom-selected-orders').html(html);
-    //             }
-    //         }
-    //     });
-    // });
 
     $(document).on('change', '#user_id', function() {
         var user_id = $(this).val();

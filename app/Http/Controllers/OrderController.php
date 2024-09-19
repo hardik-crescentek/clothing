@@ -253,6 +253,9 @@ class OrderController extends Controller
                     "total_number_of_items" => $request->input("total_number_of_items"),
                     "approximate_weight" => $request->input("approximate_weight"),
                     "delivered_date" => $request->input("delivered_date"),
+                    "grand_total" => $request->input("grand_total"),
+                    "vat_percentage" => $request->input("vat_percentage"),
+                    "vat_amount" => $request->input("vat_amount"),
                 ];
         // dd($data);
         $order = Order::create($data);

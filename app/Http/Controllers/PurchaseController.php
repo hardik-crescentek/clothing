@@ -70,7 +70,7 @@ class PurchaseController extends Controller
     {
         $this->validate($request, [
             'purchase_date'        => 'required',
-            'invoice_no'           => 'required',
+            'invoice_no'           => 'required|unique:purchases,invoice_no',
             'supplier_id'          => 'required',
             'purchase_type'        => 'required',
             'currency_of_purchase' => 'required',
