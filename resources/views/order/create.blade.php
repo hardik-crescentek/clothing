@@ -1687,7 +1687,7 @@
                         amount_to_receive += order_total; // Placeholder for actual amount to receive logic
 
                         html += '<tr>\
-                                    <td>' + order_data.id + '</td>\
+                                    <td> <a href="{{ url('order') }}/view/' + order_data.id + '" data-toggle="tooltip" data-placement="top" title="View Order">' + order_data.id + '</a></td>\
                                     <td>' + formattedDate + '</td>\
                                     <td>' + order_total.toFixed(2) + '</td>\
                                     <td>' + payment_status + '</td>\
