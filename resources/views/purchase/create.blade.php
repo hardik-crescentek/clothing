@@ -256,7 +256,6 @@
 <script type="text/javascript">
 
     (function($) {
-
         function calculateTransportationShippingCostPerMeter() {
             var totalMeter = parseFloat($('#total_meter').val()) || 0;
             var importTax = parseFloat($('#import_tax').val()) || 0;
@@ -317,39 +316,38 @@
                 });
             }
 
-            function populateArticles() {
+            // Populate articles dropdown for the specified row
+            function populateArticles(articleSelect) {
                 $.ajax({
                     url: '{{ route('get.articles') }}',
                     type: 'GET',
                     success: function(data) {
-                        $('.article-select').each(function() {
-                            var $articleSelect = $(this);
-                            var $materialIdInput = $articleSelect.closest('.form-group.row').find('.material-id');
-                            var selectedValue = $articleSelect.val(); // Preserve selected value
-                            $articleSelect.empty(); // Clear existing options
+                        var $articleSelect = $(articleSelect);
+                        var $materialIdInput = $articleSelect.closest('.form-group.row').find('.material-id');
+                        var selectedValue = $articleSelect.val();
+                        $articleSelect.empty();
 
-                            // Populate new options
-                            $.each(data, function(key, value) {
-                                $articleSelect.append(new Option(value, key, false, false)); // Display name, use ID
-                            });
+                        $.each(data, function(key, value) {
+                            $articleSelect.append(new Option(value, key, false, false));
+                        });
 
-                            // Set placeholder option
-                            $articleSelect.prepend(new Option("-- Select Article --", "", true, false));
-                            $articleSelect.val(selectedValue).trigger('change'); // Restore selection
+                        $articleSelect.prepend(new Option("-- Select Article --", "", true, false));
+                        $articleSelect.val(selectedValue).trigger('change');
 
-                            // Set material_id
-                            $articleSelect.on('change', function() {
-                                var selectedId = $(this).val();
-                                $materialIdInput.val(selectedId);
-                            });
+                        // Populate colors when the article changes
+                        $articleSelect.on('change', function() {
+                            var selectedId = $(this).val();
+                            $materialIdInput.val(selectedId);
+                            populateColors($articleSelect); 
                         });
                     },
                     error: function(xhr, status, error) {
-                        console.error('Error fetching articles:', error); // Debug: Check for errors
+                        console.error('Error fetching articles:', error);
                     }
                 });
             }
 
+            // Populate colors based on the selected article for the specified row
             function populateColors(articleSelect) {
                 var article = $(articleSelect).val();
                 var $colorSelect = $(articleSelect).closest('.form-group.row').find('.color-select');
@@ -360,27 +358,36 @@
                         type: 'GET',
                         data: { article: article },
                         success: function(data) {
-                            var selectedValues = $colorSelect.val(); // Preserve selected values
-                            $colorSelect.empty(); // Clear existing options
-
-                            $.each(data, function(index, color) {
-                                $colorSelect.append(new Option(color.name, color.color_id, false, false)); // Display name, use color_id
+                            var allColorOptions = data.map(function(color) {
+                                return new Option(color.name, color.color_id, false, false);
                             });
 
-                            $colorSelect.val(selectedValues).trigger('change'); // Restore selections
+                            var selectedValues = $colorSelect.val() || []; // Store current selected values
+                            $colorSelect.empty(); // Clear existing options
+                            $colorSelect.append(new Option('Select All Colors', 'all', false, false)); // Add 'Select All' option
+                            $colorSelect.append(allColorOptions); // Add new options
+                            $colorSelect.val(selectedValues).trigger('change'); // Reapply selected values
                         },
                         error: function(xhr, status, error) {
-                            console.error('Error fetching colors:', error); // Debug: Check for errors
+                            console.error('Error fetching colors:', error);
                         }
                     });
                 } else {
-                    $colorSelect.empty().trigger('change'); // Clear the color dropdown if no article is selected
+                    $colorSelect.empty().trigger('change');
                 }
             }
 
-            // Handle article change to populate colors
-            $('#additional-section').on('change', '.article-select', function() {
-                populateColors(this);
+            // Handle selecting "Select All Colors" option
+            $('#additional-section').on('change', '.color-select', function() {
+                var $this = $(this);
+                var selectedValue = $this.val();
+
+                if (selectedValue && selectedValue.includes('all')) {
+                    var allValues = $this.find('option').map(function() {
+                        return $(this).val();
+                    }).get().filter(value => value !== 'all'); // Exclude 'Select All' option
+                    $this.val(allValues).trigger('change');
+                }
             });
 
             // Add new row
@@ -412,8 +419,11 @@
                 `;
                 
                 $('#additional-section').append(newRow);
-                initializeSelect2(); // Reinitialize Select2 for new elements
-                populateArticles();
+                initializeSelect2(); // Initialize Select2 for the new elements
+                
+                // Populate articles only for the newly added row
+                var newArticleSelect = $('#additional-section').find('.article-select').last();
+                populateArticles(newArticleSelect); // Populate articles only for the new row
             });
 
             // Remove row
@@ -423,7 +433,7 @@
 
             // Initialize Select2 and populate articles on document ready
             initializeSelect2();
-            populateArticles();
+            populateArticles($('.article-select').first()); // Populate for the first row initially
 
             // sorting logic start
             var sortOrder = 1; // 1 for ascending, -1 for descending

@@ -185,10 +185,13 @@
                                 <input type="hidden" name="articles[{{ $index }}][article_id]" class="article-id" value="{{ $articleWithColors['article_id'] }}">
                             </div>
 
+                            <!-- Color Dropdown with "Select All" -->
                             <div class="col-md-4">
                                 <label for="color">Color:</label>
                                 <select class="form-control select2 color-select" name="articles[{{ $index }}][colors][]" multiple="multiple">
-                                    @foreach($articleWithColors['all_colors'] as $color)
+                                    <!-- Add the "Select All" option at the top -->
+                                    <option value="select_all">Select All Colors</option>
+                                    @foreach ($articleWithColors['all_colors'] as $color)
                                         <option value="{{ $color['color_id'] }}" 
                                             {{ in_array($color['color_id'], $articleWithColors['colors']) ? 'selected' : '' }}>
                                             {{ $color['name'] }}
@@ -596,6 +599,7 @@
     }
     (function($) {
 
+        // Function to fetch colors based on the selected article
         function fetchColors(article, $colorSelect, selectedColorIds = []) {
             $.ajax({
                 url: '{{ route('get.colors') }}',
@@ -603,6 +607,9 @@
                 data: { article: article },
                 success: function(data) {
                     $colorSelect.empty(); // Clear existing options
+
+                    // Add the "Select All" option at the top
+                    $colorSelect.append(new Option("Select All Colors", "select_all"));
 
                     // Populate new options
                     $.each(data, function(index, color) {
@@ -618,34 +625,31 @@
             });
         }
 
+        // Function to populate article dropdowns
         function populateArticleSelect() {
-            $.ajax({
-                url: '{{ route('get.articles') }}',
-                type: 'GET',
-                success: function(data) {
-                    $('.article-select').each(function() {
-                        var $articleSelect = $(this);
-                        var selectedValue = $articleSelect.val(); // Preserve selected value
+            $('.article-select').each(function() {
+                var $articleSelect = $(this);
+                var selectedArticle = $articleSelect.val();
 
-                        $articleSelect.empty(); // Clear existing options
+                // Clear the existing options and add a placeholder
+                $articleSelect.empty().append(new Option('-- Select Article --', ''));
 
-                        // Populate new options
-                        $.each(data, function(key, value) {
-                            $articleSelect.append(new Option(value, key, false, selectedValue === key));
-                        });
+                // Populate with available article options
+                var articleNumbers = @json($articleNumbers);  // Assuming $articleNumbers is passed from Blade as JSON
 
-                        // Set placeholder option
-                        $articleSelect.prepend(new Option("-- Select Article --", "", true, !selectedValue));
-                        $articleSelect.val(selectedValue).trigger('change'); // Restore selection
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error fetching articles:', error);
-                }
+                $.each(articleNumbers, function(index, article) {
+                    // Add each article as an option in the select dropdown
+                    var isSelected = selectedArticle === article;
+                    $articleSelect.append(new Option(article, article, false, isSelected));
+                });
+
+                // Initialize or update the Select2 plugin
+                $articleSelect.select2();
             });
         }
 
-        // On article change, fetch the related colors and populate
+
+        // Handle article change event to dynamically load colors
         $(document).on('change', '.article-select', function() {
             var selectedArticle = $(this).val();
             var $colorSelect = $(this).closest('.form-group.row').find('.color-select');
@@ -656,6 +660,23 @@
                 fetchColors(selectedArticle, $colorSelect, selectedColorIds);
             } else {
                 $colorSelect.empty().append(new Option("-- Select Color --", ""));
+            }
+        });
+
+        // Handle "Select All" functionality for colors
+        $(document).on('change', '.color-select', function() {
+            var $colorSelect = $(this);
+            
+             // If the "Select All" option is selected, select all colors
+            if ($colorSelect.val().includes('select_all')) {
+                $colorSelect.find('option').each(function() {
+                    if ($(this).val() !== 'select_all') {
+                        $(this).prop('selected', true); // Select all options except "Select All"
+                    }
+                });
+                // Remove the "Select All" from the selection to prevent loop
+                $colorSelect.val($colorSelect.val().filter(value => value !== 'select_all'));
+                $colorSelect.trigger('change.select2'); // Update Select2 without triggering a recursive loop
             }
         });
 
@@ -671,7 +692,7 @@
             }
         });
 
-        // Add new row dynamically
+        // Dynamically add a new row
         $('#add-row').on('click', function() {
             var index = $('#additional-section .form-group.row').length;
             var newRow = `
@@ -679,14 +700,14 @@
                     <div class="col-md-4">
                         <label for="article">Article:</label>
                         <select class="form-control select2 article-select" name="articles[${index}][article]">
-                            <!-- Options will be populated dynamically -->
+                            <option value="">-- Select Article --</option>
                         </select>
                     </div>
-                    
+
                     <div class="col-md-4">
                         <label for="color">Color:</label>
                         <select class="form-control select2 color-select" name="articles[${index}][colors][]" multiple="multiple">
-                            <!-- Options will be populated dynamically -->
+                            <option value="select_all">Select All Colors</option>
                         </select>
                     </div>
 
@@ -714,7 +735,11 @@
 
         // Initialize Select2 for existing rows
         function initializeSelect2() {
-            $('.select2').select2();
+            $('.select2').each(function() {
+                if (!$(this).data('select2')) {
+                    $(this).select2();
+                }
+            });
         }
 
         // Initialize Select2 on page load
@@ -784,17 +809,6 @@
                 }
             }
         });
-
-        // function updateTotalMeterAfterDelete() {
-        //     var totalMeter = 0;
-
-        //     $('.meter').each(function() {
-        //         var meterValue = parseFloat($(this).val());
-        //         totalMeter += isNaN(meterValue) ? 0 : meterValue;
-        //     });
-
-        //     $('#total_meter').val(totalMeter);
-        // }
 
         // Delete row functionality
         $(document).on('click', '.delete_row', function(){
@@ -1178,61 +1192,6 @@
             //     return false; // Will stop the submission of the form
             // },
         });
-
-
-        // $('#editItemModal').on('shown.bs.modal', function(e) {
-        //     var edit_selected_material_name=null;
-        //     var edit_color="<option value=''>--Select Color--</option>";
-        //     var item_id = $(e.relatedTarget).data('item_id');
-        //     var material = $('#item-' + item_id).find('.td-material').data('value');
-        //     var material_name=$('#item-' + item_id).find('.td-material').data('name');
-        //     var color = $('#item-' + item_id).find('.td-color').data('value');
-        //     console.log('color-'+color);
-        //     var article_no = $('#item-' + item_id).find('.td-article_no').data('value');
-        //     var color_no = $('#item-' + item_id).find('.td-color_no').data('value');
-        //     var batch_no = $('#item-' + item_id).find('.td-batch_no').data('value');
-        //     // var width = $('#item-' + item_id).find('.td-width').data('value');
-        //     var roll_no = $('#item-' + item_id).find('.td-roll_no').data('value');
-        //     var qty = $('#item-' + item_id).find('.td-qty').data('value');
-        //     edit_selected_material_name=material_name;
-
-        //     $('#edit_item_id').val(item_id);
-        //     $('#edit_material_id').val(material_name).trigger('change');
-
-
-
-        //     setTimeout(function() {
-        //         console.log('Setting color:', color);
-        //         $('#edit_color_id').val(color).trigger('change');
-        //         console.log('Selected color:', $('#edit_color_id').val());
-        //     }, 500);
-        //     $('#edit_color_id').select2({
-        //         dropdownParent: $('#edit_item_form'),
-        //         width: 'resolve',
-        //     });
-        //     $('#edit_material_id').select2({
-        //         dropdownParent: $('#edit_item_form'),
-        //         width: 'resolve',
-        //     });
-        //     // var data={!! json_encode($materials2) !!};
-        //     // $.each(data,function(i,v){
-        //     //     if(edit_selected_material_name==v.name){
-        //     //         edit_color+="<option value='"+v.id+"'>"+v.color+"</option>";
-        //     //     }
-        //     // });
-        //    // Update the color select element with new options
-
-        //     // $('#edit_color_id').val(color);
-        //     $('#edit_article_no').val(article_no);
-        //     $('#edit_color_no').val(color_no);
-        //     $('#edit_batch_no').val(batch_no);
-        //     // $('#edit_width').val(width);
-        //     $('#edit_roll_no').val(roll_no);
-        //     $('#edit_qty').val(qty);
-
-
-        // });
-
 
         $('#editItemModal').on('shown.bs.modal', function(e) {
             console.log("edit call");
@@ -1629,21 +1588,6 @@
         });
 
     }
-
-    // $(document).on('submit','#from_edit_purchase',function(){
-    //     var checkNewItemClass =  $('#tblPurchaseItems tbody tr').find('.valid');
-    //     var checkOldItemClass =  $('#tblPurchaseItems_edit tbody tr').find('.valid');
-    //     if (checkNewItemClass.length > 0 || checkOldItemClass.length > 0) {
-    //         return true;
-    //     }else{
-    //         new Noty({
-    //                     type: 'warning',
-    //                     text: 'Please select item first',
-    //                     timeout: 2500,
-    //                 }).show();
-    //         return false;
-    //     }
-    // });
 })(jQuery);
 </script>
 @endpush
