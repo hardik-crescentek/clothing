@@ -78,6 +78,7 @@
                                     @role('super-admin')
                                     <th data-sorter="false">Price</th>
                                     @endrole
+                                    <th data-sorter="false">Grand Total</th>
                                     <th data-sorter="false">Note</th>
                                     <!-- <th data-sorter="false">Order Status</th> -->
                                     <th data-sorter="false" width="180px">Action</th>
@@ -129,6 +130,7 @@
                                                 @endif
                                             </td>
                                             @endrole
+                                            <td> {{$order->grand_total}} </td>
                                             <td> {{$order->note}} </td>
                                             <!-- <td>
                                                 @if ($order->status == 1)
@@ -196,6 +198,7 @@
                                     @role('super-admin')
                                     <th data-sorter="false">Price</th>
                                     @endrole
+                                    <th data-sorter="false">Grand Total</th>
                                     <th data-sorter="false">Note</th>
                                     <th data-sorter="false">Remark</th>
                                     <!-- <th data-sorter="false">Order Status</th> -->
@@ -243,6 +246,7 @@
                                                 @endif
                                             </td>
                                             @endrole
+                                            <td> {{$order->grand_total}} </td>
                                             <td> {{$order->note}} </td>
                                             <td> {{$order->remark}} </td>
                                             <!-- <td>
