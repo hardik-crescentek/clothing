@@ -195,4 +195,7 @@ Route::group(['middleware' => ['auth']], function() {
             return 'Error optimizing application: ' . $e->getMessage();
         }
     });
+
+    # warehouse master #
+    Route::resource('warehouse', WareHouseController::class);
 });

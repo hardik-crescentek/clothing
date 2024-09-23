@@ -47,6 +47,29 @@
             </li>
             @endrole
             @role('super-admin')
+                <li class="{{ (request()->is('warehouse')) ? 'active' : '' }}">
+                    <a href="#dropdown-warehouse" aria-expanded="false" data-toggle="collapse" title="WareHouse">
+                        <img src="{{ url('public/uploads/sidebar/Suppliers.svg') }}" alt="WareHouse Icon">
+                        <span>WareHouses</span>
+                    </a>
+                    <ul id="dropdown-warehouse" class="collapse list-unstyled pt-0 {{ (request()->is('warehouse*')) ? 'show' : '' }}">
+                        <li><a class="{{ (request()->is('warehouse/create')) ? 'active' : '' }}" href="{{ url('/warehouse/create') }}" title="Add WareHouse">Add WareHouse</a></li>
+                        <li><a class="{{ (request()->is('warehouse')) ? 'active' : '' }}" href="{{ url('/warehouse/') }}" title="WareHouse List">WareHouse List</a></li>
+                    </ul>
+                </li>
+            @endrole
+            @role('client')
+                <li class="{{ (request()->is('warehouse')) ? 'active' : '' }}">
+                    <a href="#dropdown-warehouse" aria-expanded="false" data-toggle="collapse" title="WareHouse">
+                        <img src="{{ url('public/uploads/sidebar/Suppliers.svg') }}" alt="WareHouse Icon">
+                        <span>WareHouses</span>
+                    </a>
+                    <ul id="dropdown-suppwarehouselier" class="collapse list-unstyled pt-0 {{ (request()->is('warehouse*')) ? 'show' : '' }}">
+                        <li><a class="{{ (request()->is('warehouse')) ? 'active' : '' }}" href="{{ url('/warehouse/') }}" title="WareHouse List">WareHouse List</a></li>
+                    </ul>
+                </li>
+            @endrole
+            @role('super-admin')
             <li class="{{ (request()->is('materials*') || request()->is('category*') || request()->is('color*')) ? 'active' : '' }}">
                 <a href="#dropdown-materials" aria-expanded="false" data-toggle="collapse" title="Materials">
                     <img src="{{ url('public/uploads/sidebar/Materials.svg') }}" alt="Materials Icon">
