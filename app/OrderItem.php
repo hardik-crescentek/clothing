@@ -10,7 +10,7 @@ class OrderItem extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        "order_id", "item_id", "type_of_sale", "meter", "price","roll_id"
+        "order_id", "item_id", "type_of_sale", "meter", "price","roll_id" ,"item_total"
     ];
     
     protected $dates = ['deleted_at'];

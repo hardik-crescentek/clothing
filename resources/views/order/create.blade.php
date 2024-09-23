@@ -343,7 +343,8 @@
     <!-- <td class="td-weight" data-value="">{!! Form::text('weight[]',0 , ['class'=>'inv_weight form-control','readonly'=>'readonly','placeholder'=>"Weight"]) !!}</td> -->
     <td class="td-discount_type" data-value="">{!! Form::select("discount_type[]", ["percentage"=>"Percentage","amount"=>"Amount"], null, ['class'=>'form-control discount_type','data-validation'=>"required"]) !!}</td>
     <td class="td-discount_value" data-value="">{!! Form::text('discount_value[]' , 0 , array('class' => 'discount_value form-control', 'data-validation'=>"required",'placeholder'=>"Discount Value" )) !!}</td>
-    <td  class="td-total-price" id="inv_total_price" data-value="">0</td>
+    <!-- <td  class="td-total-price" id="inv_total_price" data-value="">0</td> -->
+    <td class="td-total-price" data-value="">{!! Form::text('total-price[]' , 0 , array('class' => 'total-price form-control', 'data-validation'=>"required",'readonly'=>'readonly' )) !!}</td>
     <!-- <td class="td-selected-meter">
         <div class="data">0</div>
         {!! Form::hidden("selected_meter[]", null, ["class"=>"inv_total_selected_roll","id"=>"selected_meter"]) !!}
@@ -731,7 +732,8 @@
                 var total = 0;
                 if (price == 0) {
                     total = 0;
-                    $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+                    // $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+                    $('.total-price', $thisRow).val(total).attr('title', `Total Amount: ${total}`);
                     sub_total();
                     grandtotal();
                 } else if (!isNaN(price) && price) {
@@ -748,7 +750,8 @@
                         total = parseFloat(total - discountValue).toFixed(2);
                     }
 
-                    $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+                    // $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total);
+                    $('.total-price', $thisRow).val(total).attr('title', `Total Amount: ${total}`);
                     sub_total();
                     grandtotal();
                 }
@@ -847,7 +850,8 @@
                 } else if (discountType === 'amount') {
                     total = parseFloat(total - discountValue).toFixed(2);
                 }
-                $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total).attr('title', `Total Amount: ${total}`);
+                // $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total).attr('title', `Total Amount: ${total}`);
+                $('.total-price', $thisRow).val(total).attr('title', `Total Amount: ${total}`);
                 sub_total();
                 grandtotal();
             }
@@ -895,7 +899,9 @@
             if (!isNaN(price) && price) {
                 var yard = meterToYard(meter);
                 var total = unit_of_sale === 'yard' ? calculateTotal(price, yard, discountType, discountValue) : calculateTotal(price, meter, discountType, discountValue);
-                $('.td-total-price', $thisRow).attr('data-value', total).html(total).attr('title', `Total Amount: ${total}`);
+                // $('.td-total-price', $thisRow).attr('data-value', total).html(total).attr('title', `Total Amount: ${total}`);
+                console.log("call total item price "+total);
+                $('.total-price', $thisRow).val(total).attr('title', `Total Amount: ${total}`);
 
                 sub_total();
                 grandtotal();
@@ -1317,8 +1323,8 @@
 
         function grandtotal() {
             var grand_total = 0;
-            $('.td-total-price').each(function() {
-                grand_total += Number($(this).attr('data-value'));
+            $('.total-price').each(function() {
+                grand_total += Number($(this).val());
             });
 
             // Get VAT rate (can be passed from backend using Blade)
@@ -1330,7 +1336,6 @@
 
         // Function to calculate VAT and update grand total
         function updateGrandTotalWithVAT(grandTotal, vatRate) {
-            console.log("fun call "+ grandTotal);
             // Format the base grand total
             // var formattedGrandTotal = grandTotal;
 
@@ -1341,13 +1346,11 @@
                 grandTotal += vatAmount; // Add VAT to the grand total
 
                 // Update the displayed grand total with VAT included
-                console.log("total is "+grandTotal);
                 $('#grand_total').html("Grand Total (incl. VAT): " + "฿" + grandTotal);
                 $('.grand_total').val(grandTotal);
                 $('.vat_percentage').val(vatRate);
                 $('.vat_amount').val(vatAmount);
             } else {
-                console.log("total is  222 "+grandTotal);
                 // Update the displayed grand total without VAT
                 $('#grand_total').html("Grand Total: " + "฿" + grandTotal);
                 $('.grand_total').val(grandTotal);

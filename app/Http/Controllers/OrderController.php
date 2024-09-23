@@ -192,7 +192,6 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        // dd(request()->all());
         $this->validate($request, [
             'item_id'        => 'required|distinct',
             'name'           => 'required',
@@ -225,6 +224,7 @@ class OrderController extends Controller
                                 'barcode'         => $request->input('barcode.' . $key),
                                 'type_of_sale'    => $request->input('type_of_sale.' . $key),
                                 'price'           => $request->input('price.' .$key),
+                                'total-price'     => $request->input('total-price.' .$key),
                                 'meter'           => $request->input('meter.' . $key),
                                 'roll_id'         => $request->input('roll_id.' . $key),
                                 'yard'            => meter2yard($request->input('meter.' . $key))
@@ -256,8 +256,9 @@ class OrderController extends Controller
                     "grand_total" => $request->input("grand_total"),
                     "vat_percentage" => $request->input("vat_percentage"),
                     "vat_amount" => $request->input("vat_amount"),
+                    "order_date" => $request->input("purchase_date"),
+                    "delivered_date" => $request->input("delivered_date"),
                 ];
-        // dd($data);
         $order = Order::create($data);
         if($items)
         {
@@ -279,6 +280,7 @@ class OrderController extends Controller
                                 "meter"        => $item['meter'],
                                 "price"        => $item['price'],
                                 "roll_id"      => $item['roll_id'],
+                                "item_total"   => $item['total-price'],
                             ];
 
                 OrderItem::create($item_data);
