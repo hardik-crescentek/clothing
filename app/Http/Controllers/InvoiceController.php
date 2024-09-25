@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Supplier;
 use App\Material;
+use App\Settings;
 use App\Color;
 use App\Purchase;
 use App\PurchaseItem;
@@ -27,23 +28,17 @@ class InvoiceController extends Controller
 {
     public function index(Request $request)
     {
-        $invoices;
         if(Auth::user()->hasRole("payment-receiver")){
             $invoices = Invoice::where("payment_receiver_id","=",Auth::user()->id)
                         ->with('customer','seller','invoice_items','invoice_item_rolls')
                         ->whereNull('deleted_at')
-                        ->whereHas('invoice_items.item',function ($q){
-                            $q->whereNull('deleted_at');
-                        })
                         ->orderBy('id','DESC');
         }
         else{
             $invoices = Invoice::with('customer','seller','invoice_items','invoice_item_rolls')
                         ->orderBy('id','DESC')
                         ->whereNull('deleted_at')
-                        ->whereHas('invoice_items.item',function ($q){
-                            $q->whereNull('deleted_at');
-                        });
+                        ;
         }
         if($request->to_date!=''&&$request->from_date!=''){
             $to_date = Carbon::createFromFormat('d/m/Y', $request->to_date)->format('Y-m-d');
@@ -80,7 +75,10 @@ class InvoiceController extends Controller
         // $payment_receiver = $user->role('payment-receiver')->get()->pluck('fullName', 'id');
         $items=OrderItem::where('order_id','=',$order->id)->with('item','color')->get();
         // $rolls=PurchaseItem::pluck('roll_no','id');
-        return view('invoice.generateInvoice',compact('order','items','payment_receiver'));
+
+        // gst or vat amount from settings
+        $vat = Settings::where('id', 1)->value('vat') ?? 0;
+        return view('invoice.generateInvoice',compact('order','items','payment_receiver','vat'));
     }
     public function getRollData(Request $request)
     {
@@ -109,6 +107,7 @@ class InvoiceController extends Controller
             'generate_date'=>'required',
         ]);
         $order=Order::where('id','=',$request->input('order_id'))->first();
+        $vat = Settings::where('id', 1)->value('vat') ?? 0;
         $invoice_data = [
                             "invoice_no"          => $request->input('invoice_no'),
                             "order_id"            => $order->id,
@@ -116,7 +115,9 @@ class InvoiceController extends Controller
                             "seller_id"           => $order->seller_id,
                             "payment_receiver_id" => $request->input('payment_receiver_id'),
                             "sub_total"           => $request->input('sub_total'),
-                            "tax"                 => $request->input('tax') ?? 0,
+                            "tax"                 => $vat,
+                            "vat_percentage"      => $vat,
+                            "vat_amount"          => $request->input('vat_amount'),
                             "discount"            => $request->input('discount') ?? 0,
                             "discount_type"       => $request->input('discount_type'),
                             "grand_total"         => $request->input('grand_total'),
@@ -128,77 +129,117 @@ class InvoiceController extends Controller
         User::where('id','=',$order->customer_id)
         ->update(["last_invoice"=>$order->customer->last_invoice+1]);
 
-        $order_items=OrderItem::where('order_id','=',$order->id)->get();
+        // $order_items=OrderItem::where('order_id','=',$order->id)->get();
 
-        $total_roll=0;
-        $invoice_item = null;
+        // $total_roll=0;
+        // $invoice_item = null;
+
+        // foreach($order_items as $order_item){
+        //     if($order_item->id){
+        //         foreach($order_item as $k => $v){
+        //             $total_roll++;
+        //         }
+        //         break;
+        //     }
+
+        //     $selected_meter = 0;
+        //     if($order_item->id)
+        //     {
+        //         if($order_item->meter){
+        //             OrderItem::where('id','=',$order_item->id)->update(['meter'=>$v]);
+        //             $selected_meter=$v;
+        //         break;
+        //         }
+        //     }
+
+        //     $price = 0;
+        //     foreach($request->input('price') as $k => $v){
+        //         if($order_item->id)
+        //         {
+        //             $price=$v;
+        //         break;
+        //         }
+        //     }
+
+        //     CustomerItemPrice::updateOrCreate(["customer_id"=>$order->customer_id,"material_id"=>$order_item->item_id],["price"=>$price]);
+        //     $invoice_item_data=[
+        //         "invoice_id"=>$invoice->id,
+        //         "order_id"=>$order->id,
+        //         "item_id"=>$order_item->item_id,
+        //         "total_meter"=>$selected_meter,
+        //         "total_rolls"=>$total_roll,
+        //         "price"=>$price,
+        //     ];
+
+        //     $total_roll=0;
+        //     $invoice_item=InvoiceItem::create($invoice_item_data);
+ 
+        //     if($order_item->id){
+        //             $roll_item=PurchaseItem::where('id','=',$order_item->roll_id)->first();
+        //             $invoice_item_roll_data=[
+        //                 "invoice_item_id"=>$invoice_item->id,
+        //                 "invoice_id"=>$invoice->id,
+        //                 "roll_id"=>$order_item->roll_id,
+        //                 "roll_no"=>$roll_item->roll_no,
+        //                 "meter"=>$meter,
+        //             ];
+        //             InvoiceItemRoll::create($invoice_item_roll_data);
+        //             $purchase_item=PurchaseItem::where('id','=',$roll_id)->first();
+        //             $available_meter=$purchase_item->available_qty;
+        //             $purchase_item->update(['available_qty'=>$available_meter-$meter]);
+        //     }
+        // }
+        $order_items = OrderItem::where('order_id', $order->id)->get();
+
+        $total_roll = 0;
 
         foreach($order_items as $order_item){
-            foreach($request->input('item_roll') as $key => $value)
-            {
-                if($key==$order_item->id){
-                    foreach($value as $k => $v){
-                        $total_roll++;
-                    }
-                    break;
-                }
+            $total_roll++;
 
-            }
-            $selected_meter = 0;
-            foreach($request->input('selected_meter') as $k => $v){
-                if($k==$order_item->id)
-                {
-                    if($v!=$order_item->meter){
-                        OrderItem::where('id','=',$order_item->id)->update(['meter'=>$v]);
-                        $selected_meter=$v;
-                    break;
-                    }
-                }
-            }
+            // Handle selected meter
+            $selected_meter = $order_item->meter ?? 0;  
+            OrderItem::where('id', $order_item->id)->update(['meter' => $selected_meter]);
 
-            $price = 0;
-            foreach($request->input('price') as $k => $v){
-                if($k==$order_item->id)
-                {
-                    $price=$v;
-                break;
-                }
-            }
+            // Handle price update (assumes price is sent as an array)
+            $price = $request->input('price')[$order_item->id] ?? 0;
+            CustomerItemPrice::updateOrCreate(
+                ["customer_id" => $order->customer_id, "material_id" => $order_item->item_id],
+                ["price" => $price]
+            );
 
-            CustomerItemPrice::updateOrCreate(["customer_id"=>$order->customer_id,"material_id"=>$order_item->item_id],["price"=>$price]);
-            $invoice_item_data=[
-                "invoice_id"=>$invoice->id,
-                "order_id"=>$order->id,
-                "item_id"=>$order_item->item_id,
-                "total_meter"=>$selected_meter,
-                "total_rolls"=>$total_roll,
-                "price"=>$price,
+            // Create invoice item
+            $invoice_item_data = [
+                "invoice_id"   => $invoice->id,
+                "order_id"     => $order->id,
+                "item_id"      => $order_item->item_id,
+                "type_of_sale" => $order_item->type_of_sale,
+                "total_meter"  => $selected_meter,
+                "total_rolls"  => $total_roll,
+                "price"        => $price,
             ];
 
-            $total_roll=0;
-            $invoice_item=InvoiceItem::create($invoice_item_data);
+            $invoice_item = InvoiceItem::create($invoice_item_data);
 
-            foreach($request->input('item_roll') as $item_id => $value)
-            {
-                if($item_id==$order_item->id){
-                    foreach($value as $roll_id => $meter){
-                        // echo " item id = ".$item_id." roll id = ".$roll_id." meter = ".$meter."<br />";
-                        $roll_item=PurchaseItem::where('id','=',$roll_id)->first();
-                        $invoice_item_roll_data=[
-                            "invoice_item_id"=>$invoice_item->id,
-                            "invoice_id"=>$invoice->id,
-                            "roll_id"=>$roll_id,
-                            "roll_no"=>$roll_item->roll_no,
-                            "meter"=>$meter,
-                        ];
-                        InvoiceItemRoll::create($invoice_item_roll_data);
-                        $purchase_item=PurchaseItem::where('id','=',$roll_id)->first();
-                        $available_meter=$purchase_item->available_qty;
-                        $purchase_item->update(['available_qty'=>$available_meter-$meter]);
-                    }
-                    break;
-                }
+            // Handle roll data if available
+            if($order_item->roll_id){
+                $roll_item = PurchaseItem::where('id', $order_item->roll_id)->first();
+                $invoice_item_roll_data = [
+                    "invoice_item_id" => $invoice_item->id,
+                    "invoice_id"      => $invoice->id,
+                    "roll_id"         => $order_item->roll_id,
+                    "roll_no"         => $roll_item->roll_no,
+                    "meter"           => $selected_meter,
+                ];
+                InvoiceItemRoll::create($invoice_item_roll_data);
+
+                // Update available meter on purchase item
+                $purchase_item = PurchaseItem::where('id', $order_item->roll_id)->first();
+                $available_meter = $purchase_item->available_qty;
+                $purchase_item->update(['available_qty' => $available_meter - $selected_meter]);
             }
+
+            // Reset total roll for next iteration
+            $total_roll = 0;
         }
         return redirect()->route('invoice.index')->with('success', 'Invoice Created successfully');
     }

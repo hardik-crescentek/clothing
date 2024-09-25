@@ -93,30 +93,30 @@
                                 <td> {{$invoice->invoice_date}} </td>
                                 <td>
                                     @if ($invoice->invoice_items->count())
-                                    @foreach ($invoice->invoice_items as $key => $invoice_item)
-                                    {{isset($invoice_item->item->name) ? $invoice_item->item->name : ''}} <br />
-                                    @endforeach
+                                        @foreach ($invoice->invoice_items as $key => $invoice_item)
+                                            {{isset($invoice_item->item->name) ? $invoice_item->item->name : ''}} <br />
+                                        @endforeach
                                     @endif
                                 </td>
                                 <td>
                                     @if ($invoice->invoice_items->count())
-                                    @foreach ($invoice->invoice_items as $key => $invoice_item)
-                                    {{ isset($invoice_item->item->color) ? $invoice_item->item->color : '' }} <br />
-                                    @endforeach
+                                        @foreach ($invoice->invoice_items as $key => $invoice_item)
+                                            {{ isset($invoice_item->item->color) ? $invoice_item->item->color : '' }} <br />
+                                        @endforeach
                                     @endif
                                 </td>
                                 <td>
                                     @if ($invoice->invoice_items->count())
-                                    @foreach ($invoice->invoice_items as $key => $invoice_item)
-                                    {{$invoice_item->total_meter}} <br />
-                                    @endforeach
+                                        @foreach ($invoice->invoice_items as $key => $invoice_item)
+                                            {{$invoice_item->total_meter}} <br />
+                                        @endforeach
                                     @endif
                                 </td>
                                 <td>
                                     @if ($invoice->invoice_items->count())
-                                    @foreach ($invoice->invoice_items as $key => $invoice_item)
-                                    {{$invoice_item->price}} <br />
-                                    @endforeach
+                                        @foreach ($invoice->invoice_items as $key => $invoice_item)
+                                            {{$invoice_item->price}} <br />
+                                        @endforeach
                                     @endif
                                 </td>
                                 <td> {{$invoice->note}} </td>
@@ -184,14 +184,12 @@
                 }
             });
             $('#from_date').daterangepicker({
-                autoUpdateInput: false,
+                // autoUpdateInput: false,
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
                     format: 'DD/MM/YYYY',
                 }
-            },function(chosen_date) {
-                $('#from_date').val(chosen_date.format('DD/MM/YYYY'));
             });
         })
     </script>

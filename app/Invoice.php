@@ -11,7 +11,7 @@ class Invoice extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        "invoice_no","order_id","customer_id", "seller_id","payment_receiver_id","sub_total","payment_terms","credit_days","sales_type","charge_in_unit","sales_commision","commision_type","commision_amount_thb","commision_amount_thb","commision_amount_sale","tax","discount","discount_type","grand_total",'invoice_date', "note", "status" 
+        "invoice_no","order_id","customer_id", "seller_id","payment_receiver_id","sub_total","payment_terms","credit_days","sales_type","charge_in_unit","sales_commision","commision_type","commision_amount_thb","commision_amount_thb","commision_amount_sale","tax","discount","discount_type","grand_total",'invoice_date', "note", "status" ,"vat_percentage","vat_amount"
     ];
     protected $casts = [
         'order_date' => 'datetime',        
@@ -19,11 +19,16 @@ class Invoice extends Model
     
     protected $dates = ['deleted_at'];
 
+    // public function setInvoiceDateAttribute($value)
+    // {
+    //     $this->attributes['invoice_date'] = empty($value) ? date('Y-m-d') : Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
+    // }
     public function setInvoiceDateAttribute($value)
     {
-        $this->attributes['invoice_date'] = empty($value) ? date('Y-m-d') : Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d');
+        if (!empty($value)) {
+            $this->attributes['order_date'] = Carbon::createFromFormat('d/m/Y H:i', $value)->format('Y-m-d H:i:s');
+        }
     }
-
     public function getInvoiceDateAttribute($value)
     {
         return Carbon::parse($value)->format('d/m/Y');

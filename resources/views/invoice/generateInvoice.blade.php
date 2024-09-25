@@ -171,13 +171,14 @@
                                         <td><div id="sub-total" class="input-group">{!! Form::text("sub_total", null, ['class'=>'form-control sub-total','id'=>'sub_total','data-validation'=>"required",'placeholder'=>'Sub Total','readonly'=>'readonly']) !!}</div></td>
                                     </tr>
                                     <tr>
-                                        <td><label class="form-control-label">Tax</label></td>
                                         <td>
-                                            <div id="tax" class="input-group">
-                                                {!! Form::text('tax', null, array('placeholder' => 'Tax','id'=>'tax','class' => 'form-control tax')) !!}
-                                                <span class="input-group-addon addon-secondary">%</span>
-                                            </div>
+                                            <input type="checkbox" class="mt-1" id="gst_checkbox" />
+                                            <label for="gst_checkbox">Apply GST/VAT ({{ $vat }}%) ? :</label>
                                         </td>
+                                        <td>
+                                            {!! Form::text('vat_amount', null, array('placeholder' => 'Tax Amount','id'=>'vat_amount','class' => 'form-control tax','readonly' => 'readonly')) !!}
+                                        </td>
+                                        
                                     </tr>
                                     <tr>
                                         <td><label class="form-control-label">Discount</label></td>
@@ -318,12 +319,18 @@
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
 <script type="text/javascript">
     (function($) {
+        var currentDate = moment().format('DD/MM/YYYY HH:mm');
+
         $('#generate_date').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true,
+            timePicker: true,
+            timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
             locale: {
-                format: 'DD/MM/YYYY'
-            }
+                format: 'DD/MM/YYYY HH:mm'  // Format with date and time
+            },
+            autoApply: false,
+            startDate: currentDate  // Set the current date and time as the default
         });
         // $('#select-roll').on('click',function(e){
         //     var item_id = $('input.item_id').val();
@@ -705,8 +712,8 @@
         };
         function grand_total() {
             var sub_total=parseFloat($('#sub_total').val());
-            var tax_val=$('.tax').val()==''? 0 : $('.tax').val();
-            var tax=(sub_total*parseFloat(tax_val))/100;
+            // var tax_val=$('.tax').val()==''? 0 : $('.tax').val();
+            // var tax=(sub_total*parseFloat(tax_val))/100;
             var discount_val=$('.discount').val()==''? 0 : $('.discount').val()
             var discount=0;
 
@@ -716,9 +723,38 @@
             else if($('#discount_type').val()==1){
                 discount=parseFloat(discount_val);
             }
-            var grand_total=sub_total+tax-discount;
-            $('#grand_total').val(grand_total.toFixed(2));
+            var grand_total=sub_total-discount;
+            
+            console.log("fun call grand_total");
+            console.log("sub_total "+sub_total);
+            console.log("discount_val "+discount_val);
+            console.log("discount "+discount);
+
+            // VAT/GST Handling
+            var vatRate = {{ $vat }} || 0;
+
+            if ($('#gst_checkbox').is(':checked')) {
+                // Calculate VAT
+                vatAmount = (grand_total * parseFloat(vatRate)) / 100;
+                grand_total += vatAmount; // Add VAT to grand total
+            } else {
+                // Calculate VAT
+                vatAmount = 0;
+                grand_total += vatAmount; // Add VAT to grand total
+            }
+
+            // Update the grand total fields (with or without VAT)
+            $('#grand_total').html("Grand Total: " + "฿" + grand_total.toFixed(2));
+            $('.grand_total').val(grand_total.toFixed(2));
+            $('#vat_amount').val(vatAmount.toFixed(2));
+            // $('#grand_total').val(grand_total.toFixed(2));
         }
+
+        // Use the 'change' event listener for the GST/VAT checkbox
+        $('#gst_checkbox').on('change', function() {
+            grand_total(); 
+        });
+
         $('#tax').on('keyup',function(){
             grand_total();
         });
@@ -728,13 +764,13 @@
         $('#discount_type').on('change',function(){
             grand_total();
         });
-        $('#final_save_btn').on('click',function() {
-           if($('.hidden_div').is(':empty')){
-               alert("Please Select Roll");
-               return false;
-           }
-           return true;
-        });
+        // $('#final_save_btn').on('click',function() {
+        //    if($('.hidden_div').is(':empty')){
+        //        alert("Please Select Roll");
+        //        return false;
+        //    }
+        //    return true;
+        // });
         $("#price_book").on('click',function(){
             $('#tblpricebook').html('');
             var user_id = "{{ $order->customer->id }}";

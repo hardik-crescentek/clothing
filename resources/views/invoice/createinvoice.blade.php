@@ -696,12 +696,18 @@
             }
         });
 
+        var currentDate = moment().format('DD/MM/YYYY HH:mm');
+
         $('#generate_date').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true,
+            timePicker: true,
+            timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
             locale: {
-                format: 'DD/MM/YYYY'
-            }
+                format: 'DD/MM/YYYY HH:mm'  // Format with date and time
+            },
+            autoApply: false,
+            startDate: currentDate  // Set the current date and time as the default
         });
         var roll_data;
         var modal_item_id;
