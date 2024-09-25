@@ -189,35 +189,37 @@
                 </div>
                 
                 <hr class="mt-5;">
-                <div class="widget-header bordered no-actions d-flex align-items-center justify-content-between" id="toggle-form" style="padding: 15px; background-color: #f8f9fa; cursor: pointer; border: 1px solid #dee2e6;">
-                    <h4 class="mb-0">Add Article & Color</h4>
-                    <button class="btn btn-outline-gray btn-sm" id="toggle-icon" style="font-size: 24px;">+</button>
-                </div>
-
-                <div id="additional-section" style="display: none; margin-top: 20px;">
-                    <div class="form-group row" id="form-rows">
-                        <div class="col-md-4">
-                            <label for="article">Article:</label>
-                            <select class="form-control-label select2 article-select" name="articles[0][article]" data-article-id="1">
-                                <option value="">Select Article</option>
-                                <!-- Options will be dynamically populated -->
-                            </select>
-                            <input type="hidden" name="articles[0][article_id]" class="article-id" value="1">
+                    <div class="widget-container" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 15px;">
+                        <div class="bordered no-actions d-flex align-items-center justify-content-between" id="toggle-form" style="cursor: pointer;">
+                            <h4 class="mb-0">Add Article & Color</h4>
+                            <button class="btn btn-outline-gray btn-sm" id="toggle-icon" style="font-size: 24px;">+</button>
                         </div>
 
-                        <div class="col-md-4">
-                            <label for="color">Color:</label>
-                            <select class="form-control-label select2 color-select" name="articles[0][colors][]" multiple="multiple">
-                                <option value="">Select Color</option>
-                                <!-- Options will be dynamically populated -->
-                            </select>
-                        </div>
+                        <div id="additional-section" style="display: none; margin-top: 20px;margin-left:1%">
+                            <div class="form-group row" id="form-rows">
+                                <div class="col-md-4">
+                                    <label for="article">Article:</label>
+                                    <select class="form-control-label select2 article-select" name="articles[0][article]" data-article-id="1">
+                                        <option value="">Select Article</option>
+                                        <!-- Options will be dynamically populated -->
+                                    </select>
+                                    <input type="hidden" name="articles[0][article_id]" class="article-id" value="1">
+                                </div>
 
-                        <div class="col-md-2">
-                            <button type="button" id="add-row" class="btn btn-success mt-4">+</button>
+                                <div class="col-md-4">
+                                    <label for="color">Color:</label>
+                                    <select class="form-control-label select2 color-select" name="articles[0][colors][]" multiple="multiple">
+                                        <option value="">Select Color</option>
+                                        <!-- Options will be dynamically populated -->
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button type="button" id="add-row" class="btn btn-success mt-4">+</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
                 <hr>
 
                 <div class="form-group row d-flex align-items-center mt-5">
@@ -254,6 +256,23 @@
         width: 100% !important; /* Set full width */
         min-width: 100px; /* Ensure there's a minimum width for better display */
     }
+
+    #additional-section {
+        margin: 20px 0;
+    }
+
+    .highlighted-row {
+        background-color: #e2f0d9; /* Light green background */
+        border-radius: 5px;
+        padding: 15px; /* Padding for the entire row */
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+    }
+
+    .highlighted-row label {
+        font-weight: bold; /* Make labels bold for emphasis */
+    }
+
 </style>
 @endpush
 @push('scripts')
@@ -326,6 +345,38 @@
                 });
             }
 
+            // Get a list of all selected articles
+            function getSelectedArticles() {
+                var selectedArticles = [];
+                $('.article-select').each(function() {
+                    var article = $(this).val();
+                    if (article) {
+                        selectedArticles.push(article);
+                    }
+                });
+                return selectedArticles;
+            }
+
+            // Filter the article options to remove already selected articles
+            function filterArticles($articleSelect, data) {
+                var selectedArticles = getSelectedArticles(); // Get all currently selected articles
+                var selectedValue = $articleSelect.val(); // Get the currently selected value for the current row
+                
+                $articleSelect.empty();
+                
+                // Append default placeholder
+                $articleSelect.append(new Option("-- Select Article --", "", true, false));
+
+                // Append only the articles that haven't been selected yet, plus the currently selected one
+                $.each(data, function(key, value) {
+                    if (!selectedArticles.includes(key.toString()) || key.toString() === selectedValue) {
+                        $articleSelect.append(new Option(value, key, false, key.toString() === selectedValue));
+                    }
+                });
+
+                $articleSelect.trigger('change.select2'); // Trigger a safe select2 refresh
+            }
+
             // Populate articles dropdown for the specified row
             function populateArticles(articleSelect) {
                 $.ajax({
@@ -334,21 +385,22 @@
                     success: function(data) {
                         var $articleSelect = $(articleSelect);
                         var $materialIdInput = $articleSelect.closest('.form-group.row').find('.material-id');
-                        var selectedValue = $articleSelect.val();
-                        $articleSelect.empty();
 
-                        $.each(data, function(key, value) {
-                            $articleSelect.append(new Option(value, key, false, false));
-                        });
+                        // Remove the event handler temporarily to avoid recursion
+                        $articleSelect.off('change');
+                        
+                        filterArticles($articleSelect, data); // Filter articles before populating
 
-                        $articleSelect.prepend(new Option("-- Select Article --", "", true, false));
-                        $articleSelect.val(selectedValue).trigger('change');
-
-                        // Populate colors when the article changes
+                        // Rebind the change event after options are filtered
                         $articleSelect.on('change', function() {
                             var selectedId = $(this).val();
                             $materialIdInput.val(selectedId);
                             populateColors($articleSelect); 
+                            
+                            // Update article dropdowns in all rows to remove the selected article from other rows
+                            $('.article-select').each(function() {
+                                filterArticles($(this), data); // Reapply filtering for all article selects
+                            });
                         });
                     },
                     error: function(xhr, status, error) {
@@ -369,7 +421,8 @@
                         data: { article: article },
                         success: function(data) {
                             var allColorOptions = data.map(function(color) {
-                                return new Option(color.name, color.color_id, false, false);
+                                // return new Option(color.name, color.color_id, false, false);
+                                return new Option(color.color_no + '-' + color.name , color.color_id, false, false);
                             });
 
                             var selectedValues = $colorSelect.val() || []; // Store current selected values
@@ -415,7 +468,7 @@
                         </div>
                         
                         <div class="col-md-4">
-                            <label for="color">Color # with Check Box</label>
+                            <label for="color">Color:</label>
                             <select class="form-control-label select2 color-select" name="articles[${index}][colors][]" multiple="multiple">
                                 <option>-- Select Color --</option>
                                 <!-- Options will be dynamically populated -->
@@ -439,6 +492,12 @@
             // Remove row
             $('#additional-section').on('click', '.remove-row', function() {
                 $(this).closest('.form-group.row').remove();
+
+                // Re-filter articles for all remaining rows to make the removed article available again
+                $('.article-select').each(function() {
+                    var $articleSelect = $(this);
+                    populateArticles($articleSelect); // Repopulate articles
+                });
             });
 
             // Initialize Select2 and populate articles on document ready
@@ -472,8 +531,6 @@
             // Handle form submission inside the modal
             $('#add_item_form').submit(function(event) {
                 event.preventDefault();
-                // Your logic to handle form submission
-                // Example: AJAX call to submit form data
             });
 
             $('#supplier_id').change(function() {
@@ -514,13 +571,9 @@
                 console.log('test'+selectedPurchaseType);
 
                 if (selectedPurchaseType === 'domestic') {
-                    // Set ex_rate value to 1 and disable the input
                     exRateInput.val('1');
-                    // exRateInput.prop('disabled', true); // Optionally disable the input
                 } else {
-                    // Allow the user to manually input ex_rate
                     exRateInput.val(''); // Clear previous value if any
-                    // exRateInput.prop('disabled', false); // Enable the input
                 }
             });
 

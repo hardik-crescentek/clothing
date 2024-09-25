@@ -703,17 +703,21 @@ class PurchaseController extends Controller
     {
         $article = $request->input('article');
 
-        // Fetch colors based on the selected article
+        // Fetch colors based on the selected article, including color_no
         $colors = DB::table('materials')
-            ->whereNull('deleted_at')
-            ->where('article_no', $article)
-            ->pluck('color', 'id') // Assuming 'id' is the color_id
-            ->toArray();
+        ->whereNull('deleted_at')
+        ->where('article_no', $article)
+        ->select('id', 'color', 'color_no') // Select the necessary fields
+        ->get();
 
-        // Map color names to color_id and names
+        // Map color names to color_id, name, and color_no
         $colorData = [];
-        foreach ($colors as $id => $name) {
-            $colorData[] = ['color_id' => $id, 'name' => $name];
+        foreach ($colors as $color) {
+            $colorData[] = [
+                'color_id' => $color->id,
+                'name' => $color->color,
+                'color_no' => $color->color_no // Include color_no in the response
+            ];
         }
 
         return response()->json($colorData);

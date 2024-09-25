@@ -171,59 +171,57 @@
                     </div>
                 </div>
 
-                <hr class="mt-5;">
-                <div class="widget-header bordered no-actions d-flex align-items-center justify-content-between" id="toggle-form" style="padding: 15px; background-color: #f8f9fa; cursor: pointer; border: 1px solid #dee2e6;">
-                    <h4 class="mb-0">Add Article & Color</h4>
-                    <button class="btn btn-outline-gray btn-sm" id="toggle-icon" style="font-size: 24px;">+</button>
+                <hr class="mt-5;">     
+                <div class="widget-container" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 15px;">
+                    <div class="bordered no-actions d-flex align-items-center justify-content-between" id="toggle-form" style="cursor: pointer;">
+                        <h4 class="mb-0">Add Article & Color</h4>
+                        <button class="btn btn-outline-gray btn-sm" id="toggle-icon" style="font-size: 24px;">+</button>
+                    </div>
+                    <div id="additional-section" style="margin-left:1%">
+                        @foreach($articlesWithColors as $index => $articleWithColors)
+                            <div class="form-group row">
+                                <!-- Article Dropdown -->
+                                <div class="col-md-4">
+                                    <label for="article">Article:</label>
+                                    <select class="form-control select2 article-select" name="articles[{{ $index }}][article]" data-index="{{ $index }}">
+                                        <option value="">-- Select Article --</option>
+                                        @foreach($articleNumbers as $articleNumber)
+                                            <option value="{{ $articleNumber }}" {{ $articleWithColors['article_name'] == $articleNumber ? 'selected' : '' }}>
+                                                {{ $articleNumber }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <input type="hidden" name="articles[{{ $index }}][article_id]" class="article-id" value="{{ $articleWithColors['article_id'] }}">
+                                </div>
+
+                                <!-- Color Dropdown with "Select All" -->
+                                <div class="col-md-4">
+                                    <label for="color">Color:</label>
+                                    <select class="form-control select2 color-select" name="articles[{{ $index }}][colors][]" multiple="multiple">
+                                        <!-- Add the "Select All" option at the top -->
+                                        <option value="select_all">Select All Colors</option>
+                                        @foreach ($articleWithColors['all_colors'] as $color)
+                                            <option value="{{ $color['color_id'] }}" 
+                                                {{ in_array($color['color_id'], $articleWithColors['colors']) ? 'selected' : '' }}>
+                                                {{ $color['name'] }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+
+                                <!-- Add or Remove Button -->
+                                <div class="col-md-4">
+                                    @if($loop->first)
+                                        <button type="button" id="add-row" class="btn btn-success mt-4">+</button>
+                                    @else
+                                        <button type="button" class="btn btn-danger remove-row mt-4">-</button>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
-                               
-
-                <div id="additional-section">
-                    @foreach($articlesWithColors as $index => $articleWithColors)
-                        <div class="form-group row">
-                            <!-- Article Dropdown -->
-                            <div class="col-md-4">
-                                <label for="article">Article:</label>
-                                <select class="form-control select2 article-select" name="articles[{{ $index }}][article]" data-index="{{ $index }}">
-                                    <option value="">-- Select Article --</option>
-                                    @foreach($articleNumbers as $articleNumber)
-                                        <option value="{{ $articleNumber }}" {{ $articleWithColors['article_name'] == $articleNumber ? 'selected' : '' }}>
-                                            {{ $articleNumber }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <input type="hidden" name="articles[{{ $index }}][article_id]" class="article-id" value="{{ $articleWithColors['article_id'] }}">
-                            </div>
-
-                            <!-- Color Dropdown with "Select All" -->
-                            <div class="col-md-4">
-                                <label for="color">Color:</label>
-                                <select class="form-control select2 color-select" name="articles[{{ $index }}][colors][]" multiple="multiple">
-                                    <!-- Add the "Select All" option at the top -->
-                                    <option value="select_all">Select All Colors</option>
-                                    @foreach ($articleWithColors['all_colors'] as $color)
-                                        <option value="{{ $color['color_id'] }}" 
-                                            {{ in_array($color['color_id'], $articleWithColors['colors']) ? 'selected' : '' }}>
-                                            {{ $color['name'] }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-
-                            <!-- Add or Remove Button -->
-                            <div class="col-md-4">
-                                @if($loop->first)
-                                    <button type="button" id="add-row" class="btn btn-success mt-4">+</button>
-                                @else
-                                    <button type="button" class="btn btn-danger remove-row mt-4">-</button>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-
                 <hr>
 
                 <div class="row my-4">
@@ -624,7 +622,7 @@
                     // Populate new options
                     $.each(data, function(index, color) {
                         var isSelected = selectedColorIds.includes(color.color_id.toString()); // Check if color is selected
-                        $colorSelect.append(new Option(color.name, color.color_id, false, isSelected));
+                        $colorSelect.append(new Option(color.color_no + '-' + color.name, color.color_id, false, isSelected));
                     });
 
                     $colorSelect.trigger('change'); // Trigger change to initialize Select2
@@ -635,27 +633,22 @@
             });
         }
 
-        // Function to populate article dropdowns
-        function populateArticleSelect() {
-            $('.article-select').each(function() {
-                var $articleSelect = $(this);
-                var selectedArticle = $articleSelect.val();
+        // Populate article dropdowns
+        function populateArticleSelect($articleSelect,excludedArticles = []) {
+            // Clear the existing options and add a placeholder
+            $articleSelect.empty().append(new Option('-- Select Article --', ''));
 
-                // Clear the existing options and add a placeholder
-                $articleSelect.empty().append(new Option('-- Select Article --', ''));
+            // Populate with available article options
+            var articleNumbers = @json($articleNumbers); // Assuming $articleNumbers is passed from Blade as JSON
 
-                // Populate with available article options
-                var articleNumbers = @json($articleNumbers);  // Assuming $articleNumbers is passed from Blade as JSON
-
-                $.each(articleNumbers, function(index, article) {
-                    // Add each article as an option in the select dropdown
-                    var isSelected = selectedArticle === article;
-                    $articleSelect.append(new Option(article, article, false, isSelected));
-                });
-
-                // Initialize or update the Select2 plugin
-                $articleSelect.select2();
+            $.each(articleNumbers, function(index, article) {
+                if (!excludedArticles.includes(article)) {
+                    $articleSelect.append(new Option(article, article));
+                }
             });
+
+            // Initialize or update the Select2 plugin
+            $articleSelect.select2();
         }
 
 
@@ -705,22 +698,32 @@
         // Dynamically add a new row
         $('#add-row').on('click', function() {
             var index = $('#additional-section .form-group.row').length;
+
+            // Get selected articles to exclude them in the new row
+            var excludedArticles = $('#additional-section .article-select').map(function() {
+                return $(this).val();
+            }).get();
+
             var newRow = `
                 <div class="form-group row">
                     <div class="col-md-4">
                         <label for="article">Article:</label>
-                        <select class="form-control select2 article-select" name="articles[${index}][article]">
+                        <select class="form-control select2 article-select" name="articles[${index}][article]" data-index="${index}">
                             <option value="">-- Select Article --</option>
+                            @foreach($articleNumbers as $articleNumber)
+                                <option value="{{ $articleNumber }}">{{ $articleNumber }}</option>
+                            @endforeach
                         </select>
+                        <input type="hidden" name="articles[${index}][article_id]" class="article-id">
                     </div>
-
+                    
                     <div class="col-md-4">
                         <label for="color">Color:</label>
                         <select class="form-control select2 color-select" name="articles[${index}][colors][]" multiple="multiple">
                             <option value="select_all">Select All Colors</option>
                         </select>
                     </div>
-
+                    
                     <div class="col-md-4">
                         <button type="button" class="btn btn-danger remove-row mt-4">-</button>
                     </div>
@@ -729,14 +732,16 @@
 
             // Append new row and initialize Select2
             $('#additional-section').append(newRow);
-            initializeSelect2();
+            var $newRow = $('#additional-section .form-group.row').last();
 
             // Populate the article select for the new row
-            var $newArticleSelect = $('#additional-section .article-select').last();
-            populateArticleSelect();
+            populateArticleSelect($newRow.find('.article-select'), excludedArticles);
 
-            // Populate colors when an article is selected in the new row
-            $newArticleSelect.on('change', function() {
+            // Initialize Select2 for new selects
+            $newRow.find('.select2').select2();
+
+            // Bind change event for newly added article select
+            $newRow.find('.article-select').on('change', function() {
                 var selectedArticle = $(this).val();
                 var $newColorSelect = $(this).closest('.form-group.row').find('.color-select');
                 fetchColors(selectedArticle, $newColorSelect);
@@ -756,7 +761,7 @@
         initializeSelect2();
 
         // Populate articles on page load
-        populateArticleSelect();
+        // populateArticleSelect();
 
         // Remove a row
         $(document).on('click', '.remove-row', function() {
@@ -1479,10 +1484,6 @@
         var data={!! json_encode($materials2) !!};
         $.each(data,function(index,value){
             if(name==value.name){
-                // $('#'+row_id).find('.color').val(value.color);
-                // $('#'+row_id).find('.color_no').val(String(value.color_no).padStart(2,"0"));
-                // $('#'+row_id).find('.article_no').val(value.article_no);
-                // $('#'+row_id).find('.width').val(value.width);
                 $('#'+row_id).find('.color_no').val('');
                 $('#'+row_id).find('.article_no').val('');
                 $('#'+row_id).find('.width').val('');
