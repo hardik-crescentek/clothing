@@ -105,55 +105,52 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     @isset($items)
-                                    @foreach ($items as $key => $item)
-                                    {{-- {{ dd($items) }} --}}
+                                        @foreach ($items as $key => $item)
+                                            <tr class="material-link accordion-toggle" data-toggle="collapse" data-target="#row-{{$item->id}}" id="item-{{$item->id}}" data-item_id="{{$item->id}}">
 
-                                    <tr class="material-link accordion-toggle" data-toggle="collapse" data-target="#row-{{$item->id}}" id="item-{{$item->id}}" data-item_id="{{$item->id}}">
+                                                <td class="td-material" data-value="{{ $item->item['fullName'] }}">{{ $item->item['fullName'] }}<br>{{ $item->item['article_no'] }}</td>
+                                                <td class="td-barcode" data-value="{{ $item->item['barcode'] }}">{!!  DNS1D::getBarcodeSVG($item->item['barcode'],config('app.BARCODE_TYPE'), 1, 40)  !!}</td>
+                                                <td class="td-price price" data-value="{{ $item->price }}">{!! Form::text("price[$item->id]",$item->price,["class"=>"form-control",'id'=>"price",'data-validation'=>"required"]) !!}</td>
+                                                <td class="td-meter" data-value="{{ $item->meter }}">{{ $item->meter }}</td>
+                                                <td class="td-yard" data-value="{{ number_format((float)meter2yard($item->meter),2,'.','') }}">{{ number_format((float)meter2yard($item->meter),2,'.','') }}</td>
+                                                <td class="td-weight" data-value="{{ $item->item['weight'] * $item->meter  }}">{{ ($item->item['weight'] * $item->meter) }}</td>
+                                                <td class="td-total-price" id="total_price" data-value="{{ number_format((float)($item->item_total)) }}">{{ number_format((float)($item->item_total)) }}</td>
+                                                <td class="td-selected-meter" ><div class="data">0</div>
+                                                    {!! Form::hidden("selected_meter[".$item->id."]", null, ["class"=>"selected_meter_".$item->id,"id"=>"selected_meter_".$item->id]) !!}
+                                                </td>
+                                                <td>
+                                                <!-- <button type="button" class="btn btn-sm btn-primary btn-square btn-roll-select" data-item_id="{{$item->id}}" data-material_id="{{$item->item['id']}}" data-toggle="modal" data-target="#rollSelectModel">Select Roll</button> -->
+                                                    <div id='item-rolls-{{$item->id }}' class="hidden_div"></div>
+                                                </td>
 
-                                        <td class="td-material" data-value="{{ $item->item['fullName'] }}">{{ $item->item['fullName'] }}<br>{{ $item->item['article_no'] }}</td>
-                                        <td class="td-barcode" data-value="{{ $item->item['barcode'] }}">{!!  DNS1D::getBarcodeSVG($item->item['barcode'],config('app.BARCODE_TYPE'), 1, 40)  !!}</td>
-                                        <td class="td-price price" data-value="{{ $item->price }}">{!! Form::text("price[$item->id]",$item->price,["class"=>"form-control",'id'=>"price",'data-validation'=>"required"]) !!}</td>
-                                        <td class="td-meter" data-value="{{ $item->meter }}">{{ $item->meter }}</td>
-                                        <td class="td-yard" data-value="{{ number_format((float)meter2yard($item->meter),2,'.','') }}">{{ number_format((float)meter2yard($item->meter),2,'.','') }}</td>
-                                        <td class="td-weight" data-value="{{ $item->item['weight'] * $item->meter  }}">{{ ($item->item['weight'] * $item->meter) }}</td>
-                                        <td class="td-total-price" id="total_price" data-value="{{ number_format((float)($item->price)*(meter2yard($item->meter)),2,'.','') }}">{{ number_format((float)($item->price)*(meter2yard($item->meter)),2,'.','') }}</td>
-                                        <td class="td-selected-meter" ><div class="data">0</div>
-                                            {!! Form::hidden("selected_meter[".$item->id."]", null, ["class"=>"selected_meter_".$item->id,"id"=>"selected_meter_".$item->id]) !!}
-                                        </td>
-                                        <td>
-                                        <!-- <button type="button" class="btn btn-sm btn-primary btn-square btn-roll-select" data-item_id="{{$item->id}}" data-material_id="{{$item->item['id']}}" data-toggle="modal" data-target="#rollSelectModel">Select Roll</button> -->
-                                            <div id='item-rolls-{{$item->id }}' class="hidden_div"></div>
-                                        </td>
+                                                {{-- <button class="btn btn-sm btn-primary btn-square" data-value="{{$item->id}}" id="select-roll">Select Roll</button></td> --}}
+                                            </tr>
+                                            {{-- <tr>
+                                                <td colspan="7" class="hiddenRow"><div class="accordian-body collapse" id="row-{{$item->id}}">
+                                                    <div class="form-group">
+                                                        <label class="form-control-label">Roll No<span class="text-danger ml-2">*</span></label>
+                                                        {!! Form::select('roll',[],null, array('id'=>'roll','class' => 'form-control', 'data-validation'=>"required",)) !!}
+                                                    </div>
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Roll No</th>
+                                                                <th>Article No</th>
+                                                                <th>Batch No</th>
+                                                                <th>Available Meter</th>
+                                                                <th>Meter</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
 
-                                        {{-- <button class="btn btn-sm btn-primary btn-square" data-value="{{$item->id}}" id="select-roll">Select Roll</button></td> --}}
-                                    </tr>
-                                    {{-- <tr>
-                                        <td colspan="7" class="hiddenRow"><div class="accordian-body collapse" id="row-{{$item->id}}">
-                                            <div class="form-group">
-                                                <label class="form-control-label">Roll No<span class="text-danger ml-2">*</span></label>
-                                                {!! Form::select('roll',[],null, array('id'=>'roll','class' => 'form-control', 'data-validation'=>"required",)) !!}
-                                            </div>
-                                            <table class="table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Roll No</th>
-                                                        <th>Article No</th>
-                                                        <th>Batch No</th>
-                                                        <th>Available Meter</th>
-                                                        <th>Meter</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </tr> --}}
-                                    @endforeach
-                                    {!! Form::hidden("order_id", $item->order_id, ["class"=>"order_id","id"=>"order_id"]) !!}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </tr> --}}
+                                        @endforeach
+                                        {!! Form::hidden("order_id", $item->order_id, ["class"=>"order_id","id"=>"order_id"]) !!}
                                     @endisset
                                 </tbody>
                             </table>

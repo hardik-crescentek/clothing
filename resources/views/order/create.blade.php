@@ -329,6 +329,35 @@
             </div>
         </div>
     </div>
+    <!-- Modal for Displaying Selected Rolls -->
+    <div id="selectedRollModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Selected Rolls</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table" id="selectedRollTable">
+                        <thead>
+                            <tr>
+                                <th>Roll ID</th>
+                                <th>Meter</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Selected rolls will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/template" id="templateAddItem_invoice">
@@ -1131,16 +1160,24 @@
             })
             var total_meter = parseFloat($('#item-' + modal_item_id + ' .td-meter').data("value"));
         });
+        let selectedRolls = []; // Array to hold selected rolls
         $('#model_save_btn').on('click', function() {
             var item_id = $('#material_item_id').val();
-            $('#item-rolls-' + item_id).empty();
             var input_hidden;
-             var selected_role = 0;
-             var roll_id_values = [];
+            var selected_role = 0;
+            var roll_id_values = [];
+            
+            $('#item-rolls-' + item_id).empty();
             $.each($('.select_roll'), function(index, value) {
                 if (value.checked) {
                     var roll_id = $(value).closest('tr').find('.roll_id').val();
                     var meter = $(value).closest('tr').find('.meter').val();
+                    var roll_no = $(value).closest('tr').find('.roll_no').val();
+                    var pcs_no = $(value).closest('tr').find('.pcs_no').val();
+                    var article_no = $(value).closest('tr').find('.article_no').val();
+                    var color_no = $(value).closest('tr').find('.color_no').val();
+                    var batch_no = $(value).closest('tr').find('.batch_no').val();
+                    var available_qty = $(value).closest('tr').find('.available_qty').val();
 
                     input_hidden = $('<input>').attr({
                         name: "item_roll[" + item_id + "][" + roll_id + "]",
@@ -1149,6 +1186,12 @@
                         value: meter,
                     });
                     roll_id_values.push(roll_id);
+
+                    // Push roll data along with itemId to selectedRolls
+                    const existingRoll = selectedRolls.find(roll => roll.itemId === item_id && roll.rollId === roll_id);
+                    if (!existingRoll) {
+                        selectedRolls.push({ itemId: item_id, rollId: roll_id, roll_no: roll_no, pcs_no: pcs_no, article_no: article_no, color_no: color_no, batch_no: batch_no,available_qty: available_qty , meter: meter });
+                    }
                     $('#item-rolls-' + item_id).append(input_hidden);
 
                     selected_role += 1;
@@ -1167,7 +1210,15 @@
             $('#item-rolls-' + item_id).append(input_hidden);
             var total_selected_meter = $("#total_selected_meter").html();
             $('#item-' + item_id + ' .td-selected-meter').html(total_selected_meter).attr('title',`Selected Role: ${total_selected_meter}`);
-            $('#item-' + item_id).find('.td-selected-meter #selected_meter_' + item_id).val(total_selected_meter);
+            // $('#item-' + item_id).find('.td-selected-meter #selected_meter_' + item_id).val(total_selected_meter);
+
+            // Update the selected meter and add the display button
+            var $selectedMeterTd = $('#item-' + item_id).find('.td-selected-meter');
+            $selectedMeterTd.html(total_selected_meter).attr('title', `Selected Role: ${total_selected_meter}`);
+            $selectedMeterTd.append('<button type="button" class="btn btn-info btn-sm btn-display-info ml-1" data-item-id="' + item_id + '">Info</button>');
+             // Save selected rolls to localStorage
+            
+            localStorage.setItem('selectedRolls', JSON.stringify(selectedRolls));
 
             // Set the value of the inv_meter field to the total_selected_meter value
             $('#item-' + item_id).find('.td-meter .inv_meter').val(total_selected_meter).attr('title',`Meter : ${meter}`);
@@ -1180,6 +1231,34 @@
             $('#rollSelectModel').modal('hide');
             $('#rollSelectModel #tblRoll tbody').html('');
             // }
+        });
+
+        $(document).on('click', '.btn-display-info', function() {
+            var itemId = $(this).data('item-id'); // Get the associated item ID
+            var rollsForItem = selectedRolls.filter(roll => roll.itemId.toString() === itemId.toString());
+            var displayHtml = '<table class="table"><thead><tr><th>Roll No</th><th>PSC NO</th><th>Article No</th><th>Color No</th><th>Batch No</th><th>Available Meter</th><th>Meter</th></tr></thead><tbody>';
+            
+            if (rollsForItem.length === 0) {
+                displayHtml += '<tr><td colspan="7">No rolls selected for this item.</td></tr>';
+            } else {
+                rollsForItem.forEach(function(roll) {
+                    displayHtml += '<tr>' +
+                        '<td>' + roll.roll_no + '</td>' +
+                        '<td>' + roll.pcs_no + '</td>' +
+                        '<td>' + roll.article_no + '</td>' +
+                        '<td>' + roll.color_no + '</td>' +
+                        '<td>' + roll.batch_no + '</td>' +
+                        '<td>' + roll.available_qty + '</td>' +
+                        '<td>' + roll.meter + '</td>' +
+                        '</tr>';
+                });
+            }
+
+            displayHtml += '</tbody></table>';
+            
+            // Display in a modal
+            $('#selectedRollModal .modal-body').html(displayHtml);
+            $('#selectedRollModal').modal('show');
         });
 
         function generate_invoice_no(fname, lname, last_invoice) {
