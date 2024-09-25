@@ -151,6 +151,16 @@
                             {!! Form::text('no_of_bales', null, array('placeholder' => 'Total No Of Bales Arrived','class' => 'form-control','id'=>'no_of_bales','data-validation' => "required")) !!}
                         </div>
                     </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">WareHouse<span class="text-danger ml-2">*</span></label>
+                            {!! Form::select('warehouse_id', [''=>' --Select WareHouse-- ']+$wareHouse, null, [
+                                'id' => 'warehouse',
+                                'class' => 'form-control custom-select',
+                                'data-validation' => "required"
+                            ]) !!}
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12">

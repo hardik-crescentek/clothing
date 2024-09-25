@@ -14,6 +14,7 @@ use App\PurchaseArticle;
 use App\PurchaseArticleColor;
 use App\Order;
 use App\OrderItem;
+use App\WareHouse;
 use App\Utils\Util;
 use Auth;
 use Excel;
@@ -57,7 +58,8 @@ class PurchaseController extends Controller
         $invoiceNumbers = \DB::table('purchases')->pluck('invoice_no', 'invoice_no')->toArray();
         $articleNumbers = Material::active()->pluck('article_no', 'article_no')->toArray();
         $colorMaterial = Material::active()->pluck('color', 'color')->toArray();
-        return view('purchase.create', compact('categories', 'colors', 'materials', 'materials2', 'suppliers', 'items', 'invoiceNumbers', 'articleNumbers', 'colorMaterial'));
+        $wareHouse = WareHouse::pluck('name', 'id')->all();
+        return view('purchase.create', compact('categories', 'colors', 'materials', 'materials2', 'suppliers', 'items', 'invoiceNumbers', 'articleNumbers', 'colorMaterial','wareHouse'));
     }
 
     /**
@@ -80,12 +82,10 @@ class PurchaseController extends Controller
             'import_tax'           => 'required',
             'transport_shipping_paid' => 'required',
             'transport_shippment_cost_per_meter' => 'required',
-            // Add validation for file attachments
             'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx|max:2048',
-            // 'currency_type' => 'required',
-            // 'price'                => 'required',
             'no_of_rolls'          => 'required',
             'no_of_bales'          => 'required',
+            'warehouse_id'         => 'required',
         ]);
 
         $total_qty = 0;
@@ -147,64 +147,13 @@ class PurchaseController extends Controller
             "discount"                => $request->input("discount"),
             "transport_shippment_cost_per_meter"  => $request->input("transport_shippment_cost_per_meter"),
             "note"                    => $request->input("note"),
-            // "attachment"                 => $attachment,
             "attachment"                 => json_encode($attachments),
-            "no_of_rolls"                    => $request->input("no_of_rolls"),
-            "no_of_bales"                    => $request->input("no_of_bales"),
-
-            // "total_qty"               => $total_qty,
-            // "total_tax"               => $request->input("total_tax"),
-            // "shipping_cost_per_meter" => $request->input("shipping_cost"),
-            // "price"                   => $usd_price_per_meter,
-            // "thb_ex_rate"             => $thb_ex_rate,
-            // "price_thb"               => $thb_price_per_meter,
-            // "payment_terms"           => $request->input("payment_terms"),
-            // "shipping_paid"           => $request->input("shipping_paid"),
-            // "transportation"          => $request->input("transportation"),
-            // "gross_tax"               => $request->input("gross_tax"),
-            // "shippment_cost_shipper"  => $request->input("shippment_cost_shipper"),
-            // "shippment_cost_destination" => $request->input("shippment_cost_destination"),
+            "no_of_rolls"             => $request->input("no_of_rolls"),
+            "no_of_bales"             => $request->input("no_of_bales"),
+            "warehouse_id"            => $request->input("warehouse_id"),
         ];
 
         $purchase = Purchase::create($data);
-
-        // if ($items) {
-        //     $QRCode = Util::generateID();
-        //     $sort_order = 1;
-
-        //     foreach ($items as $item) {
-        //         $color=Material::where('id','=',$item['color'])->first();
-        //         $barcode = Util::generateID();
-        //         $new_code = Util::gen_new_barcode_id($item["article_no"]);
-        //         $qty = $item["meter"];
-        //         $item_data = [
-        //             "purchase_id"=> $purchase->id,
-        //             "material_id"=> $item["color"],
-        //             "article_no" => $item["article_no"],
-        //             "color"      => $color->color,
-        //             "color_no"   => $item["color_no"],
-        //             "batch_no"   => $item["batch_no"],
-        //             "roll_no"    => $sort_order,
-        //             "barcode"    => $new_code,
-        //             // "barcode"    => $barcode,
-        //             "qrcode"     => $QRCode,
-        //             "width"      => $item["width"],
-        //             "qty"        => $qty,
-        //             "available_qty"=> $qty,
-        //             'sort_order' => $sort_order,
-        //             // "price_usd" => $qty * $usd_price_per_meter,
-        //             // "thb_ex_rate" => $thb_ex_rate,
-        //             // "price_thb" => $qty * $thb_price_per_meter,
-        //             // "total_tax" => $tax_per_meter * $qty,
-        //             // "shipping_cost" => $shipping_cost_per_meter * $qty,
-        //             // "discount" => $request->input("discount"),
-        //             'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx', // Validate each file
-        //             "piece_no" => $item["piece_no"]
-        //         ];
-        //         PurchaseItem::create($item_data);
-        //         $sort_order++;
-        //     }
-        // }
 
         // Process each article and its colors
 
@@ -459,6 +408,8 @@ class PurchaseController extends Controller
             )
             ->get();
 
+        $wareHouse = WareHouse::pluck('name', 'id')->all();        
+
         // Return view with the necessary data
         return view('purchase.edit', compact(
             'purchase',
@@ -474,7 +425,8 @@ class PurchaseController extends Controller
             'articlesWithColors',
             'colors',
             'articles',
-            'articleColors'
+            'articleColors',
+            'wareHouse'
         ));
     }
 
@@ -503,6 +455,7 @@ class PurchaseController extends Controller
             'attach_documents.*'   => 'mimes:jpeg,jpg,png,pdf,doc,docx|max:2048',
             'no_of_rolls'          => 'required',
             'no_of_bales'          => 'required',
+            'warehouse_id'         => 'required',
         ]);
 
         $total_qty = $purchase->total_qty;
@@ -561,22 +514,9 @@ class PurchaseController extends Controller
             "transport_shippment_cost_per_meter"  => $request->input("transport_shippment_cost_per_meter"),
             "note"                       => $request->input("note"),
             "attachment"                 => json_encode($attachments),
-            "no_of_rolls"                    => $request->input("no_of_rolls"),
-            "no_of_bales"                    => $request->input("no_of_bales"),
-
-
-            // "total_qty"                  => $total_qty,
-            // "total_tax"                  => $request->input("total_tax"),
-            // "shipping_cost_per_meter"    => $request->input("shipping_cost_per_meter"),
-            // "price"                      => $usd_price_per_meter,
-            // "thb_ex_rate"                => $thb_ex_rate,
-            // "price_thb"                  => $thb_price_per_meter,
-            // "payment_terms"              => $request->input("payment_terms"),
-            // "shipping_paid"              => $request->input("shipping_paid"),
-            // "transportation"             => $request->input("transportation"),
-            // "gross_tax"                  => $request->input("gross_tax"),
-            // "shippment_cost_shipper"     => $request->input("shippment_cost_shipper"),
-            // "shippment_cost_destination" => $request->input("shippment_cost_destination"),
+            "no_of_rolls"                => $request->input("no_of_rolls"),
+            "no_of_bales"                => $request->input("no_of_bales"),
+            "warehouse_id"                => $request->input("warehouse_id"),
         ];
 
         $purchase->fill($data);
