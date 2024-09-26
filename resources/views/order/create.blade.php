@@ -413,6 +413,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
+        let selectedRolls = []; // Array to hold selected rolls
+
         $(document).on('change','#payment_terms',function(){
             var p_val = $(this).val();
             if (p_val == 'credit') {
@@ -1160,7 +1162,35 @@
             })
             var total_meter = parseFloat($('#item-' + modal_item_id + ' .td-meter').data("value"));
         });
-        let selectedRolls = []; // Array to hold selected rolls
+
+        function updateSelectedRollModal() {
+            console.log("call");
+            const selectedRollContainer = $('#selectedRollTable'); // Assuming this is the container for displaying selected rolls
+            selectedRollContainer.empty(); // Clear previous contents
+
+            if (selectedRolls.length === 0) {
+                selectedRollContainer.append('<p>No rolls selected.</p>');
+                return;
+            }
+
+            console.log("selectedRolls");
+            console.log(selectedRolls);
+            $.each(selectedRolls, function(index, roll) {
+                // Create a display for each selected roll
+                const rollInfo = `<div>
+                    Roll ID: ${roll.rollId}, 
+                    Roll No: ${roll.roll_no}, 
+                    Meter: ${roll.meter}, 
+                    Pcs No: ${roll.pcs_no}, 
+                    Article No: ${roll.article_no}, 
+                    Color No: ${roll.color_no}, 
+                    Batch No: ${roll.batch_no}, 
+                    Available Qty: ${roll.available_qty}
+                </div>`;
+                selectedRollContainer.append(rollInfo);
+            });
+        }
+
         $('#model_save_btn').on('click', function() {
             var item_id = $('#material_item_id').val();
             var input_hidden;
@@ -1195,8 +1225,15 @@
                     $('#item-rolls-' + item_id).append(input_hidden);
 
                     selected_role += 1;
+                } else {
+                    // Logic for unselecting a roll, if applicable
+                    var roll_id = $(value).closest('tr').find('.roll_id').val();
+                    selectedRolls = selectedRolls.filter(roll => !(roll.itemId === item_id && roll.rollId === roll_id)); // Remove unselected roll
                 }
             });
+
+            // Update the selectedRollModal to reflect the current selection
+            updateSelectedRollModal();
 
             $('#selectedrole-'+ item_id).html(selected_role);
             //toFixed(2)
@@ -1216,10 +1253,7 @@
             var $selectedMeterTd = $('#item-' + item_id).find('.td-selected-meter');
             $selectedMeterTd.html(total_selected_meter).attr('title', `Selected Role: ${total_selected_meter}`);
             $selectedMeterTd.append('<button type="button" class="btn btn-info btn-sm btn-display-info ml-1" data-item-id="' + item_id + '">Info</button>');
-             // Save selected rolls to localStorage
             
-            localStorage.setItem('selectedRolls', JSON.stringify(selectedRolls));
-
             // Set the value of the inv_meter field to the total_selected_meter value
             $('#item-' + item_id).find('.td-meter .inv_meter').val(total_selected_meter).attr('title',`Meter : ${meter}`);
             // Trigger the calculation logic for the updated inv_meter value
