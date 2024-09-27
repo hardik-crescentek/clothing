@@ -591,13 +591,22 @@ class PurchaseItemController extends Controller
                     return [$article->id => ['name' => $article->article]];
                 });
 
-            // Fetch all colors related to the articles
+            // Fetch all colors related to the articles and check if they exist in purchase_item table
             $articleColors = [];
             foreach ($articles->keys() as $articleId) {
                 $colors = PurchaseArticleColor::where('purchase_article_id', $articleId)
                     ->get(['id', 'color', 'color_no'])
-                    ->mapWithKeys(function ($color) {
-                        return [$color->id => ['color' => $color->color, 'color_no' => $color->color_no]];
+                    ->mapWithKeys(function ($color) use ($purchase, $articleId) {
+                        // Check if the color exists in the purchase_item table
+                        $existsInPurchaseItem = PurchaseItem::where('purchase_id', $purchase->id)
+                            ->where('color', $color->color)
+                            ->exists();
+
+                        return [$color->id => [
+                            'color' => $color->color, 
+                            'color_no' => $color->color_no, 
+                            'saved' => $existsInPurchaseItem // Set saved flag based on existence in purchase_item table
+                        ]];
                     });
                 $articleColors[$articleId] = $colors; // Mapping article ID to its colors
             }

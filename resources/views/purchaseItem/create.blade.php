@@ -261,6 +261,14 @@
         overflow-y: auto;   /* Make the content scrollable if it exceeds the max-height */
     }
 
+    .select2-results__option {
+        padding: 5px 10px; /* Add padding for better visibility */
+    }
+
+    .saved-color {
+        background-color: red !important; /* Fallback if needed */
+        color: white !important; /* Ensure text is visible */
+    }
 </style>
 @endpush
 @push('scripts')
@@ -301,50 +309,6 @@
         $('#add_invoice_no').on('change', function() {
             var invoiceNo = $(this).val();
             fetchPurchaseId(invoiceNo);
-        });
-
-
-        $('#add_invoice_no').change(function() {
-            var invoiceNo = $(this).val();
-
-            if (invoiceNo) {
-                $.ajax({
-                    url: '/get-articles-by-invoice', // Adjust the URL if necessary
-                    type: 'GET',
-                    data: { invoice_no: invoiceNo },
-                    success: function(response) {
-                        if (response.success) {
-                            // Populate the article dropdown
-                            var articleSelect = $('#add_article_no');
-                            articleSelect.empty();
-                            articleSelect.append('<option value="">--Select Article No.--</option>');
-                            $.each(response.articles, function(id, article) {
-                                articleSelect.append('<option value="' + id + '">' + article.name + '</option>');
-                            });
-
-                            // When an article is selected, update the color dropdown
-                            articleSelect.change(function() {
-                                var selectedArticleId = $(this).val();
-                                var colorSelect = $('#add_color_id');
-                                colorSelect.empty();
-                                colorSelect.append('<option value="">--Select Color--</option>');
-
-                                // Check if there are colors for the selected article
-                                if (response.articleColors[selectedArticleId]) {
-                                    console.log("response"+JSON.stringify(response.articleColors));
-                                    $.each(response.articleColors[selectedArticleId], function(id, color) {
-                                        console.log("color"+JSON.stringify(color));
-                                        colorSelect.append('<option value="' + id + '" data-color-no="' + color.color_no + '">' + color.color + '</option>');
-                                    });
-                                }
-                            });
-                        }
-                    },
-                    error: function() {
-                        alert('An error occurred while fetching purchase details.');
-                    }
-                });
-            }
         });
 
         $('#search_invoice_no').change(function() {
@@ -415,6 +379,94 @@
         });
 
         $(document).ready(function() {
+
+            var savedColors = {}; // Store saved colors
+
+            $('#add_invoice_no').change(function() {
+                var invoiceNo = $(this).val();
+
+                if (invoiceNo) {
+                    $.ajax({
+                        url: '/get-articles-by-invoice', // Adjust the URL if necessary
+                        type: 'GET',
+                        data: { invoice_no: invoiceNo },
+                        success: function(response) {
+                            if (response.success) {
+                                // Populate the article dropdown
+                                var articleSelect = $('#add_article_no');
+                                articleSelect.empty();
+                                articleSelect.append('<option value="">--Select Article No.--</option>');
+                                $.each(response.articles, function(id, article) {
+                                    articleSelect.append('<option value="' + id + '">' + article.name + '</option>');
+                                });
+
+                                // When an article is selected, update the color dropdown
+                                articleSelect.change(function() {
+                                    var selectedArticleId = $(this).val();
+                                    var colorSelect = $('#add_color_id');
+                                    colorSelect.empty();
+                                    colorSelect.append('<option value="">--Select Color--</option>');
+                                    savedColors = {}; // Reset saved colors
+
+                                    // Check if there are colors for the selected article
+                                    if (response.articleColors[selectedArticleId]) {
+                                        console.log("response" + JSON.stringify(response.articleColors));
+                                        
+                                        $.each(response.articleColors[selectedArticleId], function(id, color) {
+                                            console.log("color" + JSON.stringify(color));
+                                            
+                                            // Create an <option> element
+                                            var option = $('<option></option>')
+                                                .val(id)
+                                                .text(color.color)
+                                                .attr('data-color-no', color.color_no);
+                                            
+                                            // Store saved colors in the object
+                                            if (color.saved) {
+                                                savedColors[id] = true; // Save the id of the saved color
+                                                option.css('background-color', 'red'); // Highlight saved colors
+                                            }
+                                            
+                                            // Append the option to the select element
+                                            colorSelect.append(option);
+                                        });
+                                    }
+
+                                    // Handle color selection
+                                    colorSelect.change(function() {
+                                        var selectedColorId = $(this).val();
+                                        if (savedColors[selectedColorId]) {
+                                            alert('This color is already saved.');
+                                            
+                                            // Reset and repopulate the color dropdown
+                                            colorSelect.empty();
+                                            colorSelect.append('<option value="">--Select Color--</option>');
+
+                                            // Repopulate colors
+                                            $.each(response.articleColors[selectedArticleId], function(id, color) {
+                                                var option = $('<option></option>')
+                                                    .val(id)
+                                                    .text(color.color)
+                                                    .attr('data-color-no', color.color_no);
+                                                
+                                                // Highlight saved colors
+                                                if (color.saved) {
+                                                    option.css('background-color', 'red');
+                                                }
+                                                
+                                                colorSelect.append(option);
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        },
+                        error: function() {
+                            alert('An error occurred while fetching purchase details.');
+                        }
+                    });
+                }
+            });
 
             // Add More button click event
             $(document).on('click', '.copy_row_btn', function() {
