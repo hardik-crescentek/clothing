@@ -414,6 +414,7 @@
     $(document).ready(function() {
 
         let selectedRolls = []; // Array to hold selected rolls
+        var itemRolls = {};
 
         $(document).on('change','#payment_terms',function(){
             var p_val = $(this).val();
@@ -992,11 +993,14 @@
                         $.each($('.select_roll'), function(index, value) {
                             if (value.value == roll_id) {
                                 value.checked = true;
+                                console.log("yes thats checked");
                                 $(value).closest('tr').addClass('table-success');
                                 $(value).closest('tr').find('.meter').val($('#item_roll_' + item_id + '_' + roll_id).val());
                                 $(value).closest('tr').find('.meter').attr('readonly', false);
                             }
                         });
+                        console.log("value "+v);
+                        console.log("value meter "+v.value);
                         meter += parseFloat(v.value);
                         // addRoll(data);
                     });
@@ -1033,8 +1037,10 @@
         }
 
         $(document).on('change', '#select_roll', function() {
+            console.log("checked changes");
             var selected_meter = 0;
             var user_enter_val = 0;
+            console.log(this.checked);
             if (this.checked) {
                 $(this).closest('tr').addClass('table-success');
                 // $(this).closest('tr').find('.meter').attr('readonly',false);
@@ -1191,14 +1197,27 @@
             });
         }
 
+        // Save selected rolls for the item
+        var itemRolls = {};
         $('#model_save_btn').on('click', function() {
             var item_id = $('#material_item_id').val();
             var input_hidden;
             var selected_role = 0;
             var roll_id_values = [];
-            
+
+            // Initialize itemRolls[item_id] as an array if not already set
+            if (!itemRolls[item_id]) {
+                itemRolls[item_id] = [];
+            }
+
+            // Clear the existing roll selections for this item to prevent duplicates
+            itemRolls[item_id] = [];
+
+            // Loop through each roll and check if it is selected
             $('#item-rolls-' + item_id).empty();
             $.each($('.select_roll'), function(index, value) {
+                
+                // If roll is checked, add it to the selected rolls for the item
                 if (value.checked) {
                     var roll_id = $(value).closest('tr').find('.roll_id').val();
                     var meter = $(value).closest('tr').find('.meter').val();
@@ -1209,15 +1228,29 @@
                     var batch_no = $(value).closest('tr').find('.batch_no').val();
                     var available_qty = $(value).closest('tr').find('.available_qty').val();
 
-                    input_hidden = $('<input>').attr({
+                    itemRolls[item_id].push({
+                        roll_id: roll_id,
+                        roll_no: roll_no,
+                        pcs_no: pcs_no,
+                        article_no: article_no,
+                        color_no: color_no,
+                        batch_no: batch_no,
+                        available_qty: available_qty,
+                        meter: meter
+                    });
+
+                    // Hidden input for form submission
+                    var input_hidden = $('<input>').attr({
                         name: "item_roll[" + item_id + "][" + roll_id + "]",
                         id: "item_roll_" + item_id + "_" + roll_id,
                         type: "hidden",
                         value: meter,
                     });
+                    $('#item-rolls-' + item_id).append(input_hidden);
+
                     roll_id_values.push(roll_id);
 
-                    // Push roll data along with itemId to selectedRolls
+                     // Push roll data along with itemId to selectedRolls
                     const existingRoll = selectedRolls.find(roll => roll.itemId === item_id && roll.rollId === roll_id);
                     if (!existingRoll) {
                         selectedRolls.push({ itemId: item_id, rollId: roll_id, roll_no: roll_no, pcs_no: pcs_no, article_no: article_no, color_no: color_no, batch_no: batch_no,available_qty: available_qty , meter: meter });
@@ -1235,36 +1268,71 @@
             // Update the selectedRollModal to reflect the current selection
             updateSelectedRollModal();
 
-            $('#selectedrole-'+ item_id).html(selected_role);
-            //toFixed(2)
+            // First, check if the item row already exists in the table
+            var itemRow = $('#tblOrderTable tbody').find(`tr.item-row[data-item-id="${item_id}"]`);
+            if (itemRow.length === 0) {
+                // If the item doesn't exist, create a new row for the item with a heading column
+                var newItemRow = `
+                    <tr class="item-row" data-item-id="${item_id}">
+                        <th>Roll No</th>
+                        <th>PCS No</th>
+                        <th>Article No</th>
+                        <th>Color No</th>
+                        <th>Batch No</th>
+                        <th>Available Qty</th>
+                        <th>Meter</th>
+                    </tr>`;
+                $('#tblOrderTable tbody').append(newItemRow);
+            }
+
+            // Remove any existing roll rows for this specific item to prevent duplicates
+            $('#tblOrderTable tbody').find(`tr.roll-row[data-item-id="${item_id}"]`).remove();
+
+            // Now, append the rolls for the specific item under the item's row
+            if (itemRolls[item_id].length > 0) {
+                itemRolls[item_id].forEach(function(roll) {
+                    var rollRow = `
+                        <tr class="roll-row" data-item-id="${item_id}">
+                            <td>${roll.roll_no}</td> 
+                            <td>${roll.pcs_no}</td> 
+                            <td>${roll.article_no}</td>
+                            <td>${roll.color_no}</td>
+                            <td>${roll.batch_no}</td>
+                            <td>${roll.available_qty}</td>
+                            <td>${roll.meter}</td>
+                        </tr>`;
+                    $('#tblOrderTable tbody').find(`tr.item-row[data-item-id="${item_id}"]`).after(rollRow);
+                });
+            }
+
+            $('#selectedrole-' + item_id).html(selected_role);
+
+            // Hidden input for roll IDs
             var new_role_id = roll_id_values.join(',');
-            input_hidden = $('<input>').attr({
+            var input_hidden = $('<input>').attr({
                 name: "roll_id[]",
                 id: "roll_id",
                 type: "hidden",
                 value: new_role_id,
             });
             $('#item-rolls-' + item_id).append(input_hidden);
-            var total_selected_meter = $("#total_selected_meter").html();
-            $('#item-' + item_id + ' .td-selected-meter').html(total_selected_meter).attr('title',`Selected Role: ${total_selected_meter}`);
-            // $('#item-' + item_id).find('.td-selected-meter #selected_meter_' + item_id).val(total_selected_meter);
 
-            // Update the selected meter and add the display button
-            var $selectedMeterTd = $('#item-' + item_id).find('.td-selected-meter');
-            $selectedMeterTd.html(total_selected_meter).attr('title', `Selected Role: ${total_selected_meter}`);
-            $selectedMeterTd.append('<button type="button" class="btn btn-info btn-sm btn-display-info ml-1" data-item-id="' + item_id + '">Info</button>');
-            
-            // Set the value of the inv_meter field to the total_selected_meter value
-            $('#item-' + item_id).find('.td-meter .inv_meter').val(total_selected_meter).attr('title',`Meter : ${meter}`);
-            // Trigger the calculation logic for the updated inv_meter value
-            var $thisRow = $('#item-' + item_id);
-            handleCalculation($thisRow);
+            // Update the selected meter for the specific item
+            var total_selected_meter = $("#total_selected_meter").html();
+            $('#item-' + item_id + ' .td-selected-meter').html(total_selected_meter).attr('title', `Selected Role: ${total_selected_meter}`);
+            $('#item-' + item_id + ' .td-selected-meter').append('<button type="button" class="btn btn-info btn-sm btn-display-info ml-1" data-item-id="' + item_id + '">Info</button>');
+            $('#item-' + item_id).find('.td-meter .inv_meter').val(total_selected_meter);
+
+            // Trigger recalculations
+            handleCalculation($('#item-' + item_id));
             selectedtotalmeter();
             grand_total();
             totalmeter();
+
+            // Hide modal and reset roll table content
             $('#rollSelectModel').modal('hide');
             $('#rollSelectModel #tblRoll tbody').html('');
-            // }
+            console.log(" last selectedRolls "+selectedRolls);
         });
 
         $(document).on('click', '.btn-display-info', function() {
@@ -1365,9 +1433,6 @@
                 // Find the corresponding GSM value using the data-gsm attribute
                 var weight_per_mtr = Number($(this).closest('tr').find('.td-weight_per_mtr').data('weight_per_mtr')) || 0;
                 var weight_per_yard = Number($(this).closest('tr').find('.td-weight_per_yard').data('weight_per_yard')) || 0;
-                console.log("weight_per_mtr "+weight_per_mtr);
-                console.log("weight_per_yard"+weight_per_yard);
-                console.log("unit_of_sale"+unit_of_sale);
 
                 // Calculate weight for this item
                 if(unit_of_sale == 'yard'){
@@ -1375,8 +1440,6 @@
                 } else {
                     var weight = meter * weight_per_mtr;
                 }
-                console.log('unit_of_sale '+unit_of_sale);
-                console.log('weight '+weight);
 
                 // Accumulate totals
                 totalMeter += meter;
