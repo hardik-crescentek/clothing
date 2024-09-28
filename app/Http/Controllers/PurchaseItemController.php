@@ -113,12 +113,14 @@ class PurchaseItemController extends Controller
             $sort_order = 1;
             
             foreach ($items as $item) {
+                $purchase = Purchase::find($item["purchase_id"]);
                 $color=Material::where('id','=',$item['color'])->first();
                 $barcode = Util::generateID();
                 $new_code = Util::gen_new_barcode_id($item["article_no"]);
                 $qty = $item["meter"];
                 $item_data = [
                     "purchase_id"=> $item["purchase_id"],
+                    "warehouse_id"=> $purchase ? $purchase->warehouse_id : 0,
                     "material_id"=> $item["color"],
                     "article_no" => $item["article_no"],
                     "color"      => $item["color"],

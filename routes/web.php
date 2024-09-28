@@ -198,4 +198,11 @@ Route::group(['middleware' => ['auth']], function() {
 
     # warehouse master #
     Route::resource('warehouse', WareHouseController::class);
+
+    # stock location #
+    Route::get('stockLocation', [App\Http\Controllers\WareHouseController::class, 'stockLocation'])->name('stockLocation.index');
+    Route::get('stock-location/filter', 'WareHouseController@filterStockLocation')->name('stockLocation.filter');
+    Route::put('stock-location/update/{id}', [App\Http\Controllers\WareHouseController::class, 'updateWarehouseLocation'])->name('stockLocation.update');
+    Route::put('stock-locations/update-multiple','WareHouseController@updateMultipleWarehouseLocations')->name('stockLocation.updateMultiple');
+    Route::get('warehouse-history/{id}','WareHouseController@getWarehouseHistory')->name('warehouse.history');
 });

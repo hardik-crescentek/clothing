@@ -55,6 +55,7 @@
                     <ul id="dropdown-warehouse" class="collapse list-unstyled pt-0 {{ (request()->is('warehouse*')) ? 'show' : '' }}">
                         <li><a class="{{ (request()->is('warehouse/create')) ? 'active' : '' }}" href="{{ url('/warehouse/create') }}" title="Add WareHouse">Add WareHouse</a></li>
                         <li><a class="{{ (request()->is('warehouse')) ? 'active' : '' }}" href="{{ url('/warehouse/') }}" title="WareHouse List">WareHouse List</a></li>
+                        <li><a class="{{ (request()->is('stockLocation')) ? 'active' : '' }}" href="{{ url('/stockLocation/') }}" title="StockLocation">Stock Location</a></li>
                     </ul>
                 </li>
             @endrole
@@ -66,6 +67,7 @@
                     </a>
                     <ul id="dropdown-suppwarehouselier" class="collapse list-unstyled pt-0 {{ (request()->is('warehouse*')) ? 'show' : '' }}">
                         <li><a class="{{ (request()->is('warehouse')) ? 'active' : '' }}" href="{{ url('/warehouse/') }}" title="WareHouse List">WareHouse List</a></li>
+                        <li><a class="{{ (request()->is('stockLocation')) ? 'active' : '' }}" href="{{ url('/stock_location/') }}" title="StockLocation">Stock Location</a></li>
                     </ul>
                 </li>
             @endrole
