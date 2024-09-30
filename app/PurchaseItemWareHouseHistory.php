@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\WareHouse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -17,6 +18,8 @@ class PurchaseItemWareHouseHistory extends Model
         'old_warehouse_id',
         'current_warehouse_id',
         'changed_at',
+        'moved_by',
+        'transported_by'
     ];
 
     public function warehouse()

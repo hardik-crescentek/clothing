@@ -2,12 +2,6 @@
 @section('title', 'Stock Locations')
 @section('style')
 <style>
-    @media (min-width: 100px) {
-        #updateWarehouseModal .modal-body {
-            height: 400px !important;
-            overflow-y: auto !important;
-        }
-    }
 </style>
 @endsection
 @section('content')
@@ -69,7 +63,6 @@
                                 <th>Color No.</th>
                                 <th>Current Warehouse</th>
                                 <th>Warehouse History</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -82,33 +75,6 @@
 </div>
 <!-- End Table Row -->
 
-<!-- Update Warehouse Modal -->
-<div class="modal fade" id="updateWarehouseModal" tabindex="-1" role="dialog" aria-labelledby="updateWarehouseModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateWarehouseModalLabel">Update Warehouse</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body custom-modal-body">
-                <input type="hidden" id="warehouse_id">
-                <div class="form-group">
-                    <label class="form-control-label">WareHouse<span class="text-danger ml-2">*</span></label>
-                    {!! Form::select('warehouse_id', [''=>' --Select WareHouse-- ']+$wareHouse, null, [
-                        'id' => 'warehouse_select',
-                        'class' => 'form-control custom-select',
-                        'data-validation' => "required"
-                    ]) !!}
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="updateWarehouseBtn">Update Warehouse</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Update Multiple Warehouses Modal -->
 <div class="modal fade" id="updateMultipleWarehouseModal" tabindex="-1" role="dialog" aria-labelledby="updateMultipleWarehouseModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -117,7 +83,7 @@
                 <h5 class="modal-title" id="updateMultipleWarehouseModalLabel">Update Multiple Warehouses</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="height: auto !important; overflow-y: visible !important;">
                 <div class="form-group">
                     <label class="form-control-label">WareHouse<span class="text-danger ml-2">*</span></label>
                     {!! Form::select('warehouse_id', [''=>' --Select WareHouse-- ']+$wareHouse, null, [
@@ -126,10 +92,22 @@
                         'data-validation' => "required"
                     ]) !!}
                 </div>
+
+                <!-- Moved By Input -->
+                <div class="form-group mt-3">
+                    <label class="form-control-label" for="moved_by">Moved By<span class="text-danger ml-2">*</span></label>
+                    <input type="text" class="form-control" id="moved_by" name="moved_by" placeholder="Enter the person who moved">
+                </div>
+
+                <!-- Transported By Input -->
+                <div class="form-group mt-3">
+                    <label class="form-control-label" for="transported_by">Transported By<span class="text-danger ml-2">*</span></label>
+                    <input type="text" class="form-control" id="transported_by" name="transported_by" placeholder="Enter the person who transported">
+                </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="updateMultipleWarehouseBtn">Update</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="updateMultipleWarehouseBtn">Update Multiple Warehouses</button>
             </div>
         </div>
     </div>
@@ -169,6 +147,8 @@
                 url: '{{ route("stockLocation.filter") }}',
                 dataSrc: ''
             },
+            autoWidth: false,
+            responsive: true,
             columns: [
                 {
                     data: null,
@@ -181,69 +161,42 @@
                 { data: 'color' },
                 { data: 'color_no' },
                 { data: 'current_warehouse' },
+                // {
+                //     data: null,
+                //     render: function(data, type, row) {
+                //         return '<a target="_blank" href="{{ url('warehouse-history') }}/' + row.id + '" class="btn btn-info">View History</a>';
+                //     }
+                // },
+                // {
+                //     data: 'warehouse_history',
+                //     render: function(data, type, row) {
+                //         // Check if data is null or empty
+                //         if (data) {
+                //             return '<a target="_blank" href="{{ url('warehouse-history') }}/' + row.id + '">' + data + '</a>';
+                //         }
+                //         return ''; // Return an empty string if data is null or empty
+                //     }
+                // },
                 {
-                    data: null,
-                    render: function(data, type, row) {
-                        return '<a target="_blank" href="{{ url('warehouse-history') }}/' + row.id + '" class="btn btn-info">View History</a>';
+                    data: 'warehouse_history',
+                    render: function(currentWarehouse, type, row) {
+                        // Retrieve the warehouse history
+                        var warehouseHistory = row.warehouse_history;
+
+                        // Combine current warehouse and history
+                        if (warehouseHistory && warehouseHistory.trim() !== '') {
+                            return currentWarehouse + ' << ' + warehouseHistory; // Output like 'wh1 << wh2 << wh3'
+                        } else {
+                            return currentWarehouse; // Just display the current warehouse if no history
+                        }
                     }
-                },
-                {
-                    data: null,
-                    render: function(data, type, row) {
-                        // return '<button class="btn btn-primary updateWarehouseBtn" data-id="' + row.id + '" data-warehouse="' + row.current_warehouse + '">Update WareHouse</button>';
-                        return '<button class="btn btn-primary updateWarehouseBtn" data-id="' + row.id + '" data-warehouse-id="' + row.current_warehouse + '" target="_blank">Update WareHouse</button>';
-                    }
-                },
+                }
             ],
             lengthMenu: [
                 [10, 25, 50, 100],
                 [10, 25, 50, 100]
             ],
             "aaSorting": []
-        });
-
-        // Open modal on update button click
-        $('#stocklocation_tbl tbody').on('click', '.updateWarehouseBtn', function() {
-            var itemId = $(this).data('id'); // Get the item's ID
-            var warehouseId = $(this).data('warehouse-id'); // Get the current warehouse ID
-
-            $('#warehouse_id').val(itemId);
-            $('#warehouse').val(warehouseId).trigger('change'); // Use trigger to update Select2
-
-            $('#updateWarehouseModal').modal('show');
-        });
-
-        // Handle warehouse update
-        $('#updateWarehouseBtn').on('click', function() {
-            var id = $('#warehouse_id').val();
-            var newWarehouse = $('#warehouse_select').val();
-
-            // Validate that a warehouse is selected
-            if (!newWarehouse) {
-                alert('Please select a warehouse before updating.'); // Alert if no warehouse is selected
-                return; // Exit the function if validation fails
-            }
-
-            $.ajax({
-                url: '{{ route("stockLocation.update", ":id") }}'.replace(':id', id),
-                type: 'PUT',
-                data: {
-                    warehouse_id: newWarehouse,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#updateWarehouseModal').modal('hide');
-                        table.ajax.reload(); // Reload table data
-                        alert('Warehouse updated successfully!');
-                    } else {
-                        alert('Error updating warehouse. Please try again.');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert('An error occurred. Please try again later.');
-                }
-            });
         });
 
         // Handle multiple warehouse updates
@@ -266,6 +219,15 @@
         // Handle multiple warehouse update submission
         $('#updateMultipleWarehouseBtn').on('click', function() {
             var newWarehouse = $('#multiple_warehouse_select').val();
+            var movedBy = $('#moved_by').val();
+            var transportedBy = $('#transported_by').val();
+
+            // Validate that a warehouse is selected
+            if (!newWarehouse || !movedBy || !transportedBy) {
+                alert('Please add required fields before updating.');
+                return;
+            }
+
             var selectedIds = [];
             $('.row_checkbox:checked').each(function() {
                 selectedIds.push($(this).val());
@@ -277,6 +239,8 @@
                 data: {
                     ids: selectedIds,
                     new_warehouse: newWarehouse,
+                    movedBy: movedBy,
+                    transportedBy: transportedBy,
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {

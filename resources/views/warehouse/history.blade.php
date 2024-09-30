@@ -32,6 +32,8 @@
                                 <th>Purchase Item ID</th>
                                 <!-- <th>Old Warehouse ID</th> -->
                                 <th>Warehouse Name</th>
+                                <th>Moved By</th>
+                                <th>Transported By</th>
                                 <th>Changed At</th>
                                 <th>Created At</th>
                             </tr>
@@ -48,6 +50,8 @@
                                         <td>{{ $record->purchase_item_id }}</td>
                                         <!-- <td>{{ $record->old_warehouse_id }}</td> Display old warehouse ID -->
                                         <td>{{ $record->warehouse ? $record->warehouse->name : 'N/A' }}</td> <!-- Display warehouse name -->
+                                        <td>{{ $record->moved_by ? $record->moved_by : 'N/A' }}</td>
+                                        <td>{{ $record->transported_by ? $record->transported_by : 'N/A' }}</td>
                                         <td>{{ \Carbon\Carbon::parse($record->changed_at)->format('Y-m-d H:i:s') }}</td> <!-- Parse and format changed_at -->
                                         <td>{{ \Carbon\Carbon::parse($record->created_at)->format('Y-m-d H:i:s') }}</td> <!-- Parse and format created_at -->
                                     </tr>

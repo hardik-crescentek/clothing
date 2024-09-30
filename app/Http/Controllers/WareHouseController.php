@@ -6,6 +6,7 @@ use App\WareHouse;
 use App\PurchaseItemWareHouseHistory;
 use App\Purchase;
 use App\PurchaseItem;
+use DB;
 use Illuminate\Http\Request;
 
 class WareHouseController extends Controller
@@ -117,14 +118,21 @@ class WareHouseController extends Controller
 
     public function filterStockLocation(Request $request)
     {
-        // Initialize the query
         $query = PurchaseItem::query()
-                                ->leftJoin('ware_houses', 'purchase_items.warehouse_id', '=', 'ware_houses.id')
-                                ->select('purchase_items.*', 'ware_houses.name as current_warehouse');
-
+            ->leftJoin('ware_houses', 'purchase_items.warehouse_id', '=', 'ware_houses.id') // Join to get current warehouse
+            ->leftJoin('purchase_items_warehouse_history as history', 'purchase_items.id', '=', 'history.purchase_item_id') // Join to get history
+            ->leftJoin('ware_houses as wh_old', 'history.old_warehouse_id', '=', 'wh_old.id') // Join for old warehouse name
+            ->select(
+                'purchase_items.*', 
+                'ware_houses.name as current_warehouse',
+                DB::raw('GROUP_CONCAT(wh_old.name ORDER BY history.changed_at ASC SEPARATOR " << ") as warehouse_history') // Order ascending for old warehouses
+            )
+            ->groupBy('purchase_items.id', 'ware_houses.id') // Group by necessary fields
+            ->orderBy('purchase_items.id'); // Optional: order results by purchase item ID
+        
         // Check if any filter is applied
         $filtersApplied = false;
-
+    
         // Apply filters if they exist
         if ($request->has('article_no') && $request->article_no != '') {
             $query->where('article_no', $request->article_no);
@@ -142,51 +150,9 @@ class WareHouseController extends Controller
         }
 
         // Fetch filtered results
-        $purchaseItem = $query->orderBy('created_at', 'desc')->get();
+        $purchaseItem = $query->orderBy('purchase_items.created_at', 'desc')->get();
 
         return response()->json($purchaseItem);
-    }
-
-    // Update a single warehouse location
-    // public function updateWarehouseLocation(Request $request, $id)
-    // {
-    //     $purchaseItem = PurchaseItem::findOrFail($id);
-
-    //     // Record the old warehouse
-    //     $oldWarehouseId = $purchaseItem->warehouse_id;
-
-    //     // Update the warehouse
-    //     $purchaseItem->update(['warehouse_id' => $request->warehouse_id]);
-
-    //     // Save history
-    //     PurchaseItemWareHouseHistory::create([
-    //         'purchase_item_id' => $purchaseItem->id,
-    //         'warehouse_id' => $oldWarehouseId,
-    //     ]);
-
-    //     return response()->json(['success' => 'Warehouse location updated successfully.']);
-    // }
-
-    public function updateWarehouseLocation(Request $request, $id)
-    {
-        // Find the purchase item by ID or fail
-        $purchaseItem = PurchaseItem::findOrFail($id);
-
-        // Record the old warehouse
-        $oldWarehouseId = $purchaseItem->warehouse_id;
-
-        // Update the warehouse with the new ID
-        $purchaseItem->update(['warehouse_id' => $request->warehouse_id]);
-
-        // Save history, including both old and current warehouse IDs
-        PurchaseItemWareHouseHistory::create([
-            'purchase_item_id' => $purchaseItem->id,
-            'old_warehouse_id' => $oldWarehouseId, // Make sure to have this column in your table
-            'current_warehouse_id' => $request->warehouse_id, // New/current warehouse
-            'changed_at' => now(), // Add the timestamp of the change
-        ]);
-
-        return response()->json(['success' => 'Warehouse location updated successfully.']);
     }
 
     public function updateMultipleWarehouseLocations(Request $request)
@@ -205,6 +171,8 @@ class WareHouseController extends Controller
                 'purchase_item_id' => $purchaseItem->id,
                 'old_warehouse_id' => $oldWarehouseId, // Previous warehouse
                 'current_warehouse_id' => $request->new_warehouse, // New/current warehouse
+                'moved_by' => $request->movedBy, 
+                'transported_by' => $request->transportedBy, 
                 'changed_at' => now(), // Timestamp of the change
             ]);
         }
