@@ -125,14 +125,14 @@ class WareHouseController extends Controller
             ->select(
                 'purchase_items.*', 
                 'ware_houses.name as current_warehouse',
-                DB::raw('GROUP_CONCAT(wh_old.name ORDER BY history.changed_at ASC SEPARATOR " << ") as warehouse_history') // Order ascending for old warehouses
+                DB::raw('GROUP_CONCAT(wh_old.name ORDER BY history.changed_at DESC SEPARATOR " << ") as warehouse_history') // Order descending for old warehouses
             )
             ->groupBy('purchase_items.id', 'ware_houses.id') // Group by necessary fields
             ->orderBy('purchase_items.id'); // Optional: order results by purchase item ID
-        
+
         // Check if any filter is applied
         $filtersApplied = false;
-    
+
         // Apply filters if they exist
         if ($request->has('article_no') && $request->article_no != '') {
             $query->where('article_no', $request->article_no);

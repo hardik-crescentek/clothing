@@ -161,34 +161,28 @@
                 { data: 'color' },
                 { data: 'color_no' },
                 { data: 'current_warehouse' },
-                // {
-                //     data: null,
-                //     render: function(data, type, row) {
-                //         return '<a target="_blank" href="{{ url('warehouse-history') }}/' + row.id + '" class="btn btn-info">View History</a>';
-                //     }
-                // },
-                // {
-                //     data: 'warehouse_history',
-                //     render: function(data, type, row) {
-                //         // Check if data is null or empty
-                //         if (data) {
-                //             return '<a target="_blank" href="{{ url('warehouse-history') }}/' + row.id + '">' + data + '</a>';
-                //         }
-                //         return ''; // Return an empty string if data is null or empty
-                //     }
-                // },
                 {
                     data: 'warehouse_history',
-                    render: function(currentWarehouse, type, row) {
-                        // Retrieve the warehouse history
+                    render: function(data, type, row) {
+                        var currentWarehouse = row.current_warehouse; // Accessing the property directly
                         var warehouseHistory = row.warehouse_history;
 
-                        // Combine current warehouse and history
-                        if (warehouseHistory && warehouseHistory.trim() !== '') {
-                            return currentWarehouse + ' << ' + warehouseHistory; // Output like 'wh1 << wh2 << wh3'
-                        } else {
-                            return currentWarehouse; // Just display the current warehouse if no history
+                        // Check if both current warehouse and history are null or empty
+                        if (!currentWarehouse && (!warehouseHistory || warehouseHistory.trim() === '')) {
+                            return ''; // Do not display anything if both are null or empty
                         }
+
+                        // Combine current warehouse and history
+                        var historyDisplay = currentWarehouse || ''; // Start with current warehouse or empty string
+                        if (warehouseHistory && warehouseHistory.trim() !== '') {
+                            historyDisplay += ' << ' + warehouseHistory; // Append history if available
+                        }
+
+                        // Generate the clickable link
+                        var link = '<a href="{{ url('warehouse-history') }}/' + row.id + '" target="_blank">' + historyDisplay + '</a>';
+
+                        // Return the link
+                        return link; // This will make the entire text clickable
                     }
                 }
             ],
@@ -198,6 +192,13 @@
             ],
             "aaSorting": []
         });
+
+        // Function to reset the modal fields
+        function resetModalFields() {
+            $('#multiple_warehouse_select').val('').trigger('change'); // Reset Select2
+            $('#moved_by').val(''); // Clear moved_by input
+            $('#transported_by').val(''); // Clear transported_by input
+        }
 
         // Handle multiple warehouse updates
         $('#updateMultipleBtn').on('click', function() {
@@ -211,6 +212,9 @@
                 alert('Please select at least one warehouse to update.');
                 return;
             }
+
+            // Reset modal fields
+            resetModalFields();
 
             // Show the modal for updating multiple warehouses
             $('#updateMultipleWarehouseModal').modal('show');
