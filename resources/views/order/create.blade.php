@@ -997,11 +997,9 @@
                                 $(value).closest('tr').addClass('table-success');
                                 $(value).closest('tr').find('.meter').val($('#item_roll_' + item_id + '_' + roll_id).val());
                                 $(value).closest('tr').find('.meter').attr('readonly', false);
+                                meter += parseFloat(v.value);
                             }
                         });
-                        console.log("value "+v);
-                        console.log("value meter "+v.value);
-                        meter += parseFloat(v.value);
                         // addRoll(data);
                     });
 
