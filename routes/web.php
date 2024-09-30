@@ -112,6 +112,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('invoice/pricebook/{id}', [App\Http\Controllers\InvoiceController::class, 'customerPriceBook'])->name('invoice.pricebook');
     Route::post('invoice/getmaterialday', [App\Http\Controllers\InvoiceController::class, 'isCreditDaysExits'])->name('invoice.getdays');
 
+    Route::get('invoice/getCustomerOrders', [App\Http\Controllers\InvoiceController::class, 'getCustomerInvoices'])->name('get_customer_invoices');
+
+
     # Check #
     Route::get('check-color', [App\Http\Controllers\ColorController::class, 'checkColor'])->name('color.check-color');
     Route::get('check-material', function () {

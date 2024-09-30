@@ -1,9 +1,5 @@
 @extends('layouts.master')
 @section('title', 'Stock Locations')
-@section('style')
-<style>
-</style>
-@endsection
 @section('content')
 
 <!-- Begin Page Header -->
@@ -26,9 +22,9 @@
 <!-- Begin Filter Row -->
 <div class="row">
     <div class="col-xl-3">
-        <label for="article_no"><b>Filter by Article No:</b></label>
+        <label for="article_no"><b>Article No:</b></label>
         <select class="form-control select2" id="article_no">
-            <option value="">Select Article No</option>
+            <option value="">-- Select Article No --</option>
             @foreach($articles as $article)
                 <option value="{{ $article->article_no }}">{{ $article->article_no }}</option>
             @endforeach
@@ -36,7 +32,7 @@
     </div>
 
     <div class="col-xl-3">
-        <label for="color"><b>Filter by Color:</b></label>
+        <label for="color"><b>Color:</b></label>
         <select class="form-control select2" id="color">
             <option value="">Select Color</option>
             @foreach($colors as $color)

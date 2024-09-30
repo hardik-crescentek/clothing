@@ -116,7 +116,7 @@
                                                 <td class="td-yard" data-value="{{ number_format((float)meter2yard($item->meter),2,'.','') }}">{{ number_format((float)meter2yard($item->meter),2,'.','') }}</td>
                                                 <td class="td-weight" data-value="{{ $item->item['weight'] * $item->meter  }}">{{ ($item->item['weight'] * $item->meter) }}</td>
                                                 <td class="td-total-price" id="total_price" data-value="{{ number_format((float)($item->item_total)) }}">{{ number_format((float)($item->item_total)) }}</td>
-                                                <td class="td-selected-meter" ><div class="data">0</div>
+                                                <td class="td-selected-meter" ><div class="data" data-value="{{ $item->meter }}">{{ $item->meter ?? 0 }}</div>
                                                     {!! Form::hidden("selected_meter[".$item->id."]", null, ["class"=>"selected_meter_".$item->id,"id"=>"selected_meter_".$item->id]) !!}
                                                 </td>
                                                 <td>
@@ -706,7 +706,8 @@
         function sub_total() {
             var total_price=0.00;
             $.each($('.td-total-price'),function(i,v){
-                total_price+=parseFloat($(v).data('value'));
+                var value = $(v).data('value').toString().replace(/,/g, ''); // Remove commas
+                total_price += parseFloat(value);
             });
             $('#sub_total').val(total_price.toFixed(2));
         };

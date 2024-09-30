@@ -278,9 +278,9 @@
     <div class="col-xl-4 col-12 sidebar-container sidebar">
         <div class="widget has-shadow">
             <div class="widget-header bordered no-actions d-flex align-items-center">
-                <h4>Customer past orders <span class=".custom-selected-name"></span></h4>
+                <h4>Customer Past Invoices <span class=".custom-selected-name"></span></h4>
             </div>
-            <div class="custom-selected-orders">
+            <div class="custom-selected-invoices">
                 
             </div>
         </div>
@@ -1772,7 +1772,7 @@
     var html = '<div class="text-center mt-5" style="font-size: 20px;">\
           No data found..!\
         </div>';
-    $('.custom-selected-orders').html(html);
+    $('.custom-selected-invoices').html(html);
 
         var currentDate = moment().format('DD/MM/YYYY HH:mm');
         
@@ -1813,94 +1813,83 @@
         });
         $('#delivered_date').val(currentDate);
         
+        $(document).on('change', '#user_id', function() {
+            var user_id = $(this).val();
+            $.ajax({
+                url: "{{ route('get_customer_invoices') }}",
+                dataType: "json",
+                data: {
+                    user_id: user_id
+                },
+                success: function(data) {
+                    if (data.status === 200) {
+                        $(".custom-selected-invoices").html('');
+                        var html = '<table class="table mt-3 table-order-history">\
+                                        <thead>\
+                                            <tr>\
+                                                <th scope="col">INV#</th>\
+                                                <th scope="col">DATE</th>\
+                                                <th scope="col">Amount</th>\
+                                                <th scope="col">Payment Status</th>\
+                                                <th scope="col">Note</th>\
+                                            </tr>\
+                                        </thead>\
+                                        <tbody>';
+                        var total_purchase = 0;
+                        var monthly_purchase = 0;
+                        var amount_to_receive = 0;
 
-    $(document).on('change', '#user_id', function() {
-        var user_id = $(this).val();
-        $.ajax({
-            url: "{{ route('get_customer_orders') }}",
-            dataType: "json",
-            data: {
-                user_id: user_id
-            },
-            success: function(data) {
-                if (data.status === 200) {
-                    $(".custom-selected-orders").html('');
-                    var html = '<table class="table mt-3 table-order-history">\
-                                    <thead>\
-                                        <tr>\
-                                            <th scope="col">INV#</th>\
-                                            <th scope="col">DATE</th>\
-                                            <th scope="col">Amount</th>\
-                                            <th scope="col">Payment Status</th>\
-                                            <th scope="col">Remark</th>\
-                                        </tr>\
-                                    </thead>\
-                                    <tbody>';
-                    var total_purchase = 0;
-                    var monthly_purchase = 0;
-                    var amount_to_receive = 0;
-                    var currentMonth = new Date().getMonth() + 1;
-                    var currentYear = new Date().getFullYear();
+                        $.each(data.response, function(i, order_data) {
+                            // Placeholder values for payment status and remark
+                            var payment_status = 'Paid';
+                            var remark = order_data.note;
 
-                    $.each(data.response, function(i, order_data) {
-                        var order_total = 0;
-                        $.each(order_data.order_item_data, function(i, item) {
-                            order_total += parseFloat(item.price);
+                            // Parse and format the invoice date from the JSON response
+                            var orderDate = new Date(order_data.invoice_date.split("/").reverse().join("-")); // Convert dd/mm/yyyy to yyyy-mm-dd
+                            var formattedDate = ("0" + orderDate.getDate()).slice(-2) + '/' +
+                                                ("0" + (orderDate.getMonth() + 1)).slice(-2) + '/' +
+                                                orderDate.getFullYear();
+
+                            total_purchase += order_data.grand_total;
+                            monthly_purchase += order_data.grand_total;
+                            amount_to_receive += order_data.grand_total;
+
+                            html += '<tr>\
+                                        <td><a href="{{ url('invoice') }}/edit/' + order_data.id + '" data-toggle="tooltip" data-placement="top" title="View Invoices">' + order_data.inv_no + '</a></td>\
+                                        <td>' + formattedDate + '</td>\
+                                        <td>' + order_data.grand_total + '</td>\
+                                        <td>' + payment_status + '</td>\
+                                        <td>' + remark + '</td>\
+                                    </tr>';
                         });
 
-                        // Placeholder values for payment status and remark
-                        var payment_status = 'Paid'; // Replace with actual data if available
-                        var remark = order_data.note;
-
-                        var orderDate = new Date(order_data.order_date);
-                        var formattedDate = ("0" + orderDate.getDate()).slice(-2) + '/' +
-                                        ("0" + (orderDate.getMonth() + 1)).slice(-2) + '/' +
-                                        orderDate.getFullYear();
-                        if (orderDate.getMonth() + 1 === currentMonth && orderDate.getFullYear() === currentYear) {
-                            monthly_purchase += order_total;
-                        }
-
-                        total_purchase += order_total;
-                        amount_to_receive += order_total; // Placeholder for actual amount to receive logic
-
-                        html += '<tr>\
-                                    <td> <a href="{{ url('order') }}/view/' + order_data.id + '" data-toggle="tooltip" data-placement="top" title="View Order">' + order_data.id + '</a></td>\
-                                    <td>' + formattedDate + '</td>\
-                                    <td>' + order_total.toFixed(2) + '</td>\
-                                    <td>' + payment_status + '</td>\
-                                    <td>' + remark + '</td>\
-                                </tr>';
-                    });
-
-                    html += '</tbody>\
-                            </table>';
-                    
-                    html += '<hr>';
-                    
-                    html += '<div class="row m-1">\
-                                <div class="col-md-4">\
-                                    <h4>Total Purchase: ' + total_purchase.toFixed(2) + '</h4>\
-                                </div>\
-                                <div class="col-md-4">\
-                                    <h4>Monthly Purchase: ' + monthly_purchase.toFixed(2) + '</h4>\
-                                </div>\
-                                <div class="col-md-4">\
-                                    <h4>Amount to Receive: ' + amount_to_receive.toFixed(2) + '</h4>\
-                                </div>\
-                            </div>';
-
-                    $('.custom-selected-orders').html(html);
-                } else {
-                    var html = '<div class="text-center mt-5" style="font-size: 20px;">\
-                                No data found..!\
+                        html += '</tbody>\
+                                </table>';
+                        
+                        html += '<hr>';
+                        
+                        html += '<div class="row m-1">\
+                                    <div class="col-md-4">\
+                                        <h4>Total Purchase: ' + total_purchase.toFixed(2) + '</h4>\
+                                    </div>\
+                                    <div class="col-md-4">\
+                                        <h4>Monthly Purchase: ' + monthly_purchase.toFixed(2) + '</h4>\
+                                    </div>\
+                                    <div class="col-md-4">\
+                                        <h4>Amount to Receive: ' + amount_to_receive.toFixed(2) + '</h4>\
+                                    </div>\
                                 </div>';
-                    $('.custom-selected-orders').html(html);
+
+                        $('.custom-selected-invoices').html(html);
+                    } else {
+                        var html = '<div class="text-center mt-5" style="font-size: 20px;">\
+                                    No data found..!\
+                                    </div>';
+                        $('.custom-selected-invoices').html(html);
+                    }
                 }
-            }
+            });
         });
-    });
-
-
 
 
     document.addEventListener("DOMContentLoaded", function() {

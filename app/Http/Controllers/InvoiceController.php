@@ -108,6 +108,9 @@ class InvoiceController extends Controller
         ]);
         $order=Order::where('id','=',$request->input('order_id'))->first();
         $vat = Settings::where('id', 1)->value('vat') ?? 0;
+        // Convert 'generate_date' to the correct format if necessary
+        $order_date = Carbon::createFromFormat('d/m/Y H:i', $request->input('generate_date'))->format('Y-m-d H:i:s');
+
         $invoice_data = [
                             "invoice_no"          => $request->input('invoice_no'),
                             "order_id"            => $order->id,
@@ -121,7 +124,7 @@ class InvoiceController extends Controller
                             "discount"            => $request->input('discount') ?? 0,
                             "discount_type"       => $request->input('discount_type'),
                             "grand_total"         => $request->input('grand_total'),
-                            "invoice_date"        => $request->input('generate_date'),
+                            "invoice_date"        => $request->input("generate_date"),
                             "note"                => $order->note,
                         ];
         $invoice=Invoice::create($invoice_data);
@@ -680,6 +683,48 @@ class InvoiceController extends Controller
         }
         return response()->json('Customer OR Material Not Found', 200);
 
+    }
+
+    public function getCustomerInvoices(Request $request)
+    {
+        $response = [];
+        $invoice_item_data = [];
+        $invoices     = new Invoice;
+        $invoice_data = $invoices->where("customer_id",$request->user_id)->orderBy('id','DESC')->get();
+        if (count($invoice_data) > 0) 
+        {
+            foreach ($invoice_data as $key => $value) 
+            {
+                $invoice_items = InvoiceItem::where("invoice_id",$value->id)->orderBy('id','DESC')->get();
+                if ($invoice_items != '') 
+                {
+                    foreach ($invoice_items as $key => $row) 
+                    {
+                        $invoice_item_data[] = [
+                            'id' => $row->id,
+                            'type_of_sale' => $row->type_of_sale,
+                            'meter' => $row->meter,
+                            'price' => $row->price,
+                        ];
+                    }
+                }
+                $response[] = [
+                    'id' => $value->id,
+                    // 'order_date' => date("d-m-Y",strtotime($value->order_date)),
+                    'inv_no' => $value->invoice_no,
+                    'grand_total' => $value->grand_total,
+                    'invoice_date' => $value->invoice_date,
+                    'note' => $value->note?$value->note:'',
+                    'invoice_item_data' => $invoice_item_data,
+                ];
+                unset($invoice_item_data);
+            }
+            return response()->json(["response" => $response,"status" => 200]);
+        }
+        else
+        {
+            return response()->json(["response" => $response,"status" => 201]);
+        }
     }
 
 }
