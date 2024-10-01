@@ -24,7 +24,7 @@ class MaterialController extends Controller
     {
         $materials = Material::with('category', 'color')->orderBy('id','DESC');
 
-        $article_no = ['' => "Select Article No"];
+        $article_no = ['' => "-- Select Article No --"];
         $article_no += Material::active()->orderBy('article_no','ASC')->pluck('article_no', 'article_no')->all();
 
         if ($request->ajax()) {
@@ -32,7 +32,7 @@ class MaterialController extends Controller
             if($article!=''){
                 $materials = $materials->where('article_no', $article);
                 if ($request->has('specific_page') && $request->specific_page == 'materials_page') {
-                    $colors = ['' => "All Color"];
+                    $colors = ['' => "-- All Color --"];
                     $colors += Material::active()->where('article_no', $article)->get()->pluck('color_code', 'color_no')->all();
                 } else {
                     $colors = Material::active()->where('article_no', $article)->get()->pluck('color_code', 'color_no')->all();
@@ -41,7 +41,7 @@ class MaterialController extends Controller
                 return response()->json($colors, 200);
             }
         }
-        $colors = ['' => "All Color"];
+        $colors = ['' => "-- All Color --"];
         $colors += Material::active()->get()->pluck('color_code','color_no')->all();
 
         //category search
@@ -56,7 +56,7 @@ class MaterialController extends Controller
         $article=$request->search_article;
         if($article!=''){
             $materials = $materials->where('article_no', $article);
-            $colors = ['' => "All Color"];
+            $colors = ['' => "-- All Color --"];
             $colors += Material::active()->where('article_no', $article)->get()->pluck('color_code', 'color_no')->all();
             $query_param['article_no'] = $article;
         }
@@ -83,7 +83,7 @@ class MaterialController extends Controller
             $materials->appends($query_param);
         }
 
-        $categories = [0 => "Select Category"];
+        $categories = [0 => "-- Select Category --"];
         $categories += Category::active()->pluck('name', 'id')->all();
 
         // Group materials by article_no

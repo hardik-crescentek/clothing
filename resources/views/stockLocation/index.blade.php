@@ -18,12 +18,11 @@
 </div>
 @endif
 
-
 <!-- Begin Filter Row -->
 <div class="row">
-    <div class="col-xl-3">
-        <label for="article_no"><b>Article No:</b></label>
-        <select class="form-control select2" id="article_no">
+    <div class="col-lg-2">
+        <label for="article_no" class="form-control-label"><b>Article No:</b></label>
+        <select class="form-control select2" id="article_no" >
             <option value="">-- Select Article No --</option>
             @foreach($articles as $article)
                 <option value="{{ $article->article_no }}">{{ $article->article_no }}</option>
@@ -31,10 +30,10 @@
         </select>
     </div>
 
-    <div class="col-xl-3">
-        <label for="color"><b>Color:</b></label>
+    <div class="col-lg-2">
+        <label for="color" class="form-control-label"><b>Color:</b></label>
         <select class="form-control select2" id="color">
-            <option value="">Select Color</option>
+            <option value="">-- Select Color --</option>
             @foreach($colors as $color)
                 <option value="{{ $color->color }}">{{ $color->color }}</option>
             @endforeach
@@ -110,6 +109,14 @@
 </div>
 
 @endsection
+
+@push('after-styles')
+    <style>
+        .select2-container, .select2-container span.selection {
+            width: 100% !important;
+        }
+    </style>
+@endpush
 
 @push('scripts')
 <!-- Include Bootstrap CSS (for modal styling) -->

@@ -18,6 +18,9 @@
         padding: 0; /* Remove padding if needed */
         margin: 0; /* Remove margin if needed */
     }
+    .select2-container, .select2-container span.selection {
+        width: 100% !important;
+    }
 </style>
 
 <!-- Begin Row -->
