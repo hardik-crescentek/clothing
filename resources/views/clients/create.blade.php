@@ -157,29 +157,6 @@
                         {!! Form::password('password_confirmation', array('placeholder' => 'Confirm Password','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
                     
-                    <!-- <div class="col-lg-3">
-                        <label for="upload_image" class="col-form-label">Client Image</label>
-                        <div class="d-flex align-items-center">
-                            {!! Form::file('image', [
-                                'id' => 'upload_image', 
-                                'accept' => 'image/*',
-                                'data-validation' => "mime",
-                                'data-validation-allowing' => "jpeg, jpg, png, gif",
-                                'data-validation-error-msg-mime' => "You can only upload images",
-                                'capture' => "camera",
-                                'class' => 'form-control-file',
-                                'multiple' => true
-                            ]) !!}
-                            <button type="button" class="btn btn-info btn-sl ml-3" onclick="showComara(this)" data-toggle="modal" data-target="#myModal">Capture</button>
-                        </div>
-                        <small>
-                            <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
-                        </small>
-                        <input type="hidden" name="image_binary" class="image_binary"/>
-                    </div>
-                    <div class="col-lg-3">
-                        <img id="image_preview" src="#" alt="Image Preview" style="display:none; max-width: 100px; margin-top: 10px;" />
-                    </div> -->
                     <div class="form-group col-lg-6">
                         <label for="images form-control-label">Upload Images:</label>
                         <div style="display: flex; align-items: center;">
@@ -215,9 +192,12 @@
                             <tr>
                                 <th>Article No</th>
                                 <th>Selling Price:</th>
-                                <th>Role</th>
-                                <th>Cut Wholesale</th>
-                                <th>Retail</th>
+                                <th>Role(yrd)</th>
+                                <th>Roll(mtr)</th>
+                                <th>Cut Wholesale(yrd)</th>
+                                <th>Cut Wholesale(mtr)</th>
+                                <th>Retail(yrd)</th>
+                                <th>Retail(mtr)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -229,8 +209,11 @@
                                     </td>
                                     <td></td>
                                     <td>{!! Form::text('roll[]', (isset($article->roll) && !empty($article->roll) ? $article->roll : 0), ['class' => 'form-control']) !!}</td>
+                                    <td>{!! Form::text('roll_per_mtr[]', (isset($article->roll_per_mtr) && !empty($article->roll_per_mtr) ? $article->roll_per_mtr : 0), ['class' => 'form-control']) !!}</td>
                                     <td>{!! Form::text('cut_wholesale[]', (isset($article->cut_wholesale) && !empty($article->cut_wholesale) ? $article->cut_wholesale : 0), ['class' => 'form-control']) !!}</td>
+                                    <td>{!! Form::text('cut_wholesale_per_mtr[]', (isset($article->cut_wholesale_per_mtr) && !empty($article->cut_wholesale_per_mtr) ? $article->cut_wholesale_per_mtr : 0), ['class' => 'form-control']) !!}</td>
                                     <td>{!! Form::text('retail[]', (isset($article->retail) && !empty($article->retail) ? $article->retail : 0), ['class' => 'form-control']) !!}</td>
+                                    <td>{!! Form::text('retail_per_mtr[]', (isset($article->retail_per_mtr) && !empty($article->retail_per_mtr) ? $article->retail_per_mtr : 0), ['class' => 'form-control']) !!}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -347,16 +330,6 @@
     function closeWebcame(){
         Webcam.reset();
     }
-
-    // document.getElementById('upload_image').addEventListener('change', function(event) {
-    //     var reader = new FileReader();
-    //     reader.onload = function(){
-    //         var output = document.getElementById('image_preview');
-    //         output.src = reader.result;
-    //         output.style.display = 'block';  // Show the image preview
-    //     }
-    //     reader.readAsDataURL(event.target.files[0]);
-    // });
 
     function previewImages() {
         const previewContainer = document.getElementById('preview-container');

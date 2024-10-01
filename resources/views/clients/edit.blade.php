@@ -340,9 +340,12 @@
                                 <thead>
                                     <tr>
                                         <th>Article Number</th>
-                                        <th>Roll</th>
-                                        <th>Cut Wholesale</th>
-                                        <th>Retail</th>
+                                        <th>Roll(yrd)</th>
+                                        <th>Roll(mtr)</th>
+                                        <th>Cut Wholesale(yrd)</th>
+                                        <th>Cut Wholesale(mtr)</th>
+                                        <th>Retail(yrd)</th>
+                                        <th>Retail(mtr)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -350,8 +353,11 @@
                                     <tr>
                                         <td>{{ $article->article_no }}<input type="hidden" name="article_no[]" value="{{ $article->article_no }}"></td>
                                         <td>{!! Form::text('roll[]', (isset($article->roll) && !empty($article->roll) ? $article->roll : 0), ['class' => 'form-control']) !!}</td>
+                                        <td>{!! Form::text('roll_per_mtr[]', (isset($article->roll_per_mtr) && !empty($article->roll_per_mtr) ? $article->roll_per_mtr : 0), ['class' => 'form-control']) !!}</td>
                                         <td>{!! Form::text('cut_wholesale[]', (isset($article->cut_wholesale) && !empty($article->cut_wholesale) ? $article->cut_wholesale : 0), ['class' => 'form-control']) !!}</td>
+                                        <td>{!! Form::text('cut_wholesale_per_mtr[]', (isset($article->cut_wholesale_per_mtr) && !empty($article->cut_wholesale_per_mtr) ? $article->cut_wholesale_per_mtr : 0), ['class' => 'form-control']) !!}</td>
                                         <td>{!! Form::text('retail[]', (isset($article->retail) && !empty($article->retail) ? $article->retail : 0), ['class' => 'form-control']) !!}</td>
+                                        <td>{!! Form::text('retail_per_mtr[]', (isset($article->retail_per_mtr) && !empty($article->retail_per_mtr) ? $article->retail_per_mtr : 0), ['class' => 'form-control']) !!}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

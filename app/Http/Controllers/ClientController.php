@@ -56,7 +56,7 @@ class ClientController extends Controller
         $business_nature = array_merge(['' => "Select Nature or Business"],config('constants.business_nature'));
 
         $latestRecordsSubquery = DB::table('materials')
-                                ->select('id', 'article_no', 'color', 'color_no', 'roll', 'cut_wholesale', 'retail', DB::raw('MAX(id) as max_id'))
+                                ->select('id', 'article_no', 'color', 'color_no', 'roll', 'roll_per_mtr', 'cut_wholesale', 'cut_wholesale_per_mtr', 'retail', 'retail_per_mtr', DB::raw('MAX(id) as max_id'))
                                 ->groupBy('article_no')
                                 ->orderBy('max_id', 'desc');
         
@@ -65,7 +65,7 @@ class ClientController extends Controller
                     ->joinSub($latestRecordsSubquery, 'latest_records', function ($join) {
                         $join->on('materials.id', '=', 'latest_records.id');
                     })
-                    ->select('materials.article_no', 'materials.color', 'materials.color_no', 'latest_records.roll', 'latest_records.cut_wholesale', 'latest_records.retail')
+                    ->select('materials.article_no', 'materials.color', 'materials.color_no', 'latest_records.roll' , 'latest_records.roll_per_mtr', 'latest_records.cut_wholesale','latest_records.cut_wholesale_per_mtr', 'latest_records.retail','latest_records.retail_per_mtr')
                     ->get();
         return view('clients.create', compact('redirect','business_nature','articles'));
     }
@@ -76,35 +76,6 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request)
-    // {
-    //     //Validate name, email and password fields
-    //     $this->validate($request, [
-    //         'firstname' => 'required|max:120',
-    //         'lastname'  => 'required|max:120',
-    //         'email'     => 'required|email|unique:users',
-    //         'password'  => 'required|min:6|confirmed',
-    //         'phone'     => 'required|digits:10',
-    //         'dob'       => 'required',
-    //         'address'   => 'required',
-    //         'city'      => 'required',
-    //         'state'     => 'required',
-    //         'zip'       => 'required',
-    //     ]);
-    //     $input = $request->only('firstname', 'lastname', 'email', 'phone', 'phone2', 'address', 'city', 'state', 'country', 'dob', 'zip','company_name','business_nature', 'business_nature_other', 'newsletter');
-    //     // $input['dob'] = Carbon::createFromFormat('d/m/Y', $request->dob)->format('Y-m-d');
-    //     $input['password'] = Hash::make($request->password);
-    //     $user = User::create($input); //Retrieving only the email and password data
-
-    //     $user->assignRole('client');
-    //     if ($request->input('redirectTo')) {
-    //         return redirect(base64_decode($request->input('redirectTo')))->with('success', 'Client created successfully');
-    //     }
-    //     else{
-    //         return redirect()->route('clients.index')->with('success', 'Client created successfully');
-    //     }
-
-    // }
     public function store(Request $request)
     {
         // Validate name, email and password fields
@@ -141,8 +112,11 @@ class ClientController extends Controller
                 'client_id'     => $user->id,
                 'article_no'    => $articleNo,
                 'roll'          => $request->roll[$index],
+                'roll_per_mtr'  => $request->roll_per_mtr[$index],
                 'cut_wholesale' => $request->cut_wholesale[$index],
+                'cut_wholesale_per_mtr' => $request->cut_wholesale_per_mtr[$index],
                 'retail'        => $request->retail[$index],
+                'retail_per_mtr'        => $request->retail_per_mtr[$index],
                 'created_at'    => now(),
                 'updated_at'    => now(),
             ];
@@ -150,50 +124,6 @@ class ClientController extends Controller
         ClientArticle::insert($articlesData);
 
         $imagePath = public_path('uploads/') . config('constants.client_img_path');
-
-        // if ($request->hasFile('image')) {
-        //     $file = $request->file('image');
-        //     $filename = time() . '-' . $file->getClientOriginalName();
-        //     $filePath = $file->storeAs('images', $filename);
-
-        //     // Update or create the client image record
-        //     $existingImage = ClientImage::where('client_id', $user->id)->latest()->first();
-        
-        //     if ($existingImage) {
-        //         $existingImage->update([
-        //             'name' => $filename,
-        //             'path' => $filePath // optional: store the full path if needed
-        //         ]);
-        //     } else {
-        //         ClientImage::create([
-        //             'client_id' => $user->id,
-        //             'name' => $filename,
-        //             'path' => $filePath // optional
-        //         ]);
-        //     }
-        // }
-       
-        // if(isset($request->image_binary) && !empty($request->image_binary)){
-        //     // Get the old image if it exists
-        //     $oldImage = ClientImage::where('client_id', $user->id)->latest()->first();
-        //     if ($oldImage) {
-        //         $oldImagePath = $imagePath . '/' . $oldImage->name;
-        //         if (File::exists($oldImagePath)) {
-        //             File::delete($oldImagePath);
-        //         }
-        //     }
-        //     $imageName = Str::random() . ".jpg";
-        //     $baseFromJavascript = $request->image_binary;
-        //     $base_to_php = explode(',', $baseFromJavascript);
-        //     $originalImage = base64_decode($base_to_php[1]);
-        //     File::put(public_path('uploads/').config('constants.client_img_path') .'/'. $imageName, $originalImage);
-        //     $data['image'] = config('constants.client_img_path') .'/'. $imageName;
-        //     Util::genrateThumb($data['image']);
-        //     ClientImage::create([
-        //         'client_id' => $user->id,
-        //         'name' => $imageName
-        //     ]);
-        // }
 
         if(isset($request->image_binary) && !empty($request->image_binary)){
             // Get the old image if it exists
@@ -244,138 +174,11 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function editOld(Request $request,$id)
-    {
-        $latestRecordsSubquery = DB::table('materials')
-                                ->select('id', 'article_no', 'color', 'color_no', 'roll', 'cut_wholesale', 'retail', DB::raw('MAX(id) as max_id'))
-                                ->groupBy('article_no')
-                                ->orderBy('max_id', 'desc');
-        
-          // Query to fetch the latest records for each article_no
-        $materials = DB::table('materials')
-                    ->joinSub($latestRecordsSubquery, 'latest_records', function ($join) {
-                        $join->on('materials.id', '=', 'latest_records.id');
-                    })
-                    ->select('materials.article_no', 'materials.color', 'materials.color_no', 'latest_records.roll', 'latest_records.cut_wholesale', 'latest_records.retail')
-                    ->get();
-
-        // echo "<pre>"; print_r($materials->toArray()); die();
-
-        $user = User::with('pricelist.material','clientArticles');
-        if($request->ajax()){
-            $article_no = $request->Article;
-            if($article_no == ''){
-                $user = $user->with('pricelist.material');
-            }else{
-                $user = $user->with(['pricelist'=> function($q) use ($article_no) {
-                            $q->whereHas('material',function($query) use($article_no){
-                                $query->where('article_no',$article_no);
-                            });
-                        }]);
-
-            }
-            $user = $user->find($id);
-            return response()->json($user);
-        }
-
-        $user = $user->find($id);
-
-        $clientArticles = ClientArticle::where('client_id', $user->id)->get();
-
-        // Fetch all materials
-        $materials = Material::all();
-
-        // Convert client articles to an associative array for quick lookup
-        $clientArticlesMap = $clientArticles->keyBy('article_no');
-
-        // Iterate through materials and match with client articles
-        $matchedData = $materials->map(function($material) use ($clientArticlesMap) {
-            // Find matching client article based on article_no
-            $clientArticle = $clientArticlesMap->get($material->article_no);
-            
-            // echo "<pre>"; print_r($clientArticle->toArray()); die();
-            // Add data from client article if exists, otherwise use material's data
-            $material->roll = $clientArticle ? $clientArticle->roll : $material->roll;
-            $material->cut_wholesale = $clientArticle ? $clientArticle->cut_wholesale : $material->cut_wholesale;
-            $material->retail = $clientArticle ? $clientArticle->retail : $material->retail;
-
-            return $material;
-        });
-        // echo "<pre>"; print_r($matchedData->toArray()); die();
-
-        // Add the matched data to the user's client articles
-        $user->clientArticles = $matchedData;
-        // echo "<pre>"; print_r($user); die();
-        $business_nature = array_merge(['' => "Select Nature or Business"],config('constants.business_nature'));
-        return view('clients.edit', compact('user','business_nature'));
-    }
-
-    // public function edit(Request $request, $id)
-    // {
-    //     // Query to fetch the latest records for each article_no
-    //     $latestRecordsSubquery = DB::table('materials')
-    //         ->select('id', 'article_no', 'color', 'color_no', 'roll', 'cut_wholesale', 'retail', DB::raw('MAX(id) as max_id'))
-    //         ->groupBy('article_no')
-    //         ->orderBy('max_id', 'desc');
-
-    //     // Fetch latest materials based on the subquery
-    //     $materials = DB::table('materials')
-    //         ->joinSub($latestRecordsSubquery, 'latest_records', function ($join) {
-    //             $join->on('materials.id', '=', 'latest_records.id');
-    //         })
-    //         ->select('materials.article_no', 'materials.color', 'materials.color_no', 'latest_records.roll', 'latest_records.cut_wholesale', 'latest_records.retail')
-    //         ->get();
-
-    //     // Fetch the user with related pricelist and clientArticles
-    //     $userQuery = User::with('pricelist.material', 'clientArticles');
-        
-    //     if ($request->ajax()) {
-    //         $article_no = $request->get('Article', '');
-
-    //         // Conditionally filter by article_no if provided
-    //         if (!empty($article_no)) {
-    //             $userQuery->with(['pricelist' => function ($q) use ($article_no) {
-    //                 $q->whereHas('material', function ($query) use ($article_no) {
-    //                     $query->where('article_no', $article_no);
-    //                 });
-    //             }]);
-    //         }
-
-    //         $user = $userQuery->find($id);
-    //         return response()->json($user);
-    //     }
-
-    //     // Fetch the user and their related client articles
-    //     $user = $userQuery->find($id);
-    //     $clientArticles = ClientArticle::where('client_id', $user->id)->get()->keyBy('article_no');
-
-    //     // Combine material data with client articles data
-    //     $matchedData = $materials->map(function ($material) use ($clientArticles) {
-    //         // Get the client article for the current material
-    //         $clientArticle = $clientArticles->get($material->article_no);
-
-    //         // Update material fields if client article exists
-    //         $material->roll = $clientArticle->roll ?? $material->roll;
-    //         $material->cut_wholesale = $clientArticle->cut_wholesale ?? $material->cut_wholesale;
-    //         $material->retail = $clientArticle->retail ?? $material->retail;
-
-    //         return $material;
-    //     });
-
-    //     // Attach matched data to user
-    //     $user->clientArticles = $matchedData;
-
-    //     // Fetch business nature options
-    //     $business_nature = array_merge(['' => "Select Nature or Business"], config('constants.business_nature'));
-
-    //     // Render the view with the required data
-    //     return view('clients.edit', compact('user', 'business_nature'));
-    // }
     public function edit(Request $request, $id)
     {
         // Fetch all materials and group them by article_no
         $materials = DB::table('materials')
-            ->select('id', 'article_no', 'color', 'color_no', 'roll', 'cut_wholesale', 'retail')
+            ->select('id', 'article_no', 'color', 'color_no', 'roll','roll_per_mtr', 'cut_wholesale','cut_wholesale_per_mtr', 'retail','retail_per_mtr')
             ->get()
             ->groupBy('article_no')
             ->map(function ($group) {
@@ -414,8 +217,11 @@ class ClientController extends Controller
             // Update material fields if client article exists
             if ($clientArticle) {
                 $material->roll = $clientArticle->roll ?? $material->roll;
+                $material->roll_per_mtr = $clientArticle->roll_per_mtr ?? $material->roll_per_mtr;
                 $material->cut_wholesale = $clientArticle->cut_wholesale ?? $material->cut_wholesale;
+                $material->cut_wholesale_per_mtr = $clientArticle->cut_wholesale_per_mtr ?? $material->cut_wholesale_per_mtr;
                 $material->retail = $clientArticle->retail ?? $material->retail;
+                $material->retail_per_mtr = $clientArticle->retail_per_mtr ?? $material->retail_per_mtr;
             }
 
             return $material;
@@ -490,14 +296,7 @@ class ClientController extends Controller
             if ($request->has('article_no')) {
                 // Update or create client articles
                 foreach ($request->article_no as $key => $article_no) {
-                     // Log the incoming data
-                    \Log::info('Updating/Creating ClientArticle:', [
-                        'client_id' => $user->id,
-                        'article_no' => $article_no,
-                        'roll' => $request->roll[$key],
-                        'cut_wholesale' => $request->cut_wholesale[$key],
-                        'retail' => $request->retail[$key]
-                    ]);
+                   
                     $clientArticle = ClientArticle::updateOrCreate(
                         [
                             'client_id' => $user->id, // Add client_id to make the condition unique
@@ -505,38 +304,16 @@ class ClientController extends Controller
                         ],
                         [
                             'roll' => $request->roll[$key],
+                            'roll_per_mtr' => $request->roll_per_mtr[$key],
                             'cut_wholesale' => $request->cut_wholesale[$key],
+                            'cut_wholesale_per_mtr' => $request->cut_wholesale_per_mtr[$key],
                             'retail' => $request->retail[$key],
+                            'retail_per_mtr' => $request->retail_per_mtr[$key],
                         ]
                     );
                 }
             }
-            
-            // $imagePath = public_path('uploads/') . config('constants.client_img_path');
-
-                        
-            // // Handle file upload if present
-            // if ($request->hasFile('image')) {
-            //     $file = $request->file('image');
-            //     $filename = time() . '-' . $file->getClientOriginalName();
-            //     $filePath = $file->storeAs(config('constants.client_img_path'), $filename);
-            //      // Get the old image if it exists
-            //     // $existingImage = ClientImage::where('client_id', $user->id)->latest()->first();
-            
-            //     // if ($existingImage) {
-            //     //     $existingImage->update([
-            //     //         'name' => $filename,
-            //     //         'path' => $filePath // optional: store the full path if needed
-            //     //     ]);
-            //     // } else {
-            //         ClientImage::create([
-            //             'client_id' => $user->id,
-            //             'name' => $filename,
-            //             'path' => $filePath // optional
-            //         ]);
-            //     // }
-            // }
-           
+                       
             if(isset($request->image_binary) && !empty($request->image_binary)){
                 // Get the old image if it exists
                 $imageName = 'captured_' .Str::random() . ".jpg";
@@ -560,22 +337,6 @@ class ClientController extends Controller
                     $user->images()->create(['name' => $imageName]); // Save only image name
                 }
             }
-
-            // Handle captured image
-            // if (isset($request->image_binary) && !empty($request->image_binary)) {
-            //     $data_uri = $request->input('captured_image');
-            //     $data_uri = str_replace('data:image/jpeg;base64,', '', $data_uri);
-            //     $data_uri = str_replace('data:image/png;base64,', '', $data_uri);
-            //     $data_uri = str_replace('data:image/jpg;base64,', '', $data_uri);
-            //     $data_uri = str_replace('data:image/gif;base64,', '', $data_uri);
-            //     $data_uri = str_replace('data:image/svg+xml;base64,', '', $data_uri);
-            //     $data_uri = str_replace(' ', '+', $data_uri);
-            //     $imageName = 'captured_' . time() . '.jpg';
-            //     \Storage::disk('public')->path('clients/' . $imageName, base64_decode($data_uri));
-                
-            //     // Update or create captured image record
-            //     $user->images()->create(['name' => $imageName]);
-            // }
 
             return redirect()->route('clients.index')->with('success', 'User updated successfully');
         }

@@ -15,8 +15,11 @@ class ClientArticle extends Authenticatable
         'article_no',
         'color_no',
         'roll',
+        'roll_per_mtr',
         'cut_wholesale',
+        'cut_wholesale_per_mtr',
         'retail',
+        'retail_per_mtr',
     ];
 
     public function client()
