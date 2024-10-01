@@ -374,9 +374,21 @@
 
                     // Uncheck the "Select All" checkbox after deletion
                     $('#select_all').prop('checked', false);
+
+                    // Check if rows exist and enable/disable the Add Item button after deletion
+                    checkRowsAndToggleAddButton();
                 }
             }
         });
+
+        // Check if rows exist and enable/disable the Add Item button accordingly
+        function checkRowsAndToggleAddButton() {
+            if ($('.row_checkbox').length === 0) {
+                enableAddItemButton(); // Enable if no rows exist
+            } else {
+                disableAddItemButton(); // Disable if rows exist
+            }
+        }
 
         $(document).ready(function() {
 
@@ -1022,14 +1034,22 @@
             }
         }
 
-        // Disable the Add Item button to prevent multiple clicks
-        function disableAddItemButton() {
-            $('#add_item_model_btn').addClass('disabled'); // Add a disabled class
-            $('#add_item_model_btn').off('click'); // Disable the click event
-        }
         disableAddItemButton();
     }
+    
+    // Disable the Add Item button to prevent multiple clicks
+    function disableAddItemButton() {
+        $('#add_item_model_btn').addClass('disabled'); // Add a disabled class
+        $('#add_item_model_btn').off('click'); // Disable the click event
+    }
 
+    function enableAddItemButton() {
+        $('#add_item_model_btn').removeClass('disabled'); // Add a disabled class
+        $('#add_item_model_btn').on('click', function() {
+            // Add your logic to show the modal or perform any action when the button is clicked
+            $('#addItemModal').modal('show'); 
+        });
+    }
 
 </script>
 @endpush
