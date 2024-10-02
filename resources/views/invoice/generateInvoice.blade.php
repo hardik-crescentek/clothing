@@ -701,6 +701,7 @@
         };
         $(window).on('load',function(){
            sub_total();
+           grand_total();
            generate_invoice_no();
         });
         function sub_total() {
