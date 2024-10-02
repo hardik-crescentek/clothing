@@ -1520,7 +1520,7 @@
                 grandTotal += vatAmount; // Add VAT to the grand total
 
                 // Update the displayed grand total with VAT included
-                $('#grand_total').html("Grand Total (incl. VAT): " + "฿" + grandTotal);
+                $('#grand_total').html("Grand Total (incl. VAT): " + "฿" + parseFloat(grandTotal).toFixed(2));
                 $('.grand_total').val(grandTotal);
                 $('.vat_percentage').val(vatRate);
                 $('.vat_amount').val(vatAmount);

@@ -295,18 +295,18 @@ class InvoiceController extends Controller
 
         if ($customerId) {
             // Fetch from ClientArticle if customer is selected
-            $clientArticle = ClientArticle::select('cut_wholesale','retail','roll')
+            $clientArticle = ClientArticle::select('cut_wholesale','cut_wholesale_per_mtr','retail','retail_per_mtr','roll','roll_per_mtr')
                 ->where(['client_id' => $customerId, 'article_no' => $articleNo])
                 ->first();
 
             // Override price fields if client article exists
             if (isset($clientArticle) && !empty($clientArticle)) {
                 $material->cut_wholesale = $clientArticle->cut_wholesale;
-                $material->cut_wholesale_per_mtr = $material->cut_wholesale_per_mtr;
+                $material->cut_wholesale_per_mtr = $clientArticle->cut_wholesale_per_mtr;
                 $material->retail = $clientArticle->retail;
-                $material->retail_per_mtr = $material->retail_per_mtr;
+                $material->retail_per_mtr = $clientArticle->retail_per_mtr;
                 $material->roll = $clientArticle->roll;
-                $material->roll_per_mtr = $material->roll_per_mtr;
+                $material->roll_per_mtr = $clientArticle->roll_per_mtr;
             }
         }
 
