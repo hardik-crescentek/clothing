@@ -84,75 +84,58 @@
                     </div>
                 </div>
                 <div class="row">
-                    <!-- First Column with lg-2 width -->
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label class="form-control-label">Selling Price:</label>
                         </div>
                     </div>
 
-                    <!-- Second Column with lg-5 width (to account for lg-7 used in remaining columns) -->
                     <div class="col-lg-5">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="form-control-label">ROLL (per yrd)</label>
-                                    {!! Form::text('roll', 0, ['class' => 'form-control', 'id' => 'sample', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Sample Price']) !!}
+                                    {!! Form::text('roll', 0, ['class' => 'form-control', 'id' => 'roll_per_yard', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Sample Price']) !!}
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="form-control-label">WHOLESALE (per yrd)</label>
-                                    {!! Form::text('cut_wholesale', 0, ['class' => 'form-control', 'id' => 'wholesale', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'WholeSale Price']) !!}
+                                    {!! Form::text('cut_wholesale', 0, ['class' => 'form-control', 'id' => 'wholesale_per_yard', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'WholeSale Price']) !!}
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="form-control-label">RETAIL (per yrd)</label>
-                                    {!! Form::text('retail', 0, ['class' => 'form-control', 'id' => 'retail', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Retail Price']) !!}
+                                    {!! Form::text('retail', 0, ['class' => 'form-control', 'id' => 'retail_per_yard', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Retail Price']) !!}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Third Column with lg-5 width (to account for lg-7 used in remaining columns) -->
                     <div class="col-lg-5">
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="form-control-label">ROLL (per mtr)</label>
-                                    {!! Form::text('roll_per_mtr', 0, ['class' => 'form-control', 'id' => 'sample', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Sample Price']) !!}
+                                    {!! Form::text('roll_per_mtr', 0, ['class' => 'form-control', 'id' => 'roll_per_meter', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Sample Price']) !!}
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="form-control-label">WHOLESALE (per mtr)</label>
-                                    {!! Form::text('cut_wholesale_per_mtr', 0, ['class' => 'form-control', 'id' => 'wholesale', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'WholeSale Price']) !!}
+                                    {!! Form::text('cut_wholesale_per_mtr', 0, ['class' => 'form-control', 'id' => 'wholesale_per_meter', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'WholeSale Price']) !!}
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="form-control-label">RETAIL (per mtr)</label>
-                                    {!! Form::text('retail_per_mtr', 0, ['class' => 'form-control', 'id' => 'retail', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Retail Price']) !!}
+                                    {!! Form::text('retail_per_mtr', 0, ['class' => 'form-control', 'id' => 'retail_per_meter', 'data-validation' => 'number', 'data-validation-allowing' => 'float', 'placeholder' => 'Retail Price']) !!}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                {{-- <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Barcode Number</label>
-                    <div class="col-lg-5">
-                        <div class="input-group">
-                            <span class="input-group-addon addon-secondary"><i class="la la-barcode"></i></span> --}}
-                {{-- {!! Form::hidden('barcode', null, array('id'=>'input_barcode','placeholder' => 'Barcode Number','class' => 'form-control', 'data-validation'=>"required")) !!} --}}
-                {{-- <span class="input-group-btn">
-                                <button type="button" id="genrate_code" class="btn btn-secondary ripple">
-                                    Genrate Code
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                </div> --}}
                 <div class="row">
                     <div class="col-lg-2">
                         <label class="form-control-label">Width(inch)<span class="text-danger ml-2">*</span></label>
@@ -226,37 +209,7 @@
                         </div>
                     </div>
                 </div>
-                {{-- <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Status</label>
-                    <div class="col-lg-1">
-                        <div class="styled-radio">
-                            {!! Form::radio('status', 1, true, array('class' => 'custom-control-input', 'id'=>"status-active")) !!}
-                            <label for="status-active">Active</label>
-                        </div>
-                    </div>
-                    <div class="col-lg-1">
-                        <div class="styled-radio">
-                            {!! Form::radio('status', 0, false, array('class' => 'custom-control-input', 'id'=>"status-inactive")) !!}
-                            <label for="status-inactive">Inactive</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row d-flex align-items-center mb-5">
-                    <label class="col-lg-3 form-control-label d-flex justify-content-lg-end">Image</label>
-                    <div class="col-lg-5">
-                        {!! Form::file('image', ['id' => 'upload_image', 'accept' => 'image/*',
-                        'data-validation'=>"required mime",
-                        'data-validation-allowing'=>"jpeg, jpg, png, gif",
-                        'data-validation-error-msg-mime'=>"You can only upload images"]); !!}
-                        <small>
-                            <p class="help-block">Only .jpeg, .jpg, .png, .gif file can be uploaded. Maximum image size 5MB</p>
-                        </small>
-                    </div>
-                    <div class="col-lg-4">
-
-                    </div>
-
-                </div> --}}
+               
                 <div class="row my-4">
                     <div class="col-md-12">
 
@@ -302,33 +255,10 @@
     </div>
 </div>
 
-{{-- <div id="addColorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-    <div role="document" class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 id="modal-header" class="modal-title">Add Purchase Item</h5>
-                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-                <form id="add_color_form" class="">
-                    <div class="form-group">
-                        <label class="form-control-label">Number Of Rolls<span class="text-danger ml-2">*</span></label>
-                        {!! Form::number('number_of_rows', 1, array('id'=>'add_number_of_rolls', 'class' => 'form-control', 'data-validation'=>"required")) !!}
-                    </div>
-                    <div class="form-action float-right">
-                        <button type="submit" name="update_btn" class="btn btn-primary">Add</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> --}}
-
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog  modal-lg">
 
-    <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Modal Header</h4>
@@ -418,12 +348,16 @@
                 $('#' + $uniqueId).find('.min_alert_qty').val(material_min_alert_qty);
                 $('#' + $uniqueId).find('.item-delete').attr('id', $uniqueId);
             }
-            $('#no_of_color').val(1);
+            $('#no_of_color').prop('disabled', true).val(1);
         }
 
         $(document).on('click', '#tblMaterialItems tbody .item-delete', function() {
             var rowid = $(this).attr('id');
             $('#' + rowid).remove();
+
+            if ($('#tblMaterialItems tbody .colorItem').length === 0) {
+                $('#no_of_color').prop('disabled', false);
+            }
         });
 
         $(window).keydown(function(e) {
@@ -455,7 +389,6 @@
     })(jQuery);
 
     function take_snapshot() {
-        // take snapshot and get image data
         Webcam.snap( function(data_uri) {
             var id = $('#row_id').val();
             $('#'+id+' .image_binary').val(data_uri);
@@ -476,25 +409,18 @@
         Webcam.reset();
     }
 
-    // Function to convert inches to centimeters
     function inchesToCm(inches) {
         return inches * 2.54; // 1 inch = 2.54 cm
     }
 
-    // Add event listener to detect input changes in width-inch field
     document.getElementById('widthInch').addEventListener('input', function() {
-        // Get value of width in inches
         let inches = parseFloat(this.value);
 
-        // Check if the input is a valid number
         if (!isNaN(inches)) {
-            // Convert inches to centimeters
             let cm = inchesToCm(inches);
 
-            // Update the value in width-cm field (rounded to 2 decimal places)
             document.getElementById('widthCm').value = cm.toFixed(2);
         } else {
-            // If input is not a valid number, clear the width-cm field
             document.getElementById('widthCm').value = '';
         }
     });
@@ -515,36 +441,52 @@
     }
 
     $(document).ready(function() {
+
+        $('#roll_per_yard').on('input', function () {
+            let rollPerYard = parseFloat($(this).val()) || 0;
+            let rollPerMeter = rollPerYard * 0.9144;
+            $('#roll_per_meter').val(rollPerMeter.toFixed(2)); 
+        });
+
+        $('#wholesale_per_yard').on('input', function () {
+            let wholesalePerYard = parseFloat($(this).val()) || 0;
+            let wholesalePerMeter = wholesalePerYard * 0.9144;
+            $('#wholesale_per_meter').val(wholesalePerMeter.toFixed(2)); 
+        });
+
+        $('#retail_per_yard').on('input', function () {
+            let retailPerYard = parseFloat($(this).val()) || 0;
+            let retailPerMeter = retailPerYard * 0.9144;
+            $('#retail_per_meter').val(retailPerMeter.toFixed(2)); 
+        });
+
         $('#from_add_material').on('submit', function(e) {
             var isValid = true;
 
-            // Validate all Color fields
             $('input[name="color[]"]').each(function() {
                 var color = $(this).val();
                 if (color === '') {
                     isValid = false;
                     $(this).addClass('is-invalid');
                     alert('Each Color is required');
-                    return false; // Break the loop if an invalid color is found
+                    return false; 
                 } else {
                     $(this).removeClass('is-invalid');
                 }
             });
 
-            // Validate all Color fields
             $('input[name="color_no[]"]').each(function() {
                 var color_no = $(this).val();
                 if (color_no === '') {
                     isValid = false;
                     $(this).addClass('is-invalid');
                     alert('Each Color No is required');
-                    return false; // Break the loop if an invalid color is found
+                    return false; 
                 } else {
                     $(this).removeClass('is-invalid');
                 }
             });
 
-            // Prevent form submission if validation fails
             if (!isValid) {
                 e.preventDefault();
             }

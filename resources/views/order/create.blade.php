@@ -10,23 +10,23 @@
     }
 
     .main-content {
-        padding: 20px; /* Add padding or other styling as needed */
-        transition: all 0.3s ease; /* Add transitions for smooth effect */
+        padding: 20px; 
+        transition: all 0.3s ease; 
     }
 
     .sidebar-container {
-        overflow: hidden; /* Ensure sidebar doesn't affect layout when hidden */
+        overflow: hidden; 
     }
 
     .sidebar {
-        display: block; /* Default display state */
-        transform: translateX(0); /* Ensure sidebar starts in view */
-        transition: transform 0.3s ease; /* Add transitions for smooth sliding effect */
+        display: block; 
+        transform: translateX(0); 
+        transition: transform 0.3s ease; 
     }
 
     .sidebar-hidden {
-        transform: translateX(100%); /* Slide sidebar out of view */
-        transition: transform 0.3s ease; /* Add transitions for smooth sliding effect */
+        transform: translateX(100%); 
+        transition: transform 0.3s ease; 
     }
 </style>
 
@@ -290,6 +290,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 id="modal-header" class="modal-title">Select roll for <span class="span-modal-header"> </span></h5>
+                    <span class="d-inline-block ml-3">Total Meter: <span id="total_meters" class="d-inline"></span></span>
                     <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body role-model">
@@ -413,7 +414,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
-        let selectedRolls = []; // Array to hold selected rolls
+        let selectedRolls = []; 
         var itemRolls = {};
 
         $(document).on('change','#payment_terms',function(){
@@ -978,6 +979,8 @@
                             addRoll(value);
                             // console.log(value);
                         })
+
+                        calculateTotalMeter(roll_data);
                     }
                 })
             ).then(function() {
@@ -1032,6 +1035,18 @@
                 $('#' + $uniqueId).find('.meter').val(data.meter);
             }
 
+        }
+
+        function calculateTotalMeter(roll_data) {
+            var totalMeter = 0;
+
+            // Loop through each roll item and calculate the total meter
+            $.each(roll_data, function (index, value) {
+                totalMeter += parseFloat(value.available_qty); // Assuming available_qty is the meter value
+            });
+
+            // Update the total meter in the modal header
+            $('#total_meters').html(totalMeter.toFixed(2));
         }
 
         $(document).on('change', '#select_roll', function() {
@@ -1411,54 +1426,45 @@
             var totalYard = 0;
             var totalWeight = 0;
 
-            // Iterate over each row
             $('.invoiceitem').each(function() {
                 console.log("Call");
-                // Get the meter and yard values from the inputs
                 var meter = Number($(this).find('.inv_meter').val()) || 0;
                 var yard = Number($(this).find('.inv_yard').val()) || 0;
                 var unit_of_sale = $(this).find('.unit_of_sale').val(); 
 
-                // If yard is given, convert it to meter
                 if (yard > 0 && meter === 0) {
-                    meter = yard2meter(yard); // Convert yard to meter
+                    meter = yard2meter(yard); 
                 } else if (meter > 0 && yard === 0) {
-                    yard = meter2yard(meter); // Convert meter to yard
+                    yard = meter2yard(meter);
                 }
 
-                var itemId = $(this).find('.inv_meter').data('item-id'); // Get the item ID
+                var itemId = $(this).find('.inv_meter').data('item-id'); 
 
-                // Find the corresponding GSM value using the data-gsm attribute
                 var weight_per_mtr = Number($(this).closest('tr').find('.td-weight_per_mtr').data('weight_per_mtr')) || 0;
                 var weight_per_yard = Number($(this).closest('tr').find('.td-weight_per_yard').data('weight_per_yard')) || 0;
 
-                // Calculate weight for this item
                 if(unit_of_sale == 'yard'){
                     var weight = yard * weight_per_yard;
                 } else {
                     var weight = meter * weight_per_mtr;
                 }
 
-                // Accumulate totals
                 totalMeter += meter;
                 totalYard += yard;
                 totalWeight += weight;
             });
 
-            // Update the total meter and yard values in the HTML
             $('#totalMeter').html("Total Meter: " + totalMeter.toFixed(2) + " / " + totalYard.toFixed(2));
 
-            // Update the approximate weight
             $('#approximate_weight').val(totalWeight.toFixed(2));
         }
 
         function selectedtotalmeter(callback) {
             var total = 0;
 
-            // Calculate total from selected meters
             $.each($('.td-selected-meter'), function(i, v) {
-                var value = $(v).html().trim(); // Ensure there are no extra spaces
-                var number = parseFloat(value); // Convert to float
+                var value = $(v).html().trim(); 
+                var number = parseFloat(value); 
                 if (!isNaN(number)) {
                     total += number;
                 } else {
@@ -1466,17 +1472,14 @@
                 }
             });
 
-            // Set the total value with 2 decimal places
             $('#SelectedTotalMeter').html(total.toFixed(2));
 
-            // Retrieve the value for further processing
             var sel_roll_total = total.toFixed(2);
             if (isNaN(sel_roll_total)) {
                 console.warn('Invalid sel_roll_total:', $('#SelectedTotalMeter').html());
-                sel_roll_total = 0; // Fallback to 0 if the value is not valid
+                sel_roll_total = 0; 
             }
 
-            // Use callback to return the result
             if (typeof callback === 'function') {
                 callback(sel_roll_total);
             }
@@ -1484,7 +1487,6 @@
         
         function totalrow() {
             var rowCount = $("#tblOrderTable tbody tr").length;
-            // $('#totalItem').html("Total Items : " + rowCount);
             $('#total_number_of_items').val(rowCount);
         };
         $(document).on('click', '.inv_delete', function() {
@@ -1501,37 +1503,27 @@
                 grand_total += Number($(this).val());
             });
 
-            // Get VAT rate (can be passed from backend using Blade)
             var vatRate = {{ $vat }};
 
-            // Call the common function to update the grand total with or without VAT
             updateGrandTotalWithVAT(grand_total, vatRate);
         };
 
-        // Function to calculate VAT and update grand total
         function updateGrandTotalWithVAT(grandTotal, vatRate) {
-            // Format the base grand total
-            // var formattedGrandTotal = grandTotal;
 
-            // Check if the GST/VAT checkbox is checked
             if ($('#gst_checkbox').is(':checked')) {
-                // Calculate the VAT based on the grand total and VAT rate
                 var vatAmount = (grandTotal * vatRate) / 100;
-                grandTotal += vatAmount; // Add VAT to the grand total
+                grandTotal += vatAmount; 
 
-                // Update the displayed grand total with VAT included
                 $('#grand_total').html("Grand Total (incl. VAT): " + "฿" + parseFloat(grandTotal).toFixed(2));
                 $('.grand_total').val(grandTotal);
                 $('.vat_percentage').val(vatRate);
                 $('.vat_amount').val(vatAmount);
             } else {
-                // Update the displayed grand total without VAT
                 $('#grand_total').html("Grand Total: " + "฿" + grandTotal);
                 $('.grand_total').val(grandTotal);
             }
         }
 
-        // Use the 'change' event listener for the GST/VAT checkbox
         $('#gst_checkbox').on('change', function() {
             grandtotal(); 
         });
@@ -1554,12 +1546,6 @@
                 discount = parseFloat(discount_val);
             }
             var grand_total = sub_total + tax - discount;
-
-            // Get VAT rate (can be passed from backend using Blade)
-            // var vatRate = {{ $vat }};
-
-            // Call the common function to update the grand total with or without VAT
-            // updateGrandTotalWithVAT(grand_total, vatRate);
         }
         
         $('#final_save_btn').on('click', function() {
@@ -1673,13 +1659,6 @@
                         $('#price_book_model').modal('show');
                         var trHTML = '';
                         $.each(data, function (i,item) {
-                            // var str    = item.created_at;
-                            // var substr = str.split('T');
-                            // fname      = substr[0];
-                            // dteSplit   = fname.split("-");
-                            // yr         = dteSplit[0];
-                            // month      = dteSplit[1];
-                            // day        = dteSplit[2];
                             trHTML +=   '<tr>'+
                                             '<td>' + item.material.name + '</td><td>'+ item.material.article_no+ '</td>'+
                                             '<td>'+
@@ -1729,9 +1708,6 @@
                                                     (item.remark_note != null ? item.remark_note : '---')+
                                                 '</p>'+
                                             '</td>'+
-                                            // '<td>' 
-                                            //     + day+'-'+month+'-'+yr + 
-                                            // '</td>'+
                                             '<td>'+
                                                 '<button class="btn btn-primary btn-sm btn-square" id="edit_price_book" data-id="'+item.id +'" data-client-id="'+item.customer_id +'" data-material-id="'+item.material_id +'">Edit</button>'+
                                             '</td>'+
@@ -1768,7 +1744,6 @@
     });
 </script>
 <script type="text/javascript">
-    // on chage customer name show past orders right side
     var html = '<div class="text-center mt-5" style="font-size: 20px;">\
           No data found..!\
         </div>';
@@ -1780,12 +1755,12 @@
             singleDatePicker: true,
             showDropdowns: true,
             timePicker: true,
-            timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
+            timePicker24Hour: false,  
             locale: {
-                format: 'DD/MM/YYYY HH:mm'  // Format with date and time
+                format: 'DD/MM/YYYY HH:mm'  
             },
             autoApply: false,
-            startDate: currentDate  // Set the current date and time as the default
+            startDate: currentDate  
         });
         $('#purchase_date').val(currentDate);
 
@@ -1793,9 +1768,9 @@
             singleDatePicker: true,
             showDropdowns: true,
             timePicker: true,
-            timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
+            timePicker24Hour: false, 
             locale: {
-                format: 'DD/MM/YYYY HH:mm'  // Format with date and time
+                format: 'DD/MM/YYYY HH:mm'  
             },
             autoApply: false
         });
@@ -1804,12 +1779,12 @@
             singleDatePicker: true,
             showDropdowns: true,
             timePicker: true,
-            timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
+            timePicker24Hour: false,  
             locale: {
-                format: 'DD/MM/YYYY HH:mm'  // Format with date and time
+                format: 'DD/MM/YYYY HH:mm' 
             },
             autoApply: false,
-            startDate: currentDate  // Set the current date and time as the default
+            startDate: currentDate 
         });
         $('#delivered_date').val(currentDate);
         
@@ -1840,12 +1815,10 @@
                         var amount_to_receive = 0;
 
                         $.each(data.response, function(i, order_data) {
-                            // Placeholder values for payment status and remark
                             var payment_status = 'Paid';
                             var remark = order_data.note;
 
-                            // Parse and format the invoice date from the JSON response
-                            var orderDate = new Date(order_data.invoice_date.split("/").reverse().join("-")); // Convert dd/mm/yyyy to yyyy-mm-dd
+                            var orderDate = new Date(order_data.invoice_date.split("/").reverse().join("-")); 
                             var formattedDate = ("0" + orderDate.getDate()).slice(-2) + '/' +
                                                 ("0" + (orderDate.getMonth() + 1)).slice(-2) + '/' +
                                                 orderDate.getFullYear();
@@ -1897,31 +1870,23 @@
         var mainContent = document.querySelector('.main-content');
         var sidebar = document.querySelector('.sidebar');
 
-        // Function to toggle sidebar visibility
         function toggleSidebar() {
             sidebarContainer.classList.toggle('sidebar-hidden');
-            // Check if sidebar is hidden
             if (sidebarContainer.classList.contains('sidebar-hidden')) {
-                // Expand main content to col-xl-12 when sidebar is hidden
                 mainContent.classList.remove('col-xl-8');
                 mainContent.classList.add('col-xl-12');
-                // Hide sidebar by reducing its width to 0
                 sidebar.classList.remove('col-xl-4');
                 sidebar.classList.add('col-xl-0');
             } else {
-                // Restore main content to col-xl-8 when sidebar is shown
                 mainContent.classList.remove('col-xl-12');
                 mainContent.classList.add('col-xl-8');
-                 // Show sidebar by restoring its width
                 sidebar.classList.remove('col-xl-0');
                 sidebar.classList.add('col-xl-4');
             }
         }
 
-        // Initially hide sidebar
         toggleSidebar();
 
-        // Toggle sidebar visibility when clicking on the 'Show Past Orders' button
         document.getElementById('btn-show-orders').addEventListener('click', function() {
             toggleSidebar();
         });
