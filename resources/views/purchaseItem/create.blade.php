@@ -170,6 +170,7 @@
     {!! Form::hidden('purchase_ex_rate[]', null, array('class' => 'purchase_ex_rate hidden')) !!}
     {!! Form::hidden('purchase_total_no_of_rolls[]', null, array('class' => 'purchase_total_no_of_rolls hidden')) !!}
     {!! Form::hidden('purchase_transport_shippment_cost_per_meter[]', null, array('class' => 'purchase_transport_shippment_cost_per_meter hidden')) !!}
+    {!! Form::hidden('material_id', null, ['class' => 'material_id hidden']) !!}
     <td><button type="button" class="btn btn-secondary copy_row_btn">+</button></td>
 
 </script>
@@ -1008,6 +1009,9 @@
                     $('#' + $uniqueId).find('.width').val(v.width_cm).attr('title', `Width: ${v.width_cm}`);
                     $('#' + $uniqueId).find('.brand').val(v.name).attr('title', `Brand: ${v.name}`);
                     $('#' + $uniqueId).find('.price').val(v.price);
+                    if(selectedOption.text() == v.color){
+                        $('#' + $uniqueId).find('.material_id').val(v.id);
+                    }
                     unit_purchased_in = v.unit_purchased_in;
                 }
             });

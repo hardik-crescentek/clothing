@@ -286,7 +286,7 @@
         </div>
     </div>
     <div id="rollSelectModel" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true" class="modal fade lg text-left">
-        <div role="document" class="modal-dialog modal-lg">
+        <div role="document" class="modal-dialog modal-lg" style="max-width: 60%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 id="modal-header" class="modal-title">Select roll for <span class="span-modal-header"> </span></h5>

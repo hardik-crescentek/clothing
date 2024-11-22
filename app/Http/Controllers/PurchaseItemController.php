@@ -86,7 +86,7 @@ class PurchaseItemController extends Controller
         if (is_array($materials)) {
             foreach ($materials as $key => $value) {
                 $items[] = array(
-                                'material_id'=> $value,
+                                'material_id'=> $request->input('material_id'),
                                 'color'      => $request->input('color.' . $key),
                                 'article_no' => $request->input('article_no.' . $key),
                                 'color_no'   => $request->input('color_no.' . $key),
@@ -121,7 +121,7 @@ class PurchaseItemController extends Controller
                 $item_data = [
                     "purchase_id"=> $item["purchase_id"],
                     "warehouse_id"=> $purchase ? $purchase->warehouse_id : 0,
-                    "material_id"=> $item["color"],
+                    "material_id"=> $item["material_id"],
                     "article_no" => $item["article_no"],
                     "color"      => $item["color"],
                     "color_no"   => $item["color_no"],
@@ -597,7 +597,7 @@ class PurchaseItemController extends Controller
             $articleColors = [];
             foreach ($articles->keys() as $articleId) {
                 $colors = PurchaseArticleColor::where('purchase_article_id', $articleId)
-                    ->get(['id', 'color', 'color_no'])
+                    ->get(['id','material_id', 'color', 'color_no'])
                     ->mapWithKeys(function ($color) use ($purchase, $articleId) {
                         // Check if the color exists in the purchase_item table
                         $existsInPurchaseItem = PurchaseItem::where('purchase_id', $purchase->id)
@@ -605,6 +605,7 @@ class PurchaseItemController extends Controller
                             ->exists();
 
                         return [$color->id => [
+                            'material_id' => $color->material_id,
                             'color' => $color->color, 
                             'color_no' => $color->color_no, 
                             'saved' => $existsInPurchaseItem // Set saved flag based on existence in purchase_item table
