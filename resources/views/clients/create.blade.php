@@ -46,12 +46,16 @@
                         {!! Form::text('lastname', null, array('placeholder' => 'LastName','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
                     <div class="form-group col-lg-3">
-                        <label class="form-control-label d-flex">Address<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('address', null, array('placeholder' => 'Address','class' => 'form-control', 'data-validation'=>"required")) !!}
+                        <label class="form-control-label d-flex">Client Mark</label>
+                        {!! Form::text('client_mark', null, array('placeholder' => 'Client Mark','class' => 'form-control')) !!}
                     </div>
                 </div>
 
                 <div class="row">
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Address<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text('address', null, array('placeholder' => 'Address','class' => 'form-control', 'data-validation'=>"required")) !!}
+                    </div>
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">City<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('city', null, array('placeholder' => 'City','class' => 'form-control', 'data-validation'=>"required")) !!}
@@ -64,13 +68,13 @@
                         <label class="form-control-label d-flex">Country<span class="text-danger ml-2">*</span></label>
                         @include('countries', ['default' => null, 'attributes' => array('class' => 'form-control', 'data-validation'=>"required")])
                     </div>
+                </div>
+
+                <div class="row">
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Zip<span class="text-danger ml-2">*</span></label>
                         {!! Form::text('zip', null, array('placeholder' => 'Zip','class' => 'form-control', 'data-validation'=>"required")) !!}
                     </div>
-                </div>
-
-                <div class="row">
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Nature Of Business</label>
                         {!! Form::select('business_nature', $business_nature,null, array('class' => 'form-control' , 'id' => 'input_business_nature')) !!}

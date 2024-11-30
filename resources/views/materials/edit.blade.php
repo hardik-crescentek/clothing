@@ -326,19 +326,19 @@
 
         $('#roll_per_yard').on('input', function () {
             let rollPerYard = parseFloat($(this).val()) || 0;
-            let rollPerMeter = rollPerYard * 0.9144;
+            let rollPerMeter = rollPerYard / 0.9144;
             $('#roll_per_meter').val(rollPerMeter.toFixed(2)); 
         });
 
         $('#wholesale_per_yard').on('input', function () {
             let wholesalePerYard = parseFloat($(this).val()) || 0;
-            let wholesalePerMeter = wholesalePerYard * 0.9144;
+            let wholesalePerMeter = wholesalePerYard / 0.9144;
             $('#wholesale_per_meter').val(wholesalePerMeter.toFixed(2)); 
         });
 
         $('#retail_per_yard').on('input', function () {
             let retailPerYard = parseFloat($(this).val()) || 0;
-            let retailPerMeter = retailPerYard * 0.9144;
+            let retailPerMeter = retailPerYard / 0.9144;
             $('#retail_per_meter').val(retailPerMeter.toFixed(2)); 
         });
     });

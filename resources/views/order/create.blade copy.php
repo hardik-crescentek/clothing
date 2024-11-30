@@ -50,7 +50,7 @@
                 @endif
                 {!! Form::open(array('route' => 'order.store','method'=>'POST','id'=>'from_add_order', 'class'=>"form-horizontal form-validate", 'novalidate')) !!}
                 <div class="row">
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label class="form-control-label">Customer<span class="text-danger ml-2">*</span></label>
                             <div class="input-group">
@@ -65,17 +65,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <br>
                         <button type="button" id="btn-show-orders" class="btn btn-primary btn-square mt-2">Show Past Orders</button>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label class="form-control-label">Date<span class="text-danger ml-2">*</span></label>
                             {!! Form::text('purchase_date', null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required")) !!}
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label class="form-control-label">Sales Person</label>
                             <div class="input-group form-group">
@@ -90,19 +92,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label class="form-control-label">Price VAT<span class="text-danger ml-2">*</span></label>
-                            <div class="input-group">
-                                {!! Form::select('price_vat', ['price_include_vat' => 'Price Include VAT', 'price_exclude_vat' => 'Price Exclude VAT'], 'price_exclude_vat', ['id' => 'price_vat', 'class' => 'form-control custom-select', 'data-validation' => "required"]) !!}
-                            </div>
-                        </div>
-                    </div>
-                    
+
                     <!-- New Payment Term field -->
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label class="form-control-label">Payment Term<span class="text-danger ml-2">*</span></label>
                             <div class="input-group">
@@ -118,12 +110,14 @@
                         </div>
                     </div>
 
-                    <div id="credit-days" class="form-group d-none col-lg-3">
+                    <div id="credit-days" class="form-group d-none col-lg-4">
                         <label class="form-control-label">Credit Days<span class="text-danger ml-2">*</span></label>
                         {!! Form::number('credit_day', null, array('id' => 'credit_days', 'class' => 'form-control', 'placeholder' => 'Enter days', 'min' => 1)) !!}
                     </div>
+                </div>
 
-                    <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label class="form-control-label">Scan Barcode Number</label>
                             <div class="input-group form-group">
@@ -131,18 +125,15 @@
                                 {!! Form::text('input_search_barcode', null, array('id'=>'input_search_barcode','placeholder' => 'Barcode Number','class' => 'form-control')) !!}
                             </div>
                         </div>
-                    </div>     
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-3">
+                    </div>                    
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label class="form-control-label">Article No</label>
                             <br>
                             {!! Form::select('search_article',$article_no, '' , array('class' => 'form-control','id'=>'search_article')) !!}
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="form-group">
                             <label class="form-control-label">Color</label>
                             <br>
@@ -158,7 +149,7 @@
                     <table class="table table-hover mb-0 " id="tblOrderTable">
                         <thead>
                             <tr>
-                                {{-- <th style="width:9%;">Brand Name</th>
+                                <th style="width:9%;">Brand Name</th>
                                 <th style="width:9%;">Barcode</th>
                                 <th style="width:9%;">Type Of Sale</th>
                                 <th style="width:9%;">Unit Of Sale</th>
@@ -170,58 +161,34 @@
                                 <th style="width:9%;">Discount Value</th>
                                 <th style="width:9%;">Total Amount</th>
                                 <th style="width:9%;">Select Role</th>
-                                <th style="width:9%;">Action</th> --}}
-                                <th style="width:5%;">Sr. No.</th>
-                                <th style="width:14%;">Description</th>
-                                <th style="width:9%;">Qty Mtrs</th>
-                                <th style="width:9%;">Qty Yrds</th>
-                                <th style="width:9%;">Unit Sold</th>
-                                <th style="width:9%;">Sales Type</th>
-                                <th style="width:9%;">Price</th>
-                                <th style="width:9%;">Discount Type</th>
-                                <th style="width:9%;">Discount Value</th>
-                                <th style="width:9%;">Amount</th>
                                 <th style="width:9%;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @isset($items)
-                                @foreach ($items as $key => $item)
-                                    <tr class="material-link">
-                                        {{-- <td>{!! Form::text('name[]', $item['name'], array('class' => 'name form-control', 'data-validation'=>"required")) !!}</td>
-                                        {!! Form::hidden('item_id[]',$item['id'],array('class'=>'item_id')) !!}
-                                        {!! Form::hidden('color_id[]',$item['color'],array('class'=>'color_id')) !!}
-                                        <td>{!! Form::text('barcode[]', $item['barcode'], array('class' => 'barcode form-control', 'data-validation'=>"required")) !!}</td>
-                                        <td>{!! Form::select("type_of_sale[]", ["W"=>"Wholsale","R"=>"Retail","P"=>"Sample Price"],null, ['class'=>'form-control type_of_sale','data-validation'=>"required",'id' => 'selected_price']) !!}</td>
-                                        <td>{!! Form::select("unit_of_sale[]", ["meter"=>"meter","yard"=>"yard"],null, ['class'=>'form-control unit_of_sale','data-validation'=>"required",'id' => 'unit_price']) !!}</td>
-                                        <td>{!! Form::number('price[]' , $item['price'] , array('class' => 'price form-control', 'data-validation'=>"required" )) !!}</td>
-                                        <td>{!! Form::number('meter[]', $item['meter'], array('class' => 'meter form-control', 'data-validation'=>"required")) !!}</td>
-                                        <td class="td-selected-role">
-                                            <div id="selectedrole-" class="selectedrole"></div>
-                                        </td>
-                                        <td><input name="yard[]" class="yard form-control" readonly="readonly" value="{{ number_format((float)$item['yard'],2,'.','') }}" type="text"></td>
-                                        <td>{!! Form::select("discount_type[]", ["percentage"=>"Percentage","amount"=>"Amount"],null, ['class'=>'form-control discount_type','data-validation'=>"required",'id' => 'discount_type']) !!}</td>
-                                        <td>{!! Form::number('discount_value[]' , $item['discount_value'] , array('class' => 'discount_value form-control', 'data-validation'=>"required" )) !!}</td>
-                                        <td><input name="total_price_table[]" class="total_price_table form-control" readonly="readonly" id="total_price_table" type="text"></td>
-                                        <td>
-                                            <a class="btn btn-danger btn-sm btn-square">Delete</a>
-                                            
-                                        </td> --}}
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{!! Form::text('name[]', $item['name'], ['class' => 'name form-control', 'data-validation' => "required"]) !!}</td>
-                                        <td>{!! Form::number('meter[]', $item['meter'], ['class' => 'meter form-control', 'data-validation' => "required"]) !!}</td>
-                                        <td><input name="yard[]" class="yard form-control" readonly="readonly" value="{{ number_format((float)$item['yard'], 2, '.', '') }}" type="text"></td>
-                                        <td>{!! Form::select("unit_of_sale[]", ["meter" => "meter", "yard" => "yard"], null, ['class' => 'form-control unit_of_sale', 'data-validation' => "required", 'id' => 'unit_price']) !!}</td>
-                                        <td>{!! Form::select("type_of_sale[]", ["W" => "Wholesale", "R" => "Retail", "P" => "Sample Price"], null, ['class' => 'form-control type_of_sale', 'data-validation' => "required", 'id' => 'selected_price']) !!}</td>
-                                        <td>{!! Form::number('price[]', $item['price'], ['class' => 'price form-control', 'data-validation' => "required"]) !!}</td>
-                                        <td>{!! Form::select("discount_type[]", ["percentage" => "Percentage", "amount" => "Amount"], null, ['class' => 'form-control discount_type', 'data-validation' => "required", 'id' => 'discount_type']) !!}</td>
-                                        <td>{!! Form::number('discount_value[]', $item['discount_value'], ['class' => 'discount_value form-control', 'data-validation' => "required"]) !!}</td>
-                                        <td><input name="total_price_table[]" class="total_price_table form-control" readonly="readonly" id="total_price_table" type="text"></td>
-                                        <td>
-                                            <a class="btn btn-danger btn-sm btn-square">Delete</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                            @foreach ($items as $key => $item)
+                            <tr class="material-link">
+                                <td>{!! Form::text('name[]', $item['name'], array('class' => 'name form-control', 'data-validation'=>"required")) !!}</td>
+                                {!! Form::hidden('item_id[]',$item['id'],array('class'=>'item_id')) !!}
+                                {!! Form::hidden('color_id[]',$item['color'],array('class'=>'color_id')) !!}
+                                <td>{!! Form::text('barcode[]', $item['barcode'], array('class' => 'barcode form-control', 'data-validation'=>"required")) !!}</td>
+                                <td>{!! Form::select("type_of_sale[]", ["W"=>"Wholsale","R"=>"Retail","P"=>"Sample Price"],null, ['class'=>'form-control type_of_sale','data-validation'=>"required",'id' => 'selected_price']) !!}</td>
+                                <td>{!! Form::select("unit_of_sale[]", ["meter"=>"meter","yard"=>"yard"],null, ['class'=>'form-control unit_of_sale','data-validation'=>"required",'id' => 'unit_price']) !!}</td>
+                                <td>{!! Form::number('price[]' , $item['price'] , array('class' => 'price form-control', 'data-validation'=>"required" )) !!}</td>
+                                <td>{!! Form::number('meter[]', $item['meter'], array('class' => 'meter form-control', 'data-validation'=>"required")) !!}</td>
+                                <td class="td-selected-role">
+                                    <div id="selectedrole-" class="selectedrole"></div>
+                                </td>
+                                <td><input name="yard[]" class="yard form-control" readonly="readonly" value="{{ number_format((float)$item['yard'],2,'.','') }}" type="text"></td>
+                                <td>{!! Form::select("discount_type[]", ["percentage"=>"Percentage","amount"=>"Amount"],null, ['class'=>'form-control discount_type','data-validation'=>"required",'id' => 'discount_type']) !!}</td>
+                                <td>{!! Form::number('discount_value[]' , $item['discount_value'] , array('class' => 'discount_value form-control', 'data-validation'=>"required" )) !!}</td>
+                                <td><input name="total_price_table[]" class="total_price_table form-control" readonly="readonly" id="total_price_table" type="text"></td>
+                                <td>
+                                    <a class="btn btn-danger btn-sm btn-square">Delete</a>
+                                    
+                                </td>
+                            </tr>
+                            @endforeach
                             @endisset
 
                         </tbody>
@@ -236,18 +203,15 @@
                             </div>
                         </div>
                         <div class="col-3">
-                            <h4 class="mb-3">
-                                <div id="total_sum"> Total Amount (Before Disc.) : </div>
-                            </h4>
-                            <h4 class="mb-3">
-                                <div id="total_discount"> Total Discount : </div>
-                            </h4>
+                            <!-- <h4 class="mb-3">
+                                <div id="totalItem"> Total Items : </div>
+                            </h4> -->
                             <h4 class="mb-3">
                                 <div id="totalMeter"> Total Meter : </div>
                             </h4>
-                            <div class="form-group mb-3" id="gst_info" style="display: none;">
-                                <label for="gst_checkbox">GST/VAT ({{ $vat }}%) : </label>
-                                <h4 id="vat_amount" style="display: inline;">฿0.00</h4>
+                            <div class="form-group mb-3">
+                                <label for="gst_checkbox">Apply GST/VAT ({{ $vat }}%) ? :</label>
+                                <input type="checkbox" class="mt-1" id="gst_checkbox" />
                             </div>
                             <h4 class="mb-3">
                                 <div id="grand_total" name="grand_total"> Grand Total : </div>
@@ -299,12 +263,6 @@
                             {!! Form::text('approximate_weight', null, array('id'=>'approximate_weight','placeholder' => 'Approximate Weight','class' => 'form-control')) !!}
                         </div>
                     </div>  
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label class="form-control-label">Total Profit</label>
-                            {!! Form::text('total_profit', null, array('id'=>'total_profit',0,'class' => 'form-control','readonly' => 'readonly')) !!}
-                        </div>
-                    </div>  
                 </div>
                 
                 <div class="form-group row d-flex align-items-center mt-5">
@@ -333,7 +291,6 @@
                 <div class="modal-header">
                     <h5 id="modal-header" class="modal-title">Select roll for <span class="span-modal-header"> </span></h5>
                     <span class="d-inline-block ml-3">Total Meter: <span id="total_meters" class="d-inline"></span></span>
-                    <span class="d-inline-block ml-3">Total Rolls: <span id="total_rolls" class="d-inline"></span></span>
                     <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body role-model">
@@ -404,7 +361,7 @@
     </div>
 </div>
 
-{{-- <script type="text/template" id="templateAddItem_invoice">
+<script type="text/template" id="templateAddItem_invoice">
     <td class="td-material" data-value="">{!! Form::text('name[]', null, array('class' => 'inv_name form-control', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
     {!! Form::hidden('item_id[]',null,array('id'=>'inv_item_id')) !!}
     <td class="td-barcode" data-value="">{!! Form::text('barcode[]', null, array('class' => 'inv_barcode form-control', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
@@ -435,39 +392,7 @@
         <div id='' class="hidden_div"></div>
     </td>
 
-</script> --}}
-<script type="text/template" id="templateAddItem_invoice">
-    <td class="td-sr-no">{!! Form::text('sr_no[]', null, array('class' => 'form-control sr_no', 'readonly'=>'readonly')) !!}</td>
-    <td class="td-description">{!! Form::text('description[]', null, array('class' => 'form-control description', 'readonly'=>'readonly')) !!}</td>
-    <td class="td-meter" data-value="">{!! Form::text('meter[]', 0, array('class' => 'inv_meter form-control', 'data-validation'=>"required",'placeholder'=>"Meter")) !!}</td>
-    <td class="td-yard" data-value="">{!! Form::text('yard[]',0 , ['class'=>'inv_yard form-control','placeholder'=>"Yard"]) !!}</td>
-    <td class="td-unit_of_sale" data-value="">{!! Form::select("unit_of_sale[]", ["meter"=>"meter","yard"=>"yard"], null, ['class'=>'form-control unit_of_sale','data-validation'=>"required"]) !!}</td>
-    <td class="td-type_of_sale" data-value="">{!! Form::select("type_of_sale[]", ["W"=>"Wholsale","R"=>"Retail","P"=>"Sample Price"], null, ['class'=>'form-control type_of_sale','data-validation'=>"required"]) !!}</td>
-    <td class="td-price price" data-value="">{!! Form::text('price[]' , 0 , array('class' => 'inv_price form-control', 'data-validation'=>"required",'placeholder'=>"Price" )) !!}</td>
-    <td class="td-discount_type" data-value="">{!! Form::select("discount_type[]", ["percentage"=>"Percentage","amount"=>"Amount"], null, ['class'=>'form-control discount_type','data-validation'=>"required"]) !!}</td>
-    <td class="td-discount_value" data-value="">{!! Form::text('discount_value[]' , 0 , array('class' => 'discount_value form-control', 'data-validation'=>"required",'placeholder'=>"Discount Value" )) !!}</td>
-    <td class="td-total-price" data-value="">{!! Form::text('total-price[]' , 0 , array('class' => 'total-price form-control', 'data-validation'=>"required",'readonly'=>'readonly' )) !!}</td>
-    {!! Form::hidden('inv_weight_gsm[]', null, ['class' => 'td-weight_gsm', 'data-gsm' => '']) !!}
-    {!! Form::hidden('inv_weight_per_mtr[]', null, ['class' => 'td-weight_per_mtr', 'data-weight_per_mtr' => '']) !!}
-    {!! Form::hidden('inv_weight_per_yard[]', null, ['class' => 'td-weight_per_yard', 'data-weight_per_yard' => '']) !!}
-    {!! Form::hidden('grand_total', 0, array('class' => 'grand_total form-control', 'data-validation'=>"required")) !!}
-    {!! Form::hidden('vat_percentage', 0, array('class' => 'vat_percentage form-control', 'data-validation'=>"required")) !!}
-    {!! Form::hidden('vat_amount', 0, array('class' => 'vat_amount form-control', 'data-validation'=>"required")) !!}
-    {!! Form::hidden('discount_amount', 0, array('class' => 'discount_amount form-control')) !!}
-    {!! Form::hidden('material_price', 0, array('class' => 'material_price form-control')) !!}
-    {!! Form::hidden('cost_per_mtr', 0, array('class' => 'cost_per_mtr form-control')) !!}
-    {!! Form::hidden('cost_per_yrd', 0, array('class' => 'cost_per_yrd form-control')) !!}
-    {!! Form::hidden('ex_rate', 0, array('class' => 'ex_rate form-control')) !!}
-    {!! Form::hidden('import_tax', 0, array('class' => 'import_tax form-control')) !!}
-    {!! Form::hidden('transport_shipping_paid', 0, array('class' => 'transport_shipping_paid form-control')) !!}
-    <td class="td-action">
-        <a class="btn btn-danger btn-sm btn-square inv_delete my-1 text-light">Delete</a>
-        <button type="button" class="btn btn-sm btn-primary btn-square my-1 btn-roll-select" data-material_id="" data-toggle="modal" data-target="#rollSelectModel">Select Roll</button>
-        <div id='' class="hidden_div"></div>
-    </td>
-    {!! Form::hidden('item_id[]',null,array('id'=>'inv_item_id')) !!}
 </script>
-
 <script type="text/template" id="templateAddItem_roll">
     <td>{!! Form::checkbox('select[]',0,false, array('id'=>'select_roll','class' => 'form-control input-sm select_roll')) !!}</td>
         <td>{!! Form::text('roll_no[]',null, array('id'=>'roll_no','class' => 'form-control input-sm roll_no', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
@@ -477,8 +402,7 @@
         <td>{!! Form::text('color_no[]',null, array('id'=>'color_no','class' => 'form-control input-sm color_no', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
         <td>{!! Form::text('batch_no[]',null, array('id'=>'batch_no','class' => 'form-control input-sm batch_no', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
         <td>{!! Form::text('available_qty[]',null, array('id'=>'available_qty','class' => 'form-control input-sm available_qty', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
-        {{-- <td>{!! Form::Select('option[]',["0"=>"Take All","1"=>"Cut As Per Order","2"=>"Type How Much To Cut"],null, array('id'=>'option','class' => 'form-control input-sm option', 'data-validation'=>"required",'disabled'=>'disabled')) !!}</td> --}}
-        <td>{!! Form::Select('option[]',["0"=>"Take All","2"=>"Type How Much To Cut"],null, array('id'=>'option','class' => 'form-control input-sm option', 'data-validation'=>"required",'disabled'=>'disabled')) !!}</td>
+        <td>{!! Form::Select('option[]',["0"=>"Take All","1"=>"Cut As Per Order","2"=>"Type How Much To Cut"],null, array('id'=>'option','class' => 'form-control input-sm option', 'data-validation'=>"required",'disabled'=>'disabled')) !!}</td>
         <td>{!! Form::number('meter[]',null, array('id'=>'meter','class' => 'form-control input-sm meter', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
 
 </script>
@@ -489,12 +413,6 @@
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-
-        if ($('#price_vat').val() === 'price_exclude_vat') {
-            $('#gst_info').show(); 
-        } else {
-            $('#gst_info').hide(); 
-        }
 
         let selectedRolls = []; 
         var itemRolls = {};
@@ -613,75 +531,11 @@
                             $('#search_error').fadeIn(300).css('display', 'block').html("This material allready selected").fadeOut(3000);
                         } else {
                             addSearchMaterial(data);
-
-                            openRollModal(data.id);
                         }
                     }
                 });
             }      
         });
-
-        // Function to open the modal and fetch roll data based on material (item) ID
-        function openRollModal(item_id) {
-            var roll_data;
-            var modal_item_id;
-            
-            // Open the modal directly
-            $('#rollSelectModel').modal('show');
-
-            // When the modal is shown, trigger the AJAX request to fetch roll data
-            $('#rollSelectModel').one('shown.bs.modal', function() {
-                $('#tblRoll tbody').empty();  // Clear previous data in the table
-                modal_item_id = item_id; // Store the item ID
-                $('#material_item_id').val(item_id); // Set the material ID in the modal input
-                
-                // Make the AJAX request to fetch roll data based on the material ID
-                $.ajax({
-                    url: '{{route("invoice.get-roll")}}', // Your route to get roll data
-                    data: {
-                        'material_id': item_id // Pass the material ID to fetch corresponding roll data
-                    },
-                    dataType: "json",
-                    success: function(data) {
-                        roll_data = data.roll; // Assuming the response contains a 'roll' array
-                        // Process the roll data and populate the modal table
-                        $.each(roll_data, function(index, value) {
-                            addRoll(value); // Add each roll to the table
-                        });
-
-                        // Calculate total meters if necessary
-                        calculateTotalMeter(roll_data);
-                    }
-                }).then(function() {
-                    // Update meter values after the AJAX call
-                    $('#remember_meter').html($('#item-' + item_id + ' .inv_meter').val());
-                    $('#total_selected_meter').html(0);
-                    
-                    // If any rolls are selected previously, process the selected rolls
-                    if (!$('#item-rolls-' + item_id).is(':empty')) {
-                        var meter = 0;
-                        $.each($('#item-rolls-' + item_id + ' input'), function(i, v) {
-                            var str = v.id;
-                            var n = str.lastIndexOf("_");
-                            var roll_id = str.substring(n + 1);
-                            $.each($('.select_roll'), function(index, value) {
-                                if (value.value == roll_id) {
-                                    value.checked = true;
-                                    $(value).closest('tr').addClass('table-success');
-                                    $(value).closest('tr').find('.meter').val($('#item_roll_' + item_id + '_' + roll_id).val());
-                                    $(value).closest('tr').find('.meter').attr('readonly', false);
-                                    meter += parseFloat(v.value);
-                                }
-                            });
-                        });
-
-                        // Update the total selected meter
-                        $('#total_selected_meter').html(meter.toFixed(2));
-                        totalmeter(); // Call the function to calculate the total meter
-                    }
-                });
-            });
-        }
 
         $(document).on('change', '.unit_of_sale, .type_of_sale', function() {
             var $thisRow = $(this).closest('tr');
@@ -747,6 +601,7 @@
         }
 
         function addSearchMaterial(data) {
+            console.log(data);
             $template = $('#templateAddItem_invoice').html();
             var $tr = $('<tr class="invoiceitem" id="item-' + data.id + '">').append($template);
             var unit_purchased_in = data.unit_purchased_in;
@@ -762,7 +617,7 @@
             $itemRow.find('.type_of_sale').attr('title', 'Type Of Sale: WholSale');
             $itemRow.find('.discount_type').attr('title', 'Discount Type: Percentage');
             $itemRow.find('.discount_value').attr('title', 'Discount Value: 0');
-            // $itemRow.find('.inv_barcode').val(data.barcode).attr('title', `Barcode: ${data.barcode}`);
+            $itemRow.find('.inv_barcode').val(data.barcode).attr('title', `Barcode: ${data.barcode}`);
             $itemRow.find('.td-weight_gsm').attr("data-gsm", data.weight_gsm);
             $itemRow.find('.td-weight_per_mtr').attr("data-weight_per_mtr", data.weight_per_mtr);
             $itemRow.find('.td-weight_per_yard').attr("data-weight_per_yard", data.weight_per_yard);
@@ -773,12 +628,6 @@
             $itemRow.find('.btn-roll-select').data('material_id', data.id);
             $itemRow.find('#selected_meter').attr('class', 'selected_meter_' + data.id);
             $itemRow.find('.inv_delete').attr('data-id', 'item-' + data.id);
-
-            $itemRow.find('.sr_no').val($('#tblOrderTable tbody tr.invoiceitem').length);
-            $itemRow.find('.description').val(`${data.article_no} - ${data.color} # ${data.piece_no} # ${data.barcode}`).attr('title', `Article: ${data.article_no}, Color: ${data.color}, # Piece: ${data.piece_no}, Barcode: ${data.barcode}`);;
-            $itemRow.find('.unit_sold').attr('title', 'Unit Sold:');
-            $itemRow.find('.material_price').val(data.price);
-
             
             // Enable/disable fields based on unit purchased in
             toggleUnitFields($itemRow, unit_purchased_in);
@@ -926,7 +775,6 @@
                     } else {
                         total = parseFloat(price * meter).toFixed(2);
                     }
-                    
 
                     // Apply discount
                     if (discountType === 'percentage') {
@@ -979,13 +827,13 @@
         }
 
         function toggleUnitFields($itemRow, unitPurchasedIn) {
-            // if (unitPurchasedIn === 'meter') {
-            //     $itemRow.find('.inv_meter').prop('readonly', false);
-            //     $itemRow.find('.inv_yard').prop('readonly', true);
-            // } else if (unitPurchasedIn === 'yard') {
-                $itemRow.find('.inv_meter').prop('readonly', true);
+            if (unitPurchasedIn === 'meter') {
+                $itemRow.find('.inv_meter').prop('readonly', false);
                 $itemRow.find('.inv_yard').prop('readonly', true);
-            // }
+            } else if (unitPurchasedIn === 'yard') {
+                $itemRow.find('.inv_meter').prop('readonly', true);
+                $itemRow.find('.inv_yard').prop('readonly', false);
+            }
         }
 
         // Event handler for changes in relevant fields
@@ -1049,22 +897,13 @@
 
         // Calculate total price based on discount
         function calculateTotal(price, amount, discountType, discountValue) {
-            // let total = parseFloat(price * amount).toFixed(2);
-            let initialTotal = parseFloat(price * amount).toFixed(2);
-            let discountAmount = 0;
-
+            let total = parseFloat(price * amount).toFixed(2);
             if (discountType === 'percentage') {
-                discountAmount = parseFloat(initialTotal * (discountValue / 100)).toFixed(2);
+                total = parseFloat(total - (total * discountValue / 100)).toFixed(2);
             } else if (discountType === 'amount') {
-                discountAmount = parseFloat(discountValue).toFixed(2);
+                total = parseFloat(total - discountValue).toFixed(2);
             }
-
-            let total = parseFloat(initialTotal - discountAmount).toFixed(2);
-
-            return {
-                total: total,
-                discountAmount: discountAmount
-            };
+            return total;
         }
 
         // Handle the calculation logic
@@ -1092,11 +931,10 @@
 
             if (!isNaN(price) && price) {
                 var yard = meterToYard(meter);
-                
-                // var total = unit_of_sale === 'yard' ? calculateTotal(price, yard, discountType, discountValue) : calculateTotal(price, meter, discountType, discountValue);
-                var { total, discountAmount } = unit_of_sale === 'yard'? calculateTotal(price, yard, discountType, discountValue): calculateTotal(price, meter, discountType, discountValue);
+                var total = unit_of_sale === 'yard' ? calculateTotal(price, yard, discountType, discountValue) : calculateTotal(price, meter, discountType, discountValue);
+                // $('.td-total-price', $thisRow).attr('data-value', total).html(total).attr('title', `Total Amount: ${total}`);
+                console.log("call total item price "+total);
                 $('.total-price', $thisRow).val(total).attr('title', `Total Amount: ${total}`);
-                $('.discount_amount', $thisRow).val(discountAmount);
 
                 sub_total();
                 grandtotal();
@@ -1178,7 +1016,6 @@
         });
 
         function addRoll(data) {
-            
             $template = $('#templateAddItem_roll').html();
             var $uniqueId = uuid();
             var $tr = $('<tr class="roll_item" id="' + $uniqueId + '">').append($template);
@@ -1198,31 +1035,10 @@
                 $('#' + $uniqueId).find('.meter').val(data.meter);
             }
 
-            var hiddenFields = [
-                { name: 'color', class: 'color', value: data.color },
-                { name: 'barcode_svg', class: 'barcode_svg', value: data.barcode_svg },
-                { name: 'ex_rate', class: 'ex_rate', value: data.ex_rate },
-                { name: 'import_tax', class: 'import_tax', value: data.import_tax },
-                { name: 'transport_shipping_paid', class: 'transport_shipping_paid', value: data.transport_shipping_paid },
-                { name: 'cost_per_mtr', class: 'cost_per_mtr', value: data.cost_per_mtr },
-                { name: 'cost_per_yrd', class: 'cost_per_yrd', value: data.cost_per_yrd }
-            ];
-
-            hiddenFields.forEach(function(field) {
-                var hiddenInput = $('<input>').attr({
-                    type: 'hidden',
-                    name: field.name,
-                    class: field.class,
-                    value: field.value
-                });
-                $tr.append(hiddenInput);
-            });
-            
         }
 
         function calculateTotalMeter(roll_data) {
             var totalMeter = 0;
-            var totalRolls = roll_data.length;
 
             // Loop through each roll item and calculate the total meter
             $.each(roll_data, function (index, value) {
@@ -1231,7 +1047,6 @@
 
             // Update the total meter in the modal header
             $('#total_meters').html(totalMeter.toFixed(2));
-            $('#total_rolls').html(totalRolls.toFixed(2));
         }
 
         $(document).on('change', '#select_roll', function() {
@@ -1423,14 +1238,6 @@
                     var pcs_no = $(value).closest('tr').find('.pcs_no').val();
                     var article_no = $(value).closest('tr').find('.article_no').val();
                     var color_no = $(value).closest('tr').find('.color_no').val();
-                    var color = $(value).closest('tr').find('.color').val();
-                    var barcode_svg = $(value).closest('tr').find('.barcode_svg').val();
-                    var ex_rate = $(value).closest('tr').find('.ex_rate').val();
-                    var import_tax = $(value).closest('tr').find('.import_tax').val();
-                    var transport_shipping_paid = $(value).closest('tr').find('.transport_shipping_paid').val();
-                    var cost_per_mtr = $(value).closest('tr').find('.cost_per_mtr').val();
-                    var cost_per_yrd = $(value).closest('tr').find('.cost_per_yrd').val();
-                    
                     var batch_no = $(value).closest('tr').find('.batch_no').val();
                     var available_qty = $(value).closest('tr').find('.available_qty').val();
 
@@ -1440,16 +1247,9 @@
                         pcs_no: pcs_no,
                         article_no: article_no,
                         color_no: color_no,
-                        color: color,
                         batch_no: batch_no,
                         available_qty: available_qty,
-                        meter: meter,
-                        barcode_svg: barcode_svg,
-                        ex_rate: ex_rate,
-                        import_tax: import_tax,
-                        transport_shipping_paid: transport_shipping_paid,
-                        cost_per_mtr: cost_per_mtr,
-                        cost_per_yrd: cost_per_yrd,
+                        meter: meter
                     });
 
                     // Hidden input for form submission
@@ -1466,7 +1266,7 @@
                      // Push roll data along with itemId to selectedRolls
                     const existingRoll = selectedRolls.find(roll => roll.itemId === item_id && roll.rollId === roll_id);
                     if (!existingRoll) {
-                        selectedRolls.push({ itemId: item_id, rollId: roll_id, roll_no: roll_no, pcs_no: pcs_no, article_no: article_no, color_no: color_no, color: color, batch_no: batch_no,available_qty: available_qty , meter: meter , barcode_svg: barcode_svg, ex_rate: ex_rate, import_tax: import_tax, transport_shipping_paid: transport_shipping_paid,cost_per_mtr: cost_per_mtr, cost_per_yrd: cost_per_yrd});
+                        selectedRolls.push({ itemId: item_id, rollId: roll_id, roll_no: roll_no, pcs_no: pcs_no, article_no: article_no, color_no: color_no, batch_no: batch_no,available_qty: available_qty , meter: meter });
                     }
                     $('#item-rolls-' + item_id).append(input_hidden);
 
@@ -1482,11 +1282,11 @@
             updateSelectedRollModal();
 
             // First, check if the item row already exists in the table
-            var itemRow = $('#tblOrderTable tbody').find(`tr.item-row[id="item-${item_id}"]`);
+            var itemRow = $('#tblOrderTable tbody').find(`tr.item-row[data-item-id="${item_id}"]`);
             if (itemRow.length === 0) {
                 // If the item doesn't exist, create a new row for the item with a heading column
                 var newItemRow = `
-                    <tr class="item-row" id="item-${item_id}">
+                    <tr class="item-row" data-item-id="${item_id}">
                         <th>Roll No</th>
                         <th>PCS No</th>
                         <th>Article No</th>
@@ -1494,22 +1294,18 @@
                         <th>Batch No</th>
                         <th>Available Qty</th>
                         <th>Meter</th>
-                        <th>Barcode</th>
                     </tr>`;
                 $('#tblOrderTable tbody').append(newItemRow);
             }
 
             // Remove any existing roll rows for this specific item to prevent duplicates
-            $('#tblOrderTable tbody').find(`tr.roll-row[id="item-${item_id}"]`).remove();
+            $('#tblOrderTable tbody').find(`tr.roll-row[data-item-id="${item_id}"]`).remove();
 
             // Now, append the rolls for the specific item under the item's row
             if (itemRolls[item_id].length > 0) {
                 itemRolls[item_id].forEach(function(roll) {
-                    console.log("log -> "+JSON.stringify(roll));
-                    
-                    var piece_no = roll.pcs_no;
                     var rollRow = `
-                        <tr class="roll-row" id="item-${item_id}">
+                        <tr class="roll-row" data-item-id="${item_id}">
                             <td>${roll.roll_no}</td> 
                             <td>${roll.pcs_no}</td> 
                             <td>${roll.article_no}</td>
@@ -1517,18 +1313,8 @@
                             <td>${roll.batch_no}</td>
                             <td>${roll.available_qty}</td>
                             <td>${roll.meter}</td>
-                            <td>${roll.barcode_svg}</td>
                         </tr>`;
-                    $('#tblOrderTable tbody').find(`tr.item-row[id="item-${item_id}"]`).after(rollRow);
-
-                    const descriptionValue = `${roll.article_no} - ${roll.color} # ${roll.pcs_no}`;
-                    const descriptionTitle = `Article: ${roll.article_no}, Color: ${roll.color}, Piece: ${roll.pcs_no}`;
-                    $('#item-' + item_id).find('.td-description .description').val(descriptionValue).attr('title', descriptionTitle);
-                    $('#item-' + item_id).find('.ex_rate').val(roll.ex_rate);
-                    $('#item-' + item_id).find('.import_tax').val(roll.import_tax);
-                    $('#item-' + item_id).find('.transport_shipping_paid').val(roll.transport_shipping_paid);
-                    $('#item-' + item_id).find('.cost_per_mtr').val(roll.cost_per_mtr);
-                    $('#item-' + item_id).find('.cost_per_yrd').val(roll.cost_per_yrd);
+                    $('#tblOrderTable tbody').find(`tr.item-row[data-item-id="${item_id}"]`).after(rollRow);
                 });
             }
 
@@ -1549,7 +1335,7 @@
             $('#item-' + item_id + ' .td-selected-meter').html(total_selected_meter).attr('title', `Selected Role: ${total_selected_meter}`);
             $('#item-' + item_id + ' .td-selected-meter').append('<button type="button" class="btn btn-info btn-sm btn-display-info ml-1" data-item-id="' + item_id + '">Info</button>');
             $('#item-' + item_id).find('.td-meter .inv_meter').val(total_selected_meter);
-            
+
             // Trigger recalculations
             handleCalculation($('#item-' + item_id));
             selectedtotalmeter();
@@ -1559,12 +1345,13 @@
             // Hide modal and reset roll table content
             $('#rollSelectModel').modal('hide');
             $('#rollSelectModel #tblRoll tbody').html('');
+            console.log(" last selectedRolls "+selectedRolls);
         });
 
         $(document).on('click', '.btn-display-info', function() {
             var itemId = $(this).data('item-id'); // Get the associated item ID
             var rollsForItem = selectedRolls.filter(roll => roll.itemId.toString() === itemId.toString());
-            var displayHtml = '<table class="table"><thead><tr><th>Roll No</th><th>PSC NO</th><th>Article No</th><th>Color No</th><th>Batch No</th><th>Available Meter</th><th>Meter</th><th>Barcode</th></tr></thead><tbody>';
+            var displayHtml = '<table class="table"><thead><tr><th>Roll No</th><th>PSC NO</th><th>Article No</th><th>Color No</th><th>Batch No</th><th>Available Meter</th><th>Meter</th></tr></thead><tbody>';
             
             if (rollsForItem.length === 0) {
                 displayHtml += '<tr><td colspan="7">No rolls selected for this item.</td></tr>';
@@ -1578,7 +1365,6 @@
                         '<td>' + roll.batch_no + '</td>' +
                         '<td>' + roll.available_qty + '</td>' +
                         '<td>' + roll.meter + '</td>' +
-                        '<td>' + roll.barcode_svg + '</td>' +
                         '</tr>';
                 });
             }
@@ -1639,9 +1425,9 @@
             var totalMeter = 0;
             var totalYard = 0;
             var totalWeight = 0;
-            var totalProfit = 0;
 
             $('.invoiceitem').each(function() {
+                console.log("Call");
                 var meter = Number($(this).find('.inv_meter').val()) || 0;
                 var yard = Number($(this).find('.inv_yard').val()) || 0;
                 var unit_of_sale = $(this).find('.unit_of_sale').val(); 
@@ -1656,28 +1442,21 @@
 
                 var weight_per_mtr = Number($(this).closest('tr').find('.td-weight_per_mtr').data('weight_per_mtr')) || 0;
                 var weight_per_yard = Number($(this).closest('tr').find('.td-weight_per_yard').data('weight_per_yard')) || 0;
-                var weight = unit_of_sale === 'yard' ? yard * weight_per_yard : meter * weight_per_mtr;
+
+                if(unit_of_sale == 'yard'){
+                    var weight = yard * weight_per_yard;
+                } else {
+                    var weight = meter * weight_per_mtr;
+                }
 
                 totalMeter += meter;
                 totalYard += yard;
                 totalWeight += weight;
-                var sell_price = unit_of_sale === 'yard' ? Number($(this).find('.cost_per_yrd').val()) || 0 : Number($(this).find('.cost_per_mtr').val()) || 0;
-                // var sell_price = Number($(this).find('.inv_price').val()) || 0;
-                var material_price = Number($(this).find('.material_price').val()) || 0;
-                var ex_rate = Number($(this).find('.ex_rate').val()) || 0;
-                var import_tax = Number($(this).find('.import_tax').val()) || 0;
-                var transport_shipping_paid = Number($(this).find('.transport_shipping_paid').val()) || 0;
-                var actual_price_per_unit = (material_price * ex_rate) + import_tax + transport_shipping_paid;
-
-                var quantity_sold = unit_of_sale === 'yard' ? yard : meter;
-                var profit = (sell_price * quantity_sold) - (actual_price_per_unit * quantity_sold);
-                totalProfit += profit;
             });
 
             $('#totalMeter').html("Total Meter: " + totalMeter.toFixed(2) + " / " + totalYard.toFixed(2));
 
             $('#approximate_weight').val(totalWeight.toFixed(2));
-            $('#total_profit').val(totalProfit.toFixed(2));
         }
 
         function selectedtotalmeter(callback) {
@@ -1712,15 +1491,10 @@
         };
         $(document).on('click', '.inv_delete', function() {
             var rowid = $(this).data('id');
-            // $('#' + rowid).remove();
-            $('tr[id="' + rowid + '"]').remove();
+            $('#' + rowid).remove();
             totalrow();
             totalmeter();
             grandtotal();
-
-            $('.sr_no').each(function(index) {
-                $(this).val(index + 1);
-            });
         });
 
         function grandtotal() {
@@ -1731,46 +1505,26 @@
 
             var vatRate = {{ $vat }};
 
-            var discount_total = 0;
-            $('.discount_amount').each(function() {
-                discount_total += Number($(this).val() || 0);
-            });
-
-            updateGrandTotalWithVAT(grand_total, vatRate, discount_total);
+            updateGrandTotalWithVAT(grand_total, vatRate);
         };
 
-        function updateGrandTotalWithVAT(grandTotal, vatRate, discountTotal) {
-            
-            if ($('#price_vat').val() === 'price_exclude_vat') {
-                $('#total_sum').html("Total Amount (Before Disc.) : " + "฿" + parseFloat(grandTotal+discountTotal).toFixed(2));
+        function updateGrandTotalWithVAT(grandTotal, vatRate) {
 
+            if ($('#gst_checkbox').is(':checked')) {
                 var vatAmount = (grandTotal * vatRate) / 100;
-                grandTotal += vatAmount;
+                grandTotal += vatAmount; 
 
                 $('#grand_total').html("Grand Total (incl. VAT): " + "฿" + parseFloat(grandTotal).toFixed(2));
-                $('#vat_amount').text(parseFloat(vatAmount).toFixed(2));
-                $('#gst_info').show();
                 $('.grand_total').val(grandTotal);
                 $('.vat_percentage').val(vatRate);
                 $('.vat_amount').val(vatAmount);
-                $('#total_discount').html("Total Discount : " + "฿" + parseFloat(discountTotal).toFixed(2));
-
             } else {
-                $('#grand_total').html("Grand Total: " + "฿" + parseFloat(grandTotal).toFixed(2));
-                $('#gst_info').hide();
-                $('#total_sum').html("Total Amount (Before Disc.) : " + "฿" + parseFloat(grandTotal+discountTotal).toFixed(2));
-                $('.grand_total').val(parseFloat(grandTotal).toFixed(2));
-                $('#total_discount').html("Total Discount : " + "฿" + parseFloat(discountTotal).toFixed(2));
-
+                $('#grand_total').html("Grand Total: " + "฿" + grandTotal);
+                $('.grand_total').val(grandTotal);
             }
         }
 
-        $('#price_vat').on('change', function() {
-            // if ($(this).val() === 'price_include_vat') {
-            //     $('#gst_checkbox').prop('disabled', true).prop('checked', false);
-            // } else if ($(this).val() === 'price_exclude_vat') {
-            //     $('#gst_checkbox').prop('disabled', true).prop('checked', true);
-            // }
+        $('#gst_checkbox').on('change', function() {
             grandtotal(); 
         });
         
@@ -1779,6 +1533,7 @@
         }
 
         function grand_total() {
+            console.log("call");
             var sub_total = parseFloat($('#sub_total').val());
             var tax_val = $('.tax').val() == '' ? 0 : $('.tax').val();
             var tax = (sub_total * parseFloat(tax_val)) / 100;
@@ -2008,6 +1763,17 @@
             startDate: currentDate  
         });
         $('#purchase_date').val(currentDate);
+
+        $('#delivered_date').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            timePicker: true,
+            timePicker24Hour: false, 
+            locale: {
+                format: 'DD/MM/YYYY HH:mm'  
+            },
+            autoApply: false
+        });
 
         $('#delivered_date').daterangepicker({
             singleDatePicker: true,

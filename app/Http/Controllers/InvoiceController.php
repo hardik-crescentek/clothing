@@ -22,6 +22,8 @@ use Auth;
 use App\PaymentHistory;
 use App\SalesPersonCommision;
 use Carbon\Carbon;
+use DNS1D;
+
 
 
 class InvoiceController extends Controller
@@ -86,11 +88,22 @@ class InvoiceController extends Controller
             // $roll = PurchaseItem::where('material_id','=',$request->input('material_id'))->where('available_qty','!=','0')->orderBy('sort_order', 'ASC')->get();
 
             $roll = PurchaseItem::leftJoin('purchases','purchases.id','=','purchase_items.purchase_id')
-            ->select('purchase_items.*','purchases.pcs_no as pcs_no')
-            ->where('purchase_items.material_id','=',$request->input('material_id'))
-            ->where('purchase_items.available_qty','!=','0')
-            ->orderBy('purchase_items.sort_order', 'ASC')
-            ->get();
+                    ->select('purchase_items.*','purchases.pcs_no as pcs_no','purchases.ex_rate','purchases.import_tax','purchases.transport_shipping_paid')
+                    ->where('purchase_items.material_id','=',$request->input('material_id'))
+                    ->where('purchase_items.available_qty','!=','0')
+                    ->orderBy('purchase_items.sort_order', 'ASC')
+                    ->get();
+
+            // Append barcode SVG to each item
+            foreach ($roll as $item) {
+                $item->barcode_svg = DNS1D::getBarcodeSVG(
+                    $item->barcode,
+                    config('app.BARCODE_TYPE'), // Ensure this config is set (e.g., 'C39', 'C128')
+                    1,
+                    40
+                );
+            }
+
             $response = [
                             'status'=>'success',
                             'roll'=>$roll,
@@ -289,7 +302,7 @@ class InvoiceController extends Controller
         $colorNo = $request->color;
 
         // Fetch the material from Material model
-        $material = Material::select('id', 'name', 'barcode', 'color', 'weight', 'article_no', 'color_no', 'cut_wholesale','cut_wholesale_per_mtr', 'retail','retail_per_mtr', 'roll','roll_per_mtr','unit_purchased_in','weight_gsm','weight_per_mtr','weight_per_yard')
+        $material = Material::select('id', 'name', 'barcode', 'color', 'weight', 'article_no', 'color_no', 'cut_wholesale','cut_wholesale_per_mtr', 'retail','retail_per_mtr', 'roll','roll_per_mtr','unit_purchased_in','weight_gsm','weight_per_mtr','weight_per_yard','price')
             ->where(['article_no' => $articleNo, 'color_no' => $colorNo])
             ->first();
 

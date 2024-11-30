@@ -192,14 +192,16 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        // dd(request()->all());
         $this->validate($request, [
             'item_id'        => 'required|distinct',
-            'name'           => 'required',
+            // 'name'           => 'required',
+            'description'    => 'required',
             'user_id'        => 'required',
             // 'selse_person_id'=> 'required',
-            'barcode'        => 'required',
+            // 'barcode'        => 'required',
             'price'          => 'required',
-            'meter'          => 'required',
+            // 'meter'          => 'required',
             'purchase_date'  => 'required',
             'payment_term'      => 'required|string|in:cash,credit',
             'credit_day'        => 'nullable|integer|min:1', // Default rule for credit_day
@@ -219,7 +221,8 @@ class OrderController extends Controller
             foreach ($materials as $key => $value) {
                 $items[] = array(
                                 'item_id'         => $value,
-                                'name'            => $request->input('name.' . $key),
+                                // 'name'            => $request->input('name.' . $key),
+                                'description'     => $request->input('description.' . $key),
                                 'user_id'         => $request->input('user_id.' . $key),
                                 'barcode'         => $request->input('barcode.' . $key),
                                 'type_of_sale'    => $request->input('type_of_sale.' . $key),
@@ -244,6 +247,7 @@ class OrderController extends Controller
                     "note"       => $request->input("note"),
                     "role_cutter_name" => $request->input("role_cutter_name"),
                     "payment_term" => $payment_term,
+                    "price_vat"    => $request->input("price_vat"),
                     "credit_day" => isset($payment_term) && ($payment_term == 'cash') ? NULL : $request->input("credit_day"),
                     "entered_by" => $request->input("entered_by"),
                     "arranged_by" => $request->input("arranged_by"),
@@ -256,8 +260,8 @@ class OrderController extends Controller
                     "grand_total" => $request->input("grand_total"),
                     "vat_percentage" => $request->input("vat_percentage"),
                     "vat_amount" => $request->input("vat_amount"),
-                    "order_date" => $request->input("purchase_date"),
                     "delivered_date" => $request->input("delivered_date"),
+                    "total_profit" => $request->input("total_profit"),
                 ];
         $order = Order::create($data);
         if($items)
@@ -424,6 +428,7 @@ class OrderController extends Controller
                     "role_cutter_name"     => $request->input("role_cutter_name"),
                     "status"     => $request->input("status"),
                     "payment_term" => $payment_term,
+                    "price_vat"    => $request->input("price_vat"),
                     "credit_day" => isset($payment_term) && ($payment_term == 'cash') ? NULL : $request->input("credit_day"),
                     "entered_by" => $request->input("entered_by"),
                     "arranged_by" => $request->input("arranged_by"),

@@ -82,6 +82,7 @@ class ClientController extends Controller
         $this->validate($request, [
             'firstname' => 'required|max:120',
             'lastname'  => 'required|max:120',
+            'client_mark' => 'nullable|unique:users',
             'email'     => 'required|email|unique:users',
             'password'  => 'required|min:6|confirmed',
             'phone'     => 'required',
@@ -96,7 +97,7 @@ class ClientController extends Controller
         ]);
 
         $input = $request->only(
-            'firstname', 'lastname', 'email', 'phone', 'address', 
+            'firstname', 'lastname','client_mark', 'email', 'phone', 'address', 
             'city', 'state', 'country', 'dob', 'zip', 'company_name', 
             'business_nature', 'business_nature_other', 'newsletter', 'skype','facebook','pinterest','wechat','whatsapp','line'
         );
@@ -268,6 +269,7 @@ class ClientController extends Controller
             $this->validate($request, [
                 'firstname' => 'bail|required|min:2',
                 'lastname'  => 'bail|required|min:2',
+                'client_mark' => 'nullable|unique:users,client_mark'. $id,
                 'email'     => 'required|email|unique:users,email,' . $id,
                 'phone'     => 'required',
                 'dob'       => 'required',
@@ -282,7 +284,7 @@ class ClientController extends Controller
 
             // Get the user
             $user = User::findOrFail($id);
-            $input = $request->only(['firstname','lastname', 'email', 'phone', 'address', 'city', 'state', 'dob', 'joining_date', 'zip','salesman_commission','skype','facebook','pinterest','wechat','whatsapp','line','company_name','business_nature', 'business_nature_other', 'newsletter']); //Retreive the name, email and password fields
+            $input = $request->only(['firstname','lastname','client_mark', 'email', 'phone', 'address', 'city', 'state', 'dob', 'joining_date', 'zip','salesman_commission','skype','facebook','pinterest','wechat','whatsapp','line','company_name','business_nature', 'business_nature_other', 'newsletter']); //Retreive the name, email and password fields
             // $input['dob'] = Carbon::createFromFormat('d/m/Y', $request->dob)->format('Y-m-d');
             $user->fill($input);
 

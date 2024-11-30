@@ -25,9 +25,10 @@
                 {!! Form::model($order, ['route' => ['order.update', $order->id],'method'=>'PUT','id'=>'from_edit_order', 'class'=>"form-horizontal form-validate", 'novalidate']) !!}
                 <div class="row">
                     <div class="form-group col-lg-3">
-                        <label class="form-control-label d-flex">Date of purchase<span class="text-danger ml-2">*</span></label>
-                        {!! Form::text('purchase_date', isset($order->order_date) ? $order->order_date : null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required")) !!}
+                        <label class="form-control-label d-flex">Date of Purchase<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text('purchase_date', isset($order->order_date) ? \Carbon\Carbon::parse($order->order_date)->format('d/m/Y H:i') : null, array('id' => 'purchase_date', 'class' => 'form-control', 'data-validation' => "required")) !!}
                     </div>
+                    
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Status<span class="text-danger ml-2">*</span></label>
                         {!! Form::select('status', $order_status,$order->status, array('id'=>'order_status','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
@@ -69,6 +70,19 @@
                         </div>
                     </div>
 
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Price VAT<span class="text-danger ml-2">*</span></label>
+                            <div class="input-group">
+                                {!! Form::select('price_vat', 
+                                    ['price_include_vat' => 'Price Include VAT', 'price_exclude_vat' => 'Price Exclude VAT'], 
+                                    $order->price_vat, 
+                                    ['id' => 'price_vat', 'class' => 'form-control custom-select', 'data-validation' => "required"]) 
+                                !!}
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Payment Term Field -->
                     <div class="col-lg-3">
                         <div class="form-group">
@@ -189,12 +203,10 @@
                             {!! Form::text('delivered_by', null, array('id'=>'delivered_by','placeholder' => 'Delivered By','class' => 'form-control')) !!}
                         </div>
                     </div>  
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label class="form-control-label">Delivered Date</label>
-                            {!! Form::text('delivered_date', isset($order->delivered_date) ? $order->delivered_date : null, array('id'=>'delivered_date','placeholder' => 'Delivered Date','class' => 'form-control')) !!}
-                        </div>
-                    </div>  
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label d-flex">Delivered Date<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text('delivered_date', isset($order->delivered_date) ? \Carbon\Carbon::parse($order->delivered_date)->format('d/m/Y H:i') : null, array('id' => 'delivered_date', 'class' => 'form-control', 'data-validation' => "required")) !!}
+                    </div>
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label class="form-control-label">Total Number of Items.</label>
@@ -574,29 +586,6 @@
             });
             $('#totalMeter').html("Total Meter : " + total);
         };
-
-        $('#purchase_date').daterangepicker({
-            singleDatePicker: true,
-            showDropdowns: true,
-            timePicker: true,
-            timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
-            locale: {
-                format: 'DD/MM/YYYY HH:mm'  // Format with date and time
-            },
-            autoApply: false
-        });
-
-        // $('#delivered_date').daterangepicker({
-        //     singleDatePicker: true,
-        //     showDropdowns: true,
-        //     timePicker: true,
-        //     timePicker24Hour: false,  // Use 24-hour format, set to false for 12-hour format
-        //     locale: {
-        //         format: 'DD/MM/YYYY HH:mm'  // Format with date and time
-        //     },
-        //     autoApply: false
-        // });
-
         
         function grand_total() {
             var total = 0;
@@ -644,5 +633,38 @@
         // Add event listener to toggle field based on selection
         paymentTermSelect.addEventListener('change', toggleCreditDaysField);
     });
+
+    $(document).ready(function () {
+        // Fetch the pre-filled values from the input fields
+        var purchaseDate = $('#purchase_date').val(); // Assumes value is already formatted as 'DD/MM/YYYY HH:mm'
+        var deliveredDate = $('#delivered_date').val(); // Same format as above
+
+        // Initialize the purchase_date field
+        $('#purchase_date').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            timePicker: true,
+            timePicker24Hour: false,
+            locale: {
+                format: 'DD/MM/YYYY HH:mm' // Format expected in the input value
+            },
+            autoApply: false,
+            startDate: purchaseDate // Use the pre-filled value from the input
+        });
+
+        // Initialize the delivered_date field
+        $('#delivered_date').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            timePicker: true,
+            timePicker24Hour: false,
+            locale: {
+                format: 'DD/MM/YYYY HH:mm' // Format expected in the input value
+            },
+            autoApply: false,
+            startDate: deliveredDate // Use the pre-filled value from the input
+        });
+    });
+
 </script>
 @endpush
