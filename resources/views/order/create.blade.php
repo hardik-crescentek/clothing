@@ -334,6 +334,10 @@
                     <h5 id="modal-header" class="modal-title">Select roll for <span class="span-modal-header"> </span></h5>
                     <span class="d-inline-block ml-3">Total Meter: <span id="total_meters" class="d-inline"></span></span>
                     <span class="d-inline-block ml-3">Total Rolls: <span id="total_rolls" class="d-inline"></span></span>
+                    <span class="d-inline-block ml-3">Total Selected Meter : <div id="total_select_mtr" class="d-inline mr-3"></div>
+                    </span>
+                    <span class="d-inline-block ml-3">Total Selected Yard : <div id="total_select_yrd" class="d-inline mr-3"></div>
+                    </span>
                     <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body role-model">
@@ -441,8 +445,8 @@
     <td class="td-description">{!! Form::text('description[]', null, array('class' => 'form-control description', 'readonly'=>'readonly')) !!}</td>
     <td class="td-meter" data-value="">{!! Form::text('meter[]', 0, array('class' => 'inv_meter form-control', 'data-validation'=>"required",'placeholder'=>"Meter")) !!}</td>
     <td class="td-yard" data-value="">{!! Form::text('yard[]',0 , ['class'=>'inv_yard form-control','placeholder'=>"Yard"]) !!}</td>
-    <td class="td-unit_of_sale" data-value="">{!! Form::select("unit_of_sale[]", ["meter"=>"meter","yard"=>"yard"], null, ['class'=>'form-control unit_of_sale','data-validation'=>"required"]) !!}</td>
-    <td class="td-type_of_sale" data-value="">{!! Form::select("type_of_sale[]", ["W"=>"Wholsale","R"=>"Retail","P"=>"Sample Price"], null, ['class'=>'form-control type_of_sale','data-validation'=>"required"]) !!}</td>
+    <td class="td-unit_of_sale" data-value="">{!! Form::select("unit_of_sale[]", [""=>"Select Unit","meter"=>"meter","yard"=>"yard"], null, ['class'=>'form-control unit_of_sale','data-validation'=>"required"]) !!}</td>
+    <td class="td-type_of_sale" data-value="">{!! Form::select("type_of_sale[]", [""=>"Select Type","W"=>"Wholsale","R"=>"Retail","P"=>"Sample Price"], null, ['class'=>'form-control type_of_sale','data-validation'=>"required"]) !!}</td>
     <td class="td-price price" data-value="">{!! Form::text('price[]' , 0 , array('class' => 'inv_price form-control', 'data-validation'=>"required",'placeholder'=>"Price" )) !!}</td>
     <td class="td-discount_type" data-value="">{!! Form::select("discount_type[]", ["percentage"=>"Percentage","amount"=>"Amount"], null, ['class'=>'form-control discount_type','data-validation'=>"required"]) !!}</td>
     <td class="td-discount_value" data-value="">{!! Form::text('discount_value[]' , 0 , array('class' => 'discount_value form-control', 'data-validation'=>"required",'placeholder'=>"Discount Value" )) !!}</td>
@@ -561,24 +565,43 @@
         
         
         $(document).on('change','#search_article',function(){
-                var article_no = $(this).val();
-                $("#search_color").html('');
-                $.ajax({
-                    url: "{{ route('materials.index') }}",
-                    dataType: "json",
-                    data: {
-                        article: article_no
-                    },
-                    success: function(data) {
-                        // console.log(data);
-                        $("#search_color").append(`<option value="">-- Select color --</option>`);
-                        $.each(data,function(i){
-                            $("#search_color").append(`<option value="${i}">${data[i]}</option>`); 
-                        })
-                    }
-                });
+            var article_no = $(this).val();
+            var isValid = true;
+
+            $('.invoiceitem').each(function () {
+                var meter = parseFloat($(this).find('.inv_meter').val()) || 0;
+                var unitOfSale = $(this).find('.unit_of_sale').val();
+                var typeOfSale = $(this).find('.type_of_sale').val();
+                console.log(unitOfSale);
+                console.log(typeOfSale);
+
+                if (meter > 0 && (!unitOfSale || !typeOfSale)) {
+                    isValid = false;
+                    alert('Please select Unit of Sale and Type of Sale for all existing articles before adding a new article.');
+                    return false;
+                }
             });
-            $('#search_article').trigger('change');
+
+            if (!isValid) {
+                return;
+            }
+
+            $("#search_color").html('');
+            $.ajax({
+                url: "{{ route('materials.index') }}",
+                dataType: "json",
+                data: {
+                    article: article_no
+                },
+                success: function(data) {
+                    $("#search_color").append(`<option value="">-- Select color --</option>`);
+                    $.each(data,function(i){
+                        $("#search_color").append(`<option value="${i}">${data[i]}</option>`); 
+                    })
+                }
+            });
+        });
+        $('#search_article').trigger('change');
         //for color
         var input_search_color = $('#search_color');
         input_search_color.select2();
@@ -656,6 +679,8 @@
                     // Update meter values after the AJAX call
                     $('#remember_meter').html($('#item-' + item_id + ' .inv_meter').val());
                     $('#total_selected_meter').html(0);
+                    $('#total_select_mtr').html(0);
+                    $('#total_select_yrd').html(0);
                     
                     // If any rolls are selected previously, process the selected rolls
                     if (!$('#item-rolls-' + item_id).is(':empty')) {
@@ -677,13 +702,16 @@
 
                         // Update the total selected meter
                         $('#total_selected_meter').html(meter.toFixed(2));
+                        $('#total_select_mtr').html(meter.toFixed(2));
+                        var yard = meterToYard(meter);
+                        $('#total_select_yrd').html(yard);
                         totalmeter(); // Call the function to calculate the total meter
                     }
                 });
             });
         }
 
-        $(document).on('change', '.unit_of_sale, .type_of_sale', function() {
+        $(document).on('change', '.unit_of_sale, .type_of_sale', function() {            
             var $thisRow = $(this).closest('tr');
             var unit_of_sale = $thisRow.find('.unit_of_sale').val();
             var type_of_sale = $thisRow.find('.type_of_sale').val();
@@ -766,7 +794,7 @@
             $itemRow.find('.td-weight_gsm').attr("data-gsm", data.weight_gsm);
             $itemRow.find('.td-weight_per_mtr').attr("data-weight_per_mtr", data.weight_per_mtr);
             $itemRow.find('.td-weight_per_yard').attr("data-weight_per_yard", data.weight_per_yard);
-            $itemRow.find('.unit_of_sale').val(unit_purchased_in).attr('title', `Unit Of Sale: ${unit_purchased_in}`);
+            //$itemRow.find('.unit_of_sale').val(unit_purchased_in).attr('title', `Unit Of Sale: ${unit_purchased_in}`);
             $itemRow.find('.inv_weight').val(data.weight);
             $itemRow.find('.inv_weight').attr("data-value", data.weight);
             $itemRow.find('.hidden_div').attr('id', 'item-rolls-' + data.id);
@@ -786,7 +814,6 @@
             var user_id = $('#customer_id option:selected').val();
             var material_id = data.id;
             var price_w = price_r = price_s = 0;
-            console.log($('#item-' + data.id).find('.inv_price').val())
             $.each(customer_item_price, function(i, v) {
                 if (v.customer_id == user_id && v.material_id == material_id) {
                     $('#item-' + data.id).find('.inv_price').val(v.cut_wholesale);
@@ -805,7 +832,6 @@
                 var retail_price = data.retail_price === "" ? 0 : parseFloat(data.retail_price).toFixed(3) || 0;
                 var roll_price = data.roll_price === "" ? 0 : parseFloat(data.roll_price).toFixed(3) || 0;
             }
-            console.log("price "+ cut_wholesale_price);
             if(price_w==0){
                 $('#item-' + data.id).find('.inv_price').val(cut_wholesale_price).attr('Title',`Price : ${cut_wholesale_price}`);
                 price_w=cut_wholesale_price;
@@ -838,8 +864,6 @@
                     price = price_input.attr("data-sample");
                     saleType = 'Sample';
                 }
-                console.log("this.value "+price);
-                console.log("price "+price);
 
                 // Set the title attribute to display the selected sale type
                 $(this).prop('title', 'Type of Sale: ' + saleType);
@@ -962,7 +986,6 @@
                             if (res.msg) {
                             $('#search_error').fadeIn(300).css('display', 'block').html(res.msg).fadeOut(3000);
                             }
-                            console.log(res);
                             if (res.retail_credit_days !== null) {
                                
                                 $("#credit_days").val(res.retail_credit_days);
@@ -1139,7 +1162,6 @@
                         $.each(roll_data, function(index, value) {
                             // $('#roll').append(new Option(value.roll_no + " [ Meter : " +value.available_qty+" ]", value.id));
                             addRoll(value);
-                            // console.log(value);
                         })
 
                         calculateTotalMeter(roll_data);
@@ -1148,6 +1170,8 @@
             ).then(function() {
                 $('#remember_meter').html($('#item-' + item_id + ' .inv_meter').val());
                 $('#total_selected_meter').html(0);
+                $('#total_select_mtr').html(0);
+                $('#total_select_yrd').html(0);
                 if (!$('#item-rolls-' + item_id).is(':empty')) {
                     var meter = 0;
                     $.each($('#item-rolls-' + item_id + ' input'), function(i, v) {
@@ -1158,7 +1182,6 @@
                         $.each($('.select_roll'), function(index, value) {
                             if (value.value == roll_id) {
                                 value.checked = true;
-                                console.log("yes thats checked");
                                 $(value).closest('tr').addClass('table-success');
                                 $(value).closest('tr').find('.meter').val($('#item_roll_' + item_id + '_' + roll_id).val());
                                 $(value).closest('tr').find('.meter').attr('readonly', false);
@@ -1169,7 +1192,9 @@
                     });
 
                     $('#total_selected_meter').html(meter.toFixed(2));
-                    console.log("call");
+                    $('#total_select_mtr').html(meter.toFixed(2));
+                    var yard = meterToYard(meter);
+                    $('#total_select_yrd').html(yard);
                     totalmeter();
                 }
             });
@@ -1235,10 +1260,8 @@
         }
 
         $(document).on('change', '#select_roll', function() {
-            console.log("checked changes");
             var selected_meter = 0;
             var user_enter_val = 0;
-            console.log(this.checked);
             if (this.checked) {
                 $(this).closest('tr').addClass('table-success');
                 // $(this).closest('tr').find('.meter').attr('readonly',false);
@@ -1251,6 +1274,9 @@
                 })
                 // selected_meter+=parseFloat($(this).closest('tr').find('.meter').val());
                 $('#total_selected_meter').html(selected_meter.toFixed(2));
+                $('#total_select_mtr').html(selected_meter.toFixed(2));
+                var selected_yrd = meterToYard(selected_meter);
+                $('#total_select_yrd').html(selected_yrd);
                 user_enter_val = parseFloat($('#remember_meter').html());
                 $('#show_extra').html((selected_meter - user_enter_val).toFixed(2));
             } else {
@@ -1267,6 +1293,9 @@
                 $('.error1').css('display', 'none').fadeOut();
                 $('#model_save_btn').attr('disabled', false);
                 $('#total_selected_meter').html(selected_meter.toFixed(2));
+                $('#total_select_mtr').html(selected_meter.toFixed(2));
+                var selected_yrd = meterToYard(selected_meter);
+                $('#total_select_yrd').html(selected_yrd);
                 user_enter_val = parseFloat($('#remember_meter').html());
                 if (selected_meter) {
                     $('#show_extra').html((selected_meter - user_enter_val).toFixed(2));
@@ -1279,7 +1308,6 @@
             var option_value = $(this).val();
             var selected_meter = 0;
             var user_enter_val = 0;
-            // console.log(option_value);
             if (option_value == '0') {
                 var available_qty = parseFloat($(this).closest('tr').find('#available_qty').val());
                 var selected_mtr = available_qty.toFixed();
@@ -1297,6 +1325,9 @@
                 });
 
                 $('#total_selected_meter').html(selected_meter.toFixed(2));
+                $('#total_select_mtr').html(selected_meter.toFixed(2));
+                var selected_yrd = meterToYard(selected_meter);
+                $('#total_select_yrd').html(selected_yrd);
                 user_enter_val = parseFloat($('#remember_meter').html());
                 $('#show_extra').html((selected_meter - user_enter_val).toFixed(2));
             }
@@ -1310,6 +1341,9 @@
                 });
 
                 $('#total_selected_meter').html(selected_meter.toFixed(2));
+                $('#total_select_mtr').html(selected_meter.toFixed(2));
+                var selected_yrd = meterToYard(selected_meter);
+                $('#total_select_yrd').html(selected_yrd);
                 user_enter_val = parseFloat($('#remember_meter').html());
                 $('#show_extra').html((selected_meter - user_enter_val).toFixed(2));
             }
@@ -1329,12 +1363,14 @@
                     $('.error1').css('display', 'none').fadeOut();
                     $('#model_save_btn').attr('disabled', false);
                     // $('#total_selected_meter').html(v.value);
-                    // console.log(v.value);
                 }
                 if (v.value != '') {
                     meter += parseFloat(v.value);
                 }
                 $('#total_selected_meter').html(meter.toFixed(2));
+                $('#total_select_mtr').html(meter.toFixed(2));
+                var yard = meterToYard(meter.toFixed(2));
+                $('#total_select_yrd').html(yard);
                 user_enter_val = parseFloat($('#remember_meter').html());
                 $('#show_extra').html((meter - user_enter_val).toFixed(2));
             })
@@ -1361,6 +1397,9 @@
                     meter += parseFloat(v.value);
                 }
                 $('#total_selected_meter').html(meter.toFixed(2));
+                $('#total_select_mtr').html(meter.toFixed(2));
+                var yard = meterToYard(meter.toFixed(2));
+                $('#total_select_yrd').html(yard);
                 user_enter_val = parseFloat($('#remember_meter').html());
                 $('#show_extra').html((meter - user_enter_val).toFixed(2));
             })
@@ -1368,7 +1407,6 @@
         });
 
         function updateSelectedRollModal() {
-            console.log("call");
             const selectedRollContainer = $('#selectedRollTable'); // Assuming this is the container for displaying selected rolls
             selectedRollContainer.empty(); // Clear previous contents
 
@@ -1377,8 +1415,6 @@
                 return;
             }
 
-            console.log("selectedRolls");
-            console.log(selectedRolls);
             $.each(selectedRolls, function(index, roll) {
                 // Create a display for each selected roll
                 const rollInfo = `<div>
@@ -1505,7 +1541,6 @@
             // Now, append the rolls for the specific item under the item's row
             if (itemRolls[item_id].length > 0) {
                 itemRolls[item_id].forEach(function(roll) {
-                    console.log("log -> "+JSON.stringify(roll));
                     
                     var piece_no = roll.pcs_no;
                     var rollRow = `
@@ -1604,7 +1639,6 @@
                 while (s.length < 4) s = "0" + s;
                 return s;
             }
-            // console.log(c_fname+" "+c_lname+" "+year+" "+month+" "+day+" "+pad(last_invoice));
             $('#invoice_no').val(c_fname + c_lname + year + month + day + last_invoice);
         };
         $(document).on('change', '#customer_id', function() {
@@ -1656,8 +1690,12 @@
 
                 var weight_per_mtr = Number($(this).closest('tr').find('.td-weight_per_mtr').data('weight_per_mtr')) || 0;
                 var weight_per_yard = Number($(this).closest('tr').find('.td-weight_per_yard').data('weight_per_yard')) || 0;
-                var weight = unit_of_sale === 'yard' ? yard * weight_per_yard : meter * weight_per_mtr;
+                // var weight = unit_of_sale === 'yard' ? yard * weight_per_yard : meter * weight_per_mtr;
 
+                const weight = unit_of_sale === 'yard' ? yard * weight_per_yard : meter * weight_per_mtr;
+                // const qtySold = unit_of_sale === 'yard' ? yard : meter;
+                // const profit = (sellingPrice) - (actualPricePerUnit * qtySold);
+                
                 totalMeter += meter;
                 totalYard += yard;
                 totalWeight += weight;
@@ -1677,6 +1715,7 @@
             $('#totalMeter').html("Total Meter: " + totalMeter.toFixed(2) + " / " + totalYard.toFixed(2));
 
             $('#approximate_weight').val(totalWeight.toFixed(2));
+            console.log("totalProfit "+totalProfit);
             $('#total_profit').val(totalProfit.toFixed(2));
         }
 
@@ -1869,8 +1908,6 @@
                     datatype: 'JSON',
                     success : function(data){
                         
-
-                        console.log(id);
                         ListDefault(id)
                         getPriceBook(customerId);
 

@@ -192,7 +192,6 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        // dd(request()->all());
         $this->validate($request, [
             'item_id'        => 'required|distinct',
             // 'name'           => 'required',
@@ -230,13 +229,12 @@ class OrderController extends Controller
                                 'total-price'     => $request->input('total-price.' .$key),
                                 'meter'           => $request->input('meter.' . $key),
                                 'roll_id'         => $request->input('roll_id.' . $key),
-                                'yard'            => meter2yard($request->input('meter.' . $key))
-
+                                'yard'            => meter2yard($request->input('meter.' . $key)),
+                                'item_roll'       => $request->input("item_roll.$value", []),
                             );
                 $total_qty +=  $request->input('meter.' . $key);
             }
         }
-        // echo "<pre>"; print_r($items); die();
         $request->session()->flash('order_items', $items);
         $user = Auth::user();
         $payment_term = $request->input("payment_term");
@@ -268,13 +266,30 @@ class OrderController extends Controller
         {
             foreach($items as $item)
             {
-                if (isset($item['roll_id']) && $item['roll_id'] != '' && $item['roll_id'] != 0) {
-                    $purchase_data = PurchaseItem::where('id',$item['roll_id'])->first();
-                    if ($purchase_data != '') 
-                    {
-                        $total_qty = $purchase_data->available_qty - $item['meter'];
-                        $update_data['available_qty'] = $total_qty;
-                        PurchaseItem::where('id',$item['roll_id'])->update($update_data);
+                // if (isset($item['roll_id']) && $item['roll_id'] != '' && $item['roll_id'] != 0) {
+                //     $purchase_data = PurchaseItem::where('id',$item['roll_id'])->first();
+                //     if ($purchase_data != '') 
+                //     {
+                //         $total_qty = $purchase_data->available_qty - $item['meter'];
+                //         $update_data['available_qty'] = $total_qty;
+                //         PurchaseItem::where('id',$item['roll_id'])->update($update_data);
+                //     }
+                // }
+
+                if (isset($item['item_roll']) && is_array($item['item_roll'])) {
+                    foreach ($item['item_roll'] as $roll_id => $quantity) {
+                        if ($roll_id && $quantity > 0) {
+                            $purchase_data = PurchaseItem::where('id', $roll_id)->first();
+                            if ($purchase_data) {
+                                $total_qty = $purchase_data->available_qty - $quantity;
+                                
+                                // Ensure no negative quantities
+                                $update_data['available_qty'] = max(0, $total_qty);
+                                
+                                // Update the roll's available quantity
+                                PurchaseItem::where('id', $roll_id)->update($update_data);
+                            }
+                        }
                     }
                 }
                 $item_data= [
