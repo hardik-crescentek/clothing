@@ -597,7 +597,6 @@
                         article: article_no
                     },
                     success: function(data) {
-                        // console.log(data);
                         $("#search_color").append(`<option value="">-- Select color --</option>`);
                         $.each(data,function(i){
                             $("#search_color").append(`<option value="${i}">${data[i]}</option>`); 
@@ -605,8 +604,7 @@
                     }
                 });
             });
-            $('#search_article').trigger('change');
-        //for color
+        $('#search_article').trigger('change');
         var input_search_color = $('#search_color');
         input_search_color.select2();
         
@@ -815,7 +813,6 @@
             var user_id = $('#customer_id option:selected').val();
             var material_id = data.id;
             var price_w = price_r = price_s = 0;
-            console.log($('#item-' + data.id).find('.inv_price').val())
             $.each(customer_item_price, function(i, v) {
                 if (v.customer_id == user_id && v.material_id == material_id) {
                     $('#item-' + data.id).find('.inv_price').val(v.cut_wholesale);
@@ -834,7 +831,6 @@
                 var retail_price = data.retail_price === "" ? 0 : parseFloat(data.retail_price).toFixed(3) || 0;
                 var roll_price = data.roll_price === "" ? 0 : parseFloat(data.roll_price).toFixed(3) || 0;
             }
-            console.log("price "+ cut_wholesale_price);
             if(price_w==0){
                 $('#item-' + data.id).find('.inv_price').val(cut_wholesale_price).attr('Title',`Price : ${cut_wholesale_price}`);
                 price_w=cut_wholesale_price;
@@ -867,8 +863,6 @@
                     price = price_input.attr("data-sample");
                     saleType = 'Sample';
                 }
-                console.log("this.value "+price);
-                console.log("price "+price);
 
                 // Set the title attribute to display the selected sale type
                 $(this).prop('title', 'Type of Sale: ' + saleType);
@@ -991,7 +985,6 @@
                             if (res.msg) {
                             $('#search_error').fadeIn(300).css('display', 'block').html(res.msg).fadeOut(3000);
                             }
-                            console.log(res);
                             if (res.retail_credit_days !== null) {
                                
                                 $("#credit_days").val(res.retail_credit_days);
@@ -1055,7 +1048,6 @@
 
         // Handle the calculation logic
         function handleCalculation($thisRow) {
-            console.log("222");
             
             var meter = parseFloat($thisRow.find('.inv_meter').val()).toFixed(2);
             var price = parseFloat($thisRow.find('.inv_price').val()).toFixed(2);
@@ -1069,18 +1061,13 @@
             $thisRow.find('.inv_price').attr('title',`Price : ${price}`);
 
             if (!isNaN(meter) && meter) {
-                console.log("333");
                 var yard = meterToYard(meter);
                 $('.inv_yard', $thisRow).val(yard).attr('title',`Yard : ${yard}`);
                 var weight = parseFloat($('.inv_weight', $thisRow).attr('data-value')) || 0;
-                $('.inv_weight', $thisRow).val(weight * meter);
-                
-                // totalmeter();
-                // grandtotal();
+                $('.inv_weight', $thisRow).val(weight * meter);                
             }
 
             if (!isNaN(price) && price) {
-                console.log("444");
                 var yard = meterToYard(meter);
                 
                 // var total = unit_of_sale === 'yard' ? calculateTotal(price, yard, discountType, discountValue) : calculateTotal(price, meter, discountType, discountValue);
@@ -1130,7 +1117,6 @@
                         $.each(roll_data, function(index, value) {
                             // $('#roll').append(new Option(value.roll_no + " [ Meter : " +value.available_qty+" ]", value.id));
                             addRoll(value);
-                            // console.log(value);
                         })
 
                         calculateTotalMeter(roll_data);
@@ -1151,7 +1137,6 @@
                         $.each($('.select_roll'), function(index, value) {
                             if (value.value == roll_id) {
                                 value.checked = true;
-                                console.log("yes thats checked");
                                 $(value).closest('tr').addClass('table-success');
                                 $(value).closest('tr').find('.meter').val($('#item_roll_' + item_id + '_' + roll_id).val());
                                 $(value).closest('tr').find('.meter').attr('readonly', false);
@@ -1165,7 +1150,6 @@
                     $('#total_select_mtr').html(meter.toFixed(2));
                     var yard = meterToYard(meter);
                     $('#total_select_yrd').html(yard);
-                    console.log("call");
                     totalmeter();
                 }
             });
@@ -1231,10 +1215,8 @@
         }
 
         $(document).on('change', '#select_roll', function() {
-            console.log("checked changes");
             var selected_meter = 0;
             var user_enter_val = 0;
-            console.log(this.checked);
             if (this.checked) {
                 $(this).closest('tr').addClass('table-success');
                 // $(this).closest('tr').find('.meter').attr('readonly',false);
@@ -1284,7 +1266,6 @@
             var option_value = $(this).val();
             var selected_meter = 0;
             var user_enter_val = 0;
-            // console.log(option_value);
             if (option_value == '0') {
                 var available_qty = parseFloat($(this).closest('tr').find('#available_qty').val());
                 var selected_mtr = available_qty.toFixed();
@@ -1340,7 +1321,6 @@
                     $('.error1').css('display', 'none').fadeOut();
                     $('#model_save_btn').attr('disabled', false);
                     // $('#total_selected_meter').html(v.value);
-                    // console.log(v.value);
                 }
                 if (v.value != '') {
                     meter += parseFloat(v.value);
@@ -1385,7 +1365,6 @@
         });
 
         function updateSelectedRollModal() {
-            console.log("call");
             const selectedRollContainer = $('#selectedRollTable'); // Assuming this is the container for displaying selected rolls
             selectedRollContainer.empty(); // Clear previous contents
 
@@ -1394,8 +1373,6 @@
                 return;
             }
 
-            console.log("selectedRolls");
-            console.log(selectedRolls);
             $.each(selectedRolls, function(index, roll) {
                 // Create a display for each selected roll
                 const rollInfo = `<div>
@@ -1522,8 +1499,6 @@
             // Now, append the rolls for the specific item under the item's row
             if (itemRolls[item_id].length > 0) {
                 itemRolls[item_id].forEach(function(roll) {
-                    console.log("log -> "+JSON.stringify(roll));
-                    
                     var piece_no = roll.pcs_no;
                     var rollRow = `
                         <tr class="roll-row" id="item-${item_id}">
@@ -1621,7 +1596,6 @@
                 while (s.length < 4) s = "0" + s;
                 return s;
             }
-            // console.log(c_fname+" "+c_lname+" "+year+" "+month+" "+day+" "+pad(last_invoice));
             $('#invoice_no').val(c_fname + c_lname + year + month + day + last_invoice);
         };
         $(document).on('change', '#customer_id', function() {
@@ -1676,13 +1650,7 @@
 
                 const weight = unit_of_sale === 'yard' ? yard * weight_per_yard : meter * weight_per_mtr;
                 const qtySold = unit_of_sale === 'yard' ? yard : meter;
-
                 const profit = (sellingPrice) - (actualPricePerUnit * qtySold);
-
-                console.log("sellingPrice" +sellingPrice);
-                console.log("actualPricePerUnit" +actualPricePerUnit);
-                console.log("qtySold" +qtySold);
-                console.log("profit" +profit);
                 
                 totalMeter += meter;
                 totalYard += yard;
@@ -1883,10 +1851,7 @@
                         'note'         : note
                     },
                     datatype: 'JSON',
-                    success : function(data){
-                        
-
-                        console.log(id);
+                    success : function(data){                        
                         ListDefault(id)
                         getPriceBook(customerId);
 
@@ -1898,8 +1863,6 @@
                     }
                 });
             }
-            
-            
         });
        
 
