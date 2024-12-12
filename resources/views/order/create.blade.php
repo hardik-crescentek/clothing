@@ -245,9 +245,12 @@
                             <h4 class="mb-3">
                                 <div id="totalMeter"> Total Meter : </div>
                             </h4>
-                            <div class="form-group mb-3" id="gst_info" style="display: none;">
+                            <h4 class="mb-3" id="total_amount_info" style="display: none;">
+                                <div id="total_amount_before_vat"> Total Amount (Before VAT.) : </div>
+                            </h4>
+                            <div class="form-group mb-3=" id="gst_info" style="display: none;">
                                 <label for="gst_checkbox">GST/VAT ({{ $vat }}%) : </label>
-                                <h4 id="vat_amount" style="display: inline;">฿0.00</h4>
+                                <h4 id="vat_amount" style="display: inline;"></h4>
                             </div>
                             <h4 class="mb-3">
                                 <div id="grand_total" name="grand_total"> Grand Total : </div>
@@ -311,6 +314,7 @@
                     <div class="col-lg-12 d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary btn-lg">Process Now</button>
                         <button type="submit" name="action" value="generate_invoice" class="btn btn-primary btn-lg ml-2">Process and Generate Invoice</button>
+                        <button type="submit" class="btn btn-primary btn-lg ml-2">VAT Bill</button>
                     </div>
                 </div>
                 {!! Form::close() !!}
@@ -496,8 +500,10 @@
 
         if ($('#price_vat').val() === 'price_exclude_vat') {
             $('#gst_info').show(); 
+            $('#total_amount_info').show(); 
         } else {
             $('#gst_info').hide(); 
+            $('#total_amount_info').hide(); 
         }
 
         let selectedRolls = []; 
@@ -565,43 +571,41 @@
         
         
         $(document).on('change','#search_article',function(){
-            var article_no = $(this).val();
-            var isValid = true;
+                var article_no = $(this).val();
+                var isValid = true;
 
-            $('.invoiceitem').each(function () {
-                var meter = parseFloat($(this).find('.inv_meter').val()) || 0;
-                var unitOfSale = $(this).find('.unit_of_sale').val();
-                var typeOfSale = $(this).find('.type_of_sale').val();
-                console.log(unitOfSale);
-                console.log(typeOfSale);
+                $('.invoiceitem').each(function () {
+                    var meter = parseFloat($(this).find('.inv_meter').val()) || 0;
+                    var unitOfSale = $(this).find('.unit_of_sale').val();
+                    var typeOfSale = $(this).find('.type_of_sale').val();
+                    if (meter > 0 && (!unitOfSale || !typeOfSale)) {
+                        isValid = false;
+                        alert('Please select Unit of Sale and Type of Sale for all existing articles before adding a new article.');
+                        return false;
+                    }
+                });
 
-                if (meter > 0 && (!unitOfSale || !typeOfSale)) {
-                    isValid = false;
-                    alert('Please select Unit of Sale and Type of Sale for all existing articles before adding a new article.');
-                    return false;
+                if (!isValid) {
+                    return;
                 }
-            });
 
-            if (!isValid) {
-                return;
-            }
-
-            $("#search_color").html('');
-            $.ajax({
-                url: "{{ route('materials.index') }}",
-                dataType: "json",
-                data: {
-                    article: article_no
-                },
-                success: function(data) {
-                    $("#search_color").append(`<option value="">-- Select color --</option>`);
-                    $.each(data,function(i){
-                        $("#search_color").append(`<option value="${i}">${data[i]}</option>`); 
-                    })
-                }
+                $("#search_color").html('');
+                $.ajax({
+                    url: "{{ route('materials.index') }}",
+                    dataType: "json",
+                    data: {
+                        article: article_no
+                    },
+                    success: function(data) {
+                        // console.log(data);
+                        $("#search_color").append(`<option value="">-- Select color --</option>`);
+                        $.each(data,function(i){
+                            $("#search_color").append(`<option value="${i}">${data[i]}</option>`); 
+                        })
+                    }
+                });
             });
-        });
-        $('#search_article').trigger('change');
+            $('#search_article').trigger('change');
         //for color
         var input_search_color = $('#search_color');
         input_search_color.select2();
@@ -705,13 +709,14 @@
                         $('#total_select_mtr').html(meter.toFixed(2));
                         var yard = meterToYard(meter);
                         $('#total_select_yrd').html(yard);
-                        totalmeter(); // Call the function to calculate the total meter
+                        totalmeter();
                     }
                 });
             });
         }
 
-        $(document).on('change', '.unit_of_sale, .type_of_sale', function() {            
+        $(document).on('change', '.unit_of_sale, .type_of_sale', function() {
+            
             var $thisRow = $(this).closest('tr');
             var unit_of_sale = $thisRow.find('.unit_of_sale').val();
             var type_of_sale = $thisRow.find('.type_of_sale').val();
@@ -719,10 +724,6 @@
 
             // Set the title attribute to display the selected unit of sale
             $(this).attr('title', `Unit Of Sale: ${unit_of_sale}`);
-
-            // Set read-only attributes based on unit_of_sale
-            $thisRow.find('.inv_meter').prop('readonly', unit_of_sale === 'yard');
-            $thisRow.find('.inv_yard').prop('readonly', unit_of_sale === 'meter');
 
             // Fetch price from server
             fetchMaterialPrice(materialId, unit_of_sale, type_of_sale, $thisRow);
@@ -794,7 +795,7 @@
             $itemRow.find('.td-weight_gsm').attr("data-gsm", data.weight_gsm);
             $itemRow.find('.td-weight_per_mtr').attr("data-weight_per_mtr", data.weight_per_mtr);
             $itemRow.find('.td-weight_per_yard').attr("data-weight_per_yard", data.weight_per_yard);
-            //$itemRow.find('.unit_of_sale').val(unit_purchased_in).attr('title', `Unit Of Sale: ${unit_purchased_in}`);
+            $itemRow.find('.unit_of_sale').val(unit_purchased_in).attr('title', `Unit Of Sale: ${unit_purchased_in}`);
             $itemRow.find('.inv_weight').val(data.weight);
             $itemRow.find('.inv_weight').attr("data-value", data.weight);
             $itemRow.find('.hidden_div').attr('id', 'item-rolls-' + data.id);
@@ -814,6 +815,7 @@
             var user_id = $('#customer_id option:selected').val();
             var material_id = data.id;
             var price_w = price_r = price_s = 0;
+            console.log($('#item-' + data.id).find('.inv_price').val())
             $.each(customer_item_price, function(i, v) {
                 if (v.customer_id == user_id && v.material_id == material_id) {
                     $('#item-' + data.id).find('.inv_price').val(v.cut_wholesale);
@@ -832,6 +834,7 @@
                 var retail_price = data.retail_price === "" ? 0 : parseFloat(data.retail_price).toFixed(3) || 0;
                 var roll_price = data.roll_price === "" ? 0 : parseFloat(data.roll_price).toFixed(3) || 0;
             }
+            console.log("price "+ cut_wholesale_price);
             if(price_w==0){
                 $('#item-' + data.id).find('.inv_price').val(cut_wholesale_price).attr('Title',`Price : ${cut_wholesale_price}`);
                 price_w=cut_wholesale_price;
@@ -864,6 +867,8 @@
                     price = price_input.attr("data-sample");
                     saleType = 'Sample';
                 }
+                console.log("this.value "+price);
+                console.log("price "+price);
 
                 // Set the title attribute to display the selected sale type
                 $(this).prop('title', 'Type of Sale: ' + saleType);
@@ -986,6 +991,7 @@
                             if (res.msg) {
                             $('#search_error').fadeIn(300).css('display', 'block').html(res.msg).fadeOut(3000);
                             }
+                            console.log(res);
                             if (res.retail_credit_days !== null) {
                                
                                 $("#credit_days").val(res.retail_credit_days);
@@ -1012,7 +1018,7 @@
         }
 
         // Event handler for changes in relevant fields
-        $(document).on('input change', '.inv_meter, .inv_price, .discount_value, .discount_type', function() {
+        $(document).on('input change', ' .inv_price, .discount_value, .discount_type', function() {
             var $thisRow = $(this).closest('tr');
             handleCalculation($thisRow);
         });
@@ -1021,49 +1027,6 @@
         function yard2meter(yard) {
             return yard * 0.9144;
         }
-
-        // Keyup event handler for .inv_yard field
-        $(document).on('keyup', '.inv_yard', function() {
-            var $thisRow = $(this).closest('tr');
-            var yard = parseFloat($(this).val()).toFixed(2);
-            var unit_of_sale = $thisRow.find('.unit_of_sale').val() || ''; 
-            var meter = yard2meter(yard).toFixed(2);
-            var price = parseFloat($(this).closest('tr').find('.inv_price').val()).toFixed(2);
-            var discountType = $thisRow.find('.discount_type').val() || 0; // No need for parseFloat
-            var discountValue = parseFloat($thisRow.find('.discount_value').val()) || 0;
-
-            $thisRow.find('.inv_meter').attr('title',`Meter : ${meter}`);
-            $thisRow.find('.inv_yard').attr('title',`Meter : ${yard}`);
-            $thisRow.find('.discount_type').attr('title',`Discount Type: ${discountType}`);
-            $thisRow.find('.discount_value').attr('title',`Discount Value: ${discountValue}`);
-            $(this).attr('data-value', yard);
-            if (!isNaN(yard) && yard) {
-                var meter = yard2meter(yard).toFixed(2);
-                $('.inv_meter', $thisRow).val(meter).attr('title',`Meter : ${meter}`);   
-                var weight = $('.inv_weight', $thisRow).attr('data-value');
-                $('.inv_weight', $thisRow).val(weight * yard);
-                                    
-                totalmeter();
-                grandtotal();
-            }
-            if (!isNaN(price) && price) {
-                if(unit_of_sale == 'yard'){
-                    var total = parseFloat(price * yard).toFixed(2);
-                } else {
-                    var total = parseFloat(price * meter).toFixed(2);
-                }
-                 // Apply discount
-                 if (discountType === 'percentage') {
-                    total = parseFloat(total - (total * discountValue / 100));
-                } else if (discountType === 'amount') {
-                    total = parseFloat(total - discountValue).toFixed(2);
-                }
-                // $(this).closest('tr').find('.td-total-price').attr('data-value', total).html(total).attr('title', `Total Amount: ${total}`);
-                $('.total-price', $thisRow).val(total).attr('title', `Total Amount: ${total}`);
-                sub_total();
-                grandtotal();
-            }
-        });
 
         // Convert meter to yard
         function meterToYard(meter) {
@@ -1092,6 +1055,8 @@
 
         // Handle the calculation logic
         function handleCalculation($thisRow) {
+            console.log("222");
+            
             var meter = parseFloat($thisRow.find('.inv_meter').val()).toFixed(2);
             var price = parseFloat($thisRow.find('.inv_price').val()).toFixed(2);
             var unit_of_sale = $thisRow.find('.unit_of_sale').val() || '';
@@ -1104,16 +1069,18 @@
             $thisRow.find('.inv_price').attr('title',`Price : ${price}`);
 
             if (!isNaN(meter) && meter) {
+                console.log("333");
                 var yard = meterToYard(meter);
                 $('.inv_yard', $thisRow).val(yard).attr('title',`Yard : ${yard}`);
                 var weight = parseFloat($('.inv_weight', $thisRow).attr('data-value')) || 0;
                 $('.inv_weight', $thisRow).val(weight * meter);
                 
-                totalmeter();
-                grandtotal();
+                // totalmeter();
+                // grandtotal();
             }
 
             if (!isNaN(price) && price) {
+                console.log("444");
                 var yard = meterToYard(meter);
                 
                 // var total = unit_of_sale === 'yard' ? calculateTotal(price, yard, discountType, discountValue) : calculateTotal(price, meter, discountType, discountValue);
@@ -1123,6 +1090,7 @@
 
                 sub_total();
                 grandtotal();
+                totalmeter();
             }
         }
 
@@ -1162,6 +1130,7 @@
                         $.each(roll_data, function(index, value) {
                             // $('#roll').append(new Option(value.roll_no + " [ Meter : " +value.available_qty+" ]", value.id));
                             addRoll(value);
+                            // console.log(value);
                         })
 
                         calculateTotalMeter(roll_data);
@@ -1182,6 +1151,7 @@
                         $.each($('.select_roll'), function(index, value) {
                             if (value.value == roll_id) {
                                 value.checked = true;
+                                console.log("yes thats checked");
                                 $(value).closest('tr').addClass('table-success');
                                 $(value).closest('tr').find('.meter').val($('#item_roll_' + item_id + '_' + roll_id).val());
                                 $(value).closest('tr').find('.meter').attr('readonly', false);
@@ -1195,6 +1165,7 @@
                     $('#total_select_mtr').html(meter.toFixed(2));
                     var yard = meterToYard(meter);
                     $('#total_select_yrd').html(yard);
+                    console.log("call");
                     totalmeter();
                 }
             });
@@ -1260,8 +1231,10 @@
         }
 
         $(document).on('change', '#select_roll', function() {
+            console.log("checked changes");
             var selected_meter = 0;
             var user_enter_val = 0;
+            console.log(this.checked);
             if (this.checked) {
                 $(this).closest('tr').addClass('table-success');
                 // $(this).closest('tr').find('.meter').attr('readonly',false);
@@ -1296,6 +1269,9 @@
                 $('#total_select_mtr').html(selected_meter.toFixed(2));
                 var selected_yrd = meterToYard(selected_meter);
                 $('#total_select_yrd').html(selected_yrd);
+                $('#total_select_mtr').html(selected_meter.toFixed(2));
+                var selected_yrd = meterToYard(selected_meter);
+                $('#total_select_yrd').html(selected_yrd);
                 user_enter_val = parseFloat($('#remember_meter').html());
                 if (selected_meter) {
                     $('#show_extra').html((selected_meter - user_enter_val).toFixed(2));
@@ -1308,6 +1284,7 @@
             var option_value = $(this).val();
             var selected_meter = 0;
             var user_enter_val = 0;
+            // console.log(option_value);
             if (option_value == '0') {
                 var available_qty = parseFloat($(this).closest('tr').find('#available_qty').val());
                 var selected_mtr = available_qty.toFixed();
@@ -1341,9 +1318,9 @@
                 });
 
                 $('#total_selected_meter').html(selected_meter.toFixed(2));
-                $('#total_select_mtr').html(selected_meter.toFixed(2));
-                var selected_yrd = meterToYard(selected_meter);
-                $('#total_select_yrd').html(selected_yrd);
+                $('#total_select_mtr').html(meter.toFixed(2));
+                var yard = meterToYard(meter.toFixed(2));
+                $('#total_select_yrd').html(yard);
                 user_enter_val = parseFloat($('#remember_meter').html());
                 $('#show_extra').html((selected_meter - user_enter_val).toFixed(2));
             }
@@ -1363,6 +1340,7 @@
                     $('.error1').css('display', 'none').fadeOut();
                     $('#model_save_btn').attr('disabled', false);
                     // $('#total_selected_meter').html(v.value);
+                    // console.log(v.value);
                 }
                 if (v.value != '') {
                     meter += parseFloat(v.value);
@@ -1407,6 +1385,7 @@
         });
 
         function updateSelectedRollModal() {
+            console.log("call");
             const selectedRollContainer = $('#selectedRollTable'); // Assuming this is the container for displaying selected rolls
             selectedRollContainer.empty(); // Clear previous contents
 
@@ -1415,6 +1394,8 @@
                 return;
             }
 
+            console.log("selectedRolls");
+            console.log(selectedRolls);
             $.each(selectedRolls, function(index, roll) {
                 // Create a display for each selected roll
                 const rollInfo = `<div>
@@ -1541,6 +1522,7 @@
             // Now, append the rolls for the specific item under the item's row
             if (itemRolls[item_id].length > 0) {
                 itemRolls[item_id].forEach(function(roll) {
+                    console.log("log -> "+JSON.stringify(roll));
                     
                     var piece_no = roll.pcs_no;
                     var rollRow = `
@@ -1639,6 +1621,7 @@
                 while (s.length < 4) s = "0" + s;
                 return s;
             }
+            // console.log(c_fname+" "+c_lname+" "+year+" "+month+" "+day+" "+pad(last_invoice));
             $('#invoice_no').val(c_fname + c_lname + year + month + day + last_invoice);
         };
         $(document).on('change', '#customer_id', function() {
@@ -1678,7 +1661,12 @@
             $('.invoiceitem').each(function() {
                 var meter = Number($(this).find('.inv_meter').val()) || 0;
                 var yard = Number($(this).find('.inv_yard').val()) || 0;
-                var unit_of_sale = $(this).find('.unit_of_sale').val(); 
+                const sellingPrice = Number($(this).find('.total-price ').val()) || 0;
+                const unit_of_sale = $(this).find('.unit_of_sale').val(); 
+                var itemId = $(this).find('.inv_meter').data('item-id'); 
+                const weight_per_mtr = Number($(this).closest('tr').find('.td-weight_per_mtr').data('weight_per_mtr')) || 0;
+                const weight_per_yard = Number($(this).closest('tr').find('.td-weight_per_yard').data('weight_per_yard')) || 0;
+                const actualPricePerUnit = unit_of_sale === 'yard' ?  Number($(this).find('.cost_per_yrd').val()) || 0 : Number($(this).find('.cost_per_mtr').val()) || 0;
 
                 if (yard > 0 && meter === 0) {
                     meter = yard2meter(yard); 
@@ -1686,36 +1674,25 @@
                     yard = meter2yard(meter);
                 }
 
-                var itemId = $(this).find('.inv_meter').data('item-id'); 
-
-                var weight_per_mtr = Number($(this).closest('tr').find('.td-weight_per_mtr').data('weight_per_mtr')) || 0;
-                var weight_per_yard = Number($(this).closest('tr').find('.td-weight_per_yard').data('weight_per_yard')) || 0;
-                // var weight = unit_of_sale === 'yard' ? yard * weight_per_yard : meter * weight_per_mtr;
-
                 const weight = unit_of_sale === 'yard' ? yard * weight_per_yard : meter * weight_per_mtr;
-                // const qtySold = unit_of_sale === 'yard' ? yard : meter;
-                // const profit = (sellingPrice) - (actualPricePerUnit * qtySold);
+                const qtySold = unit_of_sale === 'yard' ? yard : meter;
+
+                const profit = (sellingPrice) - (actualPricePerUnit * qtySold);
+
+                console.log("sellingPrice" +sellingPrice);
+                console.log("actualPricePerUnit" +actualPricePerUnit);
+                console.log("qtySold" +qtySold);
+                console.log("profit" +profit);
                 
                 totalMeter += meter;
                 totalYard += yard;
                 totalWeight += weight;
-                var sell_price = unit_of_sale === 'yard' ? Number($(this).find('.cost_per_yrd').val()) || 0 : Number($(this).find('.cost_per_mtr').val()) || 0;
-                // var sell_price = Number($(this).find('.inv_price').val()) || 0;
-                var material_price = Number($(this).find('.material_price').val()) || 0;
-                var ex_rate = Number($(this).find('.ex_rate').val()) || 0;
-                var import_tax = Number($(this).find('.import_tax').val()) || 0;
-                var transport_shipping_paid = Number($(this).find('.transport_shipping_paid').val()) || 0;
-                var actual_price_per_unit = (material_price * ex_rate) + import_tax + transport_shipping_paid;
-
-                var quantity_sold = unit_of_sale === 'yard' ? yard : meter;
-                var profit = (sell_price * quantity_sold) - (actual_price_per_unit * quantity_sold);
                 totalProfit += profit;
             });
 
             $('#totalMeter').html("Total Meter: " + totalMeter.toFixed(2) + " / " + totalYard.toFixed(2));
 
             $('#approximate_weight').val(totalWeight.toFixed(2));
-            console.log("totalProfit "+totalProfit);
             $('#total_profit').val(totalProfit.toFixed(2));
         }
 
@@ -1783,21 +1760,26 @@
             if ($('#price_vat').val() === 'price_exclude_vat') {
                 $('#total_sum').html("Total Amount (Before Disc.) : " + "฿" + parseFloat(grandTotal+discountTotal).toFixed(2));
 
+                $('#total_amount_before_vat').html("Total Amount (Before VAT.) : " + "฿" + parseFloat(grandTotal).toFixed(2));
+
                 var vatAmount = (grandTotal * vatRate) / 100;
+
                 grandTotal += vatAmount;
 
                 $('#grand_total').html("Grand Total (incl. VAT): " + "฿" + parseFloat(grandTotal).toFixed(2));
-                $('#vat_amount').text(parseFloat(vatAmount).toFixed(2));
+                $('#vat_amount').text("฿"+parseFloat(vatAmount).toFixed(2));
                 $('#gst_info').show();
+                $('#total_amount_info').show();
                 $('.grand_total').val(grandTotal);
                 $('.vat_percentage').val(vatRate);
-                $('.vat_amount').val(vatAmount);
                 $('#total_discount').html("Total Discount : " + "฿" + parseFloat(discountTotal).toFixed(2));
 
             } else {
                 $('#grand_total').html("Grand Total: " + "฿" + parseFloat(grandTotal).toFixed(2));
                 $('#gst_info').hide();
+                $('#total_amount_info').hide();
                 $('#total_sum').html("Total Amount (Before Disc.) : " + "฿" + parseFloat(grandTotal+discountTotal).toFixed(2));
+                $('#total_amount_before_vat').html("Total Amount (Before VAT.) : " + "฿" + parseFloat(grandTotal-vatRate).toFixed(2));
                 $('.grand_total').val(parseFloat(grandTotal).toFixed(2));
                 $('#total_discount').html("Total Discount : " + "฿" + parseFloat(discountTotal).toFixed(2));
 
@@ -1805,11 +1787,6 @@
         }
 
         $('#price_vat').on('change', function() {
-            // if ($(this).val() === 'price_include_vat') {
-            //     $('#gst_checkbox').prop('disabled', true).prop('checked', false);
-            // } else if ($(this).val() === 'price_exclude_vat') {
-            //     $('#gst_checkbox').prop('disabled', true).prop('checked', true);
-            // }
             grandtotal(); 
         });
         
@@ -1908,6 +1885,8 @@
                     datatype: 'JSON',
                     success : function(data){
                         
+
+                        console.log(id);
                         ListDefault(id)
                         getPriceBook(customerId);
 
