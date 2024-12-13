@@ -162,12 +162,20 @@
             </li>
             @endrole
             @role('super-admin')
-            <li class="{{ (request()->is('inventory')) ? 'active' : '' }}">
-                <a href="{{ url('inventory/') }}" title="Inventory">
-                    <img src="{{ url('public/uploads/sidebar/Inventory.svg') }}" alt="Inventory Icon">
-                    <span>Inventory</span>
-                </a>
-            </li>
+                <li class="{{ (request()->is('inventory*') || request()->is('stock-article')) ? 'active' : '' }}">
+                    <a href="#dropdown-inventory" aria-expanded="false" data-toggle="collapse" title="Inventory">
+                        <img src="{{ url('public/uploads/sidebar/Inventory.svg') }}" alt="Inventory Icon">
+                        <span>Inventory</span>
+                    </a>
+                    <ul id="dropdown-inventory" class="collapse list-unstyled pt-0 {{ (request()->is('inventory*') || request()->is('stock-article')) ? 'show' : '' }}">
+                        <li>
+                            <a class="{{ (request()->is('inventory')) ? 'active' : '' }}" href="{{ url('inventory/') }}" title="Inventory">Inventory</a>
+                        </li>
+                        <li>
+                            <a class="{{ (request()->is('stock-article')) ? 'active' : '' }}" href="{{ url('stock-article') }}" title="Stock Article">Stock Article</a>
+                        </li>
+                    </ul>
+                </li>
             @endrole
             @role('super-admin')
             <li class="{{ (request()->is('return')) ? 'active' : '' }}">

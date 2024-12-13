@@ -100,4 +100,9 @@ class InventoryController extends Controller
         $data = ['materials' => $materials, 'items' => $items, 'material_id' => $material_id, 'search' => $search, 'invoice_no' => $invoice_no,'article_no' => $article_no,'colors' => $colors,'article' => $article,'color' => $color];
         return view('inventory.index', $data);
     }
+
+    public function stockArticle()
+    {
+        return view('inventory.stock-article');
+    }
 }

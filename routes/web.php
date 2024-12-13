@@ -208,4 +208,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::put('stock-location/update/{id}', [App\Http\Controllers\WareHouseController::class, 'updateWarehouseLocation'])->name('stockLocation.update');
     Route::put('stock-locations/update-multiple','WareHouseController@updateMultipleWarehouseLocations')->name('stockLocation.updateMultiple');
     Route::get('warehouse-history/{id}','WareHouseController@getWarehouseHistory')->name('warehouse.history');
+
+    Route::get('stock-article','InventoryController@stockArticle')->name('stockArticle');
 });
