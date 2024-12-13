@@ -578,7 +578,11 @@
                     var meter = parseFloat($(this).find('.inv_meter').val()) || 0;
                     var unitOfSale = $(this).find('.unit_of_sale').val();
                     var typeOfSale = $(this).find('.type_of_sale').val();
-                    if (meter > 0 && (!unitOfSale || !typeOfSale)) {
+                    console.log("meter"+meter);
+                    console.log("unitOfSale"+unitOfSale);
+                    console.log("typeOfSale"+typeOfSale);
+                    
+                    if (meter >= 0 && (!unitOfSale || !typeOfSale)) {
                         isValid = false;
                         alert('Please select Unit of Sale and Type of Sale for all existing articles before adding a new article.');
                         return false;
@@ -703,8 +707,8 @@
                         });
 
                         // Update the total selected meter
-                        $('#total_selected_meter').html(meter.toFixed(2));
-                        $('#total_select_mtr').html(meter.toFixed(2));
+                        $('#total_selected_meter').html(meter);
+                        $('#total_select_mtr').html(meter);
                         var yard = meterToYard(meter);
                         $('#total_select_yrd').html(yard);
                         totalmeter();
@@ -793,7 +797,7 @@
             $itemRow.find('.td-weight_gsm').attr("data-gsm", data.weight_gsm);
             $itemRow.find('.td-weight_per_mtr').attr("data-weight_per_mtr", data.weight_per_mtr);
             $itemRow.find('.td-weight_per_yard').attr("data-weight_per_yard", data.weight_per_yard);
-            $itemRow.find('.unit_of_sale').val(unit_purchased_in).attr('title', `Unit Of Sale: ${unit_purchased_in}`);
+            // $itemRow.find('.unit_of_sale').val(unit_purchased_in).attr('title', `Unit Of Sale: ${unit_purchased_in}`);
             $itemRow.find('.inv_weight').val(data.weight);
             $itemRow.find('.inv_weight').attr("data-value", data.weight);
             $itemRow.find('.hidden_div').attr('id', 'item-rolls-' + data.id);
@@ -1067,7 +1071,7 @@
                 $('.inv_weight', $thisRow).val(weight * meter);                
             }
 
-            if (!isNaN(price) && price) {
+            if (!isNaN(price) && price && !isNaN(meter) && meter && unit_of_sale) {
                 var yard = meterToYard(meter);
                 
                 // var total = unit_of_sale === 'yard' ? calculateTotal(price, yard, discountType, discountValue) : calculateTotal(price, meter, discountType, discountValue);
@@ -1146,8 +1150,8 @@
                         // addRoll(data);
                     });
 
-                    $('#total_selected_meter').html(meter.toFixed(2));
-                    $('#total_select_mtr').html(meter.toFixed(2));
+                    $('#total_selected_meter').html(meter);
+                    $('#total_select_mtr').html(meter);
                     var yard = meterToYard(meter);
                     $('#total_select_yrd').html(yard);
                     totalmeter();
@@ -1325,9 +1329,9 @@
                 if (v.value != '') {
                     meter += parseFloat(v.value);
                 }
-                $('#total_selected_meter').html(meter.toFixed(2));
-                $('#total_select_mtr').html(meter.toFixed(2));
-                var yard = meterToYard(meter.toFixed(2));
+                $('#total_selected_meter').html(meter);
+                $('#total_select_mtr').html(meter);
+                var yard = meterToYard(meter);
                 $('#total_select_yrd').html(yard);
                 user_enter_val = parseFloat($('#remember_meter').html());
                 $('#show_extra').html((meter - user_enter_val).toFixed(2));
@@ -1354,9 +1358,9 @@
                 if (v.value != '') {
                     meter += parseFloat(v.value);
                 }
-                $('#total_selected_meter').html(meter.toFixed(2));
-                $('#total_select_mtr').html(meter.toFixed(2));
-                var yard = meterToYard(meter.toFixed(2));
+                $('#total_selected_meter').html(meter);
+                $('#total_select_mtr').html(meter);
+                var yard = meterToYard(meter);
                 $('#total_select_yrd').html(yard);
                 user_enter_val = parseFloat($('#remember_meter').html());
                 $('#show_extra').html((meter - user_enter_val).toFixed(2));

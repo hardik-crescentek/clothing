@@ -3,7 +3,7 @@
 @section('content')
 
 <link href=”https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css” rel=”stylesheet”>
-<!-- Begin Row -->
+
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
@@ -492,35 +492,6 @@
             $('#' + $uniqueId).find('.barcode').val(data.barcode);
             $('#' + $uniqueId).find('.delete').data('id', $uniqueId);
             totalrow();
-
-            // $.ajax({
-            //     url: '{{url("materials/getItem")}}/' + id,
-            //     method: 'get',
-            //     dataType: 'json',
-            //     success: function(data) {
-
-            //         console.log(data);
-
-            //         // var item_id = data[0].id;
-            //         // var color_id = data[0].color.id;
-            //         // var name = data[0].name;
-            //         // var color = data[0].color.name;
-            //         // var barcode = data[0].barcode;
-            //         // var meter = null;
-            //         // $template = $('#templateAddItem').html();
-            //         // var $uniqueId = uuid();
-            //         // var $tr = $('<tr class="orderitem" id="' + $uniqueId + '">').append($template);
-            //         // $('#tblOrderTable tbody').append($tr);
-            //         // $('#' + $uniqueId).find('.item_id').val(item_id);
-            //         // $('#' + $uniqueId).find('.color_id').val(color_id);
-            //         // $('#' + $uniqueId).find('.name').val(name);
-            //         // $('#' + $uniqueId).find('.color').val(color);
-            //         // $('#' + $uniqueId).find('.barcode').val(barcode);
-            //         // $('#' + $uniqueId).find('.meter').val(meter);
-            //         // $('#' + $uniqueId).find('.delete').attr('id', $uniqueId);
-            //         // totalrow();
-            //     }
-            // });
         }
 
         $(window).on('load',function(){
@@ -531,13 +502,9 @@
         // for add table
         $(document).on('keyup', '#edit_meter', function() {
             var meter = $(this).val();
-            console.log(meter);
             meter = parseFloat(meter);
-            // console.log(meter);
             if (!isNaN(meter) && meter) {
                 $('#edit_yard').val(meter2yard(meter).toFixed(2));
-                // totalmeter();
-                // grand_total();
             }
         });
 
@@ -646,10 +613,10 @@
             timePicker: true,
             timePicker24Hour: false,
             locale: {
-                format: 'DD/MM/YYYY HH:mm' // Format expected in the input value
+                format: 'DD/MM/YYYY HH:mm' 
             },
             autoApply: false,
-            startDate: purchaseDate // Use the pre-filled value from the input
+            startDate: purchaseDate 
         });
 
         // Initialize the delivered_date field
@@ -659,10 +626,10 @@
             timePicker: true,
             timePicker24Hour: false,
             locale: {
-                format: 'DD/MM/YYYY HH:mm' // Format expected in the input value
+                format: 'DD/MM/YYYY HH:mm'
             },
             autoApply: false,
-            startDate: deliveredDate // Use the pre-filled value from the input
+            startDate: deliveredDate
         });
     });
 
