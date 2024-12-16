@@ -136,12 +136,9 @@
                             {!! Form::text('commision_amount_sale', 0, array('id' => 'commision_amount_sale','class' => 'form-control', 'data-validation'=>"required")) !!}
                             <div class="input-group-append">
                                 @php
-                                     $commision_type =   [
-                                                             "percentage" => '%',
-                                                             "thb"        => 'THB',
-                                                         ];
+                                    $commision_type =   ["percentage" => '%',"thb" => 'THB'];
                                 @endphp
-                                 {!!Form::select('subtotal_commision_type', $commision_type, null, ['class' => 'form-control'])!!}
+                                {!!Form::select('subtotal_commision_type', $commision_type, null, ['class' => 'form-control'])!!}
                             </div>
                         </div>
                     </div>
@@ -376,9 +373,6 @@
                     </table>
                 </div>
             </div>
-            {{-- <div class="modal-footer">
-
-            </div> --}}
         </div>
     </div>
 </div>

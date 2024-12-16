@@ -269,7 +269,7 @@ class ClientController extends Controller
             $this->validate($request, [
                 'firstname' => 'bail|required|min:2',
                 'lastname'  => 'bail|required|min:2',
-                'client_mark' => 'nullable|unique:users,client_mark'. $id,
+                'client_mark' => 'nullable|unique:users,client_mark,'. $id,
                 'email'     => 'required|email|unique:users,email,' . $id,
                 'phone'     => 'required',
                 'dob'       => 'required',
