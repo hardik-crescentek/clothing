@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title', 'Users')
 @section('content')
-<!-- Begin Page Header-->
+
 <div class="row">
     <div class="page-header">
         <div class="d-flex align-items-center">
@@ -9,7 +9,6 @@
         </div>
     </div>
 </div>
-<!-- End Page Header -->
 
 @if ($message = Session::get('success'))
 <div class="alert alert-success">
@@ -17,7 +16,6 @@
 </div>
 @endif
 
-<!-- Begin Row -->
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
         <div class="widget has-shadow">
@@ -26,18 +24,16 @@
             </div>
             <div class="widget-body">
 
-
                 @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endif
-
 
                 {!! Form::open(array('route' => 'users.store','method'=>'POST', 'class'=>"form-validate", 'novalidate')) !!}
                 <input type="hidden" name="redirectTo" value="{{$redirect}}">
@@ -183,7 +179,7 @@
         </div>
     </div>
 </div>
-<!-- End Row -->
+
 @endsection
 @push('scripts')
 <script src="{{ asset('assets/js/datepicker/moment.min.js') }}"></script>
@@ -222,7 +218,17 @@
                 } else {
                     $('.row_business_nature_other').hide();
                 }
-            })
+        })
+        $('form').on('submit', function() {
+            // Disable the submit button
+            $('button[type="submit"]').prop('disabled', true).text('Submitting...');
+        });
+
+        // When the form is submitted
+        $('form').on('submit', function() {
+            $('button[type="submit"]').prop('disabled', true).text('Submitting...');
+        });
+
     })(jQuery);
 </script>
 @endpush

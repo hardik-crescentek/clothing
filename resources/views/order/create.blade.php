@@ -513,6 +513,10 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
+        $('form').on('submit', function() {
+            $('button[type="submit"]').prop('disabled', true).text('Submitting...');
+        });
+
         if ($('#price_vat').val() === 'price_exclude_vat') {
             $('#gst_info').show(); 
             $('#total_amount_info').show(); 

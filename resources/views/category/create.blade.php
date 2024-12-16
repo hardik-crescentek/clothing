@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('title', 'Create Category')
 @section('content')
-<!-- Begin Page Header-->
+
 <div class="row">
     <div class="page-header">
         <div class="d-flex align-items-center">
@@ -9,7 +9,6 @@
         </div>
     </div>
 </div>
-<!-- End Page Header -->
 
 @if ($message = Session::get('success'))
 <div class="alert alert-success">
@@ -26,18 +25,16 @@
             </div>
             <div class="widget-body">
 
-
                 @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endif
-
 
                 {!! Form::open(array('route' => 'category.store','method'=>'POST', 'class'=>"form-validate", 'novalidate')) !!}
                 <div class="row">
@@ -83,3 +80,13 @@
 </div>
 <!-- End Row -->
 @endsection
+
+@push('scripts')
+    <script>
+        (function($) {
+            $('form').on('submit', function() {
+                $('button[type="submit"]').prop('disabled', true).text('Submitting...');
+            });
+        })(jQuery);
+    </script>
+@endpush

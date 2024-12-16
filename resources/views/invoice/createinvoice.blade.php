@@ -430,6 +430,10 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
+        $('form').on('submit', function() {
+            $('button[type="submit"]').prop('disabled', true).text('Submitting...');
+        });
+
         $(document).on('change','#payment_terms',function(){
             var p_val = $(this).val();
             if (p_val == 'credit') {

@@ -385,6 +385,10 @@
 			image_format: 'jpeg',
 			jpeg_quality: 90
 		});
+
+        $('form').on('submit', function() {
+            $('button[type="submit"]').prop('disabled', true).text('Submitting...');
+        });
         
     })(jQuery);
 

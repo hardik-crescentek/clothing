@@ -285,6 +285,11 @@
 <script type="text/javascript">
 
     (function($) {
+
+        $('form').on('submit', function() {
+            $('button[type="submit"]').prop('disabled', true).text('Submitting...');
+        });
+
         function calculateTransportationShippingCostPerMeter() {
             var totalMeter = parseFloat($('#total_meter').val()) || 0;
             var importTax = parseFloat($('#import_tax').val()) || 0;

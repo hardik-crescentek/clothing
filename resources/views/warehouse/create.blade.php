@@ -63,3 +63,13 @@
 </div>
 <!-- End Row -->
 @endsection
+
+@push('scripts')
+    <script>
+        (function($) {
+            $('form').on('submit', function() {
+                $('button[type="submit"]').prop('disabled', true).text('Submitting...');
+            });
+        })(jQuery);
+    </script>
+@endpush
