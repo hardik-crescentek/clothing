@@ -332,7 +332,7 @@
         </div>
     </div>
     <div id="rollSelectModel" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true" class="modal fade lg text-left">
-        <div role="document" class="modal-dialog modal-lg" style="max-width: 60%;">
+        <div role="document" class="modal-dialog modal-lg" style="max-width: 65%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 id="modal-header" class="modal-title">Select roll for <span class="span-modal-header"> </span></h5>
@@ -341,6 +341,19 @@
                     <span class="d-inline-block ml-3">Total Selected Meter : <div id="total_select_mtr" class="d-inline mr-3"></div>
                     </span>
                     <span class="d-inline-block ml-3">Total Selected Yard : <div id="total_select_yrd" class="d-inline mr-3"></div>
+                    </span>
+                    <span>Enter Yard:</span>
+                    <span class="d-inline-block ml-3">
+                        <input 
+                            type="number" 
+                            id="yard_input" 
+                            class="form-control d-inline" 
+                            style="width: 100px;" 
+                            placeholder="Yard">
+                    </span>
+                    <span class="d-inline-block ml-3">
+                        Calculated Meter: 
+                        <span id="calculated_meter" class="d-inline"></span>
                     </span>
                     <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                 </div>
@@ -356,6 +369,7 @@
                                 <th>Color No</th>
                                 <th>Batch No</th>
                                 <th>Available Meter</th>
+                                <th>Available Yard</th>
                                 <th>Option</th>
                                 <th>Meter</th>
                             </tr>
@@ -485,6 +499,7 @@
         <td>{!! Form::text('color_no[]',null, array('id'=>'color_no','class' => 'form-control input-sm color_no', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
         <td>{!! Form::text('batch_no[]',null, array('id'=>'batch_no','class' => 'form-control input-sm batch_no', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
         <td>{!! Form::text('available_qty[]',null, array('id'=>'available_qty','class' => 'form-control input-sm available_qty', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
+        <td>{!! Form::text('available_qty_yrd[]',null, array('id'=>'available_qty_yrd','class' => 'form-control input-sm available_qty_yrd', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
         {{-- <td>{!! Form::Select('option[]',["0"=>"Take All","1"=>"Cut As Per Order","2"=>"Type How Much To Cut"],null, array('id'=>'option','class' => 'form-control input-sm option', 'data-validation'=>"required",'disabled'=>'disabled')) !!}</td> --}}
         <td>{!! Form::Select('option[]',["0"=>"Take All","2"=>"Type How Much To Cut"],null, array('id'=>'option','class' => 'form-control input-sm option', 'data-validation'=>"required",'disabled'=>'disabled')) !!}</td>
         <td>{!! Form::number('meter[]',null, array('id'=>'meter','class' => 'form-control input-sm meter', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
@@ -1165,7 +1180,9 @@
             
             $template = $('#templateAddItem_roll').html();
             var $uniqueId = uuid();
-            var $tr = $('<tr class="roll_item" id="' + $uniqueId + '">').append($template);
+            var $tr = $('<tr class="roll_item" id="' + $uniqueId + '">').append($template);                
+            var available_qty_yrd = meterToYard(data.available_qty);
+
             $('#tblRoll tbody').append($tr);
             $('#' + $uniqueId).find('.roll_id').val(data.id);
             $('#' + $uniqueId).find('.select_roll').val(data.id);
@@ -1175,6 +1192,7 @@
             $('#' + $uniqueId).find('.color_no').val(data.color_no);
             $('#' + $uniqueId).find('.batch_no').val(data.batch_no);
             $('#' + $uniqueId).find('.available_qty').val(data.available_qty);
+            $('#' + $uniqueId).find('.available_qty_yrd').val(available_qty_yrd);
             $('#' + $uniqueId).find('.meter').attr("max", data.available_qty);
             // $('#' + $uniqueId).find('.meter').val(data.available_qty);
             $('#' + $uniqueId).find('.roll_delete_btn').data('id', $uniqueId);
@@ -1560,7 +1578,7 @@
         $(document).on('click', '.btn-display-info', function() {
             var itemId = $(this).data('item-id'); // Get the associated item ID
             var rollsForItem = selectedRolls.filter(roll => roll.itemId.toString() === itemId.toString());
-            var displayHtml = '<table class="table"><thead><tr><th>Roll No</th><th>PSC NO</th><th>Article No</th><th>Color No</th><th>Batch No</th><th>Available Meter</th><th>Meter</th><th>Barcode</th></tr></thead><tbody>';
+            var displayHtml = '<table class="table"><thead><tr><th>Roll No</th><th>PSC NO</th><th>Article No</th><th>Color No</th><th>Batch No</th><th>Available Meter</th><th>Available Yard</th><th>Meter</th><th>Barcode</th></tr></thead><tbody>';
             
             if (rollsForItem.length === 0) {
                 displayHtml += '<tr><td colspan="7">No rolls selected for this item.</td></tr>';
@@ -2112,12 +2130,25 @@
     document.addEventListener('DOMContentLoaded', function () {
         const paymentTerm = document.getElementById('payment_term');
         const creditDays = document.getElementById('credit-days');
+        const yardInput = document.getElementById("yard_input");
+        const calculatedMeter = document.getElementById("calculated_meter");
 
         paymentTerm.addEventListener('change', function () {
             if (paymentTerm.value === 'credit') {
                 creditDays.classList.remove('d-none');
             } else {
                 creditDays.classList.add('d-none');
+            }
+        });
+
+        yardInput.addEventListener("input", function () {
+            const yardValue = parseFloat(yardInput.value);
+            if (!isNaN(yardValue)) {
+                // Convert yard to meter (1 yard = 0.9144 meters)
+                const meterValue = (yardValue * 0.9144).toFixed(2);
+                calculatedMeter.textContent = `${meterValue}`;
+            } else {
+                calculatedMeter.textContent = "";
             }
         });
     });
