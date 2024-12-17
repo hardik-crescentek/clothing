@@ -6,7 +6,7 @@
             <li class="{{ request()->is('dashboard') ? 'active' : '' }}">
                 <a href="{{ url('/') }}" title="Dashboard">
                     <img src="{{ url('public/uploads/sidebar/Dashboard.svg') }}" alt="Dashboard Icon">
-                    <span>Dashboard</span>
+                    <span>Dashboard </span>
                 </a>
             </li>
 
