@@ -683,21 +683,18 @@
             // }
         });
         // $('#generate_invoice').on('click',function(){
-            function generate_invoice_no(){
-            var c_fname="{{$order->customer->firstname}}".substr(0,2);
-            var c_lname="{{$order->customer->lastname}}".substr(0,2)
-            var d=new Date();
-            var year=d.getFullYear();
-            var month=("0" + (d.getMonth() + 1)).slice(-2);
-            var day=("0" + d.getDate()).slice(-2);
-            var last_invoice=pad(parseInt("{{$order->customer->last_invoice}}")+1);
-            function pad(num) {
-                var s = num+"";
-                while (s.length < 4) s = "0" + s;
-                return s;
+        function generate_invoice_no(){
+            var client_mark="{{$order->customer->client_mark}}";
+            console.log("client_mark"+client_mark);
+            var next_invoice_no="{{$nextInvoiceNumber}}";
+            var next_client_invoice_no="{{$nextClientInvoiceNumber}}";
+            if (!client_mark || client_mark === 'null' || client_mark === '') {
+                $('#invoice_no').val('');
+                alert('Client mark does not exist. Please add it to the client first.');
+            } else {
+                const invoice_no = `${next_invoice_no}-${client_mark}-${next_client_invoice_no}`;
+                $('#invoice_no').val(invoice_no);
             }
-            // console.log(c_fname+" "+c_lname+" "+year+" "+month+" "+day+" "+pad(last_invoice));
-            $('#invoice_no').val(c_fname+c_lname+year+month+day+last_invoice);
         };
         $(window).on('load',function(){
            sub_total();

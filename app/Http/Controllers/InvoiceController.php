@@ -69,7 +69,6 @@ class InvoiceController extends Controller
     }
     public function create(Order $order)
     {
-
         // $users = User::pluck('firstname', 'id');
         $user = new User();
         $payment_receiver=[""=>'--Select Payment Receiver--'];
@@ -80,7 +79,13 @@ class InvoiceController extends Controller
 
         // gst or vat amount from settings
         $vat = Settings::where('id', 1)->value('vat') ?? 0;
-        return view('invoice.generateInvoice',compact('order','items','payment_receiver','vat'));
+
+        $clintInvoiceCount = Invoice::where('customer_id', $order->customer_id)->whereNull('deleted_at')->count();
+        $nextClientInvoiceNumber = str_pad($clintInvoiceCount + 1, 6, '0', STR_PAD_LEFT);
+        $invoiceCount = Invoice::count();
+        $nextInvoiceNumber = str_pad($invoiceCount + 1, 8, '0', STR_PAD_LEFT);
+
+        return view('invoice.generateInvoice',compact('order','items','payment_receiver','vat','nextInvoiceNumber','nextClientInvoiceNumber'));
     }
     public function getRollData(Request $request)
     {
@@ -485,10 +490,31 @@ class InvoiceController extends Controller
         }
         return redirect()->route('invoice.index')->with('success', 'Invoice Created successfully');
     }
+
     public function getLastInvoiceInfo(Request $request)
     {
-        return response(User::where('id','=',$request->id)->get()->first());
+        $user = User::where('id', $request->id)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $clintInvoiceCount = Invoice::where('customer_id', $request->id)
+                                ->whereNull('deleted_at')
+                                ->count();
+        $nextClientInvoiceNumber = str_pad($clintInvoiceCount + 1, 6, '0', STR_PAD_LEFT);
+        
+        $invoiceCount = Invoice::count();
+        $nextInvoiceNumber = str_pad($invoiceCount + 1, 8, '0', STR_PAD_LEFT);
+
+
+        return response()->json([
+            'user' => $user,
+            'next_invoice_no' => $nextInvoiceNumber,
+            'next_client_invoice_no' => $nextClientInvoiceNumber
+        ]);
     }
+
     public function edit(Invoice $invoice)
     {
         $user = new User();

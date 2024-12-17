@@ -971,23 +971,12 @@
             // }
         });
 
-        function generate_invoice_no(fname, lname, last_invoice) {
-            var c_fname = fname.substr(0, 2);
-            var c_lname = lname.substr(0, 2);
-            var d = new Date();
-            var year = d.getFullYear();
-            var month = ("0" + (d.getMonth() + 1)).slice(-2);
-            var day = ("0" + d.getDate()).slice(-2);
-            var last_invoice = pad(parseInt(last_invoice) + 1);
 
-            function pad(num) {
-                var s = num + "";
-                while (s.length < 4) s = "0" + s;
-                return s;
-            }
-            // console.log(c_fname+" "+c_lname+" "+year+" "+month+" "+day+" "+pad(last_invoice));
-            $('#invoice_no').val(c_fname + c_lname + year + month + day + last_invoice);
+        function generate_invoice_no(client_mark,next_invoice_no,next_client_invoice_no) {
+            const invoice_no = `${next_invoice_no}-${client_mark}-${next_client_invoice_no}`;
+            $('#invoice_no').val(invoice_no);
         };
+        
         $(document).on('change', '#customer_id', function() {
             var id = $(this).val();
             if (id != '') {
@@ -997,10 +986,15 @@
                         'id': id
                     },
                     success: function(data) {
-                        var f_name = data.firstname;
-                        var l_name = data.lastname;
-                        var last_invoice = data.last_invoice ? data.last_invoice : 1;
-                        generate_invoice_no(f_name, l_name, last_invoice);
+                        if (!data.user.client_mark && (data.user.client_mark == null)) {
+                            $('#invoice_no').val('');
+                            alert('Client mark does not exist. Please add it to the client first.');
+                        } else {
+                            var client_mark = data.user.client_mark;
+                            var next_invoice_no = data.next_invoice_no;
+                            var next_client_invoice_no = data.next_client_invoice_no;
+                            generate_invoice_no(client_mark,next_invoice_no,next_client_invoice_no);
+                        }
                     }
                 });
             } else {
