@@ -7,6 +7,7 @@ use App\User;
 use Hash;
 use Auth;
 use Carbon\Carbon;
+use App\WareHouse;
 
 //Importing laravel-permission models
 use Spatie\Permission\Models\Role;
@@ -58,7 +59,8 @@ class UserController extends Controller
         $redirect = $request->input('redirect');
         $roles = Role::orderBy('name', 'ASC')->pluck('name', 'name')->all();
         $business_nature = array_merge(['' => "Select Nature or Business"],config('constants.business_nature'));
-        return view('users.create', compact('roles','redirect','business_nature'));
+        $wareHouse = WareHouse::pluck('name', 'id')->all();
+        return view('users.create', compact('roles','redirect','business_nature','wareHouse'));
     }
 
     /**
@@ -83,7 +85,7 @@ class UserController extends Controller
             'role'      => 'required',
             'zip'       => 'required',
         ]);
-        $input = $request->only('firstname', 'lastname', 'email', 'phone', 'phone2', 'address', 'city', 'state', 'country', 'dob', 'joining_date', 'zip','salesman_commission','skype','facebook','pinterest','wechat','whatsapp','line','company_name','business_nature', 'business_nature_other', 'newsletter');
+        $input = $request->only('firstname', 'lastname', 'email', 'phone', 'phone2', 'address', 'city', 'state', 'country', 'dob', 'joining_date', 'zip','salesman_commission','skype','facebook','pinterest','wechat','whatsapp','line','company_name','business_nature', 'business_nature_other', 'newsletter','warehouse_id');
         // $input['dob'] = Carbon::createFromFormat('d/m/Y', $request->dob)->format('Y-m-d');
         $input['password'] = Hash::make($request->password);
         $user = User::create($input); //Retrieving only the email and password data
@@ -123,7 +125,8 @@ class UserController extends Controller
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
         $business_nature = array_merge(['' => "Select Nature or Business"],config('constants.business_nature'));
-        return view('users.edit', compact('user', 'roles', 'userRole','business_nature'));
+        $wareHouse = WareHouse::pluck('name', 'id')->all();        
+        return view('users.edit', compact('user', 'roles', 'userRole','business_nature','wareHouse'));
     }
 
     /**
@@ -150,7 +153,7 @@ class UserController extends Controller
 
         // Get the user
         $user = User::findOrFail($id);
-        $input = $request->only(['firstname','lastname', 'email', 'phone', 'address', 'city', 'state', 'dob', 'joining_date', 'zip','salesman_commission','skype','facebook','pinterest','wechat','whatsapp','line','company_name','business_nature', 'business_nature_other', 'newsletter']); //Retreive the name, email and password fields
+        $input = $request->only(['firstname','lastname', 'email', 'phone', 'address', 'city', 'state', 'dob', 'joining_date', 'zip','salesman_commission','skype','facebook','pinterest','wechat','whatsapp','line','company_name','business_nature', 'business_nature_other', 'newsletter','warehouse_id']);
         // $input['dob'] = Carbon::createFromFormat('d/m/Y', $request->dob)->format('Y-m-d');
         $user->fill($input);
 

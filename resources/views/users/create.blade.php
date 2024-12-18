@@ -165,6 +165,12 @@
                             <label for="newsletter" class="form-check-label" for="printWidth">Recive update on new arrivals</label>
                         </div>
                     </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">WareHouse</label>
+                            {!! Form::select('warehouse_id', [''=>' --Select WareHouse-- ']+$wareHouse, null, ['id' => 'warehouse','class' => 'form-control custom-select']) !!}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group row d-flex align-items-center mt-5">
