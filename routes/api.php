@@ -38,7 +38,6 @@ Route::post('forgot', 'API\UserController@sendResetLinkEmail');
 // });
 
 
-
 Route::middleware('auth:api')->group(function () {
 
     Route::get('user/me', 'API\UserController@me');
@@ -62,9 +61,13 @@ Route::middleware('auth:api')->group(function () {
     
     Route::post('send_contact_mail', 'API\CommonController@sendContactMail');
 
-
-
+    // Hardik mobile api
+    Route::get('dashoard-info', 'API\OrderController@dashboardInfo');
+    Route::get('order-list', 'API\OrderController@orderList');
+    Route::put('order/{id}/status', 'API\OrderController@updateStatus');
+    // end code
 });
+
 
 Route::post('check_purchase_details', 'API\PurchaseController@CheckPurchaseDetails');
 Route::post('add_audit_details', 'API\PurchaseController@Addauditdetails');

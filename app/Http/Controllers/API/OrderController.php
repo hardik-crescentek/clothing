@@ -478,4 +478,105 @@ class OrderController extends Controller
     //     echo $output;
     // }
 
+    public function dashboardInfo(Request $request)
+    {
+        $user = $request->user();
+    
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
+        $orderStatuses = Order::selectRaw("
+                                    SUM(CASE WHEN status = 'Pending' THEN 1 ELSE 0 END) as new_orders,
+                                    SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) as completed_orders,
+                                    SUM(CASE WHEN status = 'Not Enough' THEN 1 ELSE 0 END) as not_enough_orders,
+                                    SUM(CASE WHEN status = 'Out of Stock' THEN 1 ELSE 0 END) as out_of_stock_orders,
+                                    SUM(CASE WHEN status = 'Damaged' THEN 1 ELSE 0 END) as damaged_orders")
+                                ->first();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Dashboard information retrieved successfully',
+            'data' => [
+                'new_orders' => $orderStatuses->new_orders ?? 0,
+                'completed_orders' => $orderStatuses->completed_orders ?? 0,
+                'not_enough_orders' => $orderStatuses->not_enough_orders ?? 0,
+                'out_of_stock_orders' => $orderStatuses->out_of_stock_orders ?? 0,
+                'damaged_orders' => $orderStatuses->damaged_orders ?? 0,
+            ],
+        ], 200);
+    }
+
+    public function orderList()
+    {
+        try {
+            $orders = Order::all();
+
+            if ($orders->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No orders found.',
+                    'data' => [],
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Orders retrieved successfully.',
+                'data' => $orders,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while retrieving orders.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $validated = $request->validate([
+                'status' => 'required|string|in:Pending,Completed,Not Enough,Out of Stock,Damaged',
+                'status_date' => 'nullable|date_format:Y-m-d',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+        
+            // Find the order
+            $order = Order::find($id);
+
+            if (!$order) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Order not found.',
+                ], 404);
+            }
+
+            $order->status = $validated['status'];
+            $order->status_date = now(); 
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $originalName = $request->file('image')->getClientOriginalName();
+                $imagePath = $request->file('image')->storeAs('uploads/orders', $originalName, 'public'); // Store with the original name
+                $order->image = $imagePath; // Save the image path to the order
+            }
+
+            $order->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Order status updated successfully.',
+                'data' => $order,
+            ], 200);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating the order status.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
