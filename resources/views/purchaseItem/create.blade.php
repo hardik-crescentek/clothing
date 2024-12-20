@@ -924,8 +924,10 @@
 
         //changes
         $(document).on('submit','#from_add_purchase',function(){
+            
             var checkClass =  $('#tblPurchaseItems tbody tr').find('.valid');
             if (checkClass.length > 0) {
+                $('button[type="submit"]').prop('disabled', true).text('Submitting...');
                 return true;
             }else{
                 new Noty({
