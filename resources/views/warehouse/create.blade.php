@@ -47,7 +47,7 @@
                         </div>
                         <div class="form-group col-lg-3">
                             <label class="form-control-label d-flex">Address<span class="text-danger ml-2">*</span></label>
-                            {!! Form::text('address', null, array('placeholder' => 'Address','class' => 'form-control')) !!}
+                            {!! Form::text('address', null, array('placeholder' => 'Address','class' => 'form-control', 'data-validation'=>"required")) !!}
                         </div>
                     </div>
                     <div class="form-group row d-flex align-items-center mt-5">

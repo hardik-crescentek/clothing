@@ -225,10 +225,6 @@
                     $('.row_business_nature_other').hide();
                 }
         })
-        $('form').on('submit', function() {
-            // Disable the submit button
-            $('button[type="submit"]').prop('disabled', true).text('Submitting...');
-        });
 
         // When the form is submitted
         $('form').on('submit', function() {

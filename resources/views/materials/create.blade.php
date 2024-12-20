@@ -140,14 +140,14 @@
                     <div class="col-lg-2">
                         <label class="form-control-label">Width(inch)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
-                            <input type="text" name="width_inch" class="form-control width-inch" id="widthInch" placeholder="Width in inches" data-validation="required">
+                            {!! Form::text('width_inch', null, ['class' => 'form-control width-inch', 'id' => 'widthInch', 'placeholder' => 'Width in inches', 'data-validation' => 'required']) !!}
                             <span class="input-group-text">INCH</span>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <label class="form-control-label">Width(cm)<span class="text-danger ml-2">*</span></label>
                         <div class="input-group form-group">
-                            <input type="text" name="width_cm" class="form-control width-cm" id="widthCm" placeholder="Width in centimeters" readonly>
+                            {!! Form::text('width_cm', null, ['class' => 'form-control width-cm', 'id' => 'widthCm', 'placeholder' => 'Width in centimeters', 'data-validation' => 'required','readonly' => 'readonly']) !!}
                             <span class="input-group-text">CM</span>
                         </div>
                     </div>
