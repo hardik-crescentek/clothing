@@ -68,7 +68,7 @@ class OrderController extends Controller
         }
         // dd($orders->toSql());
 
-        $orders = $orders->paginate(env('ITEMS_PER_PAGE'))->appends($request->query());
+        $orders = $orders->get();
         // $orders = $orders->paginate(env('ITEMS_PER_PAGE'))->appends($request->query())->toArray();
         // echo "<pre>"; print_r($orders); die();
         return view('order/index',compact('orders'));
@@ -251,15 +251,16 @@ class OrderController extends Controller
                     "arranged_by" => $request->input("arranged_by"),
                     "inspected_by" => $request->input("inspected_by"),
                     "delivered_by" => $request->input("delivered_by"),
-                    "delivered_date" => $request->input("delivered_date"),
                     "total_number_of_items" => $request->input("total_number_of_items"),
                     "approximate_weight" => $request->input("approximate_weight"),
-                    "delivered_date" => $request->input("delivered_date"),
                     "grand_total" => $request->input("grand_total"),
                     "vat_percentage" => $request->input("vat_percentage"),
                     "vat_amount" => $request->input("vat_amount"),
                     "delivered_date" => $request->input("delivered_date"),
                     "total_profit" => $request->input("total_profit"),
+                    "status" => $request->input("status"),
+                    'status_date' => Carbon::now()->format('Y-m-d H:i:s'),
+                    "warehouse_id" => $request->input("warehouse_id"),
                 ];
         $order = Order::create($data);
         if($items)
@@ -378,9 +379,10 @@ class OrderController extends Controller
             ->get();
         // $items=OrderItem::where('order_id','=',$order->id)->with('item','color','purchase')->get();
         $order_status = array_merge(['' => "Select Status"],config('constants.order_status'));
+        $orderWarehouse = $order->warehouse()->first();
         // $items=$order->order_items;
         // echo "<pre>"; print_r($items); die();
-        return view('order.edit',compact('order','users','sales_person','colors','items','order_status'));
+        return view('order.edit',compact('order','users','sales_person','colors','items','order_status','orderWarehouse'));
     }
 
     public function ViewOrderDetails($id)
@@ -441,7 +443,6 @@ class OrderController extends Controller
                     "note"       => $request->input("note"),
                     "remark"     => $request->input("remark"),
                     "role_cutter_name"     => $request->input("role_cutter_name"),
-                    "status"     => $request->input("status"),
                     "payment_term" => $payment_term,
                     "price_vat"    => $request->input("price_vat"),
                     "credit_day" => isset($payment_term) && ($payment_term == 'cash') ? NULL : $request->input("credit_day"),
@@ -453,6 +454,8 @@ class OrderController extends Controller
                     "total_number_of_items" => $request->input("total_number_of_items"),
                     "approximate_weight" => $request->input("approximate_weight"),
                     "delivered_date" => $request->input("delivered_date"),
+                    "status" => $request->input("status"),
+                    'status_date' => Carbon::now()->format('Y-m-d H:i:s'),
                 ];
         $order->fill($data);
         $order->save();

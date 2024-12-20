@@ -93,7 +93,8 @@ class InvoiceController extends Controller
             // $roll = PurchaseItem::where('material_id','=',$request->input('material_id'))->where('available_qty','!=','0')->orderBy('sort_order', 'ASC')->get();
 
             $roll = PurchaseItem::leftJoin('purchases','purchases.id','=','purchase_items.purchase_id')
-                    ->select('purchase_items.*','purchases.pcs_no as pcs_no','purchases.ex_rate','purchases.import_tax','purchases.transport_shipping_paid')
+                    ->leftJoin('ware_houses', 'ware_houses.id', '=', 'purchases.warehouse_id') 
+                    ->select('purchase_items.*','purchases.pcs_no as pcs_no','purchases.ex_rate','purchases.import_tax','purchases.transport_shipping_paid','ware_houses.id as latest_warehouse_id','ware_houses.name as warehouse_name')
                     ->where('purchase_items.material_id','=',$request->input('material_id'))
                     ->where('purchase_items.available_qty','!=','0')
                     ->orderBy('purchase_items.sort_order', 'ASC')

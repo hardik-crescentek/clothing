@@ -486,7 +486,15 @@ class OrderController extends Controller
             return response()->json(['error' => 'Unauthenticated'], 401);
         }
 
-        $orderStatuses = Order::selectRaw("
+        if (!$user->warehouse_id) {
+            return response()->json(['error' => 'User does not have a warehouse'], 400);
+        }
+
+        $warehouseId = $user->warehouse_id;
+
+        $orderStatuses = Order::where('warehouse_id', $warehouseId)
+                                ->selectRaw("
+                                    COUNT(*) as total_orders,
                                     SUM(CASE WHEN status = 'Pending' THEN 1 ELSE 0 END) as new_orders,
                                     SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) as completed_orders,
                                     SUM(CASE WHEN status = 'Not Enough' THEN 1 ELSE 0 END) as not_enough_orders,
@@ -498,6 +506,7 @@ class OrderController extends Controller
             'success' => true,
             'message' => 'Dashboard information retrieved successfully',
             'data' => [
+                'total_orders' => $orderStatuses->total_orders ?? 0,
                 'new_orders' => $orderStatuses->new_orders ?? 0,
                 'completed_orders' => $orderStatuses->completed_orders ?? 0,
                 'not_enough_orders' => $orderStatuses->not_enough_orders ?? 0,
@@ -507,10 +516,21 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function orderList()
+    public function orderList(Request $request)
     {
         try {
-            $orders = Order::all();
+            $user = $request->user();
+
+            if (!$user) {
+                return response()->json(['error' => 'Unauthenticated'], 401);
+            }
+
+            if (!$user->warehouse_id) {
+                return response()->json(['error' => 'User does not have a warehouse.'], 400);
+            }
+
+            $warehouseId = $user->warehouse_id;
+            $orders = Order::where('warehouse_id', $warehouseId)->get();
 
             if ($orders->isEmpty()) {
                 return response()->json([

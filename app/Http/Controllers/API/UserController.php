@@ -148,18 +148,30 @@ class UserController extends Controller
             'message' => null,
         ];
 
+        // Attempt to authenticate the user
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
             $user = Auth::user();
-            $user->role_name = $user->roles->pluck('name')->first();
-            $data = $user;
-            $data['token'] =  $user->createToken('MyApp')->accessToken;
-            $response['data'] = $data;
-            $response['success'] = true;
-            $response['message'] = 'User login successfully.';
-            return response()->json($response, 200);
-        } else {
 
+            if ($user->hasRole('dispatcher')) {
+                $user->role_name = $user->roles->pluck('name')->first();
+                $data = $user;
+                $data['token'] = $user->createToken('MyApp')->accessToken;
+
+                $response['data'] = $data;
+                $response['success'] = true;
+                $response['message'] = 'User login successfully.';
+                return response()->json($response, 200);
+            } else {
+                // If no dispatcher roll, deny access
+                $response['data'] = ['error' => 'You have not dispatcher a roll.'];
+                $response['success'] = false;
+                $response['message'] = 'You have not dispatcher a roll.';
+                return response()->json($response, 403);
+            }
+
+        } else {
+            // Invalid credentials
             $response['data'] = ['error' => 'Unauthorised'];
             $response['success'] = false;
             $response['message'] = 'Unauthorised.';

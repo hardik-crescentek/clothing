@@ -29,10 +29,10 @@
                         {!! Form::text('purchase_date', isset($order->order_date) ? \Carbon\Carbon::parse($order->order_date)->format('d/m/Y H:i') : null, array('id' => 'purchase_date', 'class' => 'form-control', 'data-validation' => "required")) !!}
                     </div>
                     
-                    <div class="form-group col-lg-3">
+                    {{-- <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Status<span class="text-danger ml-2">*</span></label>
                         {!! Form::select('status', $order_status,$order->status, array('id'=>'order_status','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
-                    </div>
+                    </div> --}}
                     <div class="form-group col-lg-3">
                         <label class="form-control-label d-flex">Role Cutter Person Name</label>
                         <input type="text" class="form-control" name="role_cutter_name" value="{{ $order->role_cutter_name }}">
@@ -120,6 +120,14 @@
                             <span class="input-group-addon addon-secondary"><i class="la la-barcode"></i></span>
                             {!! Form::text('input_search_barcode', null, array('id'=>'input_search_barcode','placeholder' => 'Barcode Number','class' => 'form-control')) !!}
                         </div>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label>Warehouse</label>
+                        <input type="text" class="form-control" value="{{ $orderWarehouse ? $orderWarehouse->name : 'N/A' }}" readonly>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label class="form-control-label">Status</label>
+                        {!! Form::select('status', ['Pending' => 'Pending','Completed' => 'Completed','Not Enough' => 'Not Enough','Out of Stock' => 'Out of Stock','Damaged' => 'Damaged'], old('status', $order->status ?? 'Pending'), ['id' => 'status', 'class' => 'form-control']) !!}
                     </div>
                 </div>
                 <div class="form-group row d-flex align-items-center">

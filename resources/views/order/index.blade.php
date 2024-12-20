@@ -81,6 +81,8 @@
                                     <th data-sorter="false">Grand Total</th>
                                     <th data-sorter="false">Note</th>
                                     <!-- <th data-sorter="false">Order Status</th> -->
+                                    <th data-sorter="false">Status</th>
+                                    <th data-sorter="false">Status Date</th>
                                     <th data-sorter="false" width="180px">Action</th>
                                 </tr>
                             </thead>
@@ -88,7 +90,7 @@
                                 @isset($orders)
                                 @foreach($orders as $order)
                                 {{ isset($order->order_items['item_id']) }}
-                                    @if($order->status == 0)
+                                    @if($order->status != "Completed")
                                         <tr class="purchase-link" data-id="{{$order->id}}" style="color: #f0ad4e !important;">
                                             <td> {{$order->customer->firstname}} {{$order->customer->lastname}} </td>
                                             <td> {{$order->seller->firstname}} {{$order->seller->lastname}} </td>
@@ -132,6 +134,8 @@
                                             @endrole
                                             <td> {{$order->grand_total}} </td>
                                             <td> {{$order->note}} </td>
+                                            <td> {{$order->status}} </td>
+                                            <td> {{$order->status_date}} </td>
                                             <!-- <td>
                                                 @if ($order->status == 1)
                                                 <span class="badge-text badge-text-small success">Dispatch</span>
@@ -181,9 +185,6 @@
                                 @endisset
                             </tbody>
                         </table>
-                       <!--  @isset($orders)
-                        {{ $orders->render() }}
-                        @endisset -->
                     </div>
                     <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="base-tab-2">
                         <table class="table table-hover mb-0 " id="order_tbl2">
@@ -201,7 +202,8 @@
                                     <th data-sorter="false">Grand Total</th>
                                     <th data-sorter="false">Note</th>
                                     <th data-sorter="false">Remark</th>
-                                    <!-- <th data-sorter="false">Order Status</th> -->
+                                    <th data-sorter="false">Status</th>
+                                    <th data-sorter="false">Status Date</th>
                                     @role('super-admin')
                                     <th data-sorter="false" width="180px">Action</th>
                                     @endrole
@@ -211,7 +213,7 @@
                                 @isset($orders)
 
                                 @foreach($orders as $order)
-                                    @if($order->status == 1)
+                                    @if($order->status == "Completed")
                                         <tr class="purchase-link" data-id="{{$order->id}}" style="color: #79b385 !important;">
                                             <td>{{$order->customer->firstname}} {{$order->customer->lastname}} </td>
                                             <td> {{$order->seller->firstname}} {{$order->seller->lastname}} </td>
@@ -249,13 +251,8 @@
                                             <td> {{$order->grand_total}} </td>
                                             <td> {{$order->note}} </td>
                                             <td> {{$order->remark}} </td>
-                                            <!-- <td>
-                                                @if ($order->status == 1)
-                                                <span class="badge-text badge-text-small success">Dispatch</span>
-                                                @else
-                                                <span class="badge-text badge-text-small warning">Pending</span>
-                                                @endif
-                                            </td> -->
+                                            <td> {{$order->status}} </td>
+                                            <td> {{$order->status_date}} </td>
                                             @role('super-admin')
                                             <td class="td-actions">
                                                <!--  <a data-toggle="modal" data-target="#order-status-model" data-id="{{ $order->id }}" class="btn btn-secondary btn-sm btn-square col-sm-6 mt-1" style="color: #f0ad4e !important;">Order <br> Status</a> -->
@@ -281,9 +278,6 @@
                                 @endisset
                             </tbody>
                         </table>
-                       <!--  @isset($orders)
-                        {{ $orders->render() }}
-                        @endisset -->
                     </div>
                 </div>
             </div>
@@ -342,13 +336,6 @@
     });
 </script>
     <script>
-        // $(document).ready(function(){
-        //     $('#order_tbl').tablesorter({
-        //         cssAsc: 'up',
-		      //   cssDesc: 'down',
-        //         cssNone: 'both'
-        //     });
-        // })
         $(document).ready(function () {
             $('#order_tbl').DataTable({
                 lengthMenu: [

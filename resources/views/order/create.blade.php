@@ -149,6 +149,18 @@
                             {!! Form::select('search_color',$colors,'' , array('class' => 'form-control','id'=>'search_color')) !!}
                         </div>
                     </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="form-control-label">Warehouse Name</label>
+                            <input type="text" class="form-control" id="warehouse_name" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Status</label>
+                            {!! Form::select('status', ['Pending' => 'Pending','Completed' => 'Completed','Not Enough' => 'Not Enough','Out of Stock' => 'Out of Stock','Damaged' => 'Damaged'], old('status', $order->status ?? 'Pending'), ['id' => 'status', 'class' => 'form-control']) !!}
+                        </div>
+                    </div>   
                 </div>
 
                 <div class="form-group row d-flex align-items-center">
@@ -488,6 +500,7 @@
         <div id='' class="hidden_div"></div>
     </td>
     {!! Form::hidden('item_id[]',null,array('id'=>'inv_item_id')) !!}
+    {!! Form::hidden('warehouse_id',null,array('id'=>'warehouse_id')) !!}
 </script>
 
 <script type="text/template" id="templateAddItem_roll">
@@ -674,30 +687,32 @@
             var roll_data;
             var modal_item_id;
             
-            // Open the modal directly
             $('#rollSelectModel').modal('show');
 
-            // When the modal is shown, trigger the AJAX request to fetch roll data
             $('#rollSelectModel').one('shown.bs.modal', function() {
-                $('#tblRoll tbody').empty();  // Clear previous data in the table
-                modal_item_id = item_id; // Store the item ID
-                $('#material_item_id').val(item_id); // Set the material ID in the modal input
+                $('#tblRoll tbody').empty(); 
+                $('#material_item_id').val(item_id);
                 
-                // Make the AJAX request to fetch roll data based on the material ID
+                modal_item_id = item_id; 
+                
                 $.ajax({
-                    url: '{{route("invoice.get-roll")}}', // Your route to get roll data
+                    url: '{{route("invoice.get-roll")}}',
                     data: {
-                        'material_id': item_id // Pass the material ID to fetch corresponding roll data
+                        'material_id': item_id 
                     },
                     dataType: "json",
                     success: function(data) {
-                        roll_data = data.roll; // Assuming the response contains a 'roll' array
-                        // Process the roll data and populate the modal table
+                        roll_data = data.roll;
+
+                        if (roll_data.length > 0) {
+                            $('#warehouse_name').val(roll_data[0].warehouse_name);
+                            $('#warehouse_id').val(roll_data[0].latest_warehouse_id);
+                        }
+
                         $.each(roll_data, function(index, value) {
-                            addRoll(value); // Add each roll to the table
+                            addRoll(value);
                         });
 
-                        // Calculate total meters if necessary
                         calculateTotalMeter(roll_data);
                     }
                 }).then(function() {
