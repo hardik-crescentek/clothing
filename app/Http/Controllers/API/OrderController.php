@@ -530,7 +530,27 @@ class OrderController extends Controller
             }
 
             $warehouseId = $user->warehouse_id;
-            $orders = Order::where('warehouse_id', $warehouseId)->get();
+            $orders = Order::
+                            select(
+                                'orders.id', 
+                                'orders.customer_id', 
+                                'orders.status', 
+                            )
+                            ->selectRaw('CONCAT(users.firstname, " ", users.lastname) as customer_name')
+                            ->leftJoin('users', 'orders.customer_id', '=', 'users.id')
+                            ->leftJoin('order_items', 'order_items.order_id', '=', 'orders.id')
+                            ->leftJoin('purchase_items', 'purchase_items.id', '=', 'order_items.roll_id') // Match roll_id with purchase_items.id
+                            ->leftJoin('purchases', 'purchases.id', '=', 'purchase_items.purchase_id') // Match purchase_id with purchases.id
+                            ->leftJoin('materials', 'materials.id', '=', 'order_items.item_id')
+                            ->selectRaw('GROUP_CONCAT(DISTINCT CONCAT(materials.color_no, " ", materials.color) SEPARATOR ", ") as color')
+                            ->selectRaw('GROUP_CONCAT(DISTINCT materials.article_no SEPARATOR ", ") as article_no')
+                            ->selectRaw('GROUP_CONCAT(DISTINCT purchases.invoice_no SEPARATOR ", ") as invoice_no') // Fetch invoice_no from purchases
+                            ->selectRaw('GROUP_CONCAT(DISTINCT purchase_items.piece_no SEPARATOR ", ") as piece_no') // Fetch piece_no from purchase_items
+                            ->selectRaw('DATE_FORMAT(orders.order_date, "%D %b %Y %H:%i") as order_date_time') // Format order_date
+                            ->where('orders.warehouse_id', $warehouseId)
+                            ->groupBy('orders.id')
+                            ->get();        
+                        
 
             if ($orders->isEmpty()) {
                 return response()->json([
