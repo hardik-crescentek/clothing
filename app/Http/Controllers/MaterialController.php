@@ -128,18 +128,18 @@ class MaterialController extends Controller
      */
     public function store(Request $request)
     {
-        // dd(request()->all());
-        $item=count($request->input('color_no'));
         $this->validate($request, [
             'name'        => 'required',
             'category_id' => 'required',
             'width_cm'       => 'required',
             'width_inch'      => 'required',
-            // 'selvage'  => 'required',
-            // 'construction' => 'required',
             'article_no'  => 'required|unique:materials',
-            // 'image'    => 'required|image|mimes:png,jpg,jpeg|max:' . config('constants.image_size_limit'),
+            'color_no'    => 'required|array|min:1',
+            'color_no.*'  => 'required|string',
         ]);
+
+        $colorNos = $request->input('color_no', []);
+        $item = count($colorNos);
 
         for($i=0;$i<$item;$i++){
             // $i=0;

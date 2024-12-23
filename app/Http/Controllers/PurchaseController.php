@@ -86,6 +86,20 @@ class PurchaseController extends Controller
             'no_of_rolls'          => 'required',
             'no_of_bales'          => 'required',
             'warehouse_id'         => 'required',
+            'articles' => 'required|array|min:1',
+            'articles.*.article' => 'required|string',
+            'articles.*.article_id' => 'required|integer|exists:materials,id',
+            'articles.*.colors' => 'required|array|min:1', 
+            'articles.*.colors.*' => 'required|string',  
+        ], [
+            'articles.required' => 'You must add at least one article.',
+            'articles.min' => 'You must add at least one article.',
+            'articles.*.article.required' => 'The article field is required.',
+            'articles.*.article_id.required' => 'The article ID is required for each entry.',
+            'articles.*.article_id.exists' => 'The selected article ID is invalid.',
+            'articles.*.colors.required' => 'The colors field is required for each article.',
+            'articles.*.colors.min' => 'Each article must have at least one color.',
+            'articles.*.colors.*.required' => 'Each color field must be filled.',
         ]);
 
         $total_qty = 0;

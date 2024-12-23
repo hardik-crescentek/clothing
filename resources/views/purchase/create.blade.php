@@ -18,14 +18,14 @@
             <div class="widget-body">
 
                 @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endif
 
 
@@ -139,7 +139,7 @@
                                     'class' => 'custom-file-input_0',
                                     'id' => 'attach_documents',
                                     'multiple' => true, // Enable multiple file selection
-                                    'data-validation' => 'mime',
+                                    'data-validation' => 'required mime',
                                     'data-validation-allowing' => 'jpeg, jpg, png, pdf, doc, docx',
                                     'data-validation-error-msg-mime' => 'You can only upload image or document files'
                                 ]) !!}
@@ -159,7 +159,7 @@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label class="form-control-label">Total No Of Rolls<span class="text-danger ml-2">*</span></label>
-                            {!! Form::text('no_of_rolls', null, array('placeholder' => 'Total No Of Rolls','class' => 'form-control','id'=>'no_of_rolls','data-validation' => "required")) !!}
+                            {!! Form::text('no_of_rolls', null, array('placeholder' => 'Total No Of Rolls','id'=>'no_of_rolls','class' => 'form-control','data-validation' => "required")) !!}
                         </div>
                     </div>
                     <div class="col-lg-3">
@@ -286,9 +286,9 @@
 
     (function($) {
 
-        $('form').on('submit', function() {
-            $('button[type="submit"]').prop('disabled', true).text('Submitting...');
-        });
+        // $('form').on('submit', function() {
+        //     $('button[type="submit"]').prop('disabled', true).text('Submitting...');
+        // });
 
         function calculateTransportationShippingCostPerMeter() {
             var totalMeter = parseFloat($('#total_meter').val()) || 0;
@@ -649,9 +649,9 @@
 
         //changes
 
-        $(window).on('load',function(){
-            check_currency();
-        });
+        // $(window).on('load',function(){
+        //     check_currency();
+        // });
         $(document).on('change','#purchase_type',function(){
             var p_type = $(this).val();
 
