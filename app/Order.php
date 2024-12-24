@@ -12,7 +12,7 @@ class Order extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        "customer_id", "seller_id",'order_date', "note", "status", "name","mobile","address", "booking_days", "remark","role_cutter_name","payment_term","price_vat","credit_day","entered_by","arranged_by","inspected_by","delivered_by","delivered_date","total_number_of_items","approximate_weight","vat_percentage","vat_amount",'grand_total','total_profit','status_date','image',"warehouse_id"
+        "customer_id", "seller_id",'order_date', "note", "status", "name","mobile","address", "booking_days", "remark","role_cutter_name","payment_term","price_vat","credit_day","entered_by","arranged_by","inspected_by","delivered_by","delivered_date","total_number_of_items","approximate_weight","vat_percentage","vat_amount",'grand_total','total_profit','status_date','image',"dispatcher_id"
     ];
 
     protected $dates = ['deleted_at', 'order_date', 'delivered_date'];

@@ -11,6 +11,7 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\ClientArticle;
 use App\ClientImage;
+use App\WareHouse;
 
 class User extends Authenticatable
 {
@@ -88,6 +89,11 @@ class User extends Authenticatable
     public function images()
     {
         return $this->hasMany(ClientImage::class, 'client_id');
+    }
+
+    public function warehouse()
+    {
+        return $this->belongsTo(WareHouse::class, 'warehouse_id');
     }
 
     protected $appends = ['full_name'];

@@ -486,13 +486,9 @@ class OrderController extends Controller
             return response()->json(['error' => 'Unauthenticated'], 401);
         }
 
-        if (!$user->warehouse_id) {
-            return response()->json(['error' => 'User does not have a warehouse'], 400);
-        }
+        $dispatcherId = $user->id;
 
-        $warehouseId = $user->warehouse_id;
-
-        $orderStatuses = Order::where('warehouse_id', $warehouseId)
+        $orderStatuses = Order::where('dispatcher_id', $dispatcherId)
                                 ->selectRaw("
                                     COUNT(*) as total_orders,
                                     SUM(CASE WHEN status = 'Pending' THEN 1 ELSE 0 END) as new_orders,
@@ -525,11 +521,7 @@ class OrderController extends Controller
                 return response()->json(['error' => 'Unauthenticated'], 401);
             }
 
-            if (!$user->warehouse_id) {
-                return response()->json(['error' => 'User does not have a warehouse.'], 400);
-            }
-
-            $warehouseId = $user->warehouse_id;
+            $dispatcherId = $user->id;
             $orders = Order::
                             select(
                                 'orders.id', 
@@ -547,7 +539,7 @@ class OrderController extends Controller
                             ->selectRaw('GROUP_CONCAT(DISTINCT purchases.invoice_no SEPARATOR ", ") as invoice_no') // Fetch invoice_no from purchases
                             ->selectRaw('GROUP_CONCAT(DISTINCT purchase_items.piece_no SEPARATOR ", ") as piece_no') // Fetch piece_no from purchase_items
                             ->selectRaw('DATE_FORMAT(orders.order_date, "%D %b %Y %H:%i") as order_date_time') // Format order_date
-                            ->where('orders.warehouse_id', $warehouseId)
+                            ->where('orders.dispatcher_id', $dispatcherId)
                             ->groupBy('orders.id')
                             ->get();        
                         
@@ -569,6 +561,65 @@ class OrderController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while retrieving orders.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function orderitemList(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            if (!$user) {
+                return response()->json(['error' => 'Unauthenticated'], 401);
+            }
+
+            $validated = $request->validate([
+                'order_id' => 'required|exists:orders,id',
+            ]);
+
+            $orderId = $validated['order_id'];
+            $orderItems = OrderItem::select(
+                    'order_items.id', 
+                    'order_items.order_id', 
+                    'order_items.item_id', 
+                    'order_items.roll_id', 
+                    'order_items.price',
+                    'order_items.status',
+                )
+                ->selectRaw('CONCAT(materials.color_no, " ", materials.color) as color')
+                ->selectRaw('GROUP_CONCAT(DISTINCT materials.article_no SEPARATOR ", ") as article_no')
+                ->selectRaw('GROUP_CONCAT(DISTINCT purchase_items.piece_no SEPARATOR ", ") as piece_no')
+                ->selectRaw('GROUP_CONCAT(DISTINCT purchases.invoice_no SEPARATOR ", ") as invoice_no')
+                ->selectRaw('DATE_FORMAT(orders.order_date, "%D %b %Y %H:%i") as order_date_time')
+                ->selectRaw('CONCAT(users.firstname, " ", users.lastname) as customer_name')
+                ->leftJoin('purchase_items', 'purchase_items.id', '=', 'order_items.roll_id') 
+                ->leftJoin('orders', 'orders.id', '=', 'order_items.order_id') 
+                ->leftJoin('users', 'orders.customer_id', '=', 'users.id')
+                ->leftJoin('materials', 'materials.id', '=', 'order_items.item_id') 
+                ->leftJoin('purchases', 'purchases.id', '=', 'purchase_items.purchase_id') 
+                ->where('order_items.order_id', $orderId)
+                ->groupBy('order_items.id') 
+                ->get();
+
+            if ($orderItems->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No order items found for the provided order.',
+                    'data' => [],
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Order items retrieved successfully.',
+                'data' => $orderItems,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while retrieving order items.',
                 'error' => $e->getMessage(),
             ], 500);
         }

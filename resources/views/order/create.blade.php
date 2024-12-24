@@ -149,12 +149,18 @@
                             {!! Form::select('search_color',$colors,'' , array('class' => 'form-control','id'=>'search_color')) !!}
                         </div>
                     </div>
-                    <div class="col-lg-3">
+                    {{-- <div class="col-lg-3">
                         <div class="form-group">
                             <label class="form-control-label">Warehouse Name</label>
                             <input type="text" class="form-control" id="warehouse_name" readonly>
                         </div>
-                    </div>
+                    </div> --}}
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Dispatcher<span class="text-danger ml-2">*</span></label>
+                            {!! Form::select('dispatcher_id', [''=>'-- select dispatcher --']+$dispatchers, old('dispatcher_id'), ['id' => 'dispatcher_id', 'class' => 'form-control custom-select', 'data-validation' => "required"]) !!}
+                        </div>
+                    </div>                    
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label class="form-control-label">Status</label>
@@ -500,7 +506,6 @@
         <div id='' class="hidden_div"></div>
     </td>
     {!! Form::hidden('item_id[]',null,array('id'=>'inv_item_id')) !!}
-    {!! Form::hidden('warehouse_id',null,array('id'=>'warehouse_id')) !!}
 </script>
 
 <script type="text/template" id="templateAddItem_roll">
@@ -703,12 +708,6 @@
                     dataType: "json",
                     success: function(data) {
                         roll_data = data.roll;
-
-                        if (roll_data.length > 0) {
-                            $('#warehouse_name').val(roll_data[0].warehouse_name);
-                            $('#warehouse_id').val(roll_data[0].latest_warehouse_id);
-                        }
-
                         $.each(roll_data, function(index, value) {
                             addRoll(value);
                         });

@@ -120,6 +120,16 @@ class OrderController extends Controller
      */
     public function create(Request $request)
     {
+        $dispatchers = User::role('dispatcher')
+                        ->with('warehouse')
+                        ->select('id', 'firstname', 'lastname','warehouse_id')
+                        ->get()
+                        ->mapWithKeys(function ($user) {
+                            $warehouseName = $user->warehouse ? $user->warehouse->name : 'No Warehouse';
+                            return [$user->id => $user->fullName . ' - ' . $warehouseName];
+                        })
+                        ->toArray();
+
         $users=[''=>'--Select Customer--'];
         $users += User::all()->pluck("fullName",'id')->toArray();
 
@@ -151,7 +161,7 @@ class OrderController extends Controller
         $vat = Settings::where('id', 1)->value('vat') ?? 0;
 
         // echo "<pre>"; print_r($article_no); die();
-        return view('order/create', compact('article_no', 'colors', 'users', 'sales_person', 'colors', 'items','customer_item_price','vat'));
+        return view('order/create', compact('article_no', 'colors', 'users', 'sales_person', 'colors', 'items','customer_item_price','vat','dispatchers'));
     }
 
     /**
@@ -203,7 +213,8 @@ class OrderController extends Controller
             // 'meter'          => 'required',
             'purchase_date'  => 'required',
             'payment_term'      => 'required|string|in:cash,credit',
-            'credit_day'        => 'nullable|integer|min:1', // Default rule for credit_day
+            'credit_day'        => 'nullable|integer|min:1',
+            'dispatcher_id'  => 'required',
         ]);
 
         // Add conditional validation for credit_day
@@ -260,7 +271,7 @@ class OrderController extends Controller
                     "total_profit" => $request->input("total_profit"),
                     "status" => $request->input("status"),
                     'status_date' => Carbon::now()->format('Y-m-d H:i:s'),
-                    "warehouse_id" => $request->input("warehouse_id"),
+                    "dispatcher_id" => $request->input("dispatcher_id"),
                 ];
         $order = Order::create($data);
         if($items)

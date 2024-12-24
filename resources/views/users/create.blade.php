@@ -206,6 +206,7 @@
                 format: 'DD/MM/YYYY'
             }
         });
+        
         $(document).on('change','.roll',function(){
             if($(this).val()=="sales-person"){
                 $('#commission_div').css('display','block');
@@ -217,7 +218,17 @@
                 $('#commission_div').removeClass('d-flex');
                 $('#commission_div #salesman_commission').attr('data-validation','none');
             }
+
+
+            if ($(this).val()== "dispatcher") {
+                $('#warehouse').attr('data-validation', 'required');
+                $('#warehouse').closest('.form-group').find('label').append('<span class="text-danger ml-2">*</span>'); // Add a red asterisk for required
+            } else {
+                $('#warehouse').attr('data-validation','none');
+                $('#warehouse').closest('.form-group').find('label .text-danger').remove(); // Remove the red asterisk
+            }
         })
+
         $(document).on('change', '#input_business_nature', function() {
                 if ($(this).val() == "other") {
                     $('.row_business_nature_other').show();
