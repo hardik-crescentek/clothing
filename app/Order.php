@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\WareHouse;
+use App\User;
 use Carbon\Carbon;
 
 class Order extends Model
@@ -70,4 +71,10 @@ class Order extends Model
     {
         return $this->belongsTo(Warehouse::class);
     }
+
+    public function dispatcher()
+    {
+        return $this->belongsTo(User::class, 'dispatcher_id'); 
+    }
+
 }

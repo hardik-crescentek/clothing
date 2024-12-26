@@ -20,6 +20,7 @@ use App\CustomerItemPrice;
 use Auth;
 use Carbon\Carbon;
 use DB;
+use DNS1D;
 
 class OrderController extends Controller
 {
@@ -31,17 +32,16 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $where = [];
-        // $where[] = ['status', '==', 0 ];
         if(Auth::user()->hasRole("client")){
             $where[] = ['customer_id', Auth::user()->id ];
         }
         $orders = new Order;
-        $orders = $orders->with('customer','seller','invoice','order_items')
+        $orders = $orders->with('customer','seller','invoice','order_items','dispatcher')
                   ->where($where)->orderBy('id','DESC');
         $search = $request->search;
         $start_date = isset($request->start_date) ? \Carbon\Carbon::parse($request->start_date)->format("Y-m-d"):"";
         $end_date = isset($request->end_date) ? \Carbon\Carbon::parse($request->end_date)->format("Y-m-d"):"";
-        // echo $start_date; die();
+        $dispatcher_id = $request->dispatcher_id;
         if ($search) {
             $orders->WhereHas(
                 'customer',
@@ -66,12 +66,28 @@ class OrderController extends Controller
             $orders->Where('order_date',">=",$start_date);
             $orders->Where('order_date',"<=",$end_date);
         }
-        // dd($orders->toSql());
+
+        if (!empty($dispatcher_id)) {
+            $orders->where('dispatcher_id', $dispatcher_id);
+        }
+
+        if ($request->filled('status')) {
+            $orders->whereHas('order_items', function ($subQuery) use ($request) {
+                $subQuery->where('status', $request->status);
+            });
+        }
 
         $orders = $orders->get();
-        // $orders = $orders->paginate(env('ITEMS_PER_PAGE'))->appends($request->query())->toArray();
-        // echo "<pre>"; print_r($orders); die();
-        return view('order/index',compact('orders'));
+        $dispatchers = User::role('dispatcher')
+                        ->with('warehouse')
+                        ->select('id', 'firstname', 'lastname','warehouse_id')
+                        ->get()
+                        ->mapWithKeys(function ($user) {
+                            $warehouseName = $user->warehouse ? $user->warehouse->name : 'No Warehouse';
+                            return [$user->id => $user->fullName . ' - ' . $warehouseName];
+                        })
+                        ->toArray();
+        return view('order/index',compact('orders','dispatchers'));
     }
     /**
      * Display a listing of the resource.
@@ -242,6 +258,8 @@ class OrderController extends Controller
                                 'roll_id'         => $request->input('roll_id.' . $key),
                                 'yard'            => meter2yard($request->input('meter.' . $key)),
                                 'item_roll'       => $request->input("item_roll.$value", []),
+                                'status'          => 'Pending',
+                                'status_date'     => Carbon::now()->format('Y-m-d H:i:s'),
                             );
                 $total_qty +=  $request->input('meter.' . $key);
             }
@@ -269,8 +287,6 @@ class OrderController extends Controller
                     "vat_amount" => $request->input("vat_amount"),
                     "delivered_date" => $request->input("delivered_date"),
                     "total_profit" => $request->input("total_profit"),
-                    "status" => $request->input("status"),
-                    'status_date' => Carbon::now()->format('Y-m-d H:i:s'),
                     "dispatcher_id" => $request->input("dispatcher_id"),
                 ];
         $order = Order::create($data);
@@ -312,6 +328,8 @@ class OrderController extends Controller
                                 "price"        => $item['price'],
                                 "roll_id"      => $item['roll_id'],
                                 "item_total"   => $item['total-price'],
+                                "status"       => $item['status'],
+                                "status_date"  => $item['status_date'],
                             ];
 
                 OrderItem::create($item_data);
@@ -691,112 +709,43 @@ class OrderController extends Controller
         }
     }
     
-    // public function generateInvoice(Order $order)
-    // {
+    public function getOrderItems($id)
+    {
+        $orderItems = OrderItem::leftJoin('materials as mat', DB::raw("FIND_IN_SET(mat.id, order_items.roll_id)"), ">", DB::raw("'0'"))
+                                ->where('order_id', $id)
+                                ->with('item')
+                                ->select('order_items.*',DB::raw("group_concat(mat.article_no) as materials_name"))
+                                ->groupBy('order_items.roll_id')
+                                ->get();
+        
+        foreach ($orderItems as $item) {
+            $item->barcode_svg = DNS1D::getBarcodeSVG($item->item->barcode, 'C128', 2, 40);
+        }
+        return response()->json($orderItems);
+    }
 
-    //     $users = User::pluck('firstname', 'id');
-    //     $sales_user = new User();
-    //     $sales_person = $sales_user->role('sales-person')->pluck('firstname', 'id');
-    //     $items=OrderItem::where('order_id','=',$order->id)->with('item','color')->get();
-    //     $rolls=PurchaseItem::pluck('roll_no','id');
-    //     return view('order.generateInvoice',compact('order','users','sales_person','items','rolls'));
-    // }
-    // public function getRollData(Request $request)
-    // {
-    //     $response=[];
-    //         $roll=PurchaseItem::where('material_id','=',$request->input('material_id'))->get();
-    //         $response=[
-    //             'status'=>'success',
-    //             'roll'=>$roll,
-    //         ];
-    //     return response()->json($response,200);
-    // }
-    // public function storeInvoice(Request $request)
-    // {
-    //     dd($request->all());
-    //     die;
-    //     $order=Order::where('id','=',$request->input('order_id'))->first();
-    //     $invoice_data=[
-    //         "invoice_no"=>$request->input('invoice_no'),
-    //         "order_id"=>$order->id,
-    //         "customer_id"=>$order->customer_id,
-    //         "seller_id"=>$order->seller_id,
-    //         "sub_total"=>$request->input('sub_total'),
-    //         "tax"=>$request->input('tax'),
-    //         "discount"=>$request->input('discount'),
-    //         "grand_total"=>$request->input('grand_total'),
-    //         "invoice_date"=>$request->input('generate_date'),
-    //         "note"=>$order->note,
-    //     ];
-    //     $invoice=Invoice::create($invoice_data);
-    //     User::where('id','=',$order->customer_id)->update(["last_invoice"=>$order->customer->last_invoice+1]);
-    //     $order_items=OrderItem::where('order_id','=',$order->id)->get();
-    //     $total_roll=0;
-    //     $invoice_item;
+    public function getOrderItemById($id)
+    {
+        $orderItem = OrderItem::with('item', 'color', 'purchase')
+                    ->where('id', $id)
+                    ->first();
 
-    //     foreach($order_items as $order_item){
-    //         foreach($request->input('item_roll') as $key => $value)
-    //         {
-    //             if($key==$order_item->id){
-    //                 foreach($value as $k => $v){
-    //                     $total_roll++;
-    //                 }
-    //                 break;
-    //             }
+        if ($orderItem) {
+            return response()->json(['data' => $orderItem]);
+        } else {
+            return response()->json(['message' => 'Order Item not found'], 404);
+        }
+    }
 
-    //         }
-    //         $invoice_item_data=[
-    //             "invoice_id"=>$invoice->id,
-    //             "order_id"=>$order->id,
-    //             "item_id"=>$order_item->item_id,
-    //             "color_id"=>$order_item->color_id,
-    //             "total_meter"=>$order_item->meter,
-    //             "total_rolls"=>$total_roll,
-    //             "price"=>$request->input('price'),
-    //         ];
-    //         $total_roll=0;
-    //         $invoice_item=InvoiceItem::create($invoice_item_data);
+    public function deleteAjaxOrderItem($orderItemId)
+    {
+        $orderItem = OrderItem::where('id', $orderItemId)->first();
 
-    //         foreach($request->input('item_roll') as $item_id => $value)
-    //         {
-    //             if($item_id==$order_item->id){
-    //                 foreach($value as $roll_id => $meter){
-    //                     // echo " item id = ".$item_id." roll id = ".$roll_id." meter = ".$meter."<br />";
-    //                     $roll_item=PurchaseItem::where('id','=',$roll_id)->first();
-    //                     $invoice_item_roll_data=[
-    //                         "invoice_item_id"=>$invoice_item->id,
-    //                         "invoice_id"=>$invoice->id,
-    //                         "roll_id"=>$roll_id,
-    //                         "roll_no"=>$roll_item->roll_no,
-    //                         "meter"=>$meter,
-    //                     ];
-    //                     InvoiceItemRoll::create($invoice_item_roll_data);
-
-    //                 }
-    //                 break;
-    //             }
-    //         }
-    //     }
-    //     return redirect()->route('order.index')->with('success', 'Invoice Created successfully');
-    // }
-
-    // public function search(Request $request)
-    // {
-    //     $q = $request->get('query');
-    //     $data = new Material();
-    //     if (is_numeric($q)) {
-    //         $data = $data->where('barcode', 'LIKE', "%{$q}%")->get();
-    //     } else {
-    //         $data = $data->where('name', 'LIKE', "%{$q}%")->get();
-    //     }
-
-    //     $output = '<ul class="form-control" id="search-droplist" style="display:block; position:relative">';
-    //     foreach ($data as $row) {
-    //         $output .= '<li><h4><a id="' . $row->id . '" class="search-item" style="cursor:pointer;corsor:hand;">' . $row->name . ' ' . $row->barcode . '</a></h4></li>';
-    //     }
-    //     $output .= '</ul>';
-    //     // return response()->json($data,200);
-    //     echo $output;
-    // }
-
+        if ($orderItem) {
+            $orderItem->delete();
+            return response()->json(['success' => true, 'message' => 'Order item deleted successfully.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Order item not found.'], 404);
+        }
+    }
 }

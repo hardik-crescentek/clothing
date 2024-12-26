@@ -39,14 +39,14 @@
             </div>
             <div class="widget-body">
                 @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endif
                 {!! Form::open(array('route' => 'order.store','method'=>'POST','id'=>'from_add_order', 'class'=>"form-horizontal form-validate", 'novalidate')) !!}
                 <div class="row">
@@ -149,24 +149,12 @@
                             {!! Form::select('search_color',$colors,'' , array('class' => 'form-control','id'=>'search_color')) !!}
                         </div>
                     </div>
-                    {{-- <div class="col-lg-3">
-                        <div class="form-group">
-                            <label class="form-control-label">Warehouse Name</label>
-                            <input type="text" class="form-control" id="warehouse_name" readonly>
-                        </div>
-                    </div> --}}
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label class="form-control-label">Dispatcher<span class="text-danger ml-2">*</span></label>
                             {!! Form::select('dispatcher_id', [''=>'-- select dispatcher --']+$dispatchers, old('dispatcher_id'), ['id' => 'dispatcher_id', 'class' => 'form-control custom-select', 'data-validation' => "required"]) !!}
                         </div>
                     </div>                    
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label class="form-control-label">Status</label>
-                            {!! Form::select('status', ['Pending' => 'Pending','Completed' => 'Completed','Not Enough' => 'Not Enough','Out of Stock' => 'Out of Stock','Damaged' => 'Damaged'], old('status', $order->status ?? 'Pending'), ['id' => 'status', 'class' => 'form-control']) !!}
-                        </div>
-                    </div>   
                 </div>
 
                 <div class="form-group row d-flex align-items-center">
@@ -176,19 +164,6 @@
                     <table class="table table-hover mb-0 " id="tblOrderTable">
                         <thead>
                             <tr>
-                                {{-- <th style="width:9%;">Brand Name</th>
-                                <th style="width:9%;">Barcode</th>
-                                <th style="width:9%;">Type Of Sale</th>
-                                <th style="width:9%;">Unit Of Sale</th>
-                                <th style="width:9%;">Price</th>
-                                <th style="width:9%;">Meter</th>
-                                <th style="width:9%;">Yard</th>
-                                <!-- <th>Price</th> -->
-                                <th style="width:9%;">Discount Type</th>
-                                <th style="width:9%;">Discount Value</th>
-                                <th style="width:9%;">Total Amount</th>
-                                <th style="width:9%;">Select Role</th>
-                                <th style="width:9%;">Action</th> --}}
                                 <th style="width:5%;">Sr. No.</th>
                                 <th style="width:14%;">Description</th>
                                 <th style="width:9%;">Qty Mtrs</th>
@@ -206,25 +181,6 @@
                             @isset($items)
                                 @foreach ($items as $key => $item)
                                     <tr class="material-link">
-                                        {{-- <td>{!! Form::text('name[]', $item['name'], array('class' => 'name form-control', 'data-validation'=>"required")) !!}</td>
-                                        {!! Form::hidden('item_id[]',$item['id'],array('class'=>'item_id')) !!}
-                                        {!! Form::hidden('color_id[]',$item['color'],array('class'=>'color_id')) !!}
-                                        <td>{!! Form::text('barcode[]', $item['barcode'], array('class' => 'barcode form-control', 'data-validation'=>"required")) !!}</td>
-                                        <td>{!! Form::select("type_of_sale[]", ["W"=>"Wholsale","R"=>"Retail","P"=>"Sample Price"],null, ['class'=>'form-control type_of_sale','data-validation'=>"required",'id' => 'selected_price']) !!}</td>
-                                        <td>{!! Form::select("unit_of_sale[]", ["meter"=>"meter","yard"=>"yard"],null, ['class'=>'form-control unit_of_sale','data-validation'=>"required",'id' => 'unit_price']) !!}</td>
-                                        <td>{!! Form::number('price[]' , $item['price'] , array('class' => 'price form-control', 'data-validation'=>"required" )) !!}</td>
-                                        <td>{!! Form::number('meter[]', $item['meter'], array('class' => 'meter form-control', 'data-validation'=>"required")) !!}</td>
-                                        <td class="td-selected-role">
-                                            <div id="selectedrole-" class="selectedrole"></div>
-                                        </td>
-                                        <td><input name="yard[]" class="yard form-control" readonly="readonly" value="{{ number_format((float)$item['yard'],2,'.','') }}" type="text"></td>
-                                        <td>{!! Form::select("discount_type[]", ["percentage"=>"Percentage","amount"=>"Amount"],null, ['class'=>'form-control discount_type','data-validation'=>"required",'id' => 'discount_type']) !!}</td>
-                                        <td>{!! Form::number('discount_value[]' , $item['discount_value'] , array('class' => 'discount_value form-control', 'data-validation'=>"required" )) !!}</td>
-                                        <td><input name="total_price_table[]" class="total_price_table form-control" readonly="readonly" id="total_price_table" type="text"></td>
-                                        <td>
-                                            <a class="btn btn-danger btn-sm btn-square">Delete</a>
-                                            
-                                        </td> --}}
                                         <td>{{ $key + 1 }}</td>
                                         <td>{!! Form::text('name[]', $item['name'], ['class' => 'name form-control', 'data-validation' => "required"]) !!}</td>
                                         <td>{!! Form::number('meter[]', $item['meter'], ['class' => 'meter form-control', 'data-validation' => "required"]) !!}</td>
@@ -432,7 +388,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Selected rolls will be populated here -->
                         </tbody>
                     </table>
                 </div>
@@ -444,38 +399,6 @@
     </div>
 </div>
 
-{{-- <script type="text/template" id="templateAddItem_invoice">
-    <td class="td-material" data-value="">{!! Form::text('name[]', null, array('class' => 'inv_name form-control', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
-    {!! Form::hidden('item_id[]',null,array('id'=>'inv_item_id')) !!}
-    <td class="td-barcode" data-value="">{!! Form::text('barcode[]', null, array('class' => 'inv_barcode form-control', 'data-validation'=>"required",'readonly'=>'readonly')) !!}</td>
-    <td class="td-type_of_sale" data-value="">{!! Form::select("type_of_sale[]", ["W"=>"Wholsale","R"=>"Retail","P"=>"Sample Price"], null, ['class'=>'form-control type_of_sale','data-validation'=>"required"]) !!}</td>
-    <td class="td-unit_of_sale" data-value="">{!! Form::select("unit_of_sale[]", ["meter"=>"meter","yard"=>"yard"], null, ['class'=>'form-control unit_of_sale','data-validation'=>"required"]) !!}</td>
-    <td class="td-price price" data-value="">{!! Form::text('price[]' , 0 , array('class' => 'inv_price form-control', 'data-validation'=>"required",'placeholder'=>"Price" )) !!}</td>
-    <td class="td-meter" data-value="">{!! Form::text('meter[]', 0, array('class' => 'inv_meter form-control', 'data-validation'=>"required",'placeholder'=>"Meter")) !!}</td>
-    <td class="td-yard" data-value="">{!! Form::text('yard[]',0 , ['class'=>'inv_yard form-control','placeholder'=>"Yard"]) !!}</td>
-    <!-- <td class="td-weight" data-value="">{!! Form::text('weight[]',0 , ['class'=>'inv_weight form-control','readonly'=>'readonly','placeholder'=>"Weight"]) !!}</td> -->
-    <td class="td-discount_type" data-value="">{!! Form::select("discount_type[]", ["percentage"=>"Percentage","amount"=>"Amount"], null, ['class'=>'form-control discount_type','data-validation'=>"required"]) !!}</td>
-    <td class="td-discount_value" data-value="">{!! Form::text('discount_value[]' , 0 , array('class' => 'discount_value form-control', 'data-validation'=>"required",'placeholder'=>"Discount Value" )) !!}</td>
-    <!-- <td  class="td-total-price" id="inv_total_price" data-value="">0</td> -->
-    <td class="td-total-price" data-value="">{!! Form::text('total-price[]' , 0 , array('class' => 'total-price form-control', 'data-validation'=>"required",'readonly'=>'readonly' )) !!}</td>
-    <!-- <td class="td-selected-meter">
-        <div class="data">0</div>
-        {!! Form::hidden("selected_meter[]", null, ["class"=>"inv_total_selected_roll","id"=>"selected_meter"]) !!}
-    </td> -->
-    <td class="td-selected-meter" data-value="">{!! Form::hidden('selected_meter[]', 0, array('class' => 'inv_selected_roll form-control', 'data-validation'=>"required")) !!}</td>
-    {!! Form::hidden('inv_weight_gsm[]', null, ['class' => 'td-weight_gsm', 'data-gsm' => '']) !!}
-    {!! Form::hidden('inv_weight_per_mtr[]', null, ['class' => 'td-weight_per_mtr', 'data-weight_per_mtr' => '']) !!}
-    {!! Form::hidden('inv_weight_per_yard[]', null, ['class' => 'td-weight_per_yard', 'data-weight_per_yard' => '']) !!}
-    {!! Form::hidden('grand_total', 0, array('class' => 'grand_total form-control', 'data-validation'=>"required")) !!}
-    {!! Form::hidden('vat_percentage', 0, array('class' => 'vat_percentage form-control', 'data-validation'=>"required")) !!}
-    {!! Form::hidden('vat_amount', 0, array('class' => 'vat_amount form-control', 'data-validation'=>"required")) !!}
-    <td>
-        <a class="btn btn-danger btn-sm btn-square inv_delete my-1 text-light">Delete</a>
-        <button type="button" class="btn btn-sm btn-primary btn-square my-1 btn-roll-select" data-material_id="" data-toggle="modal" data-target="#rollSelectModel">Select Roll</button>
-        <div id='' class="hidden_div"></div>
-    </td>
-
-</script> --}}
 <script type="text/template" id="templateAddItem_invoice">
     <td class="td-sr-no">{!! Form::text('sr_no[]', null, array('class' => 'form-control sr_no', 'readonly'=>'readonly')) !!}</td>
     <td class="td-description">{!! Form::text('description[]', null, array('class' => 'form-control description', 'readonly'=>'readonly')) !!}</td>
@@ -530,10 +453,6 @@
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-
-        // $('form').on('submit', function() {
-        //     $('button[type="submit"]').prop('disabled', true).text('Submitting...');
-        // });
 
         if ($('#price_vat').val() === 'price_exclude_vat') {
             $('#gst_info').show(); 

@@ -4,9 +4,9 @@
 
 
 @if ($message = Session::get('success'))
-<div class="alert alert-success">
-    {{ $message }}
-</div>
+    <div class="alert alert-success">
+        {{ $message }}
+    </div>
 @endif
 
 <!-- Begin Row -->
@@ -18,33 +18,50 @@
             </div>
             <div class="widget-body">
                 {!! Form::open(['method' => 'GET','route' => ['order.index']]) !!}
-                <div class="form-group row d-flex align-items-center mt-3">
-                    <!-- <div class="col-lg-3">
-                        <label class="form-control-label col-lg-12">Search <div class="d-inline text-muted" style="font-size: 10px;">[Customer Name/Sales Persion/Material]</div></label>
-                        {!! Form::text('search', '', array('class' => 'form-control')) !!}
-                    </div> -->
-                    <div class="col-lg-2">
-                        <label class="form-control-label col-lg-12">Start Date </label>
-                        <input type="date" class="form-control" name="start_date">
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="form-control-label col-lg-12">End Date </label>
-                        <input type="date" class="form-control" name="end_date">
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="form-control-label">&nbsp;</label>
-                        <div class="form-action">
-                            <a href="{{ url('/order') }}" class="btn btn-warning btn-square">Reset</a>
-                            <input type="submit" class="btn btn-primary btn-square" value="Filter">
+                    <div class="form-group row d-flex align-items-center mt-3">
+                        <div class="col-lg-2">
+                            <label class="form-control-label col-lg-12">Start Date </label>
+                            <input type="date" class="form-control" name="start_date">
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="form-control-label col-lg-12">End Date </label>
+                            <input type="date" class="form-control" name="end_date">
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="form-control-label col-lg-12">Status</label>
+                            <select class="form-control custom-select" name="status">
+                                <option value="">-- Select Status --</option>
+                                @foreach(['Pending', 'Completed', 'Not Enough', 'Out Of Stock', 'Damaged'] as $status)
+                                    <option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
+                                        {{ $status }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-2">
+                            <label class="form-control-label col-lg-12">Dispatcher</label>
+                            <select class="form-control custom-select" name="dispatcher_id">
+                                <option value="">-- Select Dispatcher --</option>
+                                @foreach($dispatchers as $id => $name)
+                                    <option value="{{ $id }}" {{ request('dispatcher_id') == $id ? 'selected' : '' }}>
+                                        {{ $name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>                        
+                        <div class="col-lg-2">
+                            <label class="form-control-label">&nbsp;</label>
+                            <div class="form-action">
+                                <input type="submit" class="btn btn-primary btn-square" value="Filter">
+                                <a href="{{ url('/order') }}" class="btn btn-warning btn-square">Reset</a>
+                            </div>
                         </div>
                     </div>
-                </div>
                 {!! Form::close() !!}
             </div>
         </div>
     </div>
 </div>
-<!-- Begin Row -->
 <!-- Begin Row -->
 <div class="row flex-row">
     <div class="col-xl-12 col-12">
@@ -76,13 +93,13 @@
                                     <th>Artical No</th>
                                     <th data-sorter="false">Meter</th>
                                     @role('super-admin')
-                                    <th data-sorter="false">Price</th>
+                                        <th data-sorter="false">Price</th>
                                     @endrole
                                     <th data-sorter="false">Grand Total</th>
                                     <th data-sorter="false">Note</th>
-                                    <!-- <th data-sorter="false">Order Status</th> -->
                                     <th data-sorter="false">Status</th>
                                     <th data-sorter="false">Status Date</th>
+                                    <th data-sorter="false">Dispatcher</th>
                                     <th data-sorter="false" width="180px">Action</th>
                                 </tr>
                             </thead>
@@ -97,38 +114,38 @@
                                             <td> {{$order->order_date}} </td>
                                             <td>
                                                 @if ($order->order_items->count())
-                                                @foreach ($order->order_items as $key => $order_item)
-                                                {{$order_item->item->name ?? ''}} <br />
-                                                @endforeach
+                                                    @foreach ($order->order_items as $key => $order_item)
+                                                        {{$order_item->item->name ?? ''}} <br />
+                                                    @endforeach
                                                 @endif
                                             </td>
                                             <td>
                                                 @if ($order->order_items->count())
-                                                @foreach ($order->order_items as $key => $order_item)
-                                                {{$order_item->item->color ?? ''}} <br />
-                                                @endforeach
+                                                    @foreach ($order->order_items as $key => $order_item)
+                                                        {{$order_item->item->color ?? ''}} <br />
+                                                    @endforeach
                                                 @endif
                                             </td>
                                             <td> 
                                                 @if ($order->order_items->count())
-                                                @foreach ($order->order_items as $key => $order_item)
-                                                {{$order_item->item->article_no ?? ''}} <br />
-                                                @endforeach
+                                                    @foreach ($order->order_items as $key => $order_item)
+                                                        {{$order_item->item->article_no ?? ''}} <br />
+                                                    @endforeach
                                                 @endif
                                             </td>
                                             <td>
                                                 @if ($order->order_items->count())
-                                                @foreach ($order->order_items as $key => $order_item)
-                                                {{$order_item->meter}} <br />
-                                                @endforeach
+                                                    @foreach ($order->order_items as $key => $order_item)
+                                                        {{$order_item->meter}} <br />
+                                                    @endforeach
                                                 @endif
                                             </td>
                                             @role('super-admin')
                                             <td>
                                                 @if ($order->order_items->count())
-                                                @foreach ($order->order_items as $key => $order_item)
-                                                {{$order_item->price}} <br />
-                                                @endforeach
+                                                    @foreach ($order->order_items as $key => $order_item)
+                                                        {{$order_item->price}} <br />
+                                                    @endforeach
                                                 @endif
                                             </td>
                                             @endrole
@@ -136,6 +153,12 @@
                                             <td> {{$order->note}} </td>
                                             <td> {{$order->status}} </td>
                                             <td> {{$order->status_date}} </td>
+                                            <td>
+                                                @if($order->dispatcher)
+                                                    {{ $order->dispatcher->firstname }} {{ $order->dispatcher->lastname }}
+                                                @else
+                                                @endif 
+                                            </td>
                                             <!-- <td>
                                                 @if ($order->status == 1)
                                                 <span class="badge-text badge-text-small success">Dispatch</span>
@@ -159,7 +182,7 @@
                                                 @endif
                                                 @endrole
                                                 <a class="btn fa fa-eye btn-sm btn-warning ml-1" href="{{ route('order.viewdetails',$order->id) }}" data-toggle="tooltip" data-placement="top" title="View Order Details"></a>
-                                                {!! Form::open(['method' => 'DELETE','route' => ['order.destroy', $order->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
+                                                {!! Form::open(['method' => 'DELETE','route' => ['order.destroy', $order->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm_order()']) !!}
                                                 <!-- {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square delete col-sm-6 mt-1']) !!} -->
                                                 <button type="submit" class="btn-action btn fa fa-trash  btn-sm btn-danger ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
                                                 </button>
@@ -204,6 +227,7 @@
                                     <th data-sorter="false">Remark</th>
                                     <th data-sorter="false">Status</th>
                                     <th data-sorter="false">Status Date</th>
+                                    <th data-sorter="false">Dispatcher</th>
                                     @role('super-admin')
                                     <th data-sorter="false" width="180px">Action</th>
                                     @endrole
@@ -253,6 +277,11 @@
                                             <td> {{$order->remark}} </td>
                                             <td> {{$order->status}} </td>
                                             <td> {{$order->status_date}} </td>
+                                            <td>@if($order->dispatcher)
+                                                    {{ $order->dispatcher->firstname }} {{ $order->dispatcher->lastname }}
+                                                @else
+                                                @endif 
+                                            </td>
                                             @role('super-admin')
                                             <td class="td-actions">
                                                <!--  <a data-toggle="modal" data-target="#order-status-model" data-id="{{ $order->id }}" class="btn btn-secondary btn-sm btn-square col-sm-6 mt-1" style="color: #f0ad4e !important;">Order <br> Status</a> -->
@@ -265,7 +294,7 @@
                                                     <a class="btn fa fa-edit btn-sm btn-primary ml-1" href="{{ route('invoice.edit',$order->invoice->id) }}" data-toggle="tooltip" data-placement="top" title="Edit Invoice"></a>
                                                 @endif
                                                 @endrole
-                                                {!! Form::open(['method' => 'DELETE','route' => ['order.destroy', $order->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm()']) !!}
+                                                {!! Form::open(['method' => 'DELETE','route' => ['order.destroy', $order->id],'style'=>'display:inline', 'onsubmit'=>'return delete_confirm_order()']) !!}
                                                 <!-- {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square delete col-sm-6 mt-1']) !!} -->
                                                 <button type="submit" class="btn-action btn fa fa-trash  btn-sm btn-danger ml-1" data-toggle="tooltip" data-placement="top" title="Delete">
                                                 </button>
@@ -315,8 +344,55 @@
     </div>
 </div>
 
+<div id="editItemModal" tabindex="-1" role="dialog" aria-labelledby="Edit" aria-hidden="true" class="modal fade text-left">
+    <div role="document" class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modal-header" class="modal-title">Edit Order Item</h5>
+                <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                {!! Form::open(array('route' => 'order.update-order-item','method'=>'PATCH','id'=>'edit_item_form', 'class'=>"form-horizontal form-validate", 'novalidate')) !!}
+                <input type="hidden" id="edit_item_id" name="orderItemId" value="" />
+                @if(isset($order))
+                    <div class="form-group">
+                        {!! Form::hidden('customer_id',$order->customer_id) !!}
+                        <label class="form-control-label">Item Name<span class="text-danger ml-2">*</span></label>
+                        {!! Form::text('name',null, array('id'=>'edit_name','class' => 'form-control', 'data-validation'=>"required",'readonly'=>"readonly")) !!}
+                    </div>
+                @endif
+                <div class="form-group">
+                    <label class="form-control-label">Barcode<span class="text-danger ml-2">*</span></label>
+                    {!! Form::text('barcode',null, array('id'=>'edit_barcode','class' => 'form-control', 'data-validation'=>"required",'readonly'=>"readonly")) !!}
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label">Type Of Sale<span class="text-danger ml-2">*</span></label>
+                    <td>{!! Form::select("type_of_sale", ["W"=>"Wholsale","R"=>"Retail","P"=>"Sample Poh"], null, ['class'=>'form-control edit_type_of_sale','data-validation'=>"required"]) !!}</td>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label">Price<span class="text-danger ml-2">*</span></label>
+                    {!! Form::text('price',0, array('id'=>'edit_price','class' => 'form-control', 'data-validation'=>"required")) !!}
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label">Meter<span class="text-danger ml-2">*</span></label>
+                    {!! Form::text('meter',0, array('id'=>'edit_meter','class' => 'form-control', 'data-validation'=>"required")) !!}
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label">Yard<span class="text-danger ml-2">*</span></label>
+                    <input name="yard" class="yard form-control" id="edit_yard" readonly="readonly" value="" type="text">                
+                </div>
+
+                <div class="form-action float-right">
+                    <button type="submit" name="update_btn" class="btn btn-primary">Update</button>
+                </div>
+                {!! Form::close() !!}
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    function delete_confirm() {
+    function delete_confirm_order() {
         return confirm("Are you sure want to delete?");
     }
 </script>
@@ -335,24 +411,152 @@
         });
     });
 </script>
-    <script>
-        $(document).ready(function () {
-            $('#order_tbl').DataTable({
-                lengthMenu: [
-                    [10, 25, 50,100,500,1000,'All'],
-                    [10, 25, 50,100,500,1000,'All'],
-                ],
-                "aaSorting": []
+<script>
+    var csrf_token = '{{ csrf_token() }}';
+
+    $(document).ready(function () {
+        const table = $('#order_tbl').DataTable({
+            lengthMenu: [
+                [10, 25, 50,100,500,1000,'All'],
+                [10, 25, 50,100,500,1000,'All'],
+            ],
+            "aaSorting": []
+        });
+
+        $('#order_tbl tbody').on('click', 'td', function () {
+            const td = $(this);
+            const tr = td.closest('tr');
+            const colIndex = td.index();
+
+            if (colIndex < 12) {
+                const row = table.row(tr);
+                const orderId = tr.data('id');
+
+                if (row.child.isShown()) {
+                    row.child.hide();
+                    tr.removeClass('shown');
+                } else {                    
+                    $.ajax({
+                        url: `orders/${orderId}/order-items`,
+                        type: 'GET',
+                        success: function (data) {
+                            const subOrderHtml = formatSubOrderItems(data);
+                            row.child(subOrderHtml).show();
+                            tr.addClass('shown');
+                        },
+                        error: function () {
+                            alert('Failed to load sub-order items.');
+                        }
+                    });
+                }
+            }
+        });
+
+        function formatSubOrderItems(data) {
+            let html = '<table class="table table-bordered">';
+            html += '<thead><tr class=""><th>=></th><th>Item Name</th><th>Barcode</th><th>Type Of Sale</th><th>Article No</th><th>Price</th><th>Meter</th><th>Yard</th><th>Total Price</th><th>Status</th><th>Status Date</th><th>Action</th></tr></thead>';
+            html += '<tbody>';
+            data.forEach(item => {      
+                const yards = (item.meter * 1.09361).toFixed(2);
+                const totalPrice = (item.price * yards).toFixed(2);
+                const editButton = `<button type="button" class="btn btn-sm btn-primary btn-square btn-edit-order-item" 
+                                        data-item_id="${item.id}" data-toggle="modal" data-target="#editItemModal">
+                                        Edit
+                                    </button>`;
+                            
+                const deleteButton = `<button type="button" class="btn btn-danger delete-order-item btn-sm btn-square" data-item_id="${item.id}">Delete</button>`;
+
+                html += `<tr>
+                            <td>=></td>
+                            <td>${item.item.name} - ${item.item.color}</td>
+                            <td>${item.barcode_svg}</td>
+                            <td>${item.type_of_sale}</td>
+                            <td>${item.item.article_no}</td>
+                            <td>${item.price}</td>
+                            <td>${item.meter}</td>
+                            <td>${yards}</td>
+                            <td>${totalPrice}</td>
+                            <td>${item.status}</td>
+                            <td>${item.status_date ?? ''}</td>
+                            <td>${editButton} ${deleteButton}</td>
+                        </tr>`;
+            });
+            html += '</tbody></table>';
+            return html;
+        }
+
+        $('#editItemModal').on('shown.bs.modal', function(e) {
+            var item_id = $(e.relatedTarget).data('item_id');
+
+            $.ajax({
+                url: 'order-items/'+item_id, 
+                method: 'GET',
+                success: function(response) {
+                    if (response.data) {
+                        var item = response.data;
+
+                        $('#edit_item_id').val(item.id);
+                        $('#edit_name').val(item.item.name);
+                        $('#edit_barcode').val(item.item.barcode);
+                        $('#edit_type_of_sale').val(item.type_of_sale);
+                        $('#edit_price').val(item.price);
+                        $('#edit_meter').val(item.meter);
+                        $('#edit_yard').val((item.meter * 1.09361).toFixed(2));  
+
+                    } else {
+                        alert('Order Item not found.');
+                    }
+                },
+                error: function(error) {
+                    console.error('Error fetching order item details:', error);
+                    alert('Error fetching order item details.');
+                }
             });
         });
-        $(document).ready(function () {
-            $('#order_tbl2').DataTable({
-                lengthMenu: [
-                    [10, 25, 50,100,500,1000,'All'],
-                    [10, 25, 50,100,500,1000,'All'],
-                ],
-                "aaSorting": []
-            });
+
+        $(document).on('click', '.delete-order-item', function () {
+            var orderItemId = $(this).data('item_id');
+            deleteOrderItem(orderItemId);
         });
-    </script>
+
+        function deleteOrderItem(orderItemId) {
+            if (!confirm('Are you sure you want to delete this order item?')) {
+                return;
+            }
+
+            // const csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            $.ajax({
+                url: `delete-order-item/${orderItemId}`,
+                method: 'DELETE',
+                data: {
+                    _token: csrf_token,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message); 
+                        location.reload();
+                    } else {
+                        alert('Error deleting order item: ' + response.message);
+                    }
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                    alert('Something went wrong while deleting the item.');
+                }
+            });
+        }
+
+    });
+
+    $(document).ready(function () {
+        $('#order_tbl2').DataTable({
+            lengthMenu: [
+                [10, 25, 50,100,500,1000,'All'],
+                [10, 25, 50,100,500,1000,'All'],
+            ],
+            "aaSorting": []
+        });
+    });
+</script>
 @endpush

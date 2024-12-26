@@ -287,7 +287,7 @@
                                 <td>{{ $item->materials_name }}</td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-square btn-edit-order-item" data-item_id="{{$item->id}}" data-toggle="modal" data-target="#editItemModal">Edit</button>
-                                    {!! Form::open(['method' => 'DELETE','route' => ['order.deleteOrderItem', $item->id,$order->customer_id],'style'=>'display:inline','onSubmit'=>'deleteConfirm()']) !!}
+                                    {!! Form::open(['method' => 'DELETE', 'route' => ['order.deleteOrderItem', $item->id, $order->customer_id], 'style' => 'display:inline', 'onSubmit' => 'deleteConfirm(event)']) !!}
                                     {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-sm btn-square']) !!}
                                     {!! Form::close() !!}
                                 </td>
@@ -371,9 +371,13 @@
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"> </script>
 <script type="text/javascript">
-    function deleteConfirm() {
-            return confirm("Are you sure want to delete?");
-        };
+   
+    function deleteConfirm(event) {
+        if (!confirm("Are you sure you want to delete?")) {
+            event.preventDefault();  // Prevent form submission if "Cancel" is clicked
+        }
+    }
+
     (function($) {
         var input_search_barcode = $('#input_search_barcode');
   //for barcode search

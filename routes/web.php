@@ -87,6 +87,12 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('order/view/{id}', [App\Http\Controllers\OrderController::class, 'ViewOrderDetails'])->name('order.viewdetails');
     Route::post('order/updatenew', [App\Http\Controllers\OrderController::class, 'updatenew'])->name('order.updatenew');
     Route::get('printorderbarcode/{id}', [App\Http\Controllers\OrderController::class, 'print_order_barcode'])->name('printorderbarcode');
+
+    #For Order Items #
+    Route::get('orders/{id}/order-items', [App\Http\Controllers\OrderController::class, 'getOrderItems'])->name('getOrderItems');
+    Route::get('order-items/{id}', [App\Http\Controllers\OrderController::class, 'getOrderItemById'])->name('getOrderItemById');
+    Route::delete('delete-order-item/{id}', [App\Http\Controllers\OrderController::class, 'deleteAjaxOrderItem'])->name('deleteAjaxOrderItem');
+
     
     # For Booking #
     Route::get('bookings', [App\Http\Controllers\OrderController::class, 'getBookings'])->name('bookings');
