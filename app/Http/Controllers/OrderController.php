@@ -137,12 +137,11 @@ class OrderController extends Controller
     public function create(Request $request)
     {
         $today = Carbon::now();
-        $formattedDate = strtoupper($today->format('dMY')); 
+        $formattedDate = strtoupper($today->format('dm')); 
         $totalOrders = Order::count();
         
         $sequence = $totalOrders + 1;
-        
-        $orderNumber = sprintf("OR-%s-%d", $formattedDate, $sequence);
+        $orderNumber = sprintf("OR%s_%d", $formattedDate, $sequence);
 
         $dispatchers = User::role('dispatcher')
                         ->with('warehouse')
