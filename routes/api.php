@@ -65,7 +65,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('dashoard-info', 'API\OrderController@dashboardInfo');
     Route::get('order-list', 'API\OrderController@orderList');
     Route::get('order-item-list', 'API\OrderController@orderitemList');
-    Route::put('order/{id}/status', 'API\OrderController@updateStatus');
+    Route::put('order-item/{id}/status', 'API\OrderController@updateStatus');
     // end code
 });
 

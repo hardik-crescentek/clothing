@@ -85,6 +85,7 @@
                         <table class="table table-hover mb-0 " id="order_tbl">
                             <thead>
                                 <tr>
+                                    <th>Order No</th>
                                     <th>Customer Name</th>
                                     <th>Sales Person</th>
                                     <th class="sorter-shortDate dateFormat-ddmmyyyy">Date</th>
@@ -109,6 +110,7 @@
                                 {{ isset($order->order_items['item_id']) }}
                                     @if($order->status != "Completed")
                                         <tr class="purchase-link" data-id="{{$order->id}}" style="color: #f0ad4e !important;">
+                                            <td> {{$order->order_no}} </td>
                                             <td> {{$order->customer->firstname}} {{$order->customer->lastname}} </td>
                                             <td> {{$order->seller->firstname}} {{$order->seller->lastname}} </td>
                                             <td> {{$order->order_date}} </td>
@@ -213,6 +215,7 @@
                         <table class="table table-hover mb-0 " id="order_tbl2">
                             <thead>
                                 <tr>
+                                    <th>Order No</th>
                                     <th>Customer Name</th>
                                     <th>Sales Person</th>
                                     <th class="sorter-shortDate dateFormat-ddmmyyyy">Date</th>
@@ -239,6 +242,7 @@
                                 @foreach($orders as $order)
                                     @if($order->status == "Completed")
                                         <tr class="purchase-link" data-id="{{$order->id}}" style="color: #79b385 !important;">
+                                            <td> {{$order->order_no}} </td>
                                             <td>{{$order->customer->firstname}} {{$order->customer->lastname}} </td>
                                             <td> {{$order->seller->firstname}} {{$order->seller->lastname}} </td>
                                             <td> {{$order->order_date}} </td>
@@ -423,6 +427,14 @@
             "aaSorting": []
         });
 
+        const table2 =$('#order_tbl2').DataTable({
+            lengthMenu: [
+                [10, 25, 50, 100, 500, 1000, 'All'],
+                [10, 25, 50, 100, 500, 1000, 'All'],
+            ],
+            "aaSorting": []
+        });
+
         $('#order_tbl tbody').on('click', 'td', function () {
             const td = $(this);
             const tr = td.closest('tr');
@@ -430,6 +442,35 @@
 
             if (colIndex < 12) {
                 const row = table.row(tr);
+                const orderId = tr.data('id');
+
+                if (row.child.isShown()) {
+                    row.child.hide();
+                    tr.removeClass('shown');
+                } else {                    
+                    $.ajax({
+                        url: `orders/${orderId}/order-items`,
+                        type: 'GET',
+                        success: function (data) {
+                            const subOrderHtml = formatSubOrderItems(data);
+                            row.child(subOrderHtml).show();
+                            tr.addClass('shown');
+                        },
+                        error: function () {
+                            alert('Failed to load sub-order items.');
+                        }
+                    });
+                }
+            }
+        });
+
+        $('#order_tbl2 tbody').on('click', 'td', function () {
+            const td = $(this);
+            const tr = td.closest('tr');
+            const colIndex = td.index();
+
+            if (colIndex < 12) {
+                const row = table2.row(tr);
                 const orderId = tr.data('id');
 
                 if (row.child.isShown()) {
@@ -547,16 +588,6 @@
             });
         }
 
-    });
-
-    $(document).ready(function () {
-        $('#order_tbl2').DataTable({
-            lengthMenu: [
-                [10, 25, 50,100,500,1000,'All'],
-                [10, 25, 50,100,500,1000,'All'],
-            ],
-            "aaSorting": []
-        });
     });
 </script>
 @endpush

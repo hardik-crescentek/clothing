@@ -52,6 +52,12 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="form-group">
+                            <label class="form-control-label">Order Number<span class="text-danger ml-2">*</span></label>
+                            {!! Form::text('order_no', $orderNumber, ['class' => 'form-control', 'data-validation'=>"required", 'readonly' => true]) !!}
+                        </div>
+                    </div>                    
+                    <div class="col-lg-3">
+                        <div class="form-group">
                             <label class="form-control-label">Customer<span class="text-danger ml-2">*</span></label>
                             <div class="input-group">
                                 {!! Form::select('user_id', $users,null, array('id'=>'user_id','class' => 'form-control custom-select', 'data-validation'=>"required")) !!}
@@ -75,6 +81,8 @@
                             {!! Form::text('purchase_date', null, array('id' => 'purchase_date','class' => 'form-control', 'data-validation'=>"required")) !!}
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label class="form-control-label">Sales Person</label>
@@ -90,8 +98,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label class="form-control-label">Price VAT<span class="text-danger ml-2">*</span></label>
@@ -270,6 +276,9 @@
                             {!! Form::text('total_number_of_items', null, array('id'=>'total_number_of_items','placeholder' => 'Total Number of Items','class' => 'form-control')) !!}
                         </div>
                     </div>  
+                </div>
+
+                <div class="row">
                     <div class="col-lg-2">
                         <div class="form-group">
                             <label class="form-control-label">Approximate weight</label>
@@ -282,6 +291,18 @@
                             {!! Form::text('total_profit', null, array('id'=>'total_profit',0,'class' => 'form-control','readonly' => 'readonly')) !!}
                         </div>
                     </div>  
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Dispatcher Name</label>
+                            <input type="text" id="dispatcher_name" name="dispatcher_name" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="form-control-label">Warehouse Name</label>
+                            <input type="text" id="warehouse_name" name="warehouse_name" class="form-control" readonly>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="form-group row d-flex align-items-center mt-5">
@@ -453,6 +474,26 @@
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        
+        var dispatchers = @json($dispatchers);
+
+        $('#dispatcher_id').change(function() {
+            var dispatcherId = $(this).val();
+
+            if (dispatcherId && dispatchers[dispatcherId]) {
+                var selectedDispatcher = dispatchers[dispatcherId];
+                var parts = selectedDispatcher.split(' - ');
+
+                $('#dispatcher_name').val(parts[0]); 
+                $('#warehouse_name').val(parts[1] || 'No Warehouse'); 
+            } else {
+                // Clear the fields if no dispatcher is selected
+                $('#dispatcher_name').val('');
+                $('#warehouse_name').val('');
+            }
+        });
+
+        $('#dispatcher_id').trigger('change');
 
         if ($('#price_vat').val() === 'price_exclude_vat') {
             $('#gst_info').show(); 

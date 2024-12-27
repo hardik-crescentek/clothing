@@ -136,6 +136,14 @@ class OrderController extends Controller
      */
     public function create(Request $request)
     {
+        $today = Carbon::now();
+        $formattedDate = strtoupper($today->format('dMY')); 
+        $totalOrders = Order::count();
+        
+        $sequence = $totalOrders + 1;
+        
+        $orderNumber = sprintf("OR-%s-%d", $formattedDate, $sequence);
+
         $dispatchers = User::role('dispatcher')
                         ->with('warehouse')
                         ->select('id', 'firstname', 'lastname','warehouse_id')
@@ -177,7 +185,7 @@ class OrderController extends Controller
         $vat = Settings::where('id', 1)->value('vat') ?? 0;
 
         // echo "<pre>"; print_r($article_no); die();
-        return view('order/create', compact('article_no', 'colors', 'users', 'sales_person', 'colors', 'items','customer_item_price','vat','dispatchers'));
+        return view('order/create', compact('article_no', 'colors', 'users', 'sales_person', 'colors', 'items','customer_item_price','vat','dispatchers','orderNumber'));
     }
 
     /**
@@ -288,6 +296,9 @@ class OrderController extends Controller
                     "delivered_date" => $request->input("delivered_date"),
                     "total_profit" => $request->input("total_profit"),
                     "dispatcher_id" => $request->input("dispatcher_id"),
+                    "order_no" => $request->input("order_no"),
+                    "dispatcher_name" => $request->input("dispatcher_name"),
+                    "warehouse_name" => $request->input("warehouse_name"),
                 ];
         $order = Order::create($data);
         if($items)
@@ -367,11 +378,56 @@ class OrderController extends Controller
             }
 
         }
+
+        $this->sendNotificationToDispatcher($order);
+
         $action = $request->input('action');
         if (isset($action) && $action === 'generate_invoice') {
             return redirect()->route('invoice.create', $order->id);
         } else {
             return redirect()->route('order.index')->with('success', 'Order added successfully');
+        }
+    }
+
+    private function sendNotificationToDispatcher($order)
+    {
+        $dispatcher = User::find($order->dispatcher_id);
+        if ($dispatcher && $dispatcher->fcm_token) {
+            $data = [
+                'to' => $dispatcher->fcm_token,
+                'notification' => [
+                    'title' => 'New Order Assigned',
+                    'body' => "Order #{$order->order_no} has been assigned to you.",
+                    'sound' => 'default',
+                ],
+                'data' => [
+                    'order_id' => $order->id,
+                ],
+            ];
+
+            $fcmUrl = 'https://fcm.googleapis.com/fcm/send';
+            $serverKey = config('services.fcm.server_key'); // Ensure this is configured in `services.php`
+
+            $headers = [
+                'Authorization: key=' . $serverKey,
+                'Content-Type: application/json',
+            ];
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $fcmUrl);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            $result = curl_exec($ch);
+            curl_close($ch);
+
+            // Log or handle errors
+            if ($result === false) {
+                Log::error('FCM Notification Failed: ' . curl_error($ch));
+            } else {
+                Log::info('FCM Notification Sent: ' . $result);
+            }
         }
     }
 

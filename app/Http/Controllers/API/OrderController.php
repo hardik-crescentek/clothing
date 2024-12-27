@@ -635,31 +635,48 @@ class OrderController extends Controller
             ]);
         
             // Find the order
-            $order = Order::find($id);
+            $orderItem = OrderItem::with('order')->find($id);
 
-            if (!$order) {
+            if (!$orderItem) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Order not found.',
+                    'message' => 'Order Item not found.',
                 ], 404);
             }
 
-            $order->status = $validated['status'];
-            $order->status_date = now(); 
+            $orderItem->status = $validated['status'];
+            $orderItem->status_date = now(); 
 
             // Handle image upload
             if ($request->hasFile('image')) {
                 $originalName = $request->file('image')->getClientOriginalName();
                 $imagePath = $request->file('image')->storeAs('uploads/orders', $originalName, 'public'); // Store with the original name
-                $order->image = $imagePath; // Save the image path to the order
+                $orderItem->image = $imagePath; // Save the image path to the order
             }
 
-            $order->save();
+            $orderItem->save();
+
+            // for main order status update
+            $order = $orderItem->order()->with('order_items')->first();
+            if (!$order || $order->order_items->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Order or order items not found.',
+                ], 404);
+            }
+
+            $allItemsCompleted = $order->order_items->every(function ($item) {
+                return $item->status === 'Completed';
+            });
+            if ($allItemsCompleted) {
+                $order->status = 'Completed';
+                $order->save();
+            }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Order status updated successfully.',
-                'data' => $order,
+                'message' => 'Order Item status updated successfully.',
+                'data' => $orderItem,
             ], 200);
         } catch (\Exception $e) {
             // Handle exceptions
