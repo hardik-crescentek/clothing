@@ -670,6 +670,7 @@ class OrderController extends Controller
             });
             if ($allItemsCompleted) {
                 $order->status = 'Completed';
+                $order->status_date = now(); 
                 $order->save();
             }
 

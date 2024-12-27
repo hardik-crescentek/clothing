@@ -99,7 +99,7 @@
                                     <th data-sorter="false">Grand Total</th>
                                     <th data-sorter="false">Note</th>
                                     <th data-sorter="false">Status</th>
-                                    <th data-sorter="false">Status Date</th>
+                                    {{-- <th data-sorter="false">Status Date</th> --}}
                                     <th data-sorter="false">Dispatcher</th>
                                     <th data-sorter="false" width="180px">Action</th>
                                 </tr>
@@ -154,7 +154,7 @@
                                             <td> {{$order->grand_total}} </td>
                                             <td> {{$order->note}} </td>
                                             <td> {{$order->status}} </td>
-                                            <td> {{$order->status_date}} </td>
+                                            {{-- <td> {{$order->status_date}} </td> --}}
                                             <td>
                                                 @if($order->dispatcher)
                                                     {{ $order->dispatcher->firstname }} {{ $order->dispatcher->lastname }}
