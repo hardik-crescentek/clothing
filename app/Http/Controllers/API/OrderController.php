@@ -526,7 +526,8 @@ class OrderController extends Controller
                             select(
                                 'orders.id', 
                                 'orders.customer_id', 
-                                'orders.status', 
+                                'orders.status',
+                                'orders.order_no', 
                             )
                             ->selectRaw('CONCAT(users.firstname, " ", users.lastname) as customer_name')
                             ->leftJoin('users', 'orders.customer_id', '=', 'users.id')
@@ -587,6 +588,7 @@ class OrderController extends Controller
                     'order_items.roll_id', 
                     'order_items.price',
                     'order_items.status',
+                    'orders.order_no',
                 )
                 ->selectRaw('CONCAT(materials.color_no, " ", materials.color) as color')
                 ->selectRaw('GROUP_CONCAT(DISTINCT materials.article_no SEPARATOR ", ") as article_no')
