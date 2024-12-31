@@ -7,6 +7,7 @@ use App\OrderItem;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\User;
 use App\Supplier;
@@ -537,7 +538,7 @@ class OrderController extends Controller
                             ->leftJoin('materials', 'materials.id', '=', 'order_items.item_id')
                             ->selectRaw('GROUP_CONCAT(DISTINCT CONCAT(materials.color_no, " ", materials.color) SEPARATOR ", ") as color')
                             ->selectRaw('GROUP_CONCAT(DISTINCT materials.article_no SEPARATOR ", ") as article_no')
-                            ->selectRaw('GROUP_CONCAT(DISTINCT purchases.invoice_no SEPARATOR ", ") as invoice_no') // Fetch invoice_no from purchases
+                            // ->selectRaw('GROUP_CONCAT(DISTINCT purchases.invoice_no SEPARATOR ", ") as invoice_no') // Fetch invoice_no from purchases
                             ->selectRaw('GROUP_CONCAT(DISTINCT purchase_items.piece_no SEPARATOR ", ") as piece_no') // Fetch piece_no from purchase_items
                             ->selectRaw('DATE_FORMAT(orders.order_date, "%D %b %Y %H:%i") as order_date_time') // Format order_date
                             ->where('orders.dispatcher_id', $dispatcherId)
@@ -588,12 +589,16 @@ class OrderController extends Controller
                     'order_items.roll_id', 
                     'order_items.price',
                     'order_items.status',
+                    'order_items.meter',
+                    DB::raw('order_items.meter * 1.09361 AS yard'),
                     'orders.order_no',
+                    'purchase_items.qty as total_meter',
+                    'purchase_items.available_qty as available_meter',
                 )
                 ->selectRaw('CONCAT(materials.color_no, " ", materials.color) as color')
                 ->selectRaw('GROUP_CONCAT(DISTINCT materials.article_no SEPARATOR ", ") as article_no')
                 ->selectRaw('GROUP_CONCAT(DISTINCT purchase_items.piece_no SEPARATOR ", ") as piece_no')
-                ->selectRaw('GROUP_CONCAT(DISTINCT purchases.invoice_no SEPARATOR ", ") as invoice_no')
+                // ->selectRaw('GROUP_CONCAT(DISTINCT purchases.invoice_no SEPARATOR ", ") as invoice_no')
                 ->selectRaw('DATE_FORMAT(orders.order_date, "%D %b %Y %H:%i") as order_date_time')
                 ->selectRaw('CONCAT(users.firstname, " ", users.lastname) as customer_name')
                 ->leftJoin('purchase_items', 'purchase_items.id', '=', 'order_items.roll_id') 
@@ -681,8 +686,15 @@ class OrderController extends Controller
                 'message' => 'Order Item status updated successfully.',
                 'data' => $orderItem,
             ], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Return validation errors
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
         } catch (\Exception $e) {
-            // Handle exceptions
+            // Handle any other exceptions
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while updating the order status.',
