@@ -415,9 +415,9 @@ class OrderController extends Controller
     private function sendNotificationToDispatcher($order)
     {
         $dispatcher = User::find($order->dispatcher_id);
-        if ($dispatcher && $dispatcher->fcm_token) {
+        if ($dispatcher && $dispatcher->device_token) {
             $data = [
-                'to' => $dispatcher->fcm_token,
+                'to' => $dispatcher->device_token,
                 'notification' => [
                     'title' => 'New Order Assigned',
                     'body' => "Order #{$order->order_no} has been assigned to you.",

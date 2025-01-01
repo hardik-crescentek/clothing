@@ -152,7 +152,7 @@ class UserController extends Controller
         $request->validate([
             'email'       => 'required|email',
             'password'    => 'required',
-            'fcm_token' => 'nullable|string',
+            'device_token' => 'nullable|string',
         ]);
 
         // Attempt to authenticate the user
@@ -161,7 +161,7 @@ class UserController extends Controller
             $user = Auth::user();
 
             if ($user->hasRole('dispatcher')) {
-                $user->update(['fcm_token' => $request->fcm_token]);
+                $user->update(['device_token' => $request->device_token]);
 
                 $user->role_name = $user->roles->pluck('name')->first();
                 $data = $user;
