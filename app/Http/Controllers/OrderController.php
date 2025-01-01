@@ -21,6 +21,7 @@ use Auth;
 use Carbon\Carbon;
 use DB;
 use DNS1D;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -238,7 +239,29 @@ class OrderController extends Controller
             'payment_term'      => 'required|string|in:cash,credit',
             'credit_day'        => 'nullable|integer|min:1',
             'dispatcher_id'  => 'required',
+            'image' => 'nullable|string',
+            'original_file_name' => 'nullable|string|max:255',
         ]);
+
+        $filePath = null;
+
+        if ($request->filled('image')) {
+            $imageData = $request->input('image');
+            $originalFileName = $request->input('original_file_name', 'unknown.png');
+    
+            $imageParts = explode(";base64,", $imageData);
+            $imageTypeAux = explode("image/", $imageParts[0]);
+            $imageExtension = $imageTypeAux[1] ?? 'png';
+            $imageBase64 = base64_decode($imageParts[1]);
+    
+            $sanitizedFileName = pathinfo($originalFileName, PATHINFO_FILENAME);
+            $sanitizedFileName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $sanitizedFileName);
+            $fileNameWithExtension = $sanitizedFileName . '.' . $imageExtension;
+    
+            $filePath = 'uploads/orders/' . $fileNameWithExtension;
+    
+            Storage::disk('public')->put($filePath, $imageBase64);
+        }
 
         // Add conditional validation for credit_day
         if ($request->input('payment_term') === 'credit') {
@@ -298,6 +321,7 @@ class OrderController extends Controller
                     "order_no" => $request->input("order_no"),
                     "dispatcher_name" => $request->input("dispatcher_name"),
                     "warehouse_name" => $request->input("warehouse_name"),
+                    'image'          => $filePath,
                 ];
         $order = Order::create($data);
         if($items)
@@ -378,7 +402,7 @@ class OrderController extends Controller
 
         }
 
-        $this->sendNotificationToDispatcher($order);
+        // $this->sendNotificationToDispatcher($order);
 
         $action = $request->input('action');
         if (isset($action) && $action === 'generate_invoice') {
@@ -405,28 +429,27 @@ class OrderController extends Controller
             ];
 
             $fcmUrl = 'https://fcm.googleapis.com/fcm/send';
-            $serverKey = config('services.fcm.server_key'); // Ensure this is configured in `services.php`
+            $serverKey = config('services.fcm.server_key');
 
-            $headers = [
-                'Authorization: key=' . $serverKey,
-                'Content-Type: application/json',
-            ];
+            $response = Http::withHeaders([
+                'Authorization' => 'key=' . $serverKey,
+                'Content-Type' => 'application/json',
+            ])->post($fcmUrl, $data);
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $fcmUrl);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-            $result = curl_exec($ch);
-            curl_close($ch);
-
-            // Log or handle errors
-            if ($result === false) {
-                Log::error('FCM Notification Failed: ' . curl_error($ch));
+            if ($response->failed()) {
+                Log::error('FCM Notification Failed', [
+                    'response' => $response->body(),
+                    'data' => $data,
+                ]);
             } else {
-                Log::info('FCM Notification Sent: ' . $result);
+                Log::info('FCM Notification Sent Successfully', [
+                    'response' => $response->body(),
+                ]);
             }
+        } else {
+            Log::warning('Dispatcher not found or missing FCM token', [
+                'dispatcher_id' => $order->dispatcher_id,
+            ]);
         }
     }
 
@@ -491,7 +514,7 @@ class OrderController extends Controller
         // $items=$order->order_items;
         // echo "<pre>"; print_r($items); die();
         return view('order.view',compact('order','users','sales_person','colors','items','order_status'));
-    }
+    } 
 
     /**
      * Update the specified resource in storage.

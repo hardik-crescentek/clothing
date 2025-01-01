@@ -160,7 +160,33 @@
                             <label class="form-control-label">Dispatcher<span class="text-danger ml-2">*</span></label>
                             {!! Form::select('dispatcher_id', [''=>'-- select dispatcher --']+$dispatchers, old('dispatcher_id'), ['id' => 'dispatcher_id', 'class' => 'form-control custom-select', 'data-validation' => "required"]) !!}
                         </div>
-                    </div>                    
+                    </div>
+                    <!-- Image Upload -->
+                    {{-- <div class="form-group">
+                        <label for="image">Upload Image</label>
+                        <input type="file" name="image" id="image" class="form-control" onchange="convertToBase64()" accept="image/*">
+                    </div>
+
+                    <!-- Hidden Base64 Image -->
+                    <input type="hidden" name="image" id="image_base64">  
+                    <!-- Original File Name (optional) -->
+                    <div class="form-group">
+                        <label for="original_file_name">Original File Name (optional)</label>
+                        <input type="text" name="original_file_name" class="form-control" id="original_file_name">
+                    </div>  --}}
+
+                     <!-- Image Upload -->
+                    <div class="form-group">
+                        <label for="image">Upload Image</label>
+                        <input type="file" name="image" id="image" class="form-control" onchange="convertToBase64()" accept="image/*">
+                    </div>
+
+                    <!-- Hidden Base64 Image -->
+                    <input type="hidden" name="image" id="image_base64">
+
+                    <!-- Hidden Original Image Name -->
+                    <input type="hidden" name="original_file_name" id="original_file_name">  
+
                 </div>
 
                 <div class="form-group row d-flex align-items-center">
@@ -474,7 +500,7 @@
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        
+
         var dispatchers = @json($dispatchers);
 
         $('#dispatcher_id').change(function() {
@@ -1966,6 +1992,25 @@
 
         }
     });
+    function convertToBase64() {
+        var fileInput = document.getElementById('image');
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+            // Get base64 string of the image
+            var base64String = reader.result;
+
+            // Set the base64 string to the hidden input
+            document.getElementById('image_base64').value = base64String;
+            document.getElementById('original_file_name').value = file.name;
+        };
+
+        // Read the file as Data URL (Base64)
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
 </script>
 <script type="text/javascript">
     var html = '<div class="text-center mt-5" style="font-size: 20px;">\

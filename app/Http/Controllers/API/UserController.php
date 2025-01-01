@@ -148,12 +148,21 @@ class UserController extends Controller
             'message' => null,
         ];
 
+        // Validate the input
+        $request->validate([
+            'email'       => 'required|email',
+            'password'    => 'required',
+            'fcm_token' => 'nullable|string',
+        ]);
+
         // Attempt to authenticate the user
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
             $user = Auth::user();
 
             if ($user->hasRole('dispatcher')) {
+                $user->update(['fcm_token' => $request->fcm_token]);
+
                 $user->role_name = $user->roles->pluck('name')->first();
                 $data = $user;
                 $data['token'] = $user->createToken('MyApp')->accessToken;

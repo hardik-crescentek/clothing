@@ -97,10 +97,11 @@
                                         <th data-sorter="false">Price</th>
                                     @endrole
                                     <th data-sorter="false">Grand Total</th>
-                                    <th data-sorter="false">Note</th>
+                                    {{-- <th data-sorter="false">Note</th> --}}
                                     <th data-sorter="false">Status</th>
                                     {{-- <th data-sorter="false">Status Date</th> --}}
                                     <th data-sorter="false">Dispatcher</th>
+                                    <th data-sorter="false">Image</th>
                                     <th data-sorter="false" width="180px">Action</th>
                                 </tr>
                             </thead>
@@ -152,7 +153,7 @@
                                             </td>
                                             @endrole
                                             <td> {{$order->grand_total}} </td>
-                                            <td> {{$order->note}} </td>
+                                            {{-- <td> {{$order->note}} </td> --}}
                                             <td> {{$order->status}} </td>
                                             {{-- <td> {{$order->status_date}} </td> --}}
                                             <td>
@@ -160,6 +161,14 @@
                                                     {{ $order->dispatcher->firstname }} {{ $order->dispatcher->lastname }}
                                                 @else
                                                 @endif 
+                                            </td>
+                                            <td>
+                                                @if($order && $order->image)
+                                                    <a href="{!! asset('storage/' . $order->image) !!}" data-lightbox="order-image">
+                                                        <img src="{!! asset('storage/' . $order->image) !!}" alt="Dispatcher Image" width="50" height="50">
+                                                    </a>
+                                                @else
+                                                @endif
                                             </td>
                                             <!-- <td>
                                                 @if ($order->status == 1)
@@ -226,11 +235,12 @@
                                     <th data-sorter="false">Price</th>
                                     @endrole
                                     <th data-sorter="false">Grand Total</th>
-                                    <th data-sorter="false">Note</th>
-                                    <th data-sorter="false">Remark</th>
+                                    {{-- <th data-sorter="false">Note</th> --}}
+                                    {{-- <th data-sorter="false">Remark</th> --}}
                                     <th data-sorter="false">Status</th>
                                     <th data-sorter="false">Status Date</th>
                                     <th data-sorter="false">Dispatcher</th>
+                                    <th data-sorter="false">Image</th>
                                     @role('super-admin')
                                     <th data-sorter="false" width="180px">Action</th>
                                     @endrole
@@ -277,14 +287,22 @@
                                             </td>
                                             @endrole
                                             <td> {{$order->grand_total}} </td>
-                                            <td> {{$order->note}} </td>
-                                            <td> {{$order->remark}} </td>
+                                            {{-- <td> {{$order->note}} </td> --}}
+                                            {{-- <td> {{$order->remark}} </td> --}}
                                             <td> {{$order->status}} </td>
                                             <td> {{$order->status_date}} </td>
                                             <td>@if($order->dispatcher)
                                                     {{ $order->dispatcher->firstname }} {{ $order->dispatcher->lastname }}
                                                 @else
                                                 @endif 
+                                            </td>
+                                            <td>
+                                                @if($order && $order->image)
+                                                    <a href="{!! asset('storage/' . $order->image) !!}" data-lightbox="order-image">
+                                                        <img src="{!! asset('storage/' . $order->image) !!}" alt="Dispatcher Image" width="50" height="50">
+                                                    </a>
+                                                @else
+                                                @endif
                                             </td>
                                             @role('super-admin')
                                             <td class="td-actions">
@@ -419,6 +437,12 @@
     var csrf_token = '{{ csrf_token() }}';
 
     $(document).ready(function () {
+
+        $('[data-lightbox="order-image"]').lightGallery({
+            thumbnail: true,  // Enable thumbnails in lightbox
+            zoom: true         // Enable zoom functionality
+        });
+
         const table = $('#order_tbl').DataTable({
             lengthMenu: [
                 [10, 25, 50,100,500,1000,'All'],
