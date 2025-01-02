@@ -22,6 +22,9 @@ use Carbon\Carbon;
 use DB;
 use DNS1D;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+use Google\Client as GoogleClient;
+use Exception;
 
 class OrderController extends Controller
 {
@@ -402,7 +405,7 @@ class OrderController extends Controller
 
         }
 
-        // $this->sendNotificationToDispatcher($order);
+        $this->sendNotificationToDispatcher($order);
 
         $action = $request->input('action');
         if (isset($action) && $action === 'generate_invoice') {
@@ -412,45 +415,147 @@ class OrderController extends Controller
         }
     }
 
-    private function sendNotificationToDispatcher($order)
+    public function sendNotificationToDispatcher($order)
     {
-        $dispatcher = User::find($order->dispatcher_id);
-        if ($dispatcher && $dispatcher->device_token) {
+        \Log::info("sendNotificationToDispatcher: Method called.");
+
+        $credentialsFilePath = public_path('service-account.json');
+
+        try {
+            if (!$order || !$order->dispatcher_id) {
+                throw new Exception("Order or dispatcher information is missing.");
+            }
+
+            $dispatcherId = $order->dispatcher_id;
+            \Log::info($order->dispatcher_id);
+
+            $dispatcher = User::find($dispatcherId);
+            \Log::info($dispatcher);
+            \Log::info($dispatcher->device_token);
+
+            if (!$dispatcher || !$dispatcher->device_token) {
+                throw new Exception("Dispatcher not found or does not have a device token.");
+            }
+
+            $deviceToken = $dispatcher->device_token;
+            \Log::info("Device Token for Dispatcher:", ['device_token' => $deviceToken]);
+
+            \Log::info("Initializing Google Client with credentials from {$credentialsFilePath}.");
+            $client = new GoogleClient();
+            $client->setAuthConfig($credentialsFilePath);
+            $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+            $client->refreshTokenWithAssertion();
+
+            $token = $client->getAccessToken();
+            $access_token = $token['access_token'];
+            \Log::info("Access token retrieved successfully."); 
+
+            $headers = [
+                "Authorization: Bearer $access_token",
+                'Content-Type: application/json'
+            ];
+            \Log::info("HTTP headers set up successfully.");
+
             $data = [
-                'to' => $dispatcher->device_token,
-                'notification' => [
-                    'title' => 'New Order Assigned',
-                    'body' => "Order #{$order->order_no} has been assigned to you.",
-                    'sound' => 'default',
-                ],
-                'data' => [
-                    'order_id' => $order->id,
-                ],
+                "message" => [
+                    "token" => $deviceToken,
+                    "notification" => [
+                        "body" => "Order Assigned",
+                        "title" => "Order #{$order->order_no} has been assigned to you." 
+                    ]
+                ]
             ];
 
-            $fcmUrl = 'https://fcm.googleapis.com/fcm/send';
-            $serverKey = config('services.fcm.server_key');
+            $payload = json_encode($data);
+            \Log::info("Payload prepared successfully:", ['payload' => $data]);
 
-            $response = Http::withHeaders([
-                'Authorization' => 'key=' . $serverKey,
-                'Content-Type' => 'application/json',
-            ])->post($fcmUrl, $data);
+            \Log::info("Initializing cURL for FCM request.");
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/clothings-99ac9/messages:send');
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+            curl_setopt($ch, CURLOPT_VERBOSE, true); 
 
-            if ($response->failed()) {
-                Log::error('FCM Notification Failed', [
-                    'response' => $response->body(),
-                    'data' => $data,
-                ]);
+            $response = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $err = curl_error($ch);
+            curl_close($ch);
+
+            \Log::info("HTTP Response:", ['http_code' => $http_code, 'response' => $response]);
+
+            if ($err) {
+                Log::error("cURL Error:", ['error' => $err]);
+                return response()->json(['error' => $err], 500);
             } else {
-                Log::info('FCM Notification Sent Successfully', [
-                    'response' => $response->body(),
-                ]);
+                \Log::info("Notification sent successfully.");
+                return response()->json(['response' => json_decode($response)], $http_code);
             }
-        } else {
-            Log::warning('Dispatcher not found or missing FCM token', [
-                'dispatcher_id' => $order->dispatcher_id,
-            ]);
+        } catch (\Exception $e) {
+            \Log::error("Error in sendNotificationToDispatcher:", ['exception' => $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    private function getAccessToken()
+    {
+        $serviceAccountJson = json_decode(file_get_contents(storage_path('app/firebase/service-account.json')), true);
+        
+        $clientEmail = $serviceAccountJson['client_email'];
+        $privateKey = $serviceAccountJson['private_key'];
+        
+        $audience = 'https://oauth2.googleapis.com/token';
+        
+        // Prepare the data for the token request
+        $data = [
+            'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+            'assertion' => $this->createJWT($clientEmail, $privateKey),
+        ];
+        
+        // Get the access token
+        $response = Http::asForm()->post($audience, $data);
+
+        return $response->json()['access_token'] ?? null;
+    }
+
+    private function createJWT($clientEmail, $privateKey)
+    {
+        $now = time();
+        $issuedAt = $now;
+        $expiration = $now + 3600; // Token valid for 1 hour
+
+        $header = [
+            'alg' => 'RS256',
+            'typ' => 'JWT'
+        ];
+
+        $payload = [
+            'iss' => $clientEmail,
+            'scope' => 'https://www.googleapis.com/auth/cloud-platform',
+            'aud' => 'https://oauth2.googleapis.com/token',
+            'iat' => $issuedAt,
+            'exp' => $expiration
+        ];
+
+        // Encode the header and payload to base64url
+        $encodedHeader = $this->base64UrlEncode(json_encode($header));
+        $encodedPayload = $this->base64UrlEncode(json_encode($payload));
+
+        // Create the signature using the private key
+        $dataToSign = $encodedHeader . '.' . $encodedPayload;
+        openssl_sign($dataToSign, $signature, $privateKey, OPENSSL_ALGO_SHA256);
+
+        // Base64url encode the signature
+        $encodedSignature = $this->base64UrlEncode($signature);
+
+        return $dataToSign . '.' . $encodedSignature;
+    }
+
+    private function base64UrlEncode($data)
+    {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
 
     /**

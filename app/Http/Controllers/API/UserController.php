@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Google\Client as GoogleClient;
 
 
 class UserController extends Controller
@@ -142,6 +143,8 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
+        \Log::info("login call");
+        \Log::info(request()->all());
         $response = [
             'success' => false,
             'data'    => null,
@@ -217,4 +220,138 @@ class UserController extends Controller
             return response()->json($response, 400);
         }
     }
+
+    // public function sendPushNotification(Request $request)
+    // {
+    //     // $fcmToken = "dJLe4InHQp-4uHewNwZEvf:APA91bEwyenJ0CaKesFizN0e6TuUe3L_WlfTZrhf_ZJKDtTu49vw50QZVzzVsr7RzKauZha_AJYeJRxhNJeGLE9dDE90HrVCV9m-UCAPlQUSi0IndwAqeUs";
+
+    //     // $title = "Herll";
+    
+    //     // $body = "kjhn";
+    
+    //     // $message = ([
+    
+    //     //     'token' => $fcmToken,
+    
+    //     //     'notification' => [
+    
+    //     //         'title' => $title,
+    
+    //     //         'body' => $body
+    
+    //     //     ],
+    
+    //     // ]);
+    
+    //     // $this->notification->send($message);
+
+    //     $credentialsFilePath = public_path('service-account.json');
+  
+    //     $client = new GoogleClient();
+
+    //     $client->setAuthConfig($credentialsFilePath);
+
+    //     $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+    //     $client->refreshTokenWithAssertion();
+    //     $token = $client->getAccessToken();
+
+    //     $access_token = $token['access_token'];
+    //     // Set up the HTTP headers
+    //     $headers = [
+    //         "Authorization: Bearer $access_token",
+    //         'Content-Type: application/json'
+    //     ];
+
+    //     $data = [
+    //         "message" => [
+    //             "topic" => "shyam",
+    //             "notification" => [
+    //                 "title" => "New Notification",
+    //                 "body" => "Notification Content",
+
+    //             ],
+    //             "apns" => [
+    //                 "payload" => [
+    //                     "aps" => [
+    //                         "sound" => "default"
+    //                     ]
+    //                 ]
+    //             ]
+    //         ]
+    //     ];
+    //     $payload = json_encode($data);
+
+    //     $ch = curl_init();
+    //     curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/clothings-99ac9/messages:send');
+    //     curl_setopt($ch, CURLOPT_POST, true);
+    //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    //     curl_setopt($ch, CURLOPT_VERBOSE, true); // Enable verbose output for debugging
+    //     $response = curl_exec($ch);
+    //     $err = curl_error($ch);
+    //     curl_close($ch);
+
+    // }
+
+    public function sendPushNotification(Request $request)
+{
+    // Path to service account credentials JSON file
+    $credentialsFilePath = public_path('service-account.json');
+    
+    // Initialize Google Client
+    $client = new GoogleClient();
+    $client->setAuthConfig($credentialsFilePath);
+    $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+    $client->refreshTokenWithAssertion();
+    
+    // Retrieve the access token
+    $token = $client->getAccessToken();
+    $access_token = $token['access_token'];
+    
+    // Set up the HTTP headers
+    $headers = [
+        "Authorization: Bearer $access_token",
+        'Content-Type: application/json'
+    ];
+    
+    // Prepare the payload (updated to match the new structure)
+    $data = [
+        "message" => [
+            "token" => "fNujMxHERWOTSOHT6QeHaw:APA91bGdew601C2eutI-zJLPVQUwtf5lYtvOSCrxFS0y_UVZWc1A9Hjdg83lFz9JI_N76huBy7WWDMk2JTa0meqLk4hzlGbopRoMARB4ASoPpd-CTO3Uc3I", // Example token
+            "notification" => [
+                "body" => "This is an FCM notification message!", // Notification body
+                "title" => "FCM Message" // Notification title
+            ]
+        ]
+    ];
+
+    $payload = json_encode($data);
+
+    // Initialize cURL
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/clothings-99ac9/messages:send');
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Disable SSL verification (useful for testing, but not recommended for production)
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_VERBOSE, true); // Enable verbose output for debugging
+    
+    // Execute the cURL request and capture the response
+    $response = curl_exec($ch);
+    $err = curl_error($ch);
+    curl_close($ch);
+
+    // Check if there's any error during the request
+    if ($err) {
+        // Log error or return a response
+        return response()->json(['error' => $err], 500);
+    } else {
+        // Return response from FCM
+        return response()->json(['response' => json_decode($response)], 200);
+    }
+}
+
 }

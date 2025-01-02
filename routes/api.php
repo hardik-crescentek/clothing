@@ -73,3 +73,5 @@ Route::middleware('auth:api')->group(function () {
 Route::post('check_purchase_details', 'API\PurchaseController@CheckPurchaseDetails');
 Route::post('add_audit_details', 'API\PurchaseController@Addauditdetails');
 Route::post('get_my_audit', 'API\PurchaseController@getmyaudit');
+
+Route::post('send-notification', 'API\UserController@sendPushNotification');
