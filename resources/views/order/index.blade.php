@@ -164,12 +164,14 @@
                                             </td>
                                             <td>
                                                 @if($order && $order->image)
-                                                    <a href="{!! asset('storage/' . $order->image) !!}" data-lightbox="order-image">
-                                                        <img src="{!! asset('storage/' . $order->image) !!}" alt="Dispatcher Image" width="50" height="50">
+                                                    <!-- Fancybox Trigger -->
+                                                    <a href="{!! url('storage/' . $order->image) !!}" data-fancybox="order-gallery" data-caption="Order Image">
+                                                        <img src="{!! url('storage/' . $order->image) !!}" alt="Dispatcher Image" width="50" height="50">
                                                     </a>
                                                 @else
+                                                    No image available
                                                 @endif
-                                            </td>
+                                            </td>                                            
                                             <!-- <td>
                                                 @if ($order->status == 1)
                                                 <span class="badge-text badge-text-small success">Dispatch</span>
@@ -419,28 +421,43 @@
     }
 </script>
 @endsection
+@push('after-styles')
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
+@endpush
+
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous"></script>
-<script type="text/javascript">
-    // change status js
-    $(document).ready(function() {
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
+<script>
+    var csrf_token = '{{ csrf_token() }}';
+
+    $(document).ready(function () {
+
+        $("[data-fancybox='order-gallery']").fancybox({
+            // Optional: customize toolbar
+            toolbar: true, // Show the toolbar with zoom, download, and close buttons
+            buttons: [
+                "zoom",      // Zoom button
+                "download",  // Download button
+                "close"      // Close button
+            ],
+            // Optional: fit the image inside the viewport without stretching
+            image: {
+                fit: "contain" // Makes sure the image fits within the modal without stretching
+            },
+            // Optional: add custom caption (you can use the data-caption attribute)
+            caption: function(instance, item) {
+                return item.opts.caption + '<br><a href="' + item.opts.download + '" download>Download Image</a>';
+            }
+        });
+
         $('#order-status-model').on('show.bs.modal', function (e) {
             if (e.namespace === 'bs.modal') {
                 var opener=e.relatedTarget;
                 var user_id         =$(opener).attr('data-id');
                 $('#change_model').find('[name="order_id"]').val(user_id);
             }
-        });
-    });
-</script>
-<script>
-    var csrf_token = '{{ csrf_token() }}';
-
-    $(document).ready(function () {
-
-        $('[data-lightbox="order-image"]').lightGallery({
-            thumbnail: true,  // Enable thumbnails in lightbox
-            zoom: true         // Enable zoom functionality
         });
 
         const table = $('#order_tbl').DataTable({

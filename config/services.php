@@ -31,7 +31,7 @@ return [
     ],
 
     'fcm' => [
-        'server_key' => env('FCM_SERVER_KEY'),
+        'key_path' => public_path(env('FIREBASE_CREDNTIALS')),
     ],
 
 
