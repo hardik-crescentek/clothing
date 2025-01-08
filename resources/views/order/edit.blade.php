@@ -288,8 +288,8 @@
                                 <td>{{ $item->materials_name }}</td>
                                 <td>
                                     @if($item->image)
-                                        <a href="{{ url('public/storage/' . $item->image) }}" data-fancybox="gallery" data-caption="Image Preview">
-                                            <img src="{{ url('public/storage/' . $item->image) }}" alt="Image" style="width: 50px; height: auto;">
+                                        <a href="{{ url('public/'.$item->image) }}" data-fancybox="gallery" data-caption="Image Preview">
+                                            <img src="{{ url('public/'.$item->image) }}" alt="Image" style="width: 50px; height: auto;">
                                         </a>
                                     @else
                                         <span>No Image Available</span>

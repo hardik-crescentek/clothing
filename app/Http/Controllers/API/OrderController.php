@@ -590,6 +590,7 @@ class OrderController extends Controller
                     'order_items.price',
                     'order_items.status',
                     'order_items.meter',
+                    'order_items.image',
                     DB::raw('order_items.meter * 1.09361 AS yard'),
                     'orders.order_no',
                     'purchase_items.qty as total_meter',
@@ -638,7 +639,7 @@ class OrderController extends Controller
             $validated = $request->validate([
                 'status' => 'required|string|in:Pending,Completed,Not Enough,Out of Stock,Damaged',
                 'status_date' => 'nullable|date_format:Y-m-d',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'image' => 'nullable',
             ]);
         
             // Find the order
@@ -655,12 +656,32 @@ class OrderController extends Controller
             $orderItem->status_date = now(); 
 
             // Handle image upload
-            if ($request->hasFile('image')) {
-                $originalName = $request->file('image')->getClientOriginalName();
-                $imagePath = $request->file('image')->storeAs('uploads/orders', $originalName, 'public'); // Store with the original name
+            if ($request->has('image')) {
+                $imageData = $request->input('image');
+
+                if (strpos($imageData, 'data:image') === 0) {
+                    // Handle base64 image
+                    preg_match('/data:image\/(jpeg|png|jpg|gif);base64,/', $imageData, $matches);
+                    $extension = $matches[1] ?? 'png'; // Default to 'png' if not matched
+                    $imageData = str_replace('data:image/' . $extension . ';base64,', '', $imageData);
+                    $decodedImage = base64_decode($imageData);
+
+                    if (!$decodedImage) {
+                        throw new \Exception('Invalid base64 image data.');
+                    }
+
+                    $imageName = uniqid('order_') . '.' . $extension;
+                    $imagePath = 'uploads/orders/' . $imageName;
+
+                    Storage::disk('public')->put($imagePath, $decodedImage);
+                } elseif ($request->hasFile('image')) {
+                    // Handle file upload
+                    $originalName = $request->file('image')->getClientOriginalName();
+                    $imagePath = $request->file('image')->storeAs('uploads/orders', $originalName, 'public');
+                }
+
                 $orderItem->image = $imagePath; // Save the image path to the order
             }
-
             $orderItem->save();
 
             // for main order status update
@@ -678,7 +699,7 @@ class OrderController extends Controller
             if ($allItemsCompleted) {
                 $order->status = 'Completed';
                 $order->status_date = now(); 
-                $order->save();
+                $order->save(); 
             }
 
             return response()->json([
