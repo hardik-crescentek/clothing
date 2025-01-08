@@ -97,11 +97,8 @@
                                         <th data-sorter="false">Price</th>
                                     @endrole
                                     <th data-sorter="false">Grand Total</th>
-                                    {{-- <th data-sorter="false">Note</th> --}}
                                     <th data-sorter="false">Status</th>
-                                    {{-- <th data-sorter="false">Status Date</th> --}}
                                     <th data-sorter="false">Dispatcher</th>
-                                    <th data-sorter="false">Image</th>
                                     <th data-sorter="false" width="180px">Action</th>
                                 </tr>
                             </thead>
@@ -153,25 +150,13 @@
                                             </td>
                                             @endrole
                                             <td> {{$order->grand_total}} </td>
-                                            {{-- <td> {{$order->note}} </td> --}}
                                             <td> {{$order->status}} </td>
-                                            {{-- <td> {{$order->status_date}} </td> --}}
                                             <td>
                                                 @if($order->dispatcher)
                                                     {{ $order->dispatcher->firstname }} {{ $order->dispatcher->lastname }}
                                                 @else
                                                 @endif 
                                             </td>
-                                            <td>
-                                                @if($order && $order->image)
-                                                    <!-- Fancybox Trigger -->
-                                                    <a href="{!! url('storage/' . $order->image) !!}" data-fancybox="order-gallery" data-caption="Order Image">
-                                                        <img src="{!! url('storage/' . $order->image) !!}" alt="Dispatcher Image" width="50" height="50">
-                                                    </a>
-                                                @else
-                                                    No image available
-                                                @endif
-                                            </td>                                            
                                             <!-- <td>
                                                 @if ($order->status == 1)
                                                 <span class="badge-text badge-text-small success">Dispatch</span>
@@ -237,12 +222,9 @@
                                     <th data-sorter="false">Price</th>
                                     @endrole
                                     <th data-sorter="false">Grand Total</th>
-                                    {{-- <th data-sorter="false">Note</th> --}}
-                                    {{-- <th data-sorter="false">Remark</th> --}}
                                     <th data-sorter="false">Status</th>
                                     <th data-sorter="false">Status Date</th>
                                     <th data-sorter="false">Dispatcher</th>
-                                    <th data-sorter="false">Image</th>
                                     @role('super-admin')
                                     <th data-sorter="false" width="180px">Action</th>
                                     @endrole
@@ -289,22 +271,12 @@
                                             </td>
                                             @endrole
                                             <td> {{$order->grand_total}} </td>
-                                            {{-- <td> {{$order->note}} </td> --}}
-                                            {{-- <td> {{$order->remark}} </td> --}}
                                             <td> {{$order->status}} </td>
                                             <td> {{$order->status_date}} </td>
                                             <td>@if($order->dispatcher)
                                                     {{ $order->dispatcher->firstname }} {{ $order->dispatcher->lastname }}
                                                 @else
                                                 @endif 
-                                            </td>
-                                            <td>
-                                                @if($order && $order->image)
-                                                    <a href="{!! asset('storage/' . $order->image) !!}" data-lightbox="order-image">
-                                                        <img src="{!! asset('storage/' . $order->image) !!}" alt="Dispatcher Image" width="50" height="50">
-                                                    </a>
-                                                @else
-                                                @endif
                                             </td>
                                             @role('super-admin')
                                             <td class="td-actions">
@@ -421,36 +393,12 @@
     }
 </script>
 @endsection
-@push('after-styles')
-    <!-- Fancybox CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
-@endpush
-
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha512-qzgd5cYSZcosqpzpn7zF2ZId8f/8CHmFKZ8j7mU4OUXTNRd5g+ZHBPsgKEwoqxCtdQvExE5LprwwPAgoicguNg==" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
 <script>
     var csrf_token = '{{ csrf_token() }}';
 
     $(document).ready(function () {
-
-        $("[data-fancybox='order-gallery']").fancybox({
-            // Optional: customize toolbar
-            toolbar: true, // Show the toolbar with zoom, download, and close buttons
-            buttons: [
-                "zoom",      // Zoom button
-                "download",  // Download button
-                "close"      // Close button
-            ],
-            // Optional: fit the image inside the viewport without stretching
-            image: {
-                fit: "contain" // Makes sure the image fits within the modal without stretching
-            },
-            // Optional: add custom caption (you can use the data-caption attribute)
-            caption: function(instance, item) {
-                return item.opts.caption + '<br><a href="' + item.opts.download + '" download>Download Image</a>';
-            }
-        });
 
         $('#order-status-model').on('show.bs.modal', function (e) {
             if (e.namespace === 'bs.modal') {

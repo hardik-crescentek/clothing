@@ -132,6 +132,7 @@
                                 <th>Total Price</th>
                                 @endrole
                                 <th>Role Name</th>
+                                <th>Image</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -155,6 +156,15 @@
                                 <td class="td-yard" data-value="{{ number_format($item->price * (float)meter2yard($item->meter),2,'.','') }}">{{ number_format($item->price * (float)meter2yard($item->meter),2,'.','') }}</td>
                                 @endrole
                                 <td>{{ $item->materials_name }}</td>
+                                <td>
+                                    @if($item->image)
+                                        <a href="{{ url('public/storage/' . $item->image) }}" data-fancybox="gallery" data-caption="Image Preview">
+                                            <img src="{{ url('public/storage/' . $item->image) }}" alt="Image" style="width: 50px; height: auto;">
+                                        </a>
+                                    @else
+                                        <span>No Image Available</span>
+                                    @endif
+                                </td>
                             </tr>
                             @endforeach
                             @endisset
@@ -229,16 +239,22 @@
     <td><a class="btn btn-danger btn-sm btn-square delete">Delete</a></td>
 </script>
 @endsection
+@push('after-styles')
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
+@endpush
 @push('scripts')
 <script src="{{ asset('assets/js/datepicker/moment.min.js') }}"></script>
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
 <script type="text/javascript">
     function deleteConfirm() {
-            return confirm("Are you sure want to delete?");
-        };
+        return confirm("Are you sure want to delete?");
+    };
+
     (function($) {
         var input_search_barcode = $('#input_search_barcode');
-  //for barcode search
+        //for barcode search
         input_search_barcode.autocomplete({
             source: function(request, response) {
                 $.ajax({
@@ -465,5 +481,19 @@
 
         });
     })(jQuery);
+
+    $(document).ready(function () {
+        $("[data-fancybox='gallery']").fancybox({
+            toolbar: true,
+            buttons: [
+                "zoom",
+                "download",
+                "close"
+            ],
+            loop: true, 
+            animationEffect: "zoom-in-out", 
+            transitionEffect: "fade" 
+        });
+    });
 </script>
 @endpush

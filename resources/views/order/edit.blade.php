@@ -263,6 +263,7 @@
                                 <th>Yard</th>
                                 <th>Total Price</th>
                                 <th>Role Name</th>
+                                <th>Image</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -285,6 +286,15 @@
                                 <td class="td-yard" data-value="{{ number_format((float)meter2yard($item->meter),2,'.','') }}">{{ number_format((float)meter2yard($item->meter),2,'.','') }}</td>
                                 <td class="td-yard" data-value="{{ number_format($item->price * (float)meter2yard($item->meter),2,'.','') }}">{{ number_format($item->price * (float)meter2yard($item->meter),2,'.','') }}</td>
                                 <td>{{ $item->materials_name }}</td>
+                                <td>
+                                    @if($item->image)
+                                        <a href="{{ url('public/storage/' . $item->image) }}" data-fancybox="gallery" data-caption="Image Preview">
+                                            <img src="{{ url('public/storage/' . $item->image) }}" alt="Image" style="width: 50px; height: auto;">
+                                        </a>
+                                    @else
+                                        <span>No Image Available</span>
+                                    @endif
+                                </td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-primary btn-square btn-edit-order-item" data-item_id="{{$item->id}}" data-toggle="modal" data-target="#editItemModal">Edit</button>
                                     {!! Form::open(['method' => 'DELETE', 'route' => ['order.deleteOrderItem', $item->id, $order->customer_id], 'style' => 'display:inline', 'onSubmit' => 'deleteConfirm(event)']) !!}
@@ -366,10 +376,15 @@
     <td><a class="btn btn-danger btn-sm btn-square delete">Delete</a></td>
 </script>
 @endsection
+@push('after-styles')
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.css" />
+@endpush
 @push('scripts')
 <script src="{{ asset('assets/js/datepicker/moment.min.js') }}"></script>
 <script src="{{ asset('assets/js/datepicker/daterangepicker.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"> </script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.2/dist/jquery.fancybox.min.js"></script>
 <script type="text/javascript">
    
     function deleteConfirm(event) {
@@ -642,6 +657,20 @@
             },
             autoApply: false,
             startDate: deliveredDate
+        });
+
+        $(document).ready(function () {
+            $("[data-fancybox='gallery']").fancybox({
+                toolbar: true,
+                buttons: [
+                    "zoom",
+                    "download",
+                    "close"
+                ],
+                loop: true, 
+                animationEffect: "zoom-in-out", 
+                transitionEffect: "fade" 
+            });
         });
     });
 
