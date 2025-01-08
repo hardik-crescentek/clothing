@@ -263,6 +263,7 @@
                                 <th>Yard</th>
                                 <th>Total Price</th>
                                 <th>Role Name</th>
+                                <th>Status</th>
                                 <th>Image</th>
                                 <th>Action</th>
                             </tr>
@@ -286,13 +287,14 @@
                                 <td class="td-yard" data-value="{{ number_format((float)meter2yard($item->meter),2,'.','') }}">{{ number_format((float)meter2yard($item->meter),2,'.','') }}</td>
                                 <td class="td-yard" data-value="{{ number_format($item->price * (float)meter2yard($item->meter),2,'.','') }}">{{ number_format($item->price * (float)meter2yard($item->meter),2,'.','') }}</td>
                                 <td>{{ $item->materials_name }}</td>
+                                <td>{{ $item->status }}</td>
                                 <td>
                                     @if($item->image)
                                         <a href="{{ url('public/'.$item->image) }}" data-fancybox="gallery" data-caption="Image Preview">
                                             <img src="{{ url('public/'.$item->image) }}" alt="Image" style="width: 50px; height: auto;">
                                         </a>
                                     @else
-                                        <span>No Image Available</span>
+                                        <span>No Image</span>
                                     @endif
                                 </td>
                                 <td>
