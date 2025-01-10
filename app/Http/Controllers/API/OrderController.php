@@ -635,16 +635,17 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        \Log::info("call status update");
+        \Log::info("call updateStatus");
+        \Log::info($id);
         \Log::info(request()->all());
         try {
+            // Validation: status is required, image is optional
             $validated = $request->validate([
-                'status' => 'required|string|in:Pending,Completed,Not Enough,Out of Stock,Damaged',
-                'status_date' => 'nullable|date_format:Y-m-d',
-                'image' => 'nullable',
+                'status' => 'required|string|in:Pending,Completed,Not Enough,Out Of Stock,Damaged',
+                'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:2048', // Image file validation
             ]);
-        
-            // Find the order
+
+            // Find the order item
             $orderItem = OrderItem::with('order')->find($id);
 
             if (!$orderItem) {
@@ -654,54 +655,47 @@ class OrderController extends Controller
                 ], 404);
             }
 
+            // Update the status of the order item
             $orderItem->status = $validated['status'];
-            $orderItem->status_date = now(); 
+            $orderItem->status_date = now();
 
-            // Handle image upload
-            if ($request->has('image')) {
-                $imageData = $request->input('image');
+            // Handle file upload if image is provided
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
 
-                if (strpos($imageData, 'data:image') === 0) {
-                    // Handle base64 image
-                    preg_match('/data:image\/(jpeg|png|jpg|gif);base64,/', $imageData, $matches);
-                    $extension = $matches[1] ?? 'png'; // Default to 'png' if not matched
-                    $imageData = str_replace('data:image/' . $extension . ';base64,', '', $imageData);
-                    $decodedImage = base64_decode($imageData);
+                // Get the original file name
+                $originalFileName = $image->getClientOriginalName();
 
-                    if (!$decodedImage) {
-                        throw new \Exception('Invalid base64 image data.');
-                    }
+                // Define the storage path
+                $imagePath = 'uploads/orders/' . $originalFileName;
 
-                    $imageName = uniqid('order_') . '.' . $extension;
-                    $imagePath = 'uploads/orders/' . $imageName;
+                // Save the image to the 'public' disk
+                $image->storeAs('uploads/orders', $originalFileName, 'public');
 
-                    Storage::disk('public')->put($imagePath, $decodedImage);
-                } elseif ($request->hasFile('image')) {
-                    // Handle file upload
-                    $originalName = $request->file('image')->getClientOriginalName();
-                    $imagePath = $request->file('image')->storeAs('uploads/orders', $originalName, 'public');
-                }
-
-                $orderItem->image = $imagePath; // Save the image path to the order
+                // Save the image path to the order item
+                $orderItem->image = $imagePath;
             }
+
+            // Save the updated order item
             $orderItem->save();
 
-            // for main order status update
+            // Update the main order status if all items are completed
             $order = $orderItem->order()->with('order_items')->first();
             if (!$order || $order->order_items->isEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Order or order items not found.',
+                    'message' => 'Order items not found.',
                 ], 404);
             }
 
             $allItemsCompleted = $order->order_items->every(function ($item) {
                 return $item->status === 'Completed';
             });
+
             if ($allItemsCompleted) {
                 $order->status = 'Completed';
-                $order->status_date = now(); 
-                $order->save(); 
+                $order->status_date = now();
+                $order->save();
             }
 
             return response()->json([
