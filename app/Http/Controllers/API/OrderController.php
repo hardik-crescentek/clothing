@@ -726,4 +726,35 @@ class OrderController extends Controller
             ], 500);
         }
     }
+
+
+    public function destroyOrderItem($id)
+    {
+        try {
+            // Find the order item by ID
+            $orderItem = OrderItem::find($id);
+
+            // Check if the order item exists
+            if (!$orderItem) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Order item not found.',
+                ], 404);
+            }
+
+            // Delete the order item
+            $orderItem->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Order item deleted successfully.',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete the order item.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
