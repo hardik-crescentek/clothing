@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
 use Google\Client as GoogleClient;
 use Exception;
+use App\Utils\Util;
 
 class OrderController extends Controller
 {
@@ -345,6 +346,7 @@ class OrderController extends Controller
                     foreach ($item['item_roll'] as $roll_id => $quantity) {
                         if ($roll_id && $quantity > 0) {
                             $purchase_data = PurchaseItem::where('id', $roll_id)->first();
+                            $barcode = Util::gen_new_barcode_id($purchase_data->article_no);
                             if ($purchase_data) {
                                 $total_qty = $purchase_data->available_qty - $quantity;
                                 
@@ -367,6 +369,7 @@ class OrderController extends Controller
                                 "item_total"   => $item['total-price'],
                                 "status"       => $item['status'],
                                 "status_date"  => $item['status_date'],
+                                "barcode"  => $barcode,
                             ];
 
                 OrderItem::create($item_data);

@@ -19,6 +19,7 @@ use App\InvoiceItem;
 use App\InvoiceItemRoll;
 use App\CustomerItemPrice;
 use Auth;
+use DNS1D;
 
 class OrderController extends Controller
 {
@@ -591,6 +592,7 @@ class OrderController extends Controller
                     'order_items.status',
                     'order_items.meter',
                     'order_items.image',
+                    'order_items.barcode',
                     DB::raw('order_items.meter * 1.09361 AS yard'),
                     'orders.order_no',
                     'purchase_items.qty as total_meter',
@@ -619,6 +621,12 @@ class OrderController extends Controller
                 ], 404);
             }
 
+            foreach ($orderItems as $item) {
+                $item->barcode_svg = $item->barcode 
+                    ? DNS1D::getBarcodeSVG($item->barcode, config('app.BARCODE_TYPE'), 1, 40)
+                    : null;
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Order items retrieved successfully.',
@@ -635,8 +643,7 @@ class OrderController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        \Log::info("call updateStatus");
-        \Log::info($id);
+        \Log::info("update call");
         \Log::info(request()->all());
         try {
             // Validation: status is required, image is optional
