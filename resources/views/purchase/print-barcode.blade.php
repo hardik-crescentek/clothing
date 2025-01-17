@@ -103,7 +103,7 @@
             </div>
             <div class="widget-body" id="print-barcodes">
                 <div class="table-responsive">
-                    <table class="barcodelist" style="width: 120mm;">
+                    <table class="barcodelist" style="width: 26.46mm;height: 13.23 mm;">
                         <thead>
                             <tr>
                                 <th style="width: 25mm"></th>
@@ -223,7 +223,12 @@
         var divToPrint = document.getElementById('print_single_barcode');
         var newWin = window.open('', 'Print-Window');
         newWin.document.open(); 
-        newWin.document.write('<html></head><style>@media print { @page{ size:100mm 40mm;margin:0;padding:0; } tr{ page-break-after: always;font-size:12px; } }</style></head><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        // newWin.document.write('<html></head><style>@media print { @page{ size:100mm 40mm;margin:0;padding:0; } tr{ page-break-after: always;font-size:12px; } }</style></head><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.write('<html><head><style>@media print { ' + 
+                            '@page { size: 100mm 40mm; margin: 0; padding: 0; } ' +
+                            'tr { page-break-after: always; font-size: 12px; } ' +
+                            '#print_single_barcode { transform: rotate(90deg); transform-origin: center center; } ' +  // Rotation added here
+                            '}</style></head><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
         setTimeout(function() {
             newWin.document.close();
             newWin.close();
