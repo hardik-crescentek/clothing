@@ -532,7 +532,9 @@ class OrderController extends Controller
                                 'orders.order_no', 
                             )
                             ->selectRaw('CONCAT(users.firstname, " ", users.lastname) as customer_name')
-                            ->selectRaw('SUM(purchase_items.qty) as total_meter') 
+                            ->selectRaw('SUM(purchase_items.qty) as total_meter')
+                            ->selectRaw('SUM(order_items.meter) as order_meter') 
+                            ->selectRaw('SUM(purchase_items.available_qty) as available_meter') 
                             ->leftJoin('users', 'orders.customer_id', '=', 'users.id')
                             ->leftJoin('order_items', 'order_items.order_id', '=', 'orders.id')
                             ->leftJoin('purchase_items', 'purchase_items.id', '=', 'order_items.roll_id') // Match roll_id with purchase_items.id
@@ -544,6 +546,7 @@ class OrderController extends Controller
                             ->selectRaw('DATE_FORMAT(orders.order_date, "%D %b %Y %H:%i") as order_date_time') // Format order_date
                             ->where('orders.dispatcher_id', $dispatcherId)
                             ->groupBy('orders.id')
+                            ->orderBy('orders.order_date', 'desc')
                             ->get();        
                         
 
